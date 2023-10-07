@@ -21,7 +21,6 @@
 -- /gimmetools-- grabs all dropped tools in the server--
 -- /dontyoudaretouchme-- flings everyone u touch--
 -- /getoutmyinv -- drops all tools in ur inv
-
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/dontyoudaretouchme" then loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/serverhop" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/emoji/main/serverhop", true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/afk" then loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/LoadstringypVvhJBq4QNz", true))() end end)
@@ -35,10 +34,17 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.l
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/swordreach" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/quickfling all" then loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/pltiger" then loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/getoutmyinv" then for _,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-game.Players.LocalPlayer.Character.Humanoid:EquipTool(v)
-v.Parent = workspace
-end end end)
+game:GetService("Players").LocalPlayer.Chatted:connect(
+    function(msg)
+        if string.lower(msg) == "/getoutmyinv" then
+            for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+                game.Players.LocalPlayer.Character.Humanoid:EquipTool(v)
+                v.Parent = workspace
+            end
+        end
+    end
+)
+
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/anticrash" then loadstring(game:HttpGet("https://raw.githubusercontent.com/v9h/dhrpvc/main/anticrash.lua", true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(
     function(msg)
@@ -93,3 +99,20 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         end
     end
 )
+
+ocal = clonefunction
+local CheckCaller = CloneFunction(checkcaller)
+local HookFunction = CloneFunction(hookfunction)
+local LocalPlayer = game.Players.PlayerAdded:wait()
+local PostMessage = require(LocalPlayer:WaitForChild("PlayerScripts", 1 / 0):WaitForChild("ChatScript", 1 / 0):WaitForChild("ChatMain", 1 / 0)).MessagePosted
+getgenv().MessageEvent = Instance.new("BindableEvent")
+local OldFunctionHook
+local PostMessageHook = function(self, msg)
+    if not CheckCaller() and self == PostMessage then
+        MessageEvent:Fire(msg)
+        return
+    end
+    return OldFunctionHook(self, msg)
+end
+
+OldFunctionHook = HookFunction(PostMessage.fire, PostMessageHook)
