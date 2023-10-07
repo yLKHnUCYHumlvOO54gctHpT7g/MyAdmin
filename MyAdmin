@@ -20,7 +20,7 @@
 -- /oof-- advanced resetting (tps u the same place u resetted)--
 -- /gimmetools-- grabs all dropped tools in the server--
 -- /dontyoudaretouchme-- flings everyone u touch--
-.. /getoutmyinv -- drops all tools in ur inv
+-- /getoutmyinv -- drops all tools in ur inv
 
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/dontyoudaretouchme" then loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/serverhop" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/emoji/main/serverhop", true))() end end)
