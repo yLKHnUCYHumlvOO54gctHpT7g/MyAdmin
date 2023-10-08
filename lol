@@ -24,6 +24,8 @@
 -- /antilog-- prevents roblox from logging in ur previous chats and screenshots--
 -- /getoutmyinv-- drops all tools in ur inv--
 
+
+game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/hub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/boomboxraid" then loadstring(game:HttpGet("https://raw.githubusercontent.com/v9h/dhrpvc/main/spam.lua", false))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/oof" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/cmds" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/cmds"))() end end)
