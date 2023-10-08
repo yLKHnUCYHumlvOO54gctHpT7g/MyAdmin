@@ -23,6 +23,7 @@
 -- /dontyoudaretouchme-- flings everyone u touch--
 -- /antilog-- prevents roblox from logging in ur previous chats and screenshots--
 -- /getoutmyinv-- drops all tools in ur inv--
+game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/getoutmyinv" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/anticrash" then loadstring(game:HttpGet('https://raw.githubusercontent.com/v9h/dhrpvc/main/anticrash.lua', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/kronefling" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/loopfling', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/gimmetools" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools"))() end end)
@@ -66,27 +67,16 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
             task.wait(5)
             Player.Character:BreakJoints()
             game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/quickfling all" then loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))() end end)
+            game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/pltiger" then loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))() end end)
             game:GetService("Players").LocalPlayer.Chatted:connect(
                 function(msg)
-                    if string.lower(msg) == "/getoutmyinv" then
-                        for _, v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-                            game.Players.LocalPlayer.Character.Humanoid:EquipTool(v)
-                            v.Parent = workspace
-                        end
-
-                        game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/pltiger" then loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))() end end)
-                        game:GetService("Players").LocalPlayer.Chatted:connect(
-                            function(msg)
-                                if string.lower(msg) == "/rejoin" then
-                                    local ts = game:GetService("TeleportService")
-                                    local p = game:GetService("Players").LocalPlayer
-                                    ts:Teleport(game.PlaceId, p)
-                                end
-                            end
-                        )
+                    if string.lower(msg) == "/rejoin" then
+                        local ts = game:GetService("TeleportService")
+                        local p = game:GetService("Players").LocalPlayer
+                        ts:Teleport(game.PlaceId, p)
                     end
                 end
             )
         end
     end
-)()
+)
