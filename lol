@@ -9,7 +9,7 @@
 -- /swordreach-- for any Sword fight game
 -- /pltiger-- for Prison life
 -- /quickfling all-- flings all in the server--
--- /impossiblefling-- antifling--
+-- /nonofling-- antifling--
 -- /bypasser-- bypasses the chat filter--
 -- /f3x-- only works in Sword Fight on the Heights (can move the 3 orange platforms.u need to enter the command "f3x" in infinite yeld after executing)
 -- /kronefling-- Loopflings all players in server (krone bot fling)
