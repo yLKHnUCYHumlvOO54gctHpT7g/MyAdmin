@@ -24,6 +24,7 @@
 -- /antilog-- prevents roblox from logging in ur previous chats and screenshots--
 -- /getoutmyinv-- drops all tools in ur inv--
 
+game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/cmds" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/cmds"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/antilog" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/lol/main/flips"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/quickfling all" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/lol/main/flips"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/dontyoudaretouchme" then loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI"))() end end)
