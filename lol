@@ -23,8 +23,6 @@
 -- /dontyoudaretouchme-- flings everyone u touch--
 -- /antilog-- prevents roblox from logging in ur previous chats and screenshots--
 -- /getoutmyinv-- drops all tools in ur inv--
-
-
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/gimmetools" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/hub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/boomboxraid" then loadstring(game:HttpGet("https://raw.githubusercontent.com/v9h/dhrpvc/main/spam.lua", false))() end end)
@@ -63,47 +61,12 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
                 end
             )
 
-            game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/boomboxraid" then loadstring(game:HttpGet("https://raw.githubusercontent.com/v9h/dhrpvc/main/spam.lua", false))() end end)
-            game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/hub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))() end end)
-            game:GetService("Players").LocalPlayer.Chatted:connect(
-                function(msg)
-                    if string.lower(msg) == "/gimmetools" then
-                        local p = game:GetService("Players").LocalPlayer
-                        local c = p.Character
-                        if c and c:FindFirstChild("Humanoid") then
-                            for i, v in pairs(game:GetService("Workspace"):GetDescendants()) do
-                                if v:IsA("Tool") then c:FindFirstChild("Humanoid"):EquipTool(v) end
-                            end
-                        end
-                    end
-                end
-            )
-
             game:GetService("Players").LocalPlayer.Chatted:connect(
                 function(msg)
                     if string.lower(msg) == "/rejoin" then
                         local ts = game:GetService("TeleportService")
                         local p = game:GetService("Players").LocalPlayer
                         ts:Teleport(game.PlaceId, p)
-                    end
-                end
-            )
-
-            game:GetService("Players").LocalPlayer.Chatted:connect(
-                function(msg)
-                    if string.lower(msg) == "/oof" then
-                        game.Players.LocalPlayer.Character.Humanoid.Health = 0
-                        function log()
-                            deadpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-                        end
-
-                        game.Players.LocalPlayer.Character.Humanoid.Died:Connect(log)
-                        game.Players.LocalPlayer.CharacterAdded:Connect(
-                            function(char)
-                                char:WaitForChild("Humanoid", 3).Died:Connect(log)
-                                char:WaitForChild("HumanoidRootPart", 3).CFrame = deadpos
-                            end
-                        )
                     end
                 end
             )
