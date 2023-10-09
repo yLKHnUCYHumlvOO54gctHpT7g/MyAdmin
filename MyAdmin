@@ -19,7 +19,7 @@
 
 
 local BlacklistedUsers = {
-    2444203145,782760380
+    782760380,
 }
 
 local localPlayer = game.Players.LocalPlayer
