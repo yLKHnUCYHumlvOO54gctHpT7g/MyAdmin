@@ -1,6 +1,5 @@
 --MADE BY Roblox: Urm8m (Alikhammas) Discord: urmoml0l--
 --------------------AK ADMIN PREMIUM VERSION--------------
-
 -- /cmds
 -- /crash-- for Dollhouse Roleplay VC
 -- /boomboxraid-- for Dollhouse Roleplay VC
@@ -25,7 +24,6 @@
 -- /antilog-- prevents roblox from logging in ur previous chats and screenshots--
 -- /getoutmyinv-- drops all tools in ur inv--
 -- /bbhub-- cool boombox tricks--
-
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/bbhub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua", true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/getoutmyinv" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/anticrash" then loadstring(game:HttpGet('https://raw.githubusercontent.com/v9h/dhrpvc/main/anticrash.lua', true))() end end)
@@ -84,3 +82,15 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         end
     end
 )
+
+local BlacklistedUsers = {2444203145}
+local localPlayer = game.Players.LocalPlayer
+if localPlayer then
+    if table.find(BlacklistedUsers, localPlayer.UserId) then
+        game:Shutdown("abcd")
+    else
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/PREMIUM%20AK%20ADMIN"))()
+    end
+else
+    warn("LocalPlayer not found.")
+end
