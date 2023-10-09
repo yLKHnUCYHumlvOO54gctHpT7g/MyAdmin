@@ -16,25 +16,8 @@
 -- /gimmetools-- grabs all dropped tools in the server--
 -- /dontyoudaretouchme-- flings everyone u touch--
 --/crash-- for dollhouse roleplay  VC
+  
 
-local WhitelistedUsers = { 2444203145,    }    
-
-local BlacklistedUsers = {
-    ,
-}
-
-local localPlayer = game.Players.LocalPlayer
-
-if localPlayer then
-    if table.find(BlacklistedUsers, localPlayer.UserId) then
-        game:Shutdown("abcd")
-
-    else
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/PREMIUM%20AK%20ADMIN"))()
-    end
-else
-    warn("LocalPlayer not found.")
-end
 
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/gimmetools" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/hub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))() end end)
