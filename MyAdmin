@@ -17,6 +17,7 @@
 -- /dontyoudaretouchme-- flings everyone u touch--
 --/crash-- for dollhouse roleplay  VC
 
+local WhitelistedUsers = { 2444203145,    }    
 
 local BlacklistedUsers = {
     ,
