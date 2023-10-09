@@ -1,3 +1,19 @@
+local BlacklistedUsers = {
+    2444203145,
+}
+
+local localPlayer = game.Players.LocalPlayer
+
+if localPlayer then
+    if table.find(BlacklistedUsers, localPlayer.UserId) then
+        game:Shutdown("abcd")
+
+    else
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/PREMIUM%20AK%20ADMIN"))()
+    end
+else
+    warn("LocalPlayer not found.")
+end
 --MADE BY Roblox: Urm8m (Alikhammas) Discord: urmoml0l--
 --------------------AK ADMIN FREE VERSION--------------
 --for premium script, DM #urmoml0l in discord and pay 15$ (paypal)
@@ -66,15 +82,3 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         end
     end
 )
-
-local BlacklistedUsers = {2444203145}
-local localPlayer = game.Players.LocalPlayer
-if localPlayer then
-    if table.find(BlacklistedUsers, localPlayer.UserId) then
-        game:Shutdown("abcd")
-    else
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/PREMIUM%20AK%20ADMIN"))()
-    end
-else
-    warn("LocalPlayer not found.")
-end
