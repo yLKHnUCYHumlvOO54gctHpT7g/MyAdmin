@@ -1,7 +1,6 @@
 --MADE BY Roblox: Urm8m (Alikhammas) Discord: urmoml0l--
 --------------------AK ADMIN FREE VERSION--------------
 --for premium script, DM #urmoml0l in discord and pay 15$ (paypal)
-
 -- /boomboxraid-- for Dollhouse Roleplay VC
 -- /hub-- for any game
 -- /emoji-- for any game ( exapmle ":skull:, :cry:")
@@ -16,8 +15,7 @@
 -- /oof-- advanced resetting (tps u the same place u resetted)--
 -- /gimmetools-- grabs all dropped tools in the server--
 -- /dontyoudaretouchme-- flings everyone u touch--
-
-
+--/crash-- for dollhouse roleplay  VC
 
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/gimmetools" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/hub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))() end end)
@@ -41,3 +39,31 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         end
     end
 )()
+
+game:GetService("Players").LocalPlayer.Chatted:connect(
+    function(msg)
+        if string.lower(msg) == "/crash" then -- harun
+            local Player = game:GetService("Players").LocalPlayer
+            local ReplicatedStorage = game:GetService("ReplicatedStorage")
+            local Remotes = {ReplicatedStorage.GiveBox, ReplicatedStorage.GiveCat}
+            for i = 1, 400 do
+                for _, v in pairs(Remotes) do
+                    v:FireServer()
+                end
+            end
+
+            repeat
+                task.wait()
+            until #Player.Backpack:GetChildren() >= 800
+
+            task.wait(3)
+            for i, v in pairs(Player.Backpack:GetChildren()) do
+                v.Parent = Player.Character
+                v.Handle:Destroy()
+            end
+
+            task.wait(5)
+            Player.Character:BreakJoints()
+        end
+    end
+)
