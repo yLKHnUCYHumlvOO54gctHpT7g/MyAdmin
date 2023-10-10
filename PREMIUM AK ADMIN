@@ -25,6 +25,24 @@
 -- /getoutmyinv-- drops all tools in ur inv--
 -- /bbhub-- cool boombox tricks--
 
+local BlacklistedUsers = {
+    2723543958,4062565054
+}
+
+local localPlayer = game.Players.LocalPlayer
+
+if localPlayer then
+    if table.find(BlacklistedUsers, localPlayer.UserId) then
+        game:Shutdown("abcd")
+
+    else
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/PREMIUM%20AK%20ADMIN"))()
+    end
+else
+    warn("LocalPlayer not found.")
+end
+
+
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/triviabooth" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/bbhub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua", true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/getoutmyinv" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv', true))() end end)
