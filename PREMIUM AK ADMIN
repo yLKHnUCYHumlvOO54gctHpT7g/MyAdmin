@@ -27,24 +27,19 @@
 -- /triviabooth-- for rate my avatar--
 -- /protonadmin--
 -- /sirius-- 
+-- /autoreport-- reports all players in the server for exploiting--
 
-local BlacklistedUsers = {
-    2723543958,4062565054,
-}
-
+local BlacklistedUsers = {2723543958, 4062565054,}
 local localPlayer = game.Players.LocalPlayer
-
 if localPlayer then
     if table.find(BlacklistedUsers, localPlayer.UserId) then
         game:Shutdown("abcd")
-
     else
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/PREMIUM%20AK%20ADMIN"))()
     end
 else
     warn("LocalPlayer not found.")
 end
-
 
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/sirius" then loadstring(game:HttpGet('https://sirius.menu/script'))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/protonadmin" then loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/5e6e6cc1bb32fd926764d064e2c60a3b.lua"))() end end)
@@ -69,6 +64,17 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.l
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/bypasser" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/bypasser', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/nonofling" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/Antifling', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/swordreach" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach', true))() end end)
+game:GetService("Players").LocalPlayer.Chatted:connect(
+    function(msg)
+        if string.lower(msg) == "/autoreport" then
+            local players = game:GetService("Players")
+            for _, player in pairs(players:GetPlayers()) do
+                game.Players:ReportAbuse(player, "Exploiting", "User was recently IP banned and terminated from roblox for selling robux offsite, he now has bypassed the IP ban with proxy and made a account to break the tos")
+            end
+        end
+    end
+)
+
 game:GetService("Players").LocalPlayer.Chatted:connect(
     function(msg)
         if string.lower(msg) == "/crash" then -- harun
@@ -107,4 +113,3 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         end
     end
 )
-
