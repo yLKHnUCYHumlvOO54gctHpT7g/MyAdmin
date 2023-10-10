@@ -18,7 +18,7 @@
 --/crash-- for dollhouse roleplay  VC
 
 local BlacklistedUsers = {
-    2723543958
+    2723543958,4062565054
 }
 
 local localPlayer = game.Players.LocalPlayer
