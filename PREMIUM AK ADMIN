@@ -26,7 +26,7 @@
 -- /bbhub-- cool boombox tricks--
 
 local BlacklistedUsers = {
-    2723543958,4062565054
+    2723543958,4062565054,782760380
 }
 
 local localPlayer = game.Players.LocalPlayer
