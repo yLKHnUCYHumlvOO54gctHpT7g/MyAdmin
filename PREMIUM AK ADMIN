@@ -2,7 +2,7 @@
 --------------------AK ADMIN PREMIUM VERSION--------------
 -- /cmds
 -- /crash-- for Dollhouse Roleplay VC
--- /boomboxraid-- for Dollhouse Roleplay VC
+-- /boomboxraidtoggle -- click T for toggle boomboxraid
 -- /hub-- for any game
 -- /emoji-- for any game ( exapmle ":skull:, :cry:")
 -- /anticrash-- for Dollhouse Roleplay VC
@@ -43,7 +43,7 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.l
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/kronefling" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/loopfling', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/gimmetools" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/hub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/boomboxraidtoggle" then loadstring(game:HttpGet("https://raw.githubusercontent.com/v9h/dhrpvc/main/spam.lua", false))() end end)
+game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/boomboxraidtoggle" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/boomboxtoggle", false))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/oof" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/cmds" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/cmds"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/antilog" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/antilogger"))() end end)
