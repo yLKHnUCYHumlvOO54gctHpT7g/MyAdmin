@@ -35,7 +35,7 @@
 -- /aimbot--
 -- /chaoshub-- only works in chaos
 
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/raidtoggle"))()()
+
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/toggle " then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/boomboxtoggle'))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/sirius" then loadstring(game:HttpGet('https://sirius.menu/script'))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/chaoshub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua"))() end end)
