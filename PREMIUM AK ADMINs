@@ -34,8 +34,6 @@
 -- /autoreport-- reports all players in the server for exploiting--
 -- /aimbot--
 -- /chaoshub-- only works in chaos
-
-
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/toggle " then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/raidtoggle'))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/sirius" then loadstring(game:HttpGet('https://sirius.menu/script'))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/chaoshub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua"))() end end)
@@ -67,3 +65,47 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.l
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/pltiger" then loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/rejoin" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin', true))() end end)()
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/fps" then loadstring(game:HttpGet("https://pastebin.com/raw/eHEfAR8z", true))() end end)
+local isKittyRaidLooping = false
+local isBoomboxRaidLooping = false
+local function processChatCommand(msg)
+    if string.lower(msg) == "/kittyraid on" then
+        isKittyRaidLooping = true
+        print("Kitty Raid Loop is now ON")
+    elseif string.lower(msg) == "/kittyraid off" then
+        isKittyRaidLooping = false
+        print("Kitty Raid Loop is now OFF")
+    elseif string.lower(msg) == "/boomboxraid on" then
+        isBoomboxRaidLooping = true
+        print("Boombox Raid Loop is now ON")
+    elseif string.lower(msg) == "/boomboxraid off" then
+        isBoomboxRaidLooping = false
+        print("Boombox Raid Loop is now OFF")
+    elseif string.lower(
+        -- Add your commands here --
+        msg
+    ) == "/yourcommand" then
+    end
+end
+
+-- Add functionality for your custom command here
+game:GetService("Players").LocalPlayer.Chatted:Connect(processChatCommand)
+local function raidLoop()
+    while true do
+        wait() -- Wait for the next frame
+        local backpack = game.Players.LocalPlayer.Backpack
+        if isKittyRaidLooping or isBoomboxRaidLooping then
+            for _, tool in pairs(backpack:GetChildren()) do
+                if tool:IsA("Tool") then
+                    tool.Parent = game.Players.LocalPlayer.Character
+                    tool.Parent = workspace
+                end
+            end
+        end
+
+        if isKittyRaidLooping then game.ReplicatedStorage.GiveCat:FireServer() end
+        if isBoomboxRaidLooping then game.ReplicatedStorage.GiveBox:FireServer() end
+    end
+end
+
+-- Add logic for other raid loops or functionalities here --
+raidLoop() -- Start the raid loop
