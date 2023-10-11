@@ -1,22 +1,25 @@
-local UserInputService = game:GetService("UserInputService")
 local isLooping = false
 
-local function toggleLoop()
-    isLooping = not isLooping
-    print("Loop is now " .. (isLooping and "ON" or "OFF"))
+local function onChatMessageReceived(message)
+    if message:lower() == "/boomboxraid on" then
+        isLooping = true
+        print("Loop is now ON")
+    elseif message:lower() == "/boomboxraid off" then
+        isLooping = false
+        print("Loop is now OFF")
+    end
 end
 
-UserInputService.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.n then
-        toggleLoop()
-    end
+local player = game.Players.LocalPlayer
+
+player.Chatted:Connect(function(message)
+    onChatMessageReceived(message)
 end)
 
 while true do
-    task.wait() -- Wait for the next frame or specific interval (you can adjust this as needed)
+    wait() -- Wait for the next frame
 
     if isLooping then
-        local player = game.Players.LocalPlayer
         local backpack = player.Backpack
 
         for _, tool in pairs(backpack:GetChildren()) do
