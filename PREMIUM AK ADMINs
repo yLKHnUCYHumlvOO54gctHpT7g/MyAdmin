@@ -66,4 +66,3 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.l
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/quickfling all" then loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/pltiger" then loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/rejoin" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin', true))() end end)()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/raidtoggle"))()()
