@@ -119,5 +119,3 @@ while true do
         game.ReplicatedStorage.GiveBox:FireServer()
     end
 end
-
-warn("LocalPlayer not found.")
