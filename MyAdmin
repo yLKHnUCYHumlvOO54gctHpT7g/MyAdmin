@@ -49,40 +49,5 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.l
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/f3x" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/F3x', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/swordreach" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/pltiger" then loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(
-    function(msg)
-        if string.lower(msg) == "/rejoin" then
-            local ts = game:GetService("TeleportService")
-            local p = game:GetService("Players").LocalPlayer
-            ts:Teleport(game.PlaceId, p)
-        end
-    end
-)()
-
-game:GetService("Players").LocalPlayer.Chatted:connect(
-    function(msg)
-        if string.lower(msg) == "/crash" then -- harun
-            local Player = game:GetService("Players").LocalPlayer
-            local ReplicatedStorage = game:GetService("ReplicatedStorage")
-            local Remotes = {ReplicatedStorage.GiveBox, ReplicatedStorage.GiveCat}
-            for i = 1, 400 do
-                for _, v in pairs(Remotes) do
-                    v:FireServer()
-                end
-            end
-
-            repeat
-                task.wait()
-            until #Player.Backpack:GetChildren() >= 800
-
-            task.wait(3)
-            for i, v in pairs(Player.Backpack:GetChildren()) do
-                v.Parent = Player.Character
-                v.Handle:Destroy()
-            end
-
-            task.wait(5)
-            Player.Character:BreakJoints()
-        end
-    end
-)
+game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/rejoin" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin', true))() end end)()
+game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/crash" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/crash', true))() end end)
