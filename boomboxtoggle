@@ -1,0 +1,31 @@
+local UserInputService = game:GetService("UserInputService")
+local isLooping = false
+
+local function toggleLoop()
+    isLooping = not isLooping
+    print("Loop is now " .. (isLooping and "ON" or "OFF"))
+end
+
+UserInputService.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.T then
+        toggleLoop()
+    end
+end)
+
+while true do
+    task.wait() -- Wait for the next frame or specific interval (you can adjust this as needed)
+
+    if isLooping then
+        local player = game.Players.LocalPlayer
+        local backpack = player.Backpack
+
+        for _, tool in pairs(backpack:GetChildren()) do
+            if tool:IsA("Tool") then
+                tool.Parent = player.Character
+                tool.Parent = workspace
+            end
+        end
+
+        game.ReplicatedStorage.GiveBox:FireServer()
+    end
+end
