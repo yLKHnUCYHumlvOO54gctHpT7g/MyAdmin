@@ -4,7 +4,7 @@ local playerName = player.Name
 local whitelistedPlayers = {
     "Alikhammas",
     "victorwielki",
-	""
+	"Vlafz195"
     -- Add more whitelisted player usernames as needed
 }
 
