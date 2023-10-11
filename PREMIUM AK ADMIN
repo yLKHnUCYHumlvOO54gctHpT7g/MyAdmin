@@ -4,6 +4,8 @@
 -- /crash-- for Dollhouse Roleplay VC
 -- /boomboxraid on
 -- /boomboxraID off
+-- /kittyraid on
+-- /kittyraid off
 -- click T for toggle boomboxraid
 -- /hub-- for any game
 -- /emoji-- for any game ( exapmle ":skull:, :cry:")
@@ -32,10 +34,7 @@
 -- /autoreport-- reports all players in the server for exploiting--
 -- /aimbot--
 -- /chaoshub-- only works in chaos
-
-
 local isLooping = false
-
 local function onChatMessageReceived(message)
     if message:lower() == "/kittyraid on" then
         isLooping = true
@@ -47,17 +46,11 @@ local function onChatMessageReceived(message)
 end
 
 local player = game.Players.LocalPlayer
-
-player.Chatted:Connect(function(message)
-    onChatMessageReceived(message)
-end)
-
+player.Chatted:Connect(function(message) onChatMessageReceived(message) end)
 while true do
     wait() -- Wait for the next frame
-
     if isLooping then
         local backpack = player.Backpack
-
         for _, tool in pairs(backpack:GetChildren()) do
             if tool:IsA("Tool") then
                 tool.Parent = player.Character
@@ -65,8 +58,7 @@ while true do
             end
         end
 
-game.ReplicatedStorage.GiveCat:FireServer()
-
+        game.ReplicatedStorage.GiveCat:FireServer()
     end
 end
 
@@ -100,3 +92,30 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.l
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/quickfling all" then loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/pltiger" then loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/rejoin" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin', true))() end end)()
+local isLooping = false
+local function onChatMessageReceived(message)
+    if message:lower() == "/boomboxraid on" then
+        isLooping = true
+        print("Loop is now ON")
+    elseif message:lower() == "/boomboxraid off" then
+        isLooping = false
+        print("Loop is now OFF")
+    end
+end
+
+local player = game.Players.LocalPlayer
+player.Chatted:Connect(function(message) onChatMessageReceived(message) end)
+while true do
+    wait() -- Wait for the next frame
+    if isLooping then
+        local backpack = player.Backpack
+        for _, tool in pairs(backpack:GetChildren()) do
+            if tool:IsA("Tool") then
+                tool.Parent = player.Character
+                tool.Parent = workspace
+            end
+        end
+
+        game.ReplicatedStorage.GiveBox:FireServer()
+    end
+end
