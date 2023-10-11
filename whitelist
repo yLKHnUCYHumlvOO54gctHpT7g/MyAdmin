@@ -1,0 +1,27 @@
+local whitelistedPlayers = {
+    "",
+    "WhitelistedPlayer2",
+    -- Add more whitelisted player usernames as needed
+}
+
+local player = game.Players.LocalPlayer
+local playerName = player.Name
+
+local function isPlayerWhitelisted()
+    for _, whitelistedUser in ipairs(whitelistedPlayers) do
+        if playerName:lower() == whitelistedUser:lower() then
+            return true
+        end
+    end
+    return false
+end
+
+if isPlayerWhitelisted() then
+    print("executed PREMIUM AK ADMIN  Succesfully")
+    print("You are whitelisted. Executing the script.")
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/PREMIUM%20AK%20ADMIN'))()
+else
+    print(player.Name .. " is not whitelisted. Denying access.")
+    player:Kick("You are not whitelisted to use this script.")
+    print("You are not whitelisted to use this script.")
+end
