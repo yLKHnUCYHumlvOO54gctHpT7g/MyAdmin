@@ -7,7 +7,7 @@ local function toggleLoop()
 end
 
 UserInputService.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.0 then
+    if input.KeyCode == Enum.KeyCode.< then
         toggleLoop()
     end
 end)
