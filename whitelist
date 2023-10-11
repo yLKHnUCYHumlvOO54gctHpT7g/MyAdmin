@@ -1,5 +1,5 @@
 local whitelistedPlayers = {
-    "",
+    "Alikhammas",
     "WhitelistedPlayer2",
     -- Add more whitelisted player usernames as needed
 }
