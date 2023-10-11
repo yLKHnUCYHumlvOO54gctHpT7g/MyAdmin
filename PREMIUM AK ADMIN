@@ -64,3 +64,38 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.l
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/quickfling all" then loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/pltiger" then loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/rejoin" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin', true))() end end)()
+local isKittyRaidLooping = false
+local isBoomboxRaidLooping = false
+local function onChatMessageReceived(message)
+    if message:lower() == "/kittyraid on" then
+        isKittyRaidLooping = true
+        print("Kitty Raid Loop is now ON")
+    elseif message:lower() == "/kittyraid off" then
+        isKittyRaidLooping = false
+        print("Kitty Raid Loop is now OFF")
+    elseif message:lower() == "/boomboxraid on" then
+        isBoomboxRaidLooping = true
+        print("Boombox Raid Loop is now ON")
+    elseif message:lower() == "/boomboxraid off" then
+        isBoomboxRaidLooping = false
+        print("Boombox Raid Loop is now OFF")
+    end
+end
+
+local player = game.Players.LocalPlayer
+player.Chatted:Connect(function(message) onChatMessageReceived(message) end)
+while true do
+    wait() -- Wait for the next frame
+    local backpack = player.Backpack
+    if isKittyRaidLooping or isBoomboxRaidLooping then
+        for _, tool in pairs(backpack:GetChildren()) do
+            if tool:IsA("Tool") then
+                tool.Parent = player.Character
+                tool.Parent = workspace
+            end
+        end
+    end
+
+    if isKittyRaidLooping then game.ReplicatedStorage.GiveCat:FireServer() end
+    if isBoomboxRaidLooping then game.ReplicatedStorage.GiveBox:FireServer() end
+end
