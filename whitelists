@@ -5,7 +5,7 @@ local whitelistedPlayers = {
     "Alikhammas",
     "victorwielki",
 	"Vlafz195",
-"rb0zo"
+"rb0zo",
 "DVXmasters748"
     -- Add more whitelisted player usernames as needed
 }
