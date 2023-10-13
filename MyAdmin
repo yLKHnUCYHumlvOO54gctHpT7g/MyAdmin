@@ -37,6 +37,8 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg)
         loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))()
     elseif string.lower(msg) == "/kick all" then
         loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))()
+    elseif string.lower(msg) == "/fps" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))()
     -- Add other commands here --
     end
 end)
