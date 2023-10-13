@@ -46,3 +46,5 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
 
 -- Add other commands here --
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/message"))()
+game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer("😍AK ADMIN😍", "All")
+game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(".gg/pcPKMpgs", "All")
