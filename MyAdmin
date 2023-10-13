@@ -40,6 +40,8 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))()
         elseif string.lower(msg) == "/fps" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))()
+        elseif string.lower(msg) == "/byebye all" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/quickfling"))()
         end
     end
 )
