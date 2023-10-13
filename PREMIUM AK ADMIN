@@ -59,7 +59,7 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         elseif string.lower(msg) == "/pltiger" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))()
         elseif string.lower(msg) == "/fps" then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua"))()
         elseif string.lower(msg) == "/rejoin" then
             local tpservice = game:GetService("TeleportService")
             local plr = game.Players.LocalPlayer
