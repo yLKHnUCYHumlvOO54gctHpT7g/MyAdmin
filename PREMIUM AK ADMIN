@@ -104,6 +104,6 @@ local function raidLoop()
 end
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/message"))()
-game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer("😍AK ADMIN PREMIUM😍", "All")
+game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer("😎AK ADMIN PREMIUM😎", "All")
 game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(".gg/pcPKMpgs", "All")
 raidLoop() -- Start the raid loop
