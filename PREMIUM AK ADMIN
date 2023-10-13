@@ -1,72 +1,73 @@
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg)
-    if string.lower(msg) == "/toggle " then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/raidtoggle'))()
-    elseif string.lower(msg) == "/sirius" then
-        loadstring(game:HttpGet('https://sirius.menu/script'))()
-    elseif string.lower(msg) == "/chaoshub" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua"))()
-    elseif string.lower(msg) == "/aimbot" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot"))()
-	elseif string.lower(msg) == "/autoreport" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/report"))()
-    elseif string.lower(msg) == "/protonadmin" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin"))()
-    elseif string.lower(msg) == "/triviabooth" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth"))()
-    elseif string.lower(msg) == "/bbhub" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua", true))()
-    elseif string.lower(msg) == "/getoutmyinv" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv', true))()
-	elseif string.lower(msg) == "/anticrash" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/v9h/dhrpvc/main/anticrash.lua', true))()
-    elseif string.lower(msg) == "/kronefling" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/loopfling', true))()
-    elseif string.lower(msg) == "/gimmetools" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools"))()
-    elseif string.lower(msg) == "/hub" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))()
-    elseif string.lower(msg) == "/oof" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof"))()
-    elseif string.lower(msg) == "/cmds" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/cmds"))()
-    elseif string.lower(msg) == "/antilog" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/antilogger"))()
-    elseif string.lower(msg) == "/dontyoudaretouchme" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI"))()
-    elseif string.lower(msg) == "/serverhop" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/emoji/main/serverhop", true))()
-    elseif string.lower(msg) == "/afk" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/LoadstringypVvhJBq4QNz", true))()
-    elseif string.lower(msg) == "/ftao" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/BlizTBr/scripts/main/FTAP.lua"))()
-    elseif string.lower(msg) == "/iy" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
-    elseif string.lower(msg) == "/emoji" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/emo', true))()
-    elseif string.lower(msg) == "/f3x" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/F3x', true))()
-    elseif string.lower(msg) == "/bypasser" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/bypasser', true))()
-    elseif string.lower(msg) == "/nonofling" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/Antifling', true))()
-    elseif string.lower(msg) == "/swordreach" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach', true))()
-    elseif string.lower(msg) == "/crash" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/crash', true))()
-    elseif string.lower(msg) == "/quickfling all" then
-        loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))()
-    elseif string.lower(msg) == "/pltiger" then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))()
-    elseif string.lower(msg) == "/fps" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))()
-    -- Add other commands here --
+game:GetService("Players").LocalPlayer.Chatted:connect(
+    function(msg)
+        if string.lower(msg) == "/toggle " then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/raidtoggle'))()
+        elseif string.lower(msg) == "/sirius" then
+            loadstring(game:HttpGet('https://sirius.menu/script'))()
+        elseif string.lower(msg) == "/chaoshub" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua"))()
+        elseif string.lower(msg) == "/aimbot" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot"))()
+        elseif string.lower(msg) == "/autoreport" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/report"))()
+        elseif string.lower(msg) == "/protonadmin" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin"))()
+        elseif string.lower(msg) == "/triviabooth" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth"))()
+        elseif string.lower(msg) == "/bbhub" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua", true))()
+        elseif string.lower(msg) == "/getoutmyinv" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv', true))()
+        elseif string.lower(msg) == "/anticrash" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/v9h/dhrpvc/main/anticrash.lua', true))()
+        elseif string.lower(msg) == "/kronefling" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/loopfling', true))()
+        elseif string.lower(msg) == "/gimmetools" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools"))()
+        elseif string.lower(msg) == "/hub" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))()
+        elseif string.lower(msg) == "/oof" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof"))()
+        elseif string.lower(msg) == "/cmds" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/cmds"))()
+        elseif string.lower(msg) == "/antilog" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/antilogger"))()
+        elseif string.lower(msg) == "/dontyoudaretouchme" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI"))()
+        elseif string.lower(msg) == "/serverhop" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/emoji/main/serverhop", true))()
+        elseif string.lower(msg) == "/afk" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/LoadstringypVvhJBq4QNz", true))()
+        elseif string.lower(msg) == "/ftao" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/BlizTBr/scripts/main/FTAP.lua"))()
+        elseif string.lower(msg) == "/iy" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
+        elseif string.lower(msg) == "/emoji" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/emo', true))()
+        elseif string.lower(msg) == "/f3x" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/F3x', true))()
+        elseif string.lower(msg) == "/bypasser" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/bypasser', true))()
+        elseif string.lower(msg) == "/nonofling" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/Antifling', true))()
+        elseif string.lower(msg) == "/swordreach" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach', true))()
+        elseif string.lower(msg) == "/crash" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/crash', true))()
+        elseif string.lower(msg) == "/quickfling all" then
+            loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))()
+        elseif string.lower(msg) == "/pltiger" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))()
+        elseif string.lower(msg) == "/fps" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))()
+        end
     end
-end)
+)
 
+-- Add other commands here --
 -- Second Script (Loops)
 local isKittyRaidLooping = false
 local isBoomboxRaidLooping = false
-
 local function processChatCommand(msg)
     if string.lower(msg) == "/kittyraid on" then
         isKittyRaidLooping = true
@@ -84,12 +85,10 @@ local function processChatCommand(msg)
 end
 
 game:GetService("Players").LocalPlayer.Chatted:Connect(processChatCommand)
-
 local function raidLoop()
     while true do
         wait() -- Wait for the next frame
         local backpack = game.Players.LocalPlayer.Backpack
-
         if isKittyRaidLooping or isBoomboxRaidLooping then
             for _, tool in pairs(backpack:GetChildren()) do
                 if tool:IsA("Tool") then
@@ -99,14 +98,12 @@ local function raidLoop()
             end
         end
 
-        if isKittyRaidLooping then
-            game.ReplicatedStorage.GiveCat:FireServer()
-        end
-
-        if isBoomboxRaidLooping then
-            game.ReplicatedStorage.GiveBox:FireServer()
-        end
+        if isKittyRaidLooping then game.ReplicatedStorage.GiveCat:FireServer() end
+        if isBoomboxRaidLooping then game.ReplicatedStorage.GiveBox:FireServer() end
     end
 end
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/message"))()
+game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer("😍AK ADMIN PREMIUM😍", "All")
+game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(".gg/pcPKMpgs", "All")
 raidLoop() -- Start the raid loop
