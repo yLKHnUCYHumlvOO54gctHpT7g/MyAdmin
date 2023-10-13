@@ -60,6 +60,10 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
             loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))()
         elseif string.lower(msg) == "/fps" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))()
+        elseif string.lower(msg) == "/rejoin" then
+            local tpservice = game:GetService("TeleportService")
+            local plr = game.Players.LocalPlayer
+            tpservice:Teleport(game.PlaceId, plr)
         end
     end
 )
