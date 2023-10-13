@@ -34,6 +34,6 @@ game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.l
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/rejoin" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin', true))() end end)()
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/crash" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/crash', true))() end end)
 game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/fps" then loadstring(game:HttpGet("https://pastebin.com/raw/eHEfAR8z", true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/kick" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))() end end)
+game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/lol" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))() end end)
 
 
