@@ -54,8 +54,8 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
             loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach', true))()
         elseif string.lower(msg) == "/crash" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/crash', true))()
-        elseif string.lower(msg) == "/quickfling all" then
-            loadstring(game:HttpGet("https://pastebin.com/raw/zqyDSUWX"))()
+        elseif string.lower(msg) == "/byebye all" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/quickfling"))()
         elseif string.lower(msg) == "/pltiger" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))()
         elseif string.lower(msg) == "/fps" then
