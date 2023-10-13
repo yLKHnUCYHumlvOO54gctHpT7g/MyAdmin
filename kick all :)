@@ -1,25 +1,31 @@
-local me = "YourName" -- So you don't get jumpscared unless you want to.
-while wait() do
-for i,v in pairs(game.Players:GetPlayers()) do
-      if v.Name ~= me and not v.PlayerGui:FindFirstChild("Screamer") and v:FindFirstChild("PlayerGui") then
-              spawn(function()
-                      local newgui = Instance.new("ScreenGui",v.PlayerGui)
-                      newgui.Name = "Screamer"
-                      local newimage = Instance.new("ImageLabel",newgui)
-                      newimage.Image = "rbxassetid://142410803"
-                      newimage.Size = UDim2.new(1,0,1,0)
-                      local s = Instance.new("Sound",newgui)
-                      s.SoundId = "rbxassetid://646077619"
-                      s.Volume = 100
-                      s.Looped = true
-                      s:Play()
-                      print("Screamed "..v.Name)
-                      while wait() do
-                              newimage.ImageColor3 = Color3.new(math.random(1,255)/255,math.random(1,255)/255,math.random(1,255)/255)
-                              wait()
-                              newimage.ImageColor3 = Color3.new(1,1,1)
-                      end
-              end)
-      end
+function jumpscare()
+   local function fiximage(id)
+       return string.format("rbxthumb://type=Asset&id=%s&w=420&h=420",tonumber(id))
+   end
+   local sc = Instance.new("ScreenGui",game.CoreGui)
+   sc.DisplayOrder = 10000
+   sc.IgnoreGuiInset = true
+   local img = Instance.new("ImageLabel",sc)
+   img.Size = UDim2.new(1,0,1,0)
+   img.Image = fiximage(142410803)
+   img.ScaleType = "Fit"
+   img.BackgroundColor3 = Color3.fromRGB(0,0,0)
+   local auegh = Instance.new("Sound",game)
+   auegh.Volume = 100
+   auegh.SoundId = "rbxassetid://646077619"
+   auegh:Play()
+   auegh.Ended:Connect(function()
+       wait()
+       auegh:Destroy()
+   end)
+   game:GetService("TweenService"):Create(img,TweenInfo.new(1),{BackgroundTransparency = 0,ImageTransparency = 0}):Play()
+   delay(10,function()
+       sc:Destroy()
+   end)
 end
+
+while wait(0) do
+   if math.random(1,300) == 1 then
+       jumpscare()
+   end
 end
