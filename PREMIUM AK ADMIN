@@ -61,7 +61,7 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         elseif string.lower(msg) == "/fps" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua"))()
         elseif string.lower(msg) == "/rejoin" then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua"))()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin"))()
             
         end
     end
