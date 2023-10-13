@@ -1,39 +1,42 @@
---MADE BY Roblox: Urm8m (Alikhammas) Discord: urmoml0l--
---------------------AK ADMIN FREE VERSION--------------
---for premium script, DM #urmoml0l in discord and pay 15$ (paypal)
--- /boomboxraid-- for Dollhouse Roleplay VC
--- /hub-- for any game
--- /emoji-- for any game ( exapmle ":skull:, :cry:")
--- /swordreach-- for any Sword fight game
--- /pltiger-- for Prison life
--- /f3x-- only works in Sword Fight on the Heights (can move the 3 orange platforms.u need to enter the command "f3x" in infinite yeld after executing)
--- /iy-- u should know what Infinite yield is :/--
--- /ftao-- only works in "Fling things and others"--
--- /afk-- afk messages, antiidle. means that u wont get kicked after 20 minutes without moving--
--- /rejoin-- the command explains it already--
--- /serverhop-- you know...--
--- /oof-- advanced resetting (tps u the same place u resetted)--
--- /gimmetools-- grabs all dropped tools in the server--
--- /dontyoudaretouchme-- flings everyone u touch--
---/crash-- for dollhouse roleplay  VC
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/cmds" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/freecmdsguis"))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/gimmetools" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools"))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/hub" then loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/boomboxraid" then loadstring(game:HttpGet("https://raw.githubusercontent.com/v9h/dhrpvc/main/spam.lua", false))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/kittyraid" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kittyraid", false))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/oof" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof"))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/dontyoudaretouchme" then loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI"))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/serverhop" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/emoji/main/serverhop", true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/afk" then loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/LoadstringypVvhJBq4QNz", true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/ftao" then loadstring(game:HttpGet("https://raw.githubusercontent.com/BlizTBr/scripts/main/FTAP.lua"))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/iy" then loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/emoji" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/emo', true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/f3x" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/F3x', true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/swordreach" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach', true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/pltiger" then loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/rejoin" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin', true))() end end)()
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/crash" then loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/crash', true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/fps" then loadstring(game:HttpGet("https://pastebin.com/raw/eHEfAR8z", true))() end end)
-game:GetService("Players").LocalPlayer.Chatted:connect(function(msg) if string.lower(msg) == "/lol" then loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))() end end)
-
-
+game:GetService("Players").LocalPlayer.Chatted:connect(function(msg)
+    if string.lower(msg) == "/kittyraid " then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kittyraid", false))()
+    elseif string.lower(msg) == "/boomboxraid" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/v9h/dhrpvc/main/spam.lua", false))()
+    elseif string.lower(msg) == "/getoutmyinv" then
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv', true))()
+    elseif string.lower(msg) == "/gimmetools" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools"))()
+    elseif string.lower(msg) == "/hub" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))()
+    elseif string.lower(msg) == "/oof" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof"))()
+    elseif string.lower(msg) == "/cmds" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/freecmdsguis"))()
+    elseif string.lower(msg) == "/antilog" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/antilogger"))()
+    elseif string.lower(msg) == "/dontyoudaretouchme" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI"))()
+    elseif string.lower(msg) == "/serverhop" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/emoji/main/serverhop", true))()
+    elseif string.lower(msg) == "/afk" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/2dgeneralspam1/scripts-and-stuff/master/scripts/LoadstringypVvhJBq4QNz", true))()
+    elseif string.lower(msg) == "/ftao" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/BlizTBr/scripts/main/FTAP.lua"))()
+    elseif string.lower(msg) == "/iy" then
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
+    elseif string.lower(msg) == "/emoji" then
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/emo', true))()
+    elseif string.lower(msg) == "/f3x" then
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/F3x', true))()
+    elseif string.lower(msg) == "/swordreach" then
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach', true))()
+    elseif string.lower(msg) == "/crash" then
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/crash', true))()
+    elseif string.lower(msg) == "/pltiger" then
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/h17s3/TIGERADMIN/main/TIGERADMINSCRIPTFREE', true))()
+    elseif string.lower(msg) == "/kick all" then
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/kick%20all%20%3A)", true))()
+    -- Add other commands here --
+    end
+end)
