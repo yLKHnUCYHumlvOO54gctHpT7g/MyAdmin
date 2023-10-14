@@ -43,7 +43,7 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         elseif string.lower(msg) == "/byebye all" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/quickfling"))()
         elseif string.lower(msg) == "/ad" then
-            game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer("😎AK ADMIN PREMIUM😎", "All")
+            game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer("😍AK ADMIN😍", "All")
             game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(".gg/pcPKMpgs", "All")
         end
     end
