@@ -19,9 +19,11 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof"))()
         elseif string.lower(msg) == "/rayx" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/SpaceYes/Lua/Main/DaHood.Lua'))()
+        elseif string.lower(msg) == "/cmds" then
+            
         elseif string.lower(msg) == "/antilog" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/antilogger"))()
-        elseif string.lower(msg) == "/l" then
+        elseif string.lower(msg) == "/legsadmin" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/leg1337/legadmv2/main/legadminv2.lua'))()
         elseif string.lower(msg) == "/serverhop" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/emoji/main/serverhop", true))()
