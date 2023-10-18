@@ -1,1 +1,530 @@
+-- Gui made by VR_official on discord
+-- CMDS By urm0mlol
 
+local ScreenGui = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local ScrollingFrame = Instance.new("ScrollingFrame")
+local byebyeall = Instance.new("TextLabel")
+local UICorner_2 = Instance.new("UICorner")
+local kittyraidonoff = Instance.new("TextLabel")
+local UICorner_3 = Instance.new("UICorner")
+local f3x = Instance.new("TextLabel")
+local UICorner_4 = Instance.new("UICorner")
+local UICorner_5 = Instance.new("UICorner")
+local byebyeall_2 = Instance.new("TextLabel")
+local UICorner_6 = Instance.new("UICorner")
+local byebyeall_3 = Instance.new("TextLabel")
+local UICorner_7 = Instance.new("UICorner")
+local rejoin = Instance.new("TextLabel")
+local UICorner_8 = Instance.new("UICorner")
+local crash = Instance.new("TextLabel")
+local UICorner_9 = Instance.new("UICorner")
+local crash_2 = Instance.new("TextLabel")
+local UICorner_10 = Instance.new("UICorner")
+local Boomboxtoggle = Instance.new("TextLabel")
+local UICorner_11 = Instance.new("UICorner")
+local crash_3 = Instance.new("TextLabel")
+local UICorner_12 = Instance.new("UICorner")
+local oof = Instance.new("TextLabel")
+local UICorner_13 = Instance.new("UICorner")
+local crash_4 = Instance.new("TextLabel")
+local UICorner_14 = Instance.new("UICorner")
+local crash_5 = Instance.new("TextLabel")
+local UICorner_15 = Instance.new("UICorner")
+local crash_6 = Instance.new("TextLabel")
+local UICorner_16 = Instance.new("UICorner")
+local kittyraidonoff_2 = Instance.new("TextLabel")
+local UICorner_17 = Instance.new("UICorner")
+local UIGridLayout = Instance.new("UIGridLayout")
+local crash_7 = Instance.new("TextLabel")
+local UICorner_18 = Instance.new("UICorner")
+local gimmetools = Instance.new("TextLabel")
+local UICorner_19 = Instance.new("UICorner")
+local byebyeall_4 = Instance.new("TextLabel")
+local UICorner_20 = Instance.new("UICorner")
+local crash_8 = Instance.new("TextLabel")
+local UICorner_21 = Instance.new("UICorner")
+local crash_9 = Instance.new("TextLabel")
+local UICorner_22 = Instance.new("UICorner")
+local crash_10 = Instance.new("TextLabel")
+local UICorner_23 = Instance.new("UICorner")
+local Boomboxtoggle_2 = Instance.new("TextLabel")
+local UICorner_24 = Instance.new("UICorner")
+local Title = Instance.new("TextLabel")
+local UICorner_25 = Instance.new("UICorner")
+local Close = Instance.new("TextButton")
+local UICorner_26 = Instance.new("UICorner")
+
+--Properties:
+
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Main.Name = "Main"
+Main.Parent = ScreenGui
+Main.BackgroundColor3 = Color3.fromRGB(121, 143, 154)
+Main.BackgroundTransparency = 0.300
+Main.BorderColor3 = Color3.fromRGB(114, 135, 148)
+Main.BorderSizePixel = 0
+Main.Position = UDim2.new(0.649577796, 0, 0.259351611, 0)
+Main.Size = UDim2.new(0, 452, 0, 366)
+Main.Visible = false
+
+UICorner.Parent = Main
+
+ScrollingFrame.Parent = Main
+ScrollingFrame.Active = true
+ScrollingFrame.BackgroundColor3 = Color3.fromRGB(112, 134, 146)
+ScrollingFrame.BackgroundTransparency = 1.000
+ScrollingFrame.BorderColor3 = Color3.fromRGB(71, 71, 71)
+ScrollingFrame.BorderSizePixel = 0
+ScrollingFrame.Position = UDim2.new(0, 0, 0.106557712, 0)
+ScrollingFrame.Size = UDim2.new(0, 446, 0, 317)
+ScrollingFrame.HorizontalScrollBarInset = Enum.ScrollBarInset.Always
+ScrollingFrame.ScrollBarThickness = 8
+ScrollingFrame.VerticalScrollBarInset = Enum.ScrollBarInset.Always
+ScrollingFrame.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
+
+byebyeall.Name = "byebye all"
+byebyeall.Parent = ScrollingFrame
+byebyeall.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+byebyeall.BackgroundTransparency = 0.350
+byebyeall.BorderColor3 = Color3.fromRGB(0, 0, 0)
+byebyeall.BorderSizePixel = 0
+byebyeall.ClipsDescendants = true
+byebyeall.Position = UDim2.new(0.549019635, 10, 0.328220844, 0)
+byebyeall.Size = UDim2.new(0, 177, 0, 40)
+byebyeall.ZIndex = 2
+byebyeall.Font = Enum.Font.Gotham
+byebyeall.LineHeight = 0.730
+byebyeall.Text = "/hub"
+byebyeall.TextColor3 = Color3.fromRGB(0, 0, 0)
+byebyeall.TextSize = 14.000
+
+UICorner_2.Parent = byebyeall
+
+kittyraidonoff.Name = "kittyraid on/off"
+kittyraidonoff.Parent = ScrollingFrame
+kittyraidonoff.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+kittyraidonoff.BackgroundTransparency = 0.350
+kittyraidonoff.BorderColor3 = Color3.fromRGB(0, 0, 0)
+kittyraidonoff.BorderSizePixel = 0
+kittyraidonoff.Position = UDim2.new(0, 10, 0.091203846, 0)
+kittyraidonoff.Size = UDim2.new(0, 177, 0, 40)
+kittyraidonoff.ZIndex = 2
+kittyraidonoff.Font = Enum.Font.Gotham
+kittyraidonoff.LineHeight = 0.730
+kittyraidonoff.Text = "/kittyraid"
+kittyraidonoff.TextColor3 = Color3.fromRGB(0, 0, 0)
+kittyraidonoff.TextSize = 14.000
+
+UICorner_3.Parent = kittyraidonoff
+
+f3x.Name = "f3x"
+f3x.Parent = ScrollingFrame
+f3x.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+f3x.BackgroundTransparency = 0.350
+f3x.BorderColor3 = Color3.fromRGB(0, 0, 0)
+f3x.BorderSizePixel = 0
+f3x.Position = UDim2.new(0, 10, 0.0209984761, 0)
+f3x.Size = UDim2.new(0, 177, 0, 40)
+f3x.ZIndex = 2
+f3x.Font = Enum.Font.Gotham
+f3x.LineHeight = 0.730
+f3x.Text = " /boomboxraid"
+f3x.TextColor3 = Color3.fromRGB(0, 0, 0)
+f3x.TextSize = 14.000
+
+UICorner_4.Parent = f3x
+
+UICorner_5.Parent = ScrollingFrame
+
+byebyeall_2.Name = "byebye all"
+byebyeall_2.Parent = ScrollingFrame
+byebyeall_2.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+byebyeall_2.BackgroundTransparency = 0.350
+byebyeall_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+byebyeall_2.BorderSizePixel = 0
+byebyeall_2.Position = UDim2.new(0, 10, 0.901629448, 0)
+byebyeall_2.Size = UDim2.new(0, 177, 0, 40)
+byebyeall_2.ZIndex = 2
+byebyeall_2.Font = Enum.Font.Gotham
+byebyeall_2.LineHeight = 0.730
+byebyeall_2.Text = "/antilog"
+byebyeall_2.TextColor3 = Color3.fromRGB(0, 0, 0)
+byebyeall_2.TextSize = 14.000
+byebyeall_2.TextWrapped = true
+
+UICorner_6.Parent = byebyeall_2
+
+byebyeall_3.Name = "byebye all"
+byebyeall_3.Parent = ScrollingFrame
+byebyeall_3.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+byebyeall_3.BackgroundTransparency = 0.350
+byebyeall_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+byebyeall_3.BorderSizePixel = 0
+byebyeall_3.Position = UDim2.new(0, 10, 0.166278914, 0)
+byebyeall_3.Size = UDim2.new(0, 177, 0, 40)
+byebyeall_3.ZIndex = 2
+byebyeall_3.Font = Enum.Font.Gotham
+byebyeall_3.LineHeight = 0.730
+byebyeall_3.Text = "/byebye all"
+byebyeall_3.TextColor3 = Color3.fromRGB(0, 0, 0)
+byebyeall_3.TextSize = 14.000
+
+UICorner_7.Parent = byebyeall_3
+
+rejoin.Name = "rejoin"
+rejoin.Parent = ScrollingFrame
+rejoin.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+rejoin.BackgroundTransparency = 0.350
+rejoin.BorderColor3 = Color3.fromRGB(0, 0, 0)
+rejoin.BorderSizePixel = 0
+rejoin.Position = UDim2.new(0, 10, 0.244357005, 0)
+rejoin.Size = UDim2.new(0, 177, 0, 40)
+rejoin.ZIndex = 2
+rejoin.Font = Enum.Font.Gotham
+rejoin.LineHeight = 0.730
+rejoin.Text = "/rejoin"
+rejoin.TextColor3 = Color3.fromRGB(0, 0, 0)
+rejoin.TextSize = 14.000
+
+UICorner_8.Parent = rejoin
+
+crash.Name = "crash"
+crash.Parent = ScrollingFrame
+crash.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash.BackgroundTransparency = 0.350
+crash.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash.BorderSizePixel = 0
+crash.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash.Size = UDim2.new(0, 177, 0, 40)
+crash.ZIndex = 2
+crash.Font = Enum.Font.Gotham
+crash.LineHeight = 0.730
+crash.Text = "/crash"
+crash.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash.TextSize = 14.000
+
+UICorner_9.Parent = crash
+
+crash_2.Name = "crash"
+crash_2.Parent = ScrollingFrame
+crash_2.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash_2.BackgroundTransparency = 0.350
+crash_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash_2.BorderSizePixel = 0
+crash_2.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash_2.Size = UDim2.new(0, 177, 0, 40)
+crash_2.ZIndex = 2
+crash_2.Font = Enum.Font.Gotham
+crash_2.LineHeight = 0.730
+crash_2.Text = "/f3x"
+crash_2.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash_2.TextSize = 14.000
+
+UICorner_10.Parent = crash_2
+
+Boomboxtoggle.Name = "Boomboxtoggle"
+Boomboxtoggle.Parent = ScrollingFrame
+Boomboxtoggle.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+Boomboxtoggle.BackgroundTransparency = 0.350
+Boomboxtoggle.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Boomboxtoggle.BorderSizePixel = 0
+Boomboxtoggle.Position = UDim2.new(0, 10, 0.607720375, 0)
+Boomboxtoggle.Size = UDim2.new(0, 177, 0, 40)
+Boomboxtoggle.ZIndex = 2
+Boomboxtoggle.Font = Enum.Font.Gotham
+Boomboxtoggle.LineHeight = 0.730
+Boomboxtoggle.Text = "/afk"
+Boomboxtoggle.TextColor3 = Color3.fromRGB(0, 0, 0)
+Boomboxtoggle.TextSize = 14.000
+
+UICorner_11.Parent = Boomboxtoggle
+
+crash_3.Name = "crash"
+crash_3.Parent = ScrollingFrame
+crash_3.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash_3.BackgroundTransparency = 0.350
+crash_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash_3.BorderSizePixel = 0
+crash_3.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash_3.Size = UDim2.new(0, 177, 0, 40)
+crash_3.ZIndex = 2
+crash_3.Font = Enum.Font.Gotham
+crash_3.LineHeight = 0.730
+crash_3.Text = "/fps"
+crash_3.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash_3.TextSize = 14.000
+
+UICorner_12.Parent = crash_3
+
+oof.Name = "oof"
+oof.Parent = ScrollingFrame
+oof.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+oof.BackgroundTransparency = 0.350
+oof.BorderColor3 = Color3.fromRGB(0, 0, 0)
+oof.BorderSizePixel = 0
+oof.Position = UDim2.new(0, 10, 0.392784595, 0)
+oof.Size = UDim2.new(0, 177, 0, 40)
+oof.ZIndex = 2
+oof.Font = Enum.Font.Gotham
+oof.LineHeight = 0.730
+oof.Text = "/oof"
+oof.TextColor3 = Color3.fromRGB(0, 0, 0)
+oof.TextSize = 14.000
+
+UICorner_13.Parent = oof
+
+crash_4.Name = "crash"
+crash_4.Parent = ScrollingFrame
+crash_4.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash_4.BackgroundTransparency = 0.350
+crash_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash_4.BorderSizePixel = 0
+crash_4.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash_4.Size = UDim2.new(0, 177, 0, 40)
+crash_4.ZIndex = 2
+crash_4.Font = Enum.Font.Gotham
+crash_4.LineHeight = 0.730
+crash_4.Text = "/swordreach"
+crash_4.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash_4.TextSize = 14.000
+
+UICorner_14.Parent = crash_4
+
+crash_5.Name = "crash"
+crash_5.Parent = ScrollingFrame
+crash_5.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash_5.BackgroundTransparency = 0.350
+crash_5.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash_5.BorderSizePixel = 0
+crash_5.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash_5.Size = UDim2.new(0, 177, 0, 40)
+crash_5.ZIndex = 2
+crash_5.Font = Enum.Font.Gotham
+crash_5.LineHeight = 0.730
+crash_5.Text = "/pltiger"
+crash_5.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash_5.TextSize = 14.000
+
+UICorner_15.Parent = crash_5
+
+crash_6.Name = "crash"
+crash_6.Parent = ScrollingFrame
+crash_6.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash_6.BackgroundTransparency = 0.350
+crash_6.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash_6.BorderSizePixel = 0
+crash_6.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash_6.Size = UDim2.new(0, 177, 0, 40)
+crash_6.ZIndex = 2
+crash_6.Font = Enum.Font.Gotham
+crash_6.LineHeight = 0.730
+crash_6.Text = "/emoji"
+crash_6.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash_6.TextSize = 14.000
+
+UICorner_16.Parent = crash_6
+
+kittyraidonoff_2.Name = "kittyraid on/ off"
+kittyraidonoff_2.Parent = ScrollingFrame
+kittyraidonoff_2.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+kittyraidonoff_2.BackgroundTransparency = 0.350
+kittyraidonoff_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+kittyraidonoff_2.BorderSizePixel = 0
+kittyraidonoff_2.Position = UDim2.new(0, 10, 0.679792404, 0)
+kittyraidonoff_2.Size = UDim2.new(0, 177, 0, 40)
+kittyraidonoff_2.ZIndex = 2
+kittyraidonoff_2.Font = Enum.Font.Gotham
+kittyraidonoff_2.LineHeight = 0.730
+kittyraidonoff_2.Text = "/iy"
+kittyraidonoff_2.TextColor3 = Color3.fromRGB(0, 0, 0)
+kittyraidonoff_2.TextSize = 14.000
+
+UICorner_17.Parent = kittyraidonoff_2
+
+UIGridLayout.Parent = ScrollingFrame
+UIGridLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIGridLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIGridLayout.CellPadding = UDim2.new(0, 5, 0, 7)
+
+crash_7.Name = "crash"
+crash_7.Parent = ScrollingFrame
+crash_7.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash_7.BackgroundTransparency = 0.350
+crash_7.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash_7.BorderSizePixel = 0
+crash_7.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash_7.Size = UDim2.new(0, 177, 0, 40)
+crash_7.ZIndex = 2
+crash_7.Font = Enum.Font.Gotham
+crash_7.LineHeight = 0.730
+crash_7.Text = "/ad"
+crash_7.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash_7.TextSize = 14.000
+
+UICorner_18.Parent = crash_7
+
+gimmetools.Name = "gimmetools"
+gimmetools.Parent = ScrollingFrame
+gimmetools.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+gimmetools.BackgroundTransparency = 0.350
+gimmetools.BorderColor3 = Color3.fromRGB(0, 0, 0)
+gimmetools.BorderSizePixel = 0
+gimmetools.Position = UDim2.new(0, 10, 0.31943208, 0)
+gimmetools.Size = UDim2.new(0, 177, 0, 40)
+gimmetools.ZIndex = 2
+gimmetools.Font = Enum.Font.Gotham
+gimmetools.LineHeight = 0.730
+gimmetools.Text = "/gimmetools"
+gimmetools.TextColor3 = Color3.fromRGB(0, 0, 0)
+gimmetools.TextSize = 14.000
+
+UICorner_19.Parent = gimmetools
+
+byebyeall_4.Name = "byebye all"
+byebyeall_4.Parent = ScrollingFrame
+byebyeall_4.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+byebyeall_4.BackgroundTransparency = 0.350
+byebyeall_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+byebyeall_4.BorderSizePixel = 0
+byebyeall_4.Position = UDim2.new(0, 10, 0.753063679, 0)
+byebyeall_4.Size = UDim2.new(0, 177, 0, 40)
+byebyeall_4.ZIndex = 2
+byebyeall_4.Font = Enum.Font.Gotham
+byebyeall_4.LineHeight = 0.730
+byebyeall_4.Text = "/getoutmyinv"
+byebyeall_4.TextColor3 = Color3.fromRGB(0, 0, 0)
+byebyeall_4.TextSize = 14.000
+
+UICorner_20.Parent = byebyeall_4
+
+crash_8.Name = "crash"
+crash_8.Parent = ScrollingFrame
+crash_8.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash_8.BackgroundTransparency = 0.350
+crash_8.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash_8.BorderSizePixel = 0
+crash_8.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash_8.Size = UDim2.new(0, 177, 0, 40)
+crash_8.ZIndex = 2
+crash_8.Font = Enum.Font.Gotham
+crash_8.LineHeight = 0.730
+crash_8.Text = "/kick all"
+crash_8.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash_8.TextSize = 14.000
+
+UICorner_21.Parent = crash_8
+
+crash_9.Name = "crash"
+crash_9.Parent = ScrollingFrame
+crash_9.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash_9.BackgroundTransparency = 0.350
+crash_9.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash_9.BorderSizePixel = 0
+crash_9.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash_9.Size = UDim2.new(0, 177, 0, 40)
+crash_9.ZIndex = 2
+crash_9.Font = Enum.Font.Gotham
+crash_9.LineHeight = 0.730
+crash_9.Text = "/ftao"
+crash_9.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash_9.TextSize = 14.000
+
+UICorner_22.Parent = crash_9
+
+crash_10.Name = "crash"
+crash_10.Parent = ScrollingFrame
+crash_10.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+crash_10.BackgroundTransparency = 0.350
+crash_10.BorderColor3 = Color3.fromRGB(0, 0, 0)
+crash_10.BorderSizePixel = 0
+crash_10.Position = UDim2.new(0, 10, 0.467643201, 0)
+crash_10.Size = UDim2.new(0, 177, 0, 40)
+crash_10.ZIndex = 2
+crash_10.Font = Enum.Font.Gotham
+crash_10.LineHeight = 0.730
+crash_10.Text = "/anticrash"
+crash_10.TextColor3 = Color3.fromRGB(0, 0, 0)
+crash_10.TextSize = 14.000
+
+UICorner_23.Parent = crash_10
+
+Boomboxtoggle_2.Name = "Boomboxtoggle"
+Boomboxtoggle_2.Parent = ScrollingFrame
+Boomboxtoggle_2.BackgroundColor3 = Color3.fromRGB(76, 76, 76)
+Boomboxtoggle_2.BackgroundTransparency = 0.350
+Boomboxtoggle_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Boomboxtoggle_2.BorderSizePixel = 0
+Boomboxtoggle_2.Position = UDim2.new(0, 10, 0.53627938, 0)
+Boomboxtoggle_2.Size = UDim2.new(0, 177, 0, 40)
+Boomboxtoggle_2.ZIndex = 2
+Boomboxtoggle_2.Font = Enum.Font.Gotham
+Boomboxtoggle_2.LineHeight = 0.730
+Boomboxtoggle_2.Text = "/serverhop"
+Boomboxtoggle_2.TextColor3 = Color3.fromRGB(0, 0, 0)
+Boomboxtoggle_2.TextSize = 14.000
+
+UICorner_24.Parent = Boomboxtoggle_2
+
+Title.Name = "Title"
+Title.Parent = Main
+Title.BackgroundColor3 = Color3.fromRGB(104, 104, 104)
+Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Title.BorderSizePixel = 0
+Title.Position = UDim2.new(0.0506327115, 0, -0.0461820178, 0)
+Title.Size = UDim2.new(0, 405, 0, 46)
+Title.SizeConstraint = Enum.SizeConstraint.RelativeXX
+Title.ZIndex = 2
+Title.Font = Enum.Font.Unknown
+Title.Text = "AK ADMIN FREE"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 16.000
+Title.TextTransparency = 0.380
+Title.TextWrapped = true
+
+UICorner_25.CornerRadius = UDim.new(0, 5)
+UICorner_25.Parent = Title
+
+Close.Name = "Close"
+Close.Parent = ScreenGui
+Close.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Close.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Close.BorderSizePixel = 0
+Close.Position = UDim2.new(0.849057794, 0, 0.2472267, 0)
+Close.Size = UDim2.new(0, 87, 0, 29)
+Close.ZIndex = 3
+Close.Font = Enum.Font.Gotham
+Close.Text = "Open/Close"
+Close.TextColor3 = Color3.fromRGB(0, 0, 0)
+Close.TextSize = 14.000
+
+UICorner_26.Parent = Close
+
+-- Scripts:
+
+local function CZPM_fake_script() -- ScrollingFrame.LocalScript 
+	local script = Instance.new('LocalScript', ScrollingFrame)
+
+	game:GetService("RunService").RenderStepped:Connect(function()
+		script.Parent.CanvasSize = UDim2.new(0,0,0,script.Parent.UIGridLayout.AbsoluteContentSize.Y)
+	end)
+end
+coroutine.wrap(CZPM_fake_script)()
+local function QLRRQT_fake_script() -- ScreenGui.Functions 
+	local script = Instance.new('LocalScript', ScreenGui)
+
+	local SGui = script.Parent
+	local Frame = SGui:WaitForChild("Main")
+	local Button = SGui:WaitForChild("Close")
+	Frame.Draggable = true
+	Frame.Active = true
+	Button.Draggable = true
+	
+	Button.MouseButton1Up:Connect(function()
+		Frame.Visible = not Frame.Visible
+	end)
+end
+coroutine.wrap(QLRRQT_fake_script)()
