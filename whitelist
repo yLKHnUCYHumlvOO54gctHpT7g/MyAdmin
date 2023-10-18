@@ -1,6 +1,6 @@
 local player = game.Players.LocalPlayer
 local playerName = player.Name
-local whitelistedPlayers = {"Alikhammas", "victorwielki", "Vlafz195", "rb0zo", "CokeYTXD", "DVXmasters748", "Doritosman2437","Legalfruad","rustz7","bloxarsenal124","Alikhammas1234","6angelzzzz","bacon_noobyk"}
+local whitelistedPlayers = {"Alikhammas", "victorwielki", "Vlafz195", "rb0zo", "CokeYTXD", "DVXmasters748", "Doritosman2437","Legalfruad","rustz7","bloxarsenal124","Alikhammas1234","6angelzzzz","bacon_noobyk","IIIlIIIllIlIllIII"}
 -- Add more whitelisted player usernames as needed
 local function showNotification(message, backgroundColor)
     local gui = Instance.new("ScreenGui")
