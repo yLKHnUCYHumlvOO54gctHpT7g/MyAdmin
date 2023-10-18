@@ -20,26 +20,26 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         elseif string.lower(msg) == "/rayx" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/SpaceYes/Lua/Main/DaHood.Lua'))()
         elseif string.lower(msg) == "/cmds" then
-            
+            loadstring(game:HttpGet('https://pastebin.com/raw/2RTk1Yf5'))()
         elseif string.lower(msg) == "/antilog" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/antilogger"))()
-        elseif string.lower(msg) == "/legsadmin" then
-            loadstring(game:HttpGet('https://raw.githubusercontent.com/leg1337/legadmv2/main/legadminv2.lua'))()
+        elseif string.lower(msg) == "/hub" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/i4mitty/Peruanito.exe/main/Peruanito.exe.lua"))()
+        elseif string.lower(msg) == "/emoji" then
+            loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/emo'))()
+        elseif string.lower(msg) == "/ftao" then
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/BlizTBr/scripts/main/FTAP.lua"))()
         elseif string.lower(msg) == "/serverhop" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/emoji/main/serverhop", true))()
-        elseif string.lower(msg) == "/visualizer" then
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/MirayXS/Aux/main/Pineapple.lua", true))()
         elseif string.lower(msg) == "/iy" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source', true))()
-        elseif string.lower(msg) == "/jailbreak" then
-            loadstring(game:HttpGet("https://api.luarmor.net/files/v3/loaders/730854e5b6499ee91deb1080e8e12ae3.lua"))()
         elseif string.lower(msg) == "/f3x" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/antifling./main/F3x', true))()
         elseif string.lower(msg) == "/swordreach" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach', true))()
         elseif string.lower(msg) == "/crash" then
             loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/crash', true))()
-        elseif string.lower(msg) == "/pladmin" then
+        elseif string.lower(msg) == "/pltiger" then
             loadstring(game:HttpGet("https://pastebin.com/raw/GzeWWPWN"))()
         elseif string.lower(msg) == "/fps" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua"))()
