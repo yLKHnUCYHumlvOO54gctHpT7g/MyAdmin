@@ -55,3 +55,308 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         end
     end
 )
+
+-- Get the player who executed the script
+local player = game.Players.LocalPlayer
+-- Create a new tag instance
+local tag = Instance.new("BillboardGui")
+tag.Name = "PlayerTag"
+tag.AlwaysOnTop = true
+tag.Size = UDim2.new(0, 200, 0, 50)
+tag.StudsOffset = Vector3.new(0, 3, 0)
+-- Create a label inside the tag
+local label = Instance.new("TextLabel")
+label.Name = "TagLabel"
+label.Size = UDim2.new(1, 0, 1, 0)
+label.BackgroundTransparency = 1
+label.Text = "AK OWNER" -- Change this to the text you want for your tag
+label.TextColor3 = Color3.new(1, 1, 1)
+label.TextStrokeTransparency = 0.5
+label.TextStrokeColor3 = Color3.new(0, 0, 0)
+label.Font = Enum.Font.Bangers
+label.FontSize = Enum.FontSize.Size18
+-- Create a table of premium users
+local Scripters = {"BloxArsenal124"}
+local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhammas"}
+local premiumUsers = {"victorwielki", "Vlafz195", "rb0zo", "CokeYTXD", "DVXmasters748", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk"}
+-- Check if the player executing the script is the owner
+-- Attach the tag to the player's head
+tag.Adornee = player.Character.Head
+tag.Parent = player.Character.Head
+for _, username in ipairs(premiumUsers) do
+    if game.Players:FindFirstChild(username) then
+        local otherPlayer = game.Players[username]
+        if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+            local otherTag = Instance.new("BillboardGui")
+            otherTag.Name = "PlayerTag"
+            otherTag.AlwaysOnTop = true
+            otherTag.Size = UDim2.new(0, 200, 0, 50)
+            otherTag.StudsOffset = Vector3.new(0, 3, 0)
+            otherTag.Adornee = otherPlayer.Character.Head
+            local otherLabel = Instance.new("TextLabel")
+            otherLabel.Name = "TagLabel"
+            otherLabel.Size = UDim2.new(1, 0, 1, 0)
+            otherLabel.BackgroundTransparency = 1
+            otherLabel.Text = "AK PREMIUM USER"
+            otherLabel.TextColor3 = Color3.new(1, 1, 1)
+            otherLabel.TextStrokeTransparency = 0.5
+            otherLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+            otherLabel.Font = Enum.Font.Bangers
+            otherLabel.FontSize = Enum.FontSize.Size18
+            otherLabel.Parent = otherTag
+            otherTag.Parent = otherPlayer.Character.Head
+        end
+    end
+end
+
+for _, username in ipairs(Scripters) do
+    if game.Players:FindFirstChild(username) then
+        local otherPlayer = game.Players[username]
+        if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+            local otherTag = Instance.new("BillboardGui")
+            otherTag.Name = "PlayerTag"
+            otherTag.AlwaysOnTop = true
+            otherTag.Size = UDim2.new(0, 200, 0, 50)
+            otherTag.StudsOffset = Vector3.new(0, 3, 0)
+            otherTag.Adornee = otherPlayer.Character.Head
+            local otherLabel = Instance.new("TextLabel")
+            otherLabel.Name = "TagLabel"
+            otherLabel.Size = UDim2.new(1, 0, 1, 0)
+            otherLabel.BackgroundTransparency = 1
+            otherLabel.Text = "AK ADMIN SCRIPTER"
+            otherLabel.TextColor3 = Color3.new(1, 1, 1)
+            otherLabel.TextStrokeTransparency = 0.5
+            otherLabel.TextStrokeColor3 = Color3.fromRGB(168, 52, 235)
+            otherLabel.Font = Enum.Font.Bangers
+            otherLabel.FontSize = Enum.FontSize.Size18
+            otherLabel.Parent = otherTag
+            otherTag.Parent = otherPlayer.Character.Head
+        end
+    end
+end
+
+for _, username in ipairs(Owners) do
+    if game.Players:FindFirstChild(username) then
+        local otherPlayer = game.Players[username]
+        if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+            local otherTag = Instance.new("BillboardGui")
+            otherTag.Name = "PlayerTag"
+            otherTag.AlwaysOnTop = true
+            otherTag.Size = UDim2.new(0, 200, 0, 50)
+            otherTag.StudsOffset = Vector3.new(0, 3, 0)
+            otherTag.Adornee = otherPlayer.Character.Head
+            local otherLabel = Instance.new("TextLabel")
+            otherLabel.Name = "TagLabel"
+            otherLabel.Size = UDim2.new(1, 0, 1, 0)
+            otherLabel.BackgroundTransparency = 1
+            otherLabel.Text = "AK OWNER"
+            otherLabel.TextColor3 = Color3.new(1, 1, 1)
+            otherLabel.TextStrokeTransparency = 0.5
+            otherLabel.Font = Enum.Font.Bangers
+            otherLabel.FontSize = Enum.FontSize.Size18
+            otherLabel.Parent = otherTag
+            otherTag.Parent = otherPlayer.Character.Head
+            spawn(
+                function()
+                    while task.wait() do
+                        local t = 5
+                        local hue = tick() % t / t
+                        local colorrr = Color3.fromHSV(hue, 1, 1)
+                        otherLabel.TextStrokeColor3 = colorrr
+                    end
+                end
+            )
+        end
+    end
+end
+
+-- Attach the tag to the heads of other premium users
+game.Players.PlayerAdded:Connect(
+    function(plr)
+        plr.CharacterAdded:Connect(
+            function()
+                wait(5)
+                for _, username in ipairs(Scripters) do
+                    if game.Players:FindFirstChild(username) then
+                        local otherPlayer = game.Players[username]
+                        if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+                            local otherTag = Instance.new("BillboardGui")
+                            otherTag.Name = "PlayerTag"
+                            otherTag.AlwaysOnTop = true
+                            otherTag.Size = UDim2.new(0, 200, 0, 50)
+                            otherTag.StudsOffset = Vector3.new(0, 3, 0)
+                            otherTag.Adornee = otherPlayer.Character.Head
+                            local otherLabel = Instance.new("TextLabel")
+                            otherLabel.Name = "TagLabel"
+                            otherLabel.Size = UDim2.new(1, 0, 1, 0)
+                            otherLabel.BackgroundTransparency = 1
+                            otherLabel.Text = "AK ADMIN SCRIPTER"
+                            otherLabel.TextColor3 = Color3.new(1, 1, 1)
+                            otherLabel.TextStrokeTransparency = 0.5
+                            otherLabel.TextStrokeColor3 = Color3.fromRGB(168, 52, 235)
+                            otherLabel.Font = Enum.Font.Bangers
+                            otherLabel.FontSize = Enum.FontSize.Size18
+                            otherLabel.Parent = otherTag
+                            otherTag.Parent = otherPlayer.Character.Head
+                        end
+                    end
+                end
+
+                for _, username in ipairs(premiumUsers) do
+                    if game.Players:FindFirstChild(username) then
+                        local otherPlayer = game.Players[username]
+                        if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+                            local otherTag = Instance.new("BillboardGui")
+                            otherTag.Name = "PlayerTag"
+                            otherTag.AlwaysOnTop = true
+                            otherTag.Size = UDim2.new(0, 200, 0, 50)
+                            otherTag.StudsOffset = Vector3.new(0, 3, 0)
+                            otherTag.Adornee = otherPlayer.Character.Head
+                            local otherLabel = Instance.new("TextLabel")
+                            otherLabel.Name = "TagLabel"
+                            otherLabel.Size = UDim2.new(1, 0, 1, 0)
+                            otherLabel.BackgroundTransparency = 1
+                            otherLabel.Text = "AK PREMIUM USER"
+                            otherLabel.TextColor3 = Color3.new(1, 1, 1)
+                            otherLabel.TextStrokeTransparency = 0.5
+                            otherLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                            otherLabel.Font = Enum.Font.Bangers
+                            otherLabel.FontSize = Enum.FontSize.Size18
+                            otherLabel.Parent = otherTag
+                            otherTag.Parent = otherPlayer.Character.Head
+                        end
+                    end
+                end
+
+                for _, username in ipairs(Owners) do
+                    if game.Players:FindFirstChild(username) then
+                        local otherPlayer = game.Players[username]
+                        if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+                            local otherTag = Instance.new("BillboardGui")
+                            otherTag.Name = "PlayerTag"
+                            otherTag.AlwaysOnTop = true
+                            otherTag.Size = UDim2.new(0, 200, 0, 50)
+                            otherTag.StudsOffset = Vector3.new(0, 3, 0)
+                            otherTag.Adornee = otherPlayer.Character.Head
+                            local otherLabel = Instance.new("TextLabel")
+                            otherLabel.Name = "TagLabel"
+                            otherLabel.Size = UDim2.new(1, 0, 1, 0)
+                            otherLabel.BackgroundTransparency = 1
+                            otherLabel.Text = "AK OWNER"
+                            otherLabel.TextColor3 = Color3.new(1, 1, 1)
+                            otherLabel.TextStrokeTransparency = 0.5
+                            otherLabel.TextStrokeColor3 = Color3.new(255, 0, 0)
+                            otherLabel.Font = Enum.Font.Bangers
+                            otherLabel.FontSize = Enum.FontSize.Size18
+                            otherLabel.Parent = otherTag
+                            otherTag.Parent = otherPlayer.Character.Head
+                            spawn(
+                                function()
+                                    while task.wait() do
+                                        local t = 5
+                                        local hue = tick() % t / t
+                                        local colorrr = Color3.fromHSV(hue, 1, 1)
+                                        otherLabel.TextStrokeColor3 = colorrr
+                                    end
+                                end
+                            )
+                        end
+                    end
+                end
+            end
+        )
+
+        game.Players.PlayerAdded:Connect(
+            function()
+                wait(5)
+                for _, username in ipairs(Scripters) do
+                    if game.Players:FindFirstChild(username) then
+                        local otherPlayer = game.Players[username]
+                        if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+                            local otherTag = Instance.new("BillboardGui")
+                            otherTag.Name = "PlayerTag"
+                            otherTag.AlwaysOnTop = true
+                            otherTag.Size = UDim2.new(0, 200, 0, 50)
+                            otherTag.StudsOffset = Vector3.new(0, 3, 0)
+                            otherTag.Adornee = otherPlayer.Character.Head
+                            local otherLabel = Instance.new("TextLabel")
+                            otherLabel.Name = "TagLabel"
+                            otherLabel.Size = UDim2.new(1, 0, 1, 0)
+                            otherLabel.BackgroundTransparency = 1
+                            otherLabel.Text = "AK ADMIN SCRIPTER"
+                            otherLabel.TextColor3 = Color3.new(1, 1, 1)
+                            otherLabel.TextStrokeTransparency = 0.5
+                            otherLabel.TextStrokeColor3 = Color3.fromRGB(168, 52, 235)
+                            otherLabel.Font = Enum.Font.Bangers
+                            otherLabel.FontSize = Enum.FontSize.Size18
+                            otherLabel.Parent = otherTag
+                            otherTag.Parent = otherPlayer.Character.Head
+                        end
+                    end
+                end
+
+                for _, username in ipairs(premiumUsers) do
+                    if game.Players:FindFirstChild(username) then
+                        local otherPlayer = game.Players[username]
+                        if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+                            local otherTag = Instance.new("BillboardGui")
+                            otherTag.Name = "PlayerTag"
+                            otherTag.AlwaysOnTop = true
+                            otherTag.Size = UDim2.new(0, 200, 0, 50)
+                            otherTag.StudsOffset = Vector3.new(0, 3, 0)
+                            otherTag.Adornee = otherPlayer.Character.Head
+                            local otherLabel = Instance.new("TextLabel")
+                            otherLabel.Name = "TagLabel"
+                            otherLabel.Size = UDim2.new(1, 0, 1, 0)
+                            otherLabel.BackgroundTransparency = 1
+                            otherLabel.Text = "AK PREMIUM USER"
+                            otherLabel.TextColor3 = Color3.new(1, 1, 1)
+                            otherLabel.TextStrokeTransparency = 0.5
+                            otherLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+                            otherLabel.Font = Enum.Font.Bangers
+                            otherLabel.FontSize = Enum.FontSize.Size18
+                            otherLabel.Parent = otherTag
+                            otherTag.Parent = otherPlayer.Character.Head
+                        end
+                    end
+                end
+
+                for _, username in ipairs(Owners) do
+                    if game.Players:FindFirstChild(username) then
+                        local otherPlayer = game.Players[username]
+                        if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+                            local otherTag = Instance.new("BillboardGui")
+                            otherTag.Name = "PlayerTag"
+                            otherTag.AlwaysOnTop = true
+                            otherTag.Size = UDim2.new(0, 200, 0, 50)
+                            otherTag.StudsOffset = Vector3.new(0, 3, 0)
+                            otherTag.Adornee = otherPlayer.Character.Head
+                            local otherLabel = Instance.new("TextLabel")
+                            otherLabel.Name = "TagLabel"
+                            otherLabel.Size = UDim2.new(1, 0, 1, 0)
+                            otherLabel.BackgroundTransparency = 1
+                            otherLabel.Text = "AK OWNER"
+                            otherLabel.TextColor3 = Color3.new(1, 1, 1)
+                            otherLabel.TextStrokeTransparency = 0.5
+                            otherLabel.TextStrokeColor3 = Color3.new(255, 0, 0)
+                            otherLabel.Font = Enum.Font.Bangers
+                            otherLabel.FontSize = Enum.FontSize.Size18
+                            otherLabel.Parent = otherTag
+                            otherTag.Parent = otherPlayer.Character.Head
+                            spawn(
+                                function()
+                                    while task.wait() do
+                                        local t = 5
+                                        local hue = tick() % t / t
+                                        local colorrr = Color3.fromHSV(hue, 1, 1)
+                                        otherLabel.TextStrokeColor3 = colorrr
+                                    end
+                                end
+                            )
+                        end
+                    end
+                end
+            end
+        )
+    end
+)
