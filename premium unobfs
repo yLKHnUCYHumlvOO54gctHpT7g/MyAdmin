@@ -136,6 +136,9 @@ label.Font = Enum.Font.Bangers
 label.FontSize = Enum.FontSize.Size32
 
 -- Create a table of premium users
+local Advertisers = {
+    "Vlafz195"
+}
 local Scripters = {
     "BloxArsenal124"
 }
@@ -193,6 +196,35 @@ for _, username in ipairs(premiumUsers) do
 end
 end
 
+for _, username in ipairs(Advertisers) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK ADVERTISER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.fromRGB(8, 112, 4)
+        otherLabel.Font = Enum.Font.Gotham
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+
+
 for _, username in ipairs(Scripters) do
     if game.Players:FindFirstChild(username) then
     local otherPlayer = game.Players[username]
@@ -208,7 +240,7 @@ for _, username in ipairs(Scripters) do
         otherLabel.Name = "TagLabel"
         otherLabel.Size = UDim2.new(1, 0, 1, 0)
         otherLabel.BackgroundTransparency = 1
-        otherLabel.Text = "AK ADMIN SCRIPTER"
+        otherLabel.Text = "AK SCRIPTER"
         otherLabel.TextColor3 = Color3.new(1, 1, 1)
         otherLabel.TextStrokeTransparency = 0.5
         otherLabel.TextStrokeColor3 = Color3.fromRGB(168, 52, 235)
@@ -261,6 +293,33 @@ end
 game.Players.PlayerAdded:Connect(function(plr)
 plr.CharacterAdded:Connect(function()
 wait(5)
+for _, username in ipairs(Advertisers) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK ADVERTISER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.fromRGB(8, 112, 4)
+        otherLabel.Font = Enum.Font.Gotham
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
 for _, username in ipairs(Scripters) do
     if game.Players:FindFirstChild(username) then
     local otherPlayer = game.Players[username]
@@ -276,7 +335,7 @@ for _, username in ipairs(Scripters) do
         otherLabel.Name = "TagLabel"
         otherLabel.Size = UDim2.new(1, 0, 1, 0)
         otherLabel.BackgroundTransparency = 1
-        otherLabel.Text = "AK ADMIN SCRIPTER"
+        otherLabel.Text = "AK SCRIPTER"
         otherLabel.TextColor3 = Color3.new(1, 1, 1)
         otherLabel.TextStrokeTransparency = 0.5
         otherLabel.TextStrokeColor3 = Color3.fromRGB(168, 52, 235)
@@ -357,6 +416,33 @@ end
 
 game.Players.PlayerAdded:Connect(function()
 wait(5)
+for _, username in ipairs(Advertisers) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK ADVERTISER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.fromRGB(8, 112, 4)
+        otherLabel.Font = Enum.Font.Gotham
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
 for _, username in ipairs(Scripters) do
     if game.Players:FindFirstChild(username) then
     local otherPlayer = game.Players[username]
@@ -372,7 +458,7 @@ for _, username in ipairs(Scripters) do
         otherLabel.Name = "TagLabel"
         otherLabel.Size = UDim2.new(1, 0, 1, 0)
         otherLabel.BackgroundTransparency = 1
-        otherLabel.Text = "AK ADMIN SCRIPTER"
+        otherLabel.Text = "AK SCRIPTER"
         otherLabel.TextColor3 = Color3.new(1, 1, 1)
         otherLabel.TextStrokeTransparency = 0.5
         otherLabel.TextStrokeColor3 = Color3.fromRGB(168, 52, 235)
