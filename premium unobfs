@@ -107,11 +107,14 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
         elseif string.lower(msg) == "/rejoin" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin"))()
         elseif string.lower(msg) == "/ad" then
-            game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer("Join server for Script", "All")
-            game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(".gg/pcPKMpgs", "All")
+            wait(0.1)
+            game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer("Best DHRPVC script join for script:", "All")
+            wait(0.1)
+            game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents"):WaitForChild("SayMessageRequest"):FireServer(".gg/rheFAbeB", "All")
         end
     end
 )
+
 
 -- Add other commands here --
 -- Second Script (Loops)
