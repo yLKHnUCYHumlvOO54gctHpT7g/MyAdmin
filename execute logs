@@ -1,0 +1,84 @@
+local url = "https://discord.com/api/webhooks/1164996334168838225/ZGq0PlnfbrdcEHkytI4ddlrdDjW0v4JUeNX1h8HkycHDYt8olXg1dwwUaTTBxXuCIxxl"
+local botname = "Execution Logger"
+
+function SendMessage(url, message)
+    local http = game:GetService("HttpService")
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+    local data = {
+        ["username"] = botname,
+        ["content"] = message
+    }
+    local body = http:JSONEncode(data)
+    local response = request({
+        Url = url,
+        Method = "POST",
+        Headers = headers,
+        Body = body
+    })
+end
+
+function SendMessageEMBED(url, embed)
+    local http = game:GetService("HttpService")
+    local headers = {
+        ["Content-Type"] = "application/json"
+    }
+    local data = {
+        ["username"] = botname,
+        ["embeds"] = {
+            {
+                ["title"] = embed.title,
+                ["description"] = embed.description,
+                ["color"] = embed.color,
+                ["fields"] = embed.fields,
+                ["footer"] = {
+                    ["text"] = embed.footer.text
+                }
+            }
+        }
+    }
+    local body = http:JSONEncode(data)
+    local response = request({
+        Url = url,
+        Method = "POST",
+        Headers = headers,
+        Body = body
+    })
+end
+local embed = {
+    ["title"] = "NEW EXECUTION",
+    ["description"] = "Player that executed: "..game.Players.LocalPlayer.Name,
+    ["color"] = 65280,
+    ["fields"] = {
+        {
+            ["name"] = "Profile",
+            ["value"] = "https://www.roblox.com/users/"..game.Players.LocalPlayer.UserId.."/profile"
+        },
+        {
+            ["name"] = "Game",
+            ["value"] = "https://www.roblox.com/games/"..game.PlaceId.."/"
+        },
+        {
+            ["name"] = "JobId",
+            ["value"] = game.JobId
+        },
+        {
+            ["name"] = "UserId",
+            ["value"] = game.Players.LocalPlayer.UserId
+        },
+        {
+            ["name"] = "Username",
+            ["value"] = game.Players.LocalPlayer.Name
+        },
+        {
+            ["name"] = "Display name",
+            ["value"] = game.Players.LocalPlayer.DisplayName
+        }
+    },
+    ["footer"] = {
+        ["text"] = "------------------------------------------------------------------"
+    }
+}
+
+SendMessageEMBED(url, embed)
