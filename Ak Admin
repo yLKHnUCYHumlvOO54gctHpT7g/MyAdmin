@@ -1,4 +1,5 @@
-NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+
+local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
 Notification:Notify(
@@ -58,7 +59,7 @@ game:GetService("Players").LocalPlayer.Chatted:connect(
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin"))()
         elseif string.lower(msg) == "/triviabooth" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth"))()
-	elseif string.lower(msg) == "/chat" then
+	elseif string.lower(msg) == "/micupchat" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/UnknownUser2883/NotBypass/main/Haha", true))()
         elseif string.lower(msg) == "/bbhub" then
             loadstring(game:HttpGet("https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua", true))()
