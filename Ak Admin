@@ -1,4 +1,4 @@
-local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+Was ist das Nicht schlaglocal NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
 Notification:Notify(
@@ -569,30 +569,3 @@ end
 
 
 end
-)
-
--- Add other commands here --
--- Second Script (Loops)
-local isKittyRaidLooping = false
-local isBoomboxRaidLooping = false
-local function processChatCommand(msg)
-    if string.lower(msg) == "/kittyraid on" then
-        isKittyRaidLooping = true
-        print("Kitty Raid Loop is now ON")
-    elseif string.lower(msg) == "/kittyraid off" then
-        isKittyRaidLooping = false
-        print("Kitty Raid Loop is now OFF")
-    elseif string.lower(msg) == "/boomboxraid on" then
-        isBoomboxRaidLooping = true
-        print("Boombox Raid Loop is now ON")
-    elseif string.lower(msg) == "/boomboxraid off" then
-        isBoomboxRaidLooping = false
-        print("Boombox Raid Loop is now OFF")
-    end
-end
-
-tpGet("https://pastebin.com/raw/2kyjCzkA"))()
-raidLoop() -- Start the raid loop
- end
-)
-        end } )
