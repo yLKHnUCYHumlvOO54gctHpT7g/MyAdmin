@@ -563,9 +563,3 @@ for _, username in ipairs(Scripters) do
     end
 end
 end
-
-
-
-
-
-end
