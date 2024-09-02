@@ -191,7 +191,7 @@ local function executeCommand(player, msg)
         ["/emoji"] = "https://raw.githubusercontent.com/Alikhammass/emoji/main/emo",
         ["/f3x"] = "https://raw.githubusercontent.com/Alikhammass/antifling./main/F3x",
         ["/bypasser"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/bypasser",
-        ["/bladeball"] = "https://raw.githubusercontent.com/3345-c-a-t-s-u-s/-beta-/main/AutoParry.lua",
+        ["/bladeball"] = "loadstring(game:HttpGet("https://raw.githubusercontent.com/FFJ1/Roblox-Exploits/main/scripts/Loader.lua"))(),
         ["/nonofling"] = "https://raw.githubusercontent.com/Alikhammass/antifling./main/Antifling",
         ["/swordreach"] = "https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach",
         ["/crash"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/crash",
