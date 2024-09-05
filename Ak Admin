@@ -1,5 +1,5 @@
 -- Whitelist configuration
-local premiumUsers = {"victorwielki", "rb0zo", "CokeYTXD", "DVXmasters748", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk"}
+local premiumUsers = {"victorwielki", "rb0zo", "CokeYTXD", "DVXmasters748", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03"}
 local GuiMakers = {"victorwielki"}
 local Advertisers = {"Vlafz195"}
 local Scripters = {"BloxArsenal124"}
