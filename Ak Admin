@@ -75,7 +75,6 @@ end
 local function executeCommand(msg)
     local commands = {
         ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
-        ["/sirius"] = "https://sirius.menu/script",
         ["/antilag"] = "https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
         ["/antibang"] = "https://pastebin.com/raw/5iSqpqf6",
         ["/chaoshub"] = "https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
