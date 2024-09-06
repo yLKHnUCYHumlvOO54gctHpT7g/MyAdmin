@@ -5,6 +5,27 @@ local Advertisers = {"Vlafz195"}
 local Scripters = {"BloxArsenal124"}
 local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhammas"}
 
+-- Flag to indicate if the script has been executed
+if _G.ScriptExecuted then
+    local player = game.Players.LocalPlayer
+    local screenGui = Instance.new("ScreenGui", player.PlayerGui)
+    local textLabel = Instance.new("TextLabel", screenGui)
+    textLabel.Text = "You have already executed the script!"
+    textLabel.Size = UDim2.new(0.5, 0, 0.1, 0)
+    textLabel.Position = UDim2.new(0.25, 0, 0.45, 0)
+    textLabel.BackgroundTransparency = 1
+    textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+    textLabel.TextScaled = true
+    textLabel.TextStrokeTransparency = 0.7
+    textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+    textLabel.Font = Enum.Font.GothamBold
+
+    -- Ensure notification persists for 5 seconds
+    wait(5)
+    screenGui:Destroy()
+    return
+end
+
 -- Function to create and display a popup message with rainbow text color
 local function showPopup(player, message)
     local screenGui = Instance.new("ScreenGui")
@@ -62,7 +83,6 @@ local function executeCommand(msg)
         ["/antilag"] = "https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
         ["/antibang"] = "https://pastebin.com/raw/5iSqpqf6",
         ["/chaoshub"] = "https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
-        ["/hkill all"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills",
         ["/aimbot"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot",
         ["/protonadmin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin",
         ["/triviabooth"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth",
@@ -90,22 +110,45 @@ local function executeCommand(msg)
         ["/pltiger"] = "https://raw.githubusercontent.com/H17S32/Tiger_Admin/main/Tiger%20Admin%203.0",
         ["/fps"] = "https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua",
         ["/rejoin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin",
-        ["/walkonvoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid"
+        ["/walkonvoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid",
+        ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
     }
-    local command = commands[string.lower(msg)]
-    if command then
-        loadstring(game:HttpGet(command, true))()
-    elseif string.sub(string.lower(msg), 1, 7) == "/swalk " then
-        local speedValue = tonumber(string.sub(msg, 8))
-        if speedValue then
-            if speedValue > 0 then
-                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedValue
-                print("WalkSpeed set to: " .. speedValue)
-            else
-                print("WalkSpeed value must be positive!")
+
+    -- Check if the message is a command with the format /hkill (playerName)
+    if string.sub(string.lower(msg), 1, 7) == "/hkill " then
+        local targetName = string.sub(msg, 8):lower()
+        local targetPlayer = game.Players:FindFirstChildWhichIsA("Player")
+        
+        for _, player in ipairs(game.Players:GetPlayers()) do
+            if string.lower(player.DisplayName) == targetName or string.lower(player.Name) == targetName then
+                targetPlayer = player
+                break
             end
+        end
+
+        if targetPlayer then
+            -- Execute the handle kill script with the target player
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills", true))()
+            print("Executed /hkill on " .. targetPlayer.Name)
         else
-            print("Invalid speed value!")
+            print("Player not found!")
+        end
+    else
+        local command = commands[string.lower(msg)]
+        if command then
+            loadstring(game:HttpGet(command, true))()
+        elseif string.sub(string.lower(msg), 1, 7) == "/swalk " then
+            local speedValue = tonumber(string.sub(msg, 8))
+            if speedValue then
+                if speedValue > 0 then
+                    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedValue
+                    print("WalkSpeed set to: " .. speedValue)
+                else
+                    print("WalkSpeed value must be positive!")
+                end
+            else
+                print("Invalid speed value!")
+            end
         end
     end
 end
