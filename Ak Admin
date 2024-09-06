@@ -62,6 +62,7 @@ local function executeCommand(msg)
         ["/antilag"] = "https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
         ["/antibang"] = "https://pastebin.com/raw/5iSqpqf6",
         ["/chaoshub"] = "https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
+        ["/hkill all"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills",
         ["/aimbot"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot",
         ["/protonadmin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin",
         ["/triviabooth"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth",
