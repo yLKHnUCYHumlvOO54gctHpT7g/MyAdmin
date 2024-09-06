@@ -111,7 +111,7 @@ local function executeCommand(msg)
         ["/fps"] = "https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua",
         ["/rejoin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin",
         ["/walkonvoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid",
-        ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
+        ["/hkill all"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
     }
 
     -- Check if the message is a command with the format /hkill (playerName)
