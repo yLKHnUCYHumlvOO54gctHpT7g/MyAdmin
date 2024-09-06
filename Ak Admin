@@ -110,11 +110,16 @@ local function executeCommand(msg)
         loadstring(game:HttpGet(command, true))()
     elseif string.sub(string.lower(msg), 1, 7) == "/swalk " then
         local speedValue = tonumber(string.sub(msg, 8))
-        if speedValue then
-            game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedValue
-            print("WalkSpeed set to: " .. speedValue)
+        if speedValue and speedValue > 0 then
+            local character = game.Players.LocalPlayer.Character
+            if character and character:FindFirstChildOfClass("Humanoid") then
+                character.Humanoid.WalkSpeed = speedValue
+                print("WalkSpeed set to: " .. speedValue)
+            else
+                print("Humanoid not found!")
+            end
         else
-            print("Invalid speed value!")
+            print("Invalid or non-positive speed value!")
         end
     end
 end
