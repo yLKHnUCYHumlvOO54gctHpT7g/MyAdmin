@@ -64,6 +64,7 @@ local function executeCommand(msg)
         ["/chaoshub"] = "https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
         ["/aimbot"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot",
         ["/protonadmin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin",
+        ["/joyreanim"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Joy%20reanim",
         ["/triviabooth"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth",
         ["/chat"] = "https://raw.githubusercontent.com/UnknownUser2883/NotBypass/main/Haha",
         ["/bbhub"] = "https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua",
