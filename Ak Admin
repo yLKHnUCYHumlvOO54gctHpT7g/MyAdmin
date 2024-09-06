@@ -65,6 +65,7 @@ local function executeCommand(msg)
         ["/aimbot"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot",
         ["/protonadmin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin",
         ["/triviabooth"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth",
+        ["/walkonwalls"] = "https://raw.githubusercontent.com/sinret/rbxscript.com-scripts-reuploads-/main/WalkOnWalls",
         ["/chat"] = "https://raw.githubusercontent.com/UnknownUser2883/NotBypass/main/Haha",
         ["/bbhub"] = "https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua",
         ["/getoutmyinv"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv",
