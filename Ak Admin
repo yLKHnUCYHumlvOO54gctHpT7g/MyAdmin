@@ -5,27 +5,6 @@ local Advertisers = {"Vlafz195"}
 local Scripters = {"BloxArsenal124"}
 local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhammas"}
 
--- Check if the script has already been executed
-if _G.ScriptExecuted then
-    local player = game.Players.LocalPlayer
-    local screenGui = Instance.new("ScreenGui", player.PlayerGui)
-    local textLabel = Instance.new("TextLabel", screenGui)
-    textLabel.Text = "You have already executed the script!"
-    textLabel.Size = UDim2.new(0.5, 0, 0.1, 0)
-    textLabel.Position = UDim2.new(0.25, 0, 0.45, 0)
-    textLabel.BackgroundTransparency = 1
-    textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-    textLabel.TextScaled = true
-    textLabel.TextStrokeTransparency = 0.7
-    textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    textLabel.Font = Enum.Font.GothamBold
-
-    -- Ensure notification persists for 5 seconds
-    wait(5)
-    screenGui:Destroy()
-    return
-end
-
 -- Function to create and display a popup message with rainbow text color
 local function showPopup(player, message)
     local screenGui = Instance.new("ScreenGui")
@@ -73,12 +52,16 @@ end
 
 -- Function to execute commands based on player message
 local function executeCommand(msg)
+    if not isWhitelisted(game.Players.LocalPlayer.Name) then
+        print("You are not whitelisted to use this command.")
+        return
+    end
+
     local commands = {
         ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
         ["/antilag"] = "https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
         ["/antibang"] = "https://pastebin.com/raw/5iSqpqf6",
         ["/chaoshub"] = "https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
-        ["/walkonvoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid",
         ["/aimbot"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot",
         ["/protonadmin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin",
         ["/triviabooth"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth",
@@ -104,46 +87,35 @@ local function executeCommand(msg)
         ["/byebye all"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/quickfling",
         ["/pltiger"] = "https://raw.githubusercontent.com/H17S32/Tiger_Admin/main/Tiger%20Admin%203.0",
         ["/fps"] = "https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua",
-        ["/rejoin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin"
+        ["/rejoin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin",
+        ["/walkonvoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid"
     }
     local command = commands[string.lower(msg)]
     if command then
         loadstring(game:HttpGet(command, true))()
     elseif string.sub(string.lower(msg), 1, 7) == "/swalk " then
         local speedValue = tonumber(string.sub(msg, 8))
-        if speedValue and speedValue > 0 then
-            local character = game.Players.LocalPlayer.Character
-            if character and character:FindFirstChildOfClass("Humanoid") then
-                character.Humanoid.WalkSpeed = speedValue
+        if speedValue then
+            if speedValue > 0 then
+                game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedValue
                 print("WalkSpeed set to: " .. speedValue)
             else
-                print("Humanoid not found!")
+                print("WalkSpeed value must be positive!")
             end
         else
-            print("Invalid or non-positive speed value!")
+            print("Invalid speed value!")
         end
     end
 end
 
 -- Function to handle player chat messages
 local function onPlayerChatted(msg)
-    if isWhitelisted(game.Players.LocalPlayer.Name) then
-        executeCommand(msg)
-    end
+    executeCommand(msg)
 end
 
 -- Handle player character load
 local function handlePlayerCharacter()
     if game.Players.LocalPlayer.Character then
-        wait(1)  -- Short delay to ensure the player's character is fully loaded
-        -- Prevent multiple notifications
-        if game.Players.LocalPlayer:FindFirstChild("HasBeenNotified") then return end
-
-        -- Mark the player as notified
-        local notifiedFlag = Instance.new("BoolValue")
-        notifiedFlag.Name = "HasBeenNotified"
-        notifiedFlag.Parent = game.Players.LocalPlayer
-
         if isWhitelisted(game.Players.LocalPlayer.Name) then
             showPopup(game.Players.LocalPlayer, "You are whitelisted!")
         else
@@ -152,16 +124,14 @@ local function handlePlayerCharacter()
     end
 end
 
--- Connect player character added event
+-- Connect events
+game.Players.LocalPlayer.Chatted:Connect(onPlayerChatted)
 game.Players.LocalPlayer.CharacterAdded:Connect(handlePlayerCharacter)
 
--- Handle case where player is already in the game
+-- Ensure handling of character already in game
 if game.Players.LocalPlayer.Character then
     handlePlayerCharacter()
 end
-
--- Listen for chat messages from the player
-game.Players.LocalPlayer.Chatted:Connect(onPlayerChatted)
 
 -- Set the flag to indicate the script has been executed
 _G.ScriptExecuted = true
