@@ -3,7 +3,7 @@ local premiumUsers = {"victorwielki", "rb0zo", "CokeYTXD", "DVXmasters748", "Dor
 local GuiMakers = {"victorwielki"}
 local Advertisers = {"Vlafz195"}
 local Scripters = {"BloxArsenal124"}
-local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhammas"}
+local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhamma"}
 
 -- Flag to indicate if the script has been executed
 if _G.ScriptExecuted then
