@@ -90,6 +90,7 @@ local function executeCommand(msg)
         ["/chat"] = "https://raw.githubusercontent.com/UnknownUser2883/NotBypass/main/Haha",
         ["/bbhub"] = "https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua",
         ["/getoutmyinv"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv",
+        ["/platespin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Platespin",
         ["/kronefling"] = "https://raw.githubusercontent.com/Alikhammass/antifling./main/loopfling",
         ["/gimmetools"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools",
         ["/oof"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof",
