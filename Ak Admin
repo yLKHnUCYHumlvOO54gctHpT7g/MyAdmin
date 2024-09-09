@@ -1,9 +1,9 @@
 -- LocalScript only
-local premiumUsers = {"victorwielki", "rb0zo", "CokeYTXD", "DVXmasters748", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070" }
+local premiumUsers = {"victorwielki", "rb0zo", "CokeYTXD", "DVXmasters748", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
 local GuiMakers = {"victorwielki"}
 local Advertisers = {"Vlafz195"}
 local Scripters = {"BloxArsenal124"}
-local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhamma"}
+local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhammas"}
 
 -- Flag to indicate if the script has been executed
 if _G.ScriptExecuted then
