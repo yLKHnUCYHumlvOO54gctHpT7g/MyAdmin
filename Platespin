@@ -1,0 +1,155 @@
+local spinPower = 600  -- Spin power
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local rs = game:GetService("RunService")
+local partsToAlign = {}
+local isAlive = true
+local originalPosition = humanoidRootPart.Position
+
+-- Function to make blue parts invisible and set collision properties
+local function configureBlueParts(part)
+    part.Transparency = 1  -- Make the part invisible
+    part.CanCollide = false  -- Ensure the player cannot collide with it
+end
+
+-- Function to align parts to follow the player
+local function align(Part0, Part1)
+    Part0.CustomPhysicalProperties = PhysicalProperties.new(0.1, 0.1, 0.1, 0.1, 0.1)
+
+    local att1 = Instance.new("Attachment")
+    att1.Orientation = Vector3.new(0, 0, 0)
+    att1.Position = Vector3.new(0, 0, 0)
+    att1.Archivable = true
+    local att0 = att1:Clone()
+
+    local ap = Instance.new("AlignPosition", att0)
+    ap.ApplyAtCenterOfMass = true
+    ap.MaxForce = 9e9
+    ap.MaxVelocity = 9e9
+    ap.ReactionForceEnabled = false
+    ap.Responsiveness = 200
+    ap.RigidityEnabled = false
+
+    local ao = Instance.new("AlignOrientation", att0)
+    ao.MaxAngularVelocity = 9e9
+    ao.MaxTorque = 9e9
+    ao.PrimaryAxisOnly = false
+    ao.ReactionTorqueEnabled = false
+    ao.Responsiveness = 200
+    ao.RigidityEnabled = false
+
+    ap.Attachment1 = att1
+    ap.Attachment0 = att0
+    ao.Attachment1 = att1
+    ao.Attachment0 = att0
+
+    att1.Parent = Part1
+    att0.Parent = Part0
+    
+    spawn(function()
+        while rs.Heartbeat:Wait() and Part0 and Part0.Parent do
+            if humanoidRootPart and isAlive then
+                Part1.Position = humanoidRootPart.Position
+            end
+        end
+    end)
+end
+
+-- Spin parts with a given power
+local function spinPart(part, power)
+    while true do
+        if part.Parent and isAlive then
+            part.CFrame = part.CFrame * CFrame.Angles(0, math.rad(power), 0)
+        end
+        rs.RenderStepped:Wait()
+    end
+end
+
+-- Handle parts named "Wobbly"
+local function handlePart(v)
+    if v.Name ~= "Wobbly" then
+        return
+    end
+    
+    v:ClearAllChildren()
+    v.CanCollide = false  -- Ensure the part doesn't collide with other objects
+    
+    local part = Instance.new("Part", v)
+    part.CFrame = v.CFrame
+    part.CanCollide = false  -- Ensure the player cannot collide with it
+    part.Anchored = true
+    part.Size = v.Size + Vector3.new(0.1, 0.1, 0.1)
+    part.Transparency = 0.5
+    
+    configureBlueParts(part)  -- Make blue parts invisible and non-collidable
+    align(v, part)
+    spawn(function()
+        spinPart(part, spinPower)  -- Spin power of 600
+    end)
+
+    table.insert(partsToAlign, part)
+end
+
+-- Apply functions to all "Wobbly" parts in the workspace
+for i, v in pairs(workspace:GetChildren()) do
+    handlePart(v)
+end
+
+-- Function to teleport to each part, freeze player, and return
+local function teleportToPartsAndBack(parts)
+    if #parts == 0 then return end
+    
+    local function freezePlayer()
+        -- Function to freeze the player's movement
+        humanoidRootPart.Anchored = true
+    end
+    
+    local function unfreezePlayer()
+        -- Function to unfreeze the player's movement
+        humanoidRootPart.Anchored = false
+    end
+    
+    -- Save the current position
+    local initialPosition = humanoidRootPart.Position
+
+    -- Iterate over each part and teleport to it
+    for _, part in ipairs(parts) do
+        if part and part.Parent then
+            -- Move to the part's position
+            humanoidRootPart.CFrame = part.CFrame
+            freezePlayer()
+            wait(1)  -- Stay at the part for 1 second
+            
+            -- Return to the original position
+            humanoidRootPart.CFrame = CFrame.new(initialPosition)
+            unfreezePlayer()
+            wait(0.5)  -- Small delay to ensure smooth transition
+        end
+    end
+end
+
+-- Teleport to parts and back after executing the script
+teleportToPartsAndBack(partsToAlign)
+
+-- Handle player respawn
+player.CharacterAdded:Connect(function(newCharacter)
+    character = newCharacter
+    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    isAlive = true
+
+    -- Reapply alignment after respawn
+    for _, part in ipairs(partsToAlign) do
+        if part and part.Parent then
+            align(part.Parent, part)
+        end
+    end
+
+    -- Teleport to parts and back, ensuring parts exist
+    teleportToPartsAndBack(partsToAlign)
+end)
+
+-- Handle player death
+character:WaitForChild("Humanoid").Died:Connect(function()
+    isAlive = false
+end)
