@@ -121,26 +121,20 @@ for i, v in pairs(workspace:GetChildren()) do
     handlePart(v)
 end
 
--- Function to freeze the player temporarily
-local function freezePlayer()
+-- Function to freeze the player for a brief moment
+local function freezePlayer(duration)
     humanoidRootPart.Anchored = true
-end
-
--- Function to unfreeze the player
-local function unfreezePlayer()
+    task.wait(duration)
     humanoidRootPart.Anchored = false
 end
 
 -- Teleport to the clicked orange plate or player and back to the original position
 local function teleportToAndBack(part)
     local initialPosition = humanoidRootPart.Position
-    humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 3, 0)  -- Teleport above the part
-
-    freezePlayer()
-    task.wait(1)  -- Freeze for 1 second to prevent falling
+    humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 3, 0)  -- Teleport above the plate/player
+    freezePlayer(1)  -- Freeze player for 1 second to prevent falling
+    task.wait(1)  -- Wait for 1 second at the part/player
     humanoidRootPart.CFrame = CFrame.new(initialPosition)  -- Teleport back to original position
-    unfreezePlayer()
-    task.wait(0.5)  -- Small delay to ensure smooth transition
 end
 
 -- Detect tapping on orange plates or players (mobile)
@@ -151,10 +145,8 @@ local function onTouchTap(touchPositions, gameProcessedEvent)
         local ray = workspace.CurrentCamera:ViewportPointToRay(touchLocation.X, touchLocation.Y, 0)
         local part, position = workspace:FindPartOnRayWithIgnoreList(Ray.new(ray.Origin, ray.Direction * 5000), {player.Character})
 
-        if part then
-            if part.BrickColor == BrickColor.new("Bright orange") or part:IsA("Player") then
-                teleportToAndBack(part)
-            end
+        if part and (part.BrickColor == BrickColor.new("Bright orange") or game.Players:GetPlayerFromCharacter(part.Parent)) then
+            teleportToAndBack(part)
         end
     end
 end
