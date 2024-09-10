@@ -3,9 +3,34 @@ local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local rs = game:GetService("RunService")
+local uis = game:GetService("UserInputService")
+local ts = game:GetService("TouchInputService")
 local partsToAlign = {}
 local isAlive = true
 local originalPosition = humanoidRootPart.Position
+
+-- Create and configure the "Void" part
+local Void = Instance.new("Part")
+Void.Parent = workspace.Terrain
+Void.Name = "Void"
+Void.Transparency = 1  -- Make it invisible
+Void.Anchored = true
+Void.Size = Vector3.new(2048, 1, 2048)
+Void.Position = Vector3.new(0, workspace.FallenPartsDestroyHeight, 0)
+Void.Locked = true
+Void.CanCollide = true  -- Ensure you can walk on it
+
+-- Update the "Void" position to follow the player
+spawn(function()
+    while true do
+        pcall(function()
+            if humanoidRootPart then
+                Void.Position = Vector3.new(humanoidRootPart.Position.X, workspace.FallenPartsDestroyHeight, humanoidRootPart.Position.Z)
+            end
+        end)
+        task.wait(0)
+    end
+end)
 
 -- Function to make blue parts invisible and set collision properties
 local function configureBlueParts(part)
@@ -96,41 +121,41 @@ for i, v in pairs(workspace:GetChildren()) do
     handlePart(v)
 end
 
--- Function to teleport to each part, freeze player, and return
-local function teleportToPartsAndBack(parts)
-    if #parts == 0 then return end
-    
-    local function freezePlayer()
-        -- Function to freeze the player's movement
-        humanoidRootPart.Anchored = true
-    end
-    
-    local function unfreezePlayer()
-        -- Function to unfreeze the player's movement
-        humanoidRootPart.Anchored = false
-    end
-    
-    -- Save the current position
-    local initialPosition = humanoidRootPart.Position
+-- Freeze the player for 1 second
+local function freezePlayer()
+    humanoidRootPart.Anchored = true
+    task.wait(1)  -- Freeze for 1 second
+    humanoidRootPart.Anchored = false
+end
 
-    -- Iterate over each part and teleport to it
-    for _, part in ipairs(parts) do
-        if part and part.Parent then
-            -- Move to the part's position
-            humanoidRootPart.CFrame = part.CFrame
-            freezePlayer()
-            wait(1)  -- Stay at the part for 1 second
-            
-            -- Return to the original position
-            humanoidRootPart.CFrame = CFrame.new(initialPosition)
-            unfreezePlayer()
-            wait(0.5)  -- Small delay to ensure smooth transition
+-- Teleport to the tapped player's position and back to the original position
+local function teleportToPlayerAndBack(targetPlayer)
+    local initialPosition = humanoidRootPart.Position
+    humanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame + Vector3.new(0, 3, 0)  -- Teleport above the target player
+    freezePlayer()  -- Freeze after teleporting
+    task.wait(1)  -- Wait for 1 second at the target player
+    humanoidRootPart.CFrame = CFrame.new(initialPosition)  -- Teleport back to the original position
+end
+
+-- Detect tapping on other players (mobile)
+local function onTouchTap(touchPositions, gameProcessedEvent)
+    if not gameProcessedEvent then
+        local touch = touchPositions[1]
+        local touchLocation = uis:GetMouseLocation()  -- Get where the touch occurred
+        local ray = workspace.CurrentCamera:ViewportPointToRay(touchLocation.X, touchLocation.Y, 0)
+        local part, position = workspace:FindPartOnRayWithIgnoreList(Ray.new(ray.Origin, ray.Direction * 5000), {player.Character})
+
+        if part and part.Parent and part.Parent:FindFirstChild("HumanoidRootPart") then
+            -- Check if the part belongs to another player
+            local targetPlayer = game.Players:GetPlayerFromCharacter(part.Parent)
+            if targetPlayer then
+                teleportToPlayerAndBack(targetPlayer)
+            end
         end
     end
 end
 
--- Teleport to parts and back after executing the script
-teleportToPartsAndBack(partsToAlign)
+uis.TouchTap:Connect(onTouchTap)
 
 -- Handle player respawn
 player.CharacterAdded:Connect(function(newCharacter)
@@ -144,9 +169,6 @@ player.CharacterAdded:Connect(function(newCharacter)
             align(part.Parent, part)
         end
     end
-
-    -- Teleport to parts and back, ensuring parts exist
-    teleportToPartsAndBack(partsToAlign)
 end)
 
 -- Handle player death
