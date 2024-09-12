@@ -87,6 +87,7 @@ local function executeCommand(msg)
         ["/protonadmin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin",
         ["/triviabooth"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth",
         ["/walkonwalls"] = "https://raw.githubusercontent.com/sinret/rbxscript.com-scripts-reuploads-/main/WalkOnWalls",
+        ["/chatquiz"] = "https://raw.githubusercontent.com/Damian-11/quizbot/master/quizbot.luau",
         ["/chat"] = "https://raw.githubusercontent.com/UnknownUser2883/NotBypass/main/Haha",
         ["/bbhub"] = "https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua",
         ["/getoutmyinv"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv",
