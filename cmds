@@ -147,7 +147,8 @@ local commands = {
     {"/fps", "Boosts your FPS."},
     {"/rejoin", "Rejoin."},
     {"/walkonvoid", "Prevents you from getting killed by falling into the void."},
-    {"/hkill all", "Kills everyone with your sword that does damage."}
+    {"/hkill all", "Kills everyone with your sword that does damage."},
+    {"/ad", "Advertises the Discord server."} -- Added command
 }
 
 -- Create buttons for each command
