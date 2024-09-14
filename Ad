@@ -1,0 +1,5 @@
+-- Getting the DefaultChatSystemChatEvents service
+local chatEvents = game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents")
+
+-- Sending a message that avoids direct URL links
+chatEvents:WaitForChild("SayMessageRequest"):FireServer("Join gg/ uB4FqdtPcZ for the AK Admin script!", "All")
