@@ -148,7 +148,6 @@ local commands = {
     {"/rejoin", "Rejoin."},
     {"/walkonvoid", "Prevents you from getting killed by falling into the void."},
     {"/hkill all", "Kills everyone with your sword that does damage."}
-    {"/ad", "advertises the discord server."}
 }
 
 -- Create buttons for each command
