@@ -73,11 +73,6 @@ end
 
 -- Function to execute commands based on player message
 local function executeCommand(msg)
-    if not isWhitelisted(game.Players.LocalPlayer.Name) then
-        print("You are not whitelisted to use this command.")
-        return
-    end
-
     local commands = {
         ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
         ["/antilag"] = "https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
@@ -114,16 +109,16 @@ local function executeCommand(msg)
         ["/fps"] = "https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua",
         ["/rejoin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin",
         ["/walkonvoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid",
-        ["/hkill all"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
+        ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
     }
 
     -- Check if the message is a command with the format /hkill (playerName)
-    if string.sub(string.lower(msg), 1, 7) == "/hkill " then
-        local targetName = string.sub(msg, 8):lower()
+    local command, targetName = msg:match("^/hkill%s+(%S+)$")
+    if command then
         local targetPlayer = game.Players:FindFirstChildWhichIsA("Player")
         
         for _, player in ipairs(game.Players:GetPlayers()) do
-            if string.lower(player.DisplayName) == targetName or string.lower(player.Name) == targetName then
+            if player.DisplayName:lower() == targetName:lower() or player.Name:lower() == targetName:lower() then
                 targetPlayer = player
                 break
             end
@@ -131,17 +126,19 @@ local function executeCommand(msg)
 
         if targetPlayer then
             -- Execute the handle kill script with the target player
-            loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills", true))()
+            loadstring(game:HttpGet(commands["/hkill"], true))()
             print("Executed /hkill on " .. targetPlayer.Name)
         else
             print("Player not found!")
         end
     else
-        local command = commands[string.lower(msg)]
-        if command then
-            loadstring(game:HttpGet(command, true))()
-        elseif string.sub(string.lower(msg), 1, 7) == "/swalk " then
-            local speedValue = tonumber(string.sub(msg, 8))
+        -- Check if it's a general command
+        local cmd = commands[string.lower(msg)]
+        if cmd then
+            loadstring(game:HttpGet(cmd, true))()
+            print("Executed command: " .. msg)
+        elseif msg:match("^/swalk%s+(%d+)$") then
+            local speedValue = tonumber(msg:match("^/swalk%s+(%d+)$"))
             if speedValue then
                 if speedValue > 0 then
                     game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedValue
@@ -152,6 +149,8 @@ local function executeCommand(msg)
             else
                 print("Invalid speed value!")
             end
+        else
+            print("Command not recognized!")
         end
     end
 end
