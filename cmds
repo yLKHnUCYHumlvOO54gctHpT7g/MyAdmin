@@ -148,7 +148,7 @@ local commands = {
     {"/rejoin", "Rejoin."},
     {"/walkonvoid", "Prevents you from getting killed by falling into the void."},
     {"/hkill all", "Kills everyone with your sword that does damage."},
-    {"/ad", "Advertises the Discord server."} -- Added command
+    {"/chatbot", "join the discord server, claim your points and enter the key. Enjoy!"},
 }
 
 -- Create buttons for each command
