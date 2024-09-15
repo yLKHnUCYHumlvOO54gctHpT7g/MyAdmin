@@ -81,7 +81,7 @@ local function executeCommand(msg)
         ["/aimbot"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot",
         ["/protonadmin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin",
         ["/triviabooth"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth",
-        ["/chatbot"] = "https://raw.githubusercontent.com/Guerric9018/chatbothub/main/ChatbotHub.lua%22",
+        ["/chatbot"] = "https://raw.githubusercontent.com/Guerric9018/chatbothub/main/ChatbotHub.lua",
         ["/walkonwalls"] = "https://raw.githubusercontent.com/sinret/rbxscript.com-scripts-reuploads-/main/WalkOnWalls",
         ["/ad"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Ad",
         ["/chatquiz"] = "https://raw.githubusercontent.com/Damian-11/quizbot/master/quizbot.luau",
