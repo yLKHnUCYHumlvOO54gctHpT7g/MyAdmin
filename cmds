@@ -57,7 +57,7 @@ textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 textLabel.BackgroundTransparency = 1
 textLabel.TextScaled = true
 textLabel.TextStrokeTransparency = 0.7
-textLabel.TextSize = 28 -- Increased text size for better visibility
+textLabel.TextSize = 28
 textLabel.Parent = frame
 
 -- Create the description box
@@ -148,9 +148,9 @@ local commands = {
     {"/rejoin", "Rejoin."},
     {"/walkonvoid", "Prevents you from getting killed by falling into the void."},
     {"/hkill all", "Kills everyone with your sword that does damage."},
-    {"/serverhopmost", "Serverhops you to the server with most people in it""},
+    {"/serverhopmost", "Serverhops you to the server with most people in it"},
     {"/serverhoplow", "Serverhops you to the server with a low amount of players in it"},
-    {"/chatbot", "join the discord server, claim your points and enter the key. Enjoy!"},
+    {"/chatbot", "Join the discord server, claim your points and enter the key. Enjoy!"},
 }
 
 -- Create buttons for each command
@@ -182,4 +182,12 @@ for i, commandData in ipairs(commands) do
 end
 
 -- Adjust the size of the scrolling frame to accommodate all buttons
-scrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y)
+local function updateScrollFrameSize()
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y)
+end
+
+-- Call the function to adjust size initially
+updateScrollFrameSize()
+
+-- Update size whenever the layout changes
+uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateScrollFrameSize)
