@@ -86,6 +86,8 @@ local function executeCommand(msg)
         ["/ad"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Ad",
         ["/chatquiz"] = "https://raw.githubusercontent.com/Damian-11/quizbot/master/quizbot.luau",
         ["/invis"] = "https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Invisible%20Gui",
+        ["/serverhopmost"] = "https://raw.githubusercontent.com/Alikhammass/emoji/main/Serverhopmost",
+        ["/serverhoplow"] = "https://raw.githubusercontent.com/Alikhammass/emoji/main/Serverhoplow",
         ["/bbhub"] = "https://raw.githubusercontent.com/Salmon-B0T/SalmonHub/main/SalmonHub.lua",
         ["/getoutmyinv"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/getoutmyinv",
         ["/platespin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Platespin",
