@@ -148,6 +148,8 @@ local commands = {
     {"/rejoin", "Rejoin."},
     {"/walkonvoid", "Prevents you from getting killed by falling into the void."},
     {"/hkill all", "Kills everyone with your sword that does damage."},
+    {"/serverhopmost", "Serverhops you to the server with most people in it""},
+    {"/serverhoplow", "Serverhops you to the server with a low amount of players in it"},
     {"/chatbot", "join the discord server, claim your points and enter the key. Enjoy!"},
 }
 
