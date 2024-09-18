@@ -1,4 +1,4 @@
-local spinPower = 600  -- Spin power
+local spinPower = 1000  -- Spin power
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
