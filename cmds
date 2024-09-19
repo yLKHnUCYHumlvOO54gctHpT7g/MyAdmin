@@ -121,8 +121,7 @@ local commands = {
     {"/protonadmin", "Just another Admin script."},
     {"/triviabooth", "(Patched)"},
     {"/walkonwalls", "Rewrites gravity and lets you walk on any surface."},
-    {"/MCfling", "touch the unanchored ball at the corner of the map.
-touch players and fling!(originally made fir Mic up but ig it works for other games too"},
+    {"/MCfling", "touch the unanchored ball at the corner of the map.touch players and fling!(originally made fir Mic up but ig it works for other games too."},
     {"/chatquiz", "A very fun script that allows you to chat quizzes with other players."},
     {"/invis", "Invisibility toggle."},
     {"/bbhub", "(Patched)"},
