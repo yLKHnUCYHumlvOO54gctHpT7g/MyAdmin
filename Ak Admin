@@ -1,4 +1,4 @@
--- LocalScript only
+Aufnehmen-- LocalScript only
 local premiumUsers = {"victorwielki", "rb0zo", "CokeYTXD", "DVXmasters748", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
 local GuiMakers = {"victorwielki"}
 local Advertisers = {"Vlafz195"}
@@ -94,7 +94,7 @@ local function executeCommand(msg)
         ["/kronefling"] = "https://raw.githubusercontent.com/Alikhammass/antifling./main/loopfling",
         ["/gimmetools"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools",
         ["/oof"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof",
-        ["/micupfling"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfling",
+        ["/mcfling"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfling",
         ["/cmds"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/cmds",
         ["/antilog"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/antilogger",
         ["/donttouchme"] = "https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI",
