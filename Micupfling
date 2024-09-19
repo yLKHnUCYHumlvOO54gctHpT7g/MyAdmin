@@ -1,0 +1,154 @@
+local flingForce = 100000
+local spinPower = 100000
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local rs = game:GetService("RunService")
+local uis = game:GetService("UserInputService")
+local partsToAlign = {}
+local isAlive = true
+local originalPosition = humanoidRootPart.Position
+
+-- Removed Void handling to prevent reposition issues
+--[[local Void = Instance.new("Part")
+Void.Parent = workspace.Terrain
+Void.Name = "Void"
+Void.Transparency = 1
+Void.Anchored = true
+Void.Size = Vector3.new(2048, 1, 2048)
+Void.Position = Vector3.new(0, workspace.FallenPartsDestroyHeight - 1000, 0)  
+Void.Locked = true
+Void.CanCollide = true
+
+spawn(function()
+    while true do
+        pcall(function()
+            if humanoidRootPart then
+                Void.Position = Vector3.new(humanoidRootPart.Position.X, workspace.FallenPartsDestroyHeight - 1000, humanoidRootPart.Position.Z)
+            end
+        end)
+        rs.Heartbeat:Wait()
+    end
+end)]]
+
+local function configurePart(part)
+    part.Transparency = 1
+    part.CanCollide = false
+end
+
+local function applyFlingForce(part)
+    while true do
+        if part.Parent and isAlive then
+            local randomDirection = Vector3.new(math.random() * 2 - 1, math.random() * 2 - 1, math.random() * 2 - 1).unit
+            for i = 1, 10 do
+                local bodyVelocity = Instance.new("BodyVelocity", part)
+                bodyVelocity.Velocity = randomDirection * flingForce
+                bodyVelocity.MaxForce = Vector3.new(flingForce, flingForce, flingForce)
+                local bodyVelocityOpposite = bodyVelocity:Clone()
+                bodyVelocityOpposite.Velocity = -randomDirection * flingForce
+                bodyVelocityOpposite.Parent = part
+                task.wait(0.05)
+                bodyVelocity:Destroy()
+                bodyVelocityOpposite:Destroy()
+            end
+        end
+        rs.RenderStepped:Wait()
+    end
+end
+
+local function align(Part0, Part1)
+    Part0.CustomPhysicalProperties = PhysicalProperties.new(0.1, 0.1, 0.1, 0.1, 0.1)
+    local att1 = Instance.new("Attachment")
+    att1.Orientation = Vector3.new(0, 0, 0)
+    att1.Position = Vector3.new(0, 0, 0)
+    att1.Archivable = true
+    local att0 = att1:Clone()
+    local ap = Instance.new("AlignPosition", att0)
+    ap.ApplyAtCenterOfMass = true
+    ap.MaxForce = 99e9
+    ap.MaxVelocity = 99e9
+    ap.ReactionForceEnabled = false
+    ap.Responsiveness = 200
+    ap.RigidityEnabled = false
+    local ao = Instance.new("AlignOrientation", att0)
+    ao.MaxAngularVelocity = 99e9
+    ao.MaxTorque = 99e9
+    ao.PrimaryAxisOnly = false
+    ao.ReactionTorqueEnabled = false
+    ao.Responsiveness = 200
+    ao.RigidityEnabled = false
+    ap.Attachment1 = att1
+    ap.Attachment0 = att0
+    ao.Attachment1 = att1
+    ao.Attachment0 = att0
+    att1.Parent = Part1
+    att0.Parent = Part0
+    
+    spawn(function()
+        while rs.Heartbeat:Wait() and Part0 and Part0.Parent do
+            if humanoidRootPart and isAlive then
+                Part1.Position = humanoidRootPart.Position
+            end
+        end
+    end)
+end
+
+local function handlePart(v)
+    if v:IsA("BasePart") and not v.Anchored and not game.Players:GetPlayerFromCharacter(v.Parent) then
+        v:ClearAllChildren()
+        v.CanCollide = false
+        local part = Instance.new("Part", v)
+        part.CFrame = v.CFrame
+        part.CanCollide = false
+        part.Anchored = true
+        part.Size = v.Size + Vector3.new(0.1, 0.1, 0.1)
+        part.Transparency = 0.5
+        configurePart(part)
+        align(v, part)
+        spawn(function()
+            applyFlingForce(part)
+        end)
+        local physicsService = game:GetService("PhysicsService")
+        physicsService:CreateCollisionGroup("LocalPlayer")
+        physicsService:CreateCollisionGroup("OtherPlayers")
+        physicsService:CollisionGroupSetCollidable("LocalPlayer", "LocalPlayer", false)
+        physicsService:CollisionGroupSetCollidable("LocalPlayer", "OtherPlayers", false)
+        physicsService:CollisionGroupSetCollidable("OtherPlayers", "OtherPlayers", true)
+        physicsService:CollisionGroupSetCollidable("OtherPlayers", "LocalPlayer", false)
+        physicsService:SetPartCollisionGroup(part, "LocalPlayer")
+        table.insert(partsToAlign, part)
+    end
+end
+
+for _, v in pairs(workspace:GetDescendants()) do
+    handlePart(v)
+end
+
+local function freezePlayer(duration)
+    humanoidRootPart.Anchored = true
+    task.wait(duration)
+    humanoidRootPart.Anchored = false
+end
+
+local function returnPartsToPlayer()
+    for _, part in ipairs(partsToAlign) do
+        if part and part.Parent then
+            part.CFrame = humanoidRootPart.CFrame + Vector3.new(0, 3, 0)
+        end
+    end
+end
+
+player.CharacterAdded:Connect(function(newCharacter)
+    character = newCharacter
+    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    isAlive = true
+    for _, part in ipairs(partsToAlign) do
+        if part and part.Parent then
+            align(part.Parent, part)
+        end
+    end
+end)
+
+character:WaitForChild("Humanoid").Died:Connect(function()
+    isAlive = false
+end)
