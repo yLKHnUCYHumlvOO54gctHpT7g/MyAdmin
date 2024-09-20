@@ -1,3 +1,4 @@
+-- Player Tags
 local premiumUsers = {"victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
 local GuiMakers = {"victorwielki"}
 local Advertisers = {"Vlafz195"}
@@ -45,15 +46,14 @@ local function showPopup(player, message)
 
     local uiGradient = Instance.new("UIGradient")
     uiGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)), -- Red
-        ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 127, 0)), -- Orange
-        ColorSequenceKeypoint.new(0.4, Color3.fromRGB(255, 255, 0)), -- Yellow
-        ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 255, 0)), -- Green
-        ColorSequenceKeypoint.new(0.8, Color3.fromRGB(0, 0, 255)), -- Blue
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(75, 0, 130)) -- Indigo
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
+        ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 127, 0)),
+        ColorSequenceKeypoint.new(0.4, Color3.fromRGB(255, 255, 0)),
+        ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 255, 0)),
+        ColorSequenceKeypoint.new(0.8, Color3.fromRGB(0, 0, 255)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(75, 0, 130))
     }
     uiGradient.Parent = textLabel
-
     textLabel.Parent = screenGui
 
     -- Ensure GUI is visible for 5 seconds
@@ -115,73 +115,21 @@ local function executeCommand(msg)
         ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
     }
 
-    -- Check if the message is a command with the format /hkill (playerName)
-    local command, targetName = msg:match("^/hkill%s+(%S+)$")
+    local command = commands[msg:lower()]
     if command then
-        local targetPlayer = game.Players:FindFirstChildWhichIsA("Player")
-        
-        for _, player in ipairs(game.Players:GetPlayers()) do
-            if player.DisplayName:lower() == targetName:lower() or player.Name:lower() == targetName:lower() then
-                targetPlayer = player
-                break
-            end
-        end
-
-        if targetPlayer then
-            -- Execute the handle kill script with the target player
-            loadstring(game:HttpGet(commands["/hkill"], true))()
-            print("Executed /hkill on " .. targetPlayer.Name)
-        else
-            print("Player not found!")
-        end
-    else
-        -- Check if it's a general command
-        local cmd = commands[string.lower(msg)]
-        if cmd then
-            loadstring(game:HttpGet(cmd, true))()
-            print("Executed command: " .. msg)
-        elseif msg:match("^/swalk%s+(%d+)$") then
-            local speedValue = tonumber(msg:match("^/swalk%s+(%d+)$"))
-            if speedValue then
-                if speedValue > 0 then
-                    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = speedValue
-                    print("WalkSpeed set to: " .. speedValue)
-                else
-                    print("WalkSpeed value must be positive!")
-                end
-            else
-                print("Invalid speed value!")
-            end
-        else
-            print("Command not recognized!")
-        end
+        loadstring(game:HttpGet(command))()
     end
 end
 
--- Function to handle player chat messages
-local function onPlayerChatted(msg)
-    executeCommand(msg)
-end
-
--- Handle player character load
-local function handlePlayerCharacter()
-    if game.Players.LocalPlayer.Character then
-        if isWhitelisted(game.Players.LocalPlayer.Name) then
-            showPopup(game.Players.LocalPlayer, "You are whitelisted!")
-        else
-            showPopup(game.Players.LocalPlayer, "You are not whitelisted! Buy the script to get whitelisted.")
-        end
-    end
-end
-
--- Connect events
-game.Players.LocalPlayer.Chatted:Connect(onPlayerChatted)
-game.Players.LocalPlayer.CharacterAdded:Connect(handlePlayerCharacter)
-
--- Ensure handling of character already in game
-if game.Players.LocalPlayer.Character then
-    handlePlayerCharacter()
-end
-
--- Set the flag to indicate the script has been executed
+-- Main execution
+local player = game.Players.LocalPlayer
 _G.ScriptExecuted = true
+
+if isWhitelisted(player.Name) then
+    showPopup(player, "Welcome, " .. player.Name .. "! You have access to the commands.")
+else
+    showPopup(player, "You are not whitelisted!")
+end
+
+-- Connect to chat message event
+game.Players.LocalPlayer.Chatted:Connect(executeCommand)
