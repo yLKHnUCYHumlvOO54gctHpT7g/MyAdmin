@@ -133,3 +133,6 @@ end
 
 -- Connect to chat message event
 game.Players.LocalPlayer.Chatted:Connect(executeCommand)
+
+-- Load additional script when executed
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Antikick"))()  -- Replace with your desired URL
