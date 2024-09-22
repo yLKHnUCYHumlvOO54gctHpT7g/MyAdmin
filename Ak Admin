@@ -173,7 +173,8 @@ label.FontSize = Enum.FontSize.Size32
 
 -- Create a table of premium users
 local Advertisers = {
-    "Vlafz195"
+    "Vlafz195",
+    "6736_45"
 }
 local Scripters = {
     "GYATT_DAMN1",
@@ -191,7 +192,7 @@ local GMS = {
     "victorwielki",
 }
 
-local premiumUsers = {"6736_45", "linkster66", "Tnk_Him", "TheRealestOnHere", "victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
+local premiumUsers = {"linkster66", "Tnk_Him", "TheRealestOnHere", "victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
 local cmds = {
           ["/jobidjoiner"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Jobidjoiner",
             ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
