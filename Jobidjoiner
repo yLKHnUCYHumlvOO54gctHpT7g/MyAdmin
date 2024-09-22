@@ -1,0 +1,173 @@
+local TeleportService = game:GetService("TeleportService")
+local player = game.Players.LocalPlayer
+
+-- Create ScreenGui and initial open button
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Open GUI Button
+local openGuiButton = Instance.new("TextButton")
+openGuiButton.Size = UDim2.new(0, 100, 0, 40)
+openGuiButton.Position = UDim2.new(0.5, -50, 0.05, 0)
+openGuiButton.Text = "Open GUI"
+openGuiButton.TextSize = 18
+openGuiButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+openGuiButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+openGuiButton.Font = Enum.Font.GothamBold
+openGuiButton.Parent = screenGui
+
+-- GUI Frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 220, 0, 200)
+frame.Position = UDim2.new(0.5, -110, 0.3, 0)
+frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+frame.BorderSizePixel = 2
+frame.BorderColor3 = Color3.fromRGB(255, 170, 0)
+frame.Active = true
+frame.Draggable = true
+frame.Visible = false -- Initially hidden
+frame.Parent = screenGui
+
+-- PlaceId Label
+local placeIdLabel = Instance.new("TextLabel")
+placeIdLabel.Size = UDim2.new(0, 80, 0, 20)
+placeIdLabel.Position = UDim2.new(0, 10, 0, 10)
+placeIdLabel.Text = "PlaceId:"
+placeIdLabel.TextSize = 14
+placeIdLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+placeIdLabel.BackgroundTransparency = 1
+placeIdLabel.Font = Enum.Font.Gotham
+placeIdLabel.Parent = frame
+
+-- PlaceId TextBox
+local placeIdBox = Instance.new("TextBox")
+placeIdBox.Size = UDim2.new(0, 120, 0, 25)
+placeIdBox.Position = UDim2.new(0, 80, 0, 10)
+placeIdBox.Text = ""
+placeIdBox.TextSize = 14
+placeIdBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+placeIdBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+placeIdBox.BorderSizePixel = 1
+placeIdBox.Font = Enum.Font.Gotham
+placeIdBox.Parent = frame
+
+-- JobId Label
+local jobIdLabel = Instance.new("TextLabel")
+jobIdLabel.Size = UDim2.new(0, 80, 0, 20)
+jobIdLabel.Position = UDim2.new(0, 10, 0, 50)
+jobIdLabel.Text = "JobId:"
+jobIdLabel.TextSize = 14
+jobIdLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+jobIdLabel.BackgroundTransparency = 1
+jobIdLabel.Font = Enum.Font.Gotham
+jobIdLabel.Parent = frame
+
+-- JobId TextBox
+local jobIdBox = Instance.new("TextBox")
+jobIdBox.Size = UDim2.new(0, 120, 0, 25)
+jobIdBox.Position = UDim2.new(0, 80, 0, 50)
+jobIdBox.Text = ""
+jobIdBox.TextSize = 14
+jobIdBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+jobIdBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+jobIdBox.BorderSizePixel = 1
+jobIdBox.Font = Enum.Font.Gotham
+jobIdBox.Parent = frame
+
+-- Set PlaceId Button
+local setPlaceIdButton = Instance.new("TextButton")
+setPlaceIdButton.Size = UDim2.new(0, 180, 0, 30)
+setPlaceIdButton.Position = UDim2.new(0.5, -90, 0.6, 0)
+setPlaceIdButton.Text = "Set PlaceId to Current Game"
+setPlaceIdButton.TextSize = 14
+setPlaceIdButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+setPlaceIdButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+setPlaceIdButton.Font = Enum.Font.GothamBold
+setPlaceIdButton.Parent = frame
+
+-- Teleport Button
+local teleportButton = Instance.new("TextButton")
+teleportButton.Size = UDim2.new(0, 180, 0, 30)
+teleportButton.Position = UDim2.new(0.5, -90, 0.75, 0)
+teleportButton.Text = "Teleport"
+teleportButton.TextSize = 14
+teleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+teleportButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+teleportButton.Font = Enum.Font.GothamBold
+teleportButton.Parent = frame
+
+-- Close Button
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 25, 0, 25)
+closeButton.Position = UDim2.new(1, -30, 0, 5)
+closeButton.Text = "X"
+closeButton.TextScaled = true
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeButton.Font = Enum.Font.SourceSansBold
+closeButton.ZIndex = 2  -- Bring it to the front
+closeButton.Parent = frame
+
+-- Dragging functionality
+local dragging, dragInput, dragStart, startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        update(input)
+    end
+end)
+
+-- Functions for teleport and setting PlaceId
+local function teleportToServer()
+    local placeId = tonumber(placeIdBox.Text)
+    local jobId = jobIdBox.Text
+    if placeId and jobId ~= "" then
+        TeleportService:TeleportToPlaceInstance(placeId, jobId, player)
+    else
+        warn("Invalid PlaceId or JobId")
+    end
+end
+
+local function setPlaceIdToCurrentGame()
+    local currentPlaceId = game.PlaceId
+    placeIdBox.Text = tostring(currentPlaceId)
+end
+
+-- Connect buttons
+setPlaceIdButton.MouseButton1Click:Connect(setPlaceIdToCurrentGame)
+teleportButton.MouseButton1Click:Connect(teleportToServer)
+
+-- Close and open GUI functionality
+closeButton.MouseButton1Click:Connect(function()
+    frame.Visible = false
+    openGuiButton.Visible = true
+end)
+
+openGuiButton.MouseButton1Click:Connect(function()
+    frame.Visible = true
+    openGuiButton.Visible = false
+end)
