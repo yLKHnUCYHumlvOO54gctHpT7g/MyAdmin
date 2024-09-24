@@ -205,6 +205,7 @@ local cmds = {
         ["/triviabooth"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth",
         ["/chatbot"] = "https://raw.githubusercontent.com/Guerric9018/chatbothub/main/ChatbotHub.lua",
         ["/walkonwalls"] = "https://raw.githubusercontent.com/sinret/rbxscript.com-scripts-reuploads-/main/WalkOnWalls",
+        ["/cmdbar"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Cmdbar",
         ["/ad"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Ad",
         ["/chatquiz"] = "https://raw.githubusercontent.com/Damian-11/quizbot/master/quizbot.luau",
         ["/invis"] = "https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Invisible%20Gui",
