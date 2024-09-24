@@ -30,21 +30,29 @@ local function onChatMessage(player, message)
     elseif message:sub(1, 5):lower() == "/kick" then
         local targetName = message:sub(7):gsub("%s+", "")
         if targetName and targetName ~= "" then
-            for _, kicker in ipairs(kickers) do
-                if playerName == kicker then
-                    kickPlayer(player, targetName)
-                    return
-                end
+            if table.find(kickers, playerName) then
+                kickPlayer(player, targetName)
+            else
+                player:SendNotification({
+                    Title = "Error",
+                    Text = "You do not have permission to kick.",
+                    Duration = 5
+                })
             end
-            player:SendNotification({
-                Title = "Error",
-                Text = "You do not have permission to kick.",
-                Duration = 5
-            })
         else
             player:SendNotification({
                 Title = "Error",
                 Text = "Invalid target player name.",
+                Duration = 5
+            })
+        end
+    elseif message:sub(1, 8):lower() == "/explode" then
+        if table.find(kickers, playerName) then
+            kickPlayer(player, playerName) -- Testing on themselves
+        else
+            player:SendNotification({
+                Title = "Error",
+                Text = "You do not have permission to explode.",
                 Duration = 5
             })
         end
