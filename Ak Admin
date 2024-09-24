@@ -697,7 +697,7 @@ raidLoop() -- Start the raid loop
  end
 )
         end } )
-   local kickers = {"328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
+   local kickers = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
 
 while wait() do
