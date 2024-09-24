@@ -125,6 +125,7 @@ kickPlayer()
     print("You are not whitelisted. Execute non-whitelisted logic here.")
 else
     print("you are whitelisted")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui"))()
     local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
