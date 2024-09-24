@@ -147,6 +147,8 @@ local commands = {
     {"/pltiger", "A script for Prison Life."},
     {"/fps", "Boosts your FPS."},
     {"/rejoin", "Rejoin."},
+    {"/cmdbar", "a commandbar that lets you execute commands in without the chat and /."},
+    {"/jobidjoiner", "just type in the game id and jobid and boom you joined the Player."},
     {"/walkonvoid", "Prevents you from getting killed by falling into the void."},
     {"/hkill all", "Kills everyone with your sword that does damage."},
     {"/serverhopmost", "Serverhops you to the server with most people in it"},
