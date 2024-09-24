@@ -1,1 +1,110 @@
+-- Add your commands here
+local commands = {
+    "+ Added cmd: \"/cmdbar\"",
+    "+ Added cmd: \"/jobidjoiner\"",
+    "+ Fixed bug: \"Tool glitch\"",
+    "+ Improved performance for low-end devices",
+}
 
+local gajIDFANIAS8762 = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local TitleLabel = Instance.new("TextLabel")
+local UIListLayout = Instance.new("UIListLayout")
+local CloseButton = Instance.new("TextButton")
+
+-- Properties
+
+gajIDFANIAS8762.Name = "UpdateLogGui"
+gajIDFANIAS8762.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+gajIDFANIAS8762.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Frame.Parent = gajIDFANIAS8762
+Frame.BackgroundColor3 = Color3.fromRGB(128, 128, 128) -- Grey background
+Frame.BackgroundTransparency = 0.5 -- Transparent background
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.5, -200, 0.4, -100) -- Centered position
+Frame.Size = UDim2.new(0, 400, 0, 200) -- Initial size
+
+UICorner.Parent = Frame
+UICorner.CornerRadius = UDim.new(0.1, 0) -- Curved corners
+
+-- Centered Title
+TitleLabel.Parent = Frame
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Position = UDim2.new(0.5, 0, 0.05, 0) -- Higher in the middle
+TitleLabel.AnchorPoint = Vector2.new(0.5, 0) -- Anchor point to center
+TitleLabel.Size = UDim2.new(0, 350, 0, 40)
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.Text = "AK UPDATE LOGS"
+TitleLabel.TextColor3 = Color3.new(1, 1, 1)
+TitleLabel.TextSize = 28 -- Title size
+TitleLabel.TextStrokeTransparency = 0.5 -- Stroke for better visibility
+
+-- Close Button
+CloseButton.Parent = Frame
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red background
+CloseButton.Position = UDim2.new(0.93, 0, 0.05, 0) -- Positioned at the top right
+CloseButton.Size = UDim2.new(0, 30, 0, 30) -- Adjusted size to fit better
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.Text = "X"
+CloseButton.TextColor3 = Color3.new(1, 1, 1)
+CloseButton.TextSize = 20
+CloseButton.TextStrokeTransparency = 0.5 -- Stroke for visibility
+CloseButton.BackgroundTransparency = 0.5 -- Semi-transparent button
+UICorner:Clone().Parent = CloseButton -- Curved corners for the button
+
+-- Layout for commands
+local commandListFrame = Instance.new("Frame")
+commandListFrame.Parent = Frame
+commandListFrame.BackgroundTransparency = 1
+commandListFrame.Position = UDim2.new(0.05, 0, 0.2, 0) -- Lower in the middle
+commandListFrame.Size = UDim2.new(0, 350, 0, 140) -- Adjust height based on content
+
+UIListLayout.Parent = commandListFrame
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 2) -- Reduced space between command items
+
+-- Add command labels dynamically
+for _, command in ipairs(commands) do
+    local commandLabel = Instance.new("TextLabel")
+    commandLabel.Parent = commandListFrame
+    commandLabel.Size = UDim2.new(1, 0, 0, 30) -- Fixed height for readability
+    commandLabel.BackgroundTransparency = 1
+    commandLabel.Font = Enum.Font.Gotham
+    commandLabel.Text = command
+    commandLabel.TextColor3 = Color3.new(1, 1, 1) -- White text
+    commandLabel.TextSize = 16 -- Smaller text size
+    commandLabel.TextWrapped = true
+end
+
+-- Resize Frame based on number of commands
+local function resizeFrame()
+    local commandCount = #commands
+    local frameHeight = math.clamp(commandCount * 35 + 70, 200, 400) -- Adjust height based on number of commands, within limits
+    Frame.Size = UDim2.new(0, 400, 0, frameHeight) -- Maintain width
+end
+
+-- Run the resize function to set initial size
+resizeFrame()
+
+-- Slide-in animation for the entire GUI
+local function slideIn()
+    Frame.Position = UDim2.new(0.5, -200, -1, 0) -- Start off-screen
+    Frame:TweenPosition(UDim2.new(0.5, -200, 0.3, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 1, true)
+end
+
+-- Slide-out animation for closing GUI
+local function slideOut()
+    Frame:TweenPosition(UDim2.new(0.5, -200, -1, 0), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 1, true, function()
+        gajIDFANIAS8762:Destroy() -- Destroy GUI after animation
+    end)
+end
+
+-- Connect close button to slide out function
+CloseButton.MouseButton1Click:Connect(function()
+    slideOut()
+end)
+
+-- Run animations
+slideIn() -- Ensure sliding animation runs on first execution
