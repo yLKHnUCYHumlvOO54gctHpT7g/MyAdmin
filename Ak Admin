@@ -112,11 +112,19 @@ for _, whitelistedUser in ipairs(whitelistedPlayers) do
 end
  
 if not isWhitelisted then
-    showNotification("You are not whitelisted. Buy premium.", Color3.fromRGB(255, 0, 0)) -- Red background for non-whitelisted
+    -- Client Kick Script
+
+-- Function to kick the player
+local function kickPlayer()
+    game.Players.LocalPlayer:Kick("You are not whitelisted. Buy the script.")
+end
+
+-- Execute the kick function
+kickPlayer()
     -- Code to execute for non-whitelisted players
     print("You are not whitelisted. Execute non-whitelisted logic here.")
 else
-    showNotification("You are Whitelisted. Enjoy AK ADMIN PREMIUM.", Color3.fromRGB(0, 255, 0)) -- Green background for whitelisted
+    print("you are whitelisted")
     local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
 
