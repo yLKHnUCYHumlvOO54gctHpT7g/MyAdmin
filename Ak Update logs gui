@@ -21,8 +21,8 @@ Frame.Parent = gajIDFANIAS8762
 Frame.BackgroundColor3 = Color3.fromRGB(128, 128, 128) -- Grey background
 Frame.BackgroundTransparency = 0.5 -- Transparent background
 Frame.BorderSizePixel = 0
-Frame.Position = UDim2.new(0.5, -200, 0.4, -100) -- Centered position
-Frame.Size = UDim2.new(0, 400, 0, 200) -- Initial size
+Frame.Position = UDim2.new(0.5, -250, 0, 10) -- Centered at the top
+Frame.Size = UDim2.new(0, 500, 0, 150) -- Adjusted size for wider display
 
 UICorner.Parent = Frame
 UICorner.CornerRadius = UDim.new(0.1, 0) -- Curved corners
@@ -32,7 +32,7 @@ TitleLabel.Parent = Frame
 TitleLabel.BackgroundTransparency = 1
 TitleLabel.Position = UDim2.new(0.5, 0, 0.05, 0) -- Higher in the middle
 TitleLabel.AnchorPoint = Vector2.new(0.5, 0) -- Anchor point to center
-TitleLabel.Size = UDim2.new(0, 350, 0, 40)
+TitleLabel.Size = UDim2.new(0, 500, 0, 40)
 TitleLabel.Font = Enum.Font.GothamBold
 TitleLabel.Text = "AK UPDATE LOGS"
 TitleLabel.TextColor3 = Color3.new(1, 1, 1)
@@ -56,31 +56,35 @@ UICorner:Clone().Parent = CloseButton -- Curved corners for the button
 local commandListFrame = Instance.new("Frame")
 commandListFrame.Parent = Frame
 commandListFrame.BackgroundTransparency = 1
-commandListFrame.Position = UDim2.new(0.05, 0, 0.2, 0) -- Lower in the middle
-commandListFrame.Size = UDim2.new(0, 350, 0, 140) -- Adjust height based on content
+commandListFrame.Position = UDim2.new(0.05, 0, 0.25, 0) -- Positioned further down
+commandListFrame.Size = UDim2.new(0, 470, 0, 80) -- Adjusted size
 
 UIListLayout.Parent = commandListFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 2) -- Reduced space between command items
 
 -- Add command labels dynamically
-for _, command in ipairs(commands) do
-    local commandLabel = Instance.new("TextLabel")
-    commandLabel.Parent = commandListFrame
-    commandLabel.Size = UDim2.new(1, 0, 0, 30) -- Fixed height for readability
-    commandLabel.BackgroundTransparency = 1
-    commandLabel.Font = Enum.Font.Gotham
-    commandLabel.Text = command
-    commandLabel.TextColor3 = Color3.new(1, 1, 1) -- White text
-    commandLabel.TextSize = 16 -- Smaller text size
-    commandLabel.TextWrapped = true
+local function addCommands()
+    for _, command in ipairs(commands) do
+        local commandLabel = Instance.new("TextLabel")
+        commandLabel.Parent = commandListFrame
+        commandLabel.Size = UDim2.new(1, 0, 0, 25) -- Fixed height for readability
+        commandLabel.BackgroundTransparency = 1
+        commandLabel.Font = Enum.Font.Gotham
+        commandLabel.Text = command
+        commandLabel.TextColor3 = Color3.new(1, 1, 1) -- White text
+        commandLabel.TextSize = 16 -- Smaller text size
+        commandLabel.TextWrapped = true
+    end
 end
+
+addCommands() -- Add initial commands
 
 -- Resize Frame based on number of commands
 local function resizeFrame()
     local commandCount = #commands
-    local frameHeight = math.clamp(commandCount * 35 + 70, 200, 400) -- Adjust height based on number of commands, within limits
-    Frame.Size = UDim2.new(0, 400, 0, frameHeight) -- Maintain width
+    local frameHeight = math.clamp(commandCount * 30 + 70, 150, 300) -- Adjust height based on number of commands, within limits
+    Frame.Size = UDim2.new(0, 500, 0, frameHeight) -- Maintain width
 end
 
 -- Run the resize function to set initial size
@@ -88,13 +92,13 @@ resizeFrame()
 
 -- Slide-in animation for the entire GUI
 local function slideIn()
-    Frame.Position = UDim2.new(0.5, -200, -1, 0) -- Start off-screen
-    Frame:TweenPosition(UDim2.new(0.5, -200, 0.3, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 1, true)
+    Frame.Position = UDim2.new(0.5, -250, -1, 0) -- Start off-screen
+    Frame:TweenPosition(UDim2.new(0.5, -250, 0, 10), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 1, true)
 end
 
 -- Slide-out animation for closing GUI
 local function slideOut()
-    Frame:TweenPosition(UDim2.new(0.5, -200, -1, 0), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 1, true, function()
+    Frame:TweenPosition(UDim2.new(0.5, -250, -1, 0), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 1, true, function()
         gajIDFANIAS8762:Destroy() -- Destroy GUI after animation
     end)
 end
