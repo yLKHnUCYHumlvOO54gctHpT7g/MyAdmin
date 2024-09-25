@@ -73,7 +73,7 @@ local webhookData = createWebhookData()
 sendWebhook(webhookUrl, webhookData)
 local player = game.Players.LocalPlayer
 local playerName = player.Name
-local whitelistedPlayers = {"RobloxBanneAMiROMG5","BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "AK_ADMEN1", "Juluen_banane", "6736_45", "linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
+local whitelistedPlayers = {"BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "AK_ADMEN1", "Juluen_banane", "6736_45", "linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
 local function showNotification(message, backgroundColor)
     local gui = Instance.new("ScreenGui")
     gui.Name = "Notification"
@@ -125,7 +125,6 @@ kickPlayer()
     print("You are not whitelisted. Execute non-whitelisted logic here.")
 else
     print("you are whitelisted")
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Owner%20power", true))()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui"))()
     local NotificationHolder = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Module.Lua"))()
 local Notification = loadstring(game:HttpGet("https://raw.githubusercontent.com/BocusLuke/UI/main/STX/Client.Lua"))()
@@ -203,7 +202,7 @@ local GMS = {
     "victorwielki",
 }
 
-local premiumUsers = {"RobloxBanneAMiROMG5", "BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "Juluen_banane", "linkster66", "Tnk_Him", "TheRealestOnHere", "victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
+local premiumUsers = {"BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "Juluen_banane", "linkster66", "Tnk_Him", "TheRealestOnHere", "victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
 local cmds = {
           ["/jobidjoiner"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Jobidjoiner",
             ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
@@ -698,7 +697,8 @@ raidLoop() -- Start the raid loop
  end
 )
         end } )
-   local kickers = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
+   loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Owner%20power", true))()
+local kickers = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
 
 while wait() do
