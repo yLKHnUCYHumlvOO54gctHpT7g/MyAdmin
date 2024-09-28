@@ -1,5 +1,5 @@
 
-local adminCmd = {"mohii03", "AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
+local adminCmd = {"ichbinabudi1070", "mohii03", "AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
 local player = game.Players.LocalPlayer
 
