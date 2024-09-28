@@ -3,10 +3,10 @@
 
 local player = game.Players.LocalPlayer
 
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/rejoin "..player.Name:lower() or msg:lower() == "/rejoin "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/rejoin "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/rejoin "..player.DisplayName:lower() then
 local ts = game:GetService("TeleportService")
 
 local p = game:GetService("Players").LocalPlayer
@@ -17,46 +17,46 @@ ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)                end
             end)
         end
     end
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/fast "..player.Name:lower() or msg:lower() == "/fast "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/fast "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/fast "..player.DisplayName:lower() then
                     player.Character.Humanoid.WalkSpeed = 50
                 end
             end)
         end
     end
-        for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/normal "..player.Name:lower() or msg:lower() == "/normal "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/normal "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/normal "..player.DisplayName:lower() then
                     player.Character.Humanoid.WalkSpeed = 16
                 end
             end)
         end
     end
-        for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/slow "..player.Name:lower() or msg:lower() == "/slow "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/slow "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/slow "..player.DisplayName:lower() then
                     player.Character.Humanoid.WalkSpeed = 5
                 end
             end)
         end
     end
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/unfloat "..player.Name:lower() or msg:lower() == "/unfloat "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/unfloat "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/unfloat "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.Anchored = false
                 end
             end)
         end
     end
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/float "..player.Name:lower() or msg:lower() == "/float "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/float "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/float "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.CFrame = CFrame.new(player.Character.HumanoidRootPart.CFrame.Position.X,player.Character.HumanoidRootPart.CFrame.Position.Y+5,player.Character.HumanoidRootPart.CFrame.Position.Z)
                     wait(0.3)
                     player.Character.HumanoidRootPart.Anchored = true
@@ -64,89 +64,152 @@ ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)                end
             end)
         end
     end
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/void "..player.Name:lower() or msg:lower() == "/void "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/void "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/void "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.CFrame = CFrame.new(1000000,1000000,1000000)
                 end
             end)
         end
     end
-                    for i, adminCmd in pairs(adminCmd) do
+                    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/jump "..player.Name:lower() or msg:lower() == "/jump "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/jump "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/jump "..player.DisplayName:lower() then
                     player.Character.Humanoid.Jump=true
                 end
             end)
         end
     end
-                for i, adminCmd in pairs(adminCmd) do
+                for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/trip "..player.Name:lower() or msg:lower() == "/trip "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/trip "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/trip "..player.DisplayName:lower() then
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.X,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Y+2,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Z)
 game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)                end
             end)
         end
     end
-            for i, adminCmd in pairs(adminCmd) do
+            for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/unfreeze "..player.Name:lower() or msg:lower() == "/unfreeze "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/unfreeze "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/unfreeze "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.Anchored = false
                 end
             end)
         end
     end
-        for i, adminCmd in pairs(adminCmd) do
+            for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/freeze "..player.Name:lower() or msg:lower() == "/freeze "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/js2 "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/js2 "..player.DisplayName:lower() then
+local jumpscare2gui = Instance.new("ScreenGui")
+local ImageLabel = Instance.new("ImageLabel")
+local sound=Instance.new("Sound")
+jumpscare2gui.Name = "jumpscare2gui"
+jumpscare2gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+jumpscare2gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ImageLabel.Parent = jumpscare2gui
+ImageLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+ImageLabel.BorderColor3 = Color3.new(0, 0, 0)
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Size = UDim2.new(1, 1, 1, 1)
+ImageLabel.Image = "http://www.roblox.com/asset/?id=75431648694596"
+sound.SoundId="rbxassetid://5567523008"
+sound.Volume="10"
+sound.Parent=game:GetService("SoundService")
+sound.Playing=true
+wait(3.599)
+sound:Destroy()
+jumpscare2gui:Destroy()                end
+            end)
+        end
+    end
+            for i, adminCmds in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmds and msg:lower() == "/js "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/js "..player.DisplayName:lower() then
+local sound2 = Instance.new("Sound")
+local jumpscare2gui = Instance.new("ScreenGui")
+local ImageLabel = Instance.new("ImageLabel")
+jumpscare2gui.Name = "jumpscare2gui"
+jumpscare2gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+jumpscare2gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ImageLabel.Parent = jumpscare2gui
+ImageLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+ImageLabel.BorderColor3 = Color3.new(0, 0, 0)
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Size = UDim2.new(1, 1, 1, 1)
+ImageLabel.Image = "http://www.roblox.com/asset/?id=10798732430"
+jumpscare2gui.Name = "jumpscare2gui"
+sound2.SoundId="rbxassetid://7076365030"
+sound2.Volume="10"
+
+sound2.Parent=game:GetService("SoundService")
+sound2.Playing=true
+wait(1.674)
+sound2:Destroy()
+jumpscare2gui:Destroy()
+                end
+            end)
+        end
+    end
+        for i, adminCmds in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg)
+                if v.Name == adminCmds and msg:lower() == "/freeze "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/freeze "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.Anchored = true
                 end
             end)
         end
     end
 
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/kick "..player.Name:lower() or msg:lower() == "/kick "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/kick "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/kick "..player.DisplayName:lower() then
                     player:Kick("Kicked")
                 end
             end)
         end
     end
-        for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/kill "..player.Name:lower() or msg:lower() == "/kill "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/kill "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/kill "..player.DisplayName:lower() then
                     player.Character.Humanoid.Health=0
                 end
             end)
         end
     end
 
-        for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/bring "..player.Name:lower() or msg:lower() == "/bring "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/bring "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/bring "..player.DisplayName:lower() then
                 player.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
                 end
             end)
         end
     end
-
+        for i, adminCmds in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg): ()
+                if v.Name == adminCmds and msg:lower() == "/sit "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/sit "..player.DisplayName:lower() then
+                    player.Character.Humanoid.Sit=true
+                end
+            end)
+        end
+    end
 game.Players.PlayerAdded:Connect(function(plr)
 for i,adminCmd in pairs(adminCmd) do
 if plr.Name == adminCmd then
 
-    for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/rejoin "..player.Name:lower() or msg:lower() == "/rejoin "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/rejoin "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/rejoin "..player.DisplayName:lower() then
 local ts = game:GetService("TeleportService")
 
 local p = game:GetService("Players").LocalPlayer
@@ -157,46 +220,55 @@ ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)                end
             end)
         end
     end
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/fast "..player.Name:lower() or msg:lower() == "/fast "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/fast "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/fast "..player.DisplayName:lower() then
                     player.Character.Humanoid.WalkSpeed = 50
                 end
             end)
         end
     end
-        for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/normal "..player.Name:lower() or msg:lower() == "/normal "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/normal "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/normal "..player.DisplayName:lower() then
                     player.Character.Humanoid.WalkSpeed = 16
                 end
             end)
         end
     end
-        for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/slow "..player.Name:lower() or msg:lower() == "/slow "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/slow "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/slow "..player.DisplayName:lower() then
                     player.Character.Humanoid.WalkSpeed = 5
                 end
             end)
         end
     end
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/unfloat "..player.Name:lower() or msg:lower() == "/unfloat "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/unfloat "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/unfloat "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.Anchored = false
                 end
             end)
         end
     end
-    for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg): ()
-                if v.Name == adminCmd and msg:lower() == "/float "..player.Name:lower() or msg:lower() == "/float "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/sit "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/sit "..player.DisplayName:lower() then
+                    player.Character.Humanoid.Sit=true
+                end
+            end)
+        end
+    end
+    for i, adminCmds in pairs(adminCmd) do
+        for i, v in pairs(game.Players:GetPlayers()) do
+            v.Chatted:Connect(function(msg): ()
+                if v.Name == adminCmds and msg:lower() == "/float "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/float "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.CFrame = CFrame.new(player.Character.HumanoidRootPart.CFrame.Position.X,player.Character.HumanoidRootPart.CFrame.Position.Y+5,player.Character.HumanoidRootPart.CFrame.Position.Z)
                     wait(0.3)
                     player.Character.HumanoidRootPart.Anchored = true
@@ -204,75 +276,75 @@ ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)                end
             end)
         end
     end
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/void "..player.Name:lower() or msg:lower() == "/void "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/void "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/void "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.CFrame = CFrame.new(1000000,1000000,1000000)
                 end
             end)
         end
     end
-                    for i, adminCmd in pairs(adminCmd) do
+                    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/jump "..player.Name:lower() or msg:lower() == "/jump "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/jump "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/jump "..player.DisplayName:lower() then
                     player.Character.Humanoid.Jump=true
                 end
             end)
         end
     end
-                for i, adminCmd in pairs(adminCmd) do
+                for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/trip "..player.Name:lower() or msg:lower() == "/trip "..player.DisplayName:lower() then
-                  game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.X,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Y+2,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Z)
+                if v.Name == adminCmds and msg:lower() == "/trip "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/trip "..player.DisplayName:lower() then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.X,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Y+2,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Z)
 game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)                end
             end)
         end
     end
-            for i, adminCmd in pairs(adminCmd) do
+            for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/unfreeze "..player.Name:lower() or msg:lower() == "/unfreeze "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/unfreeze "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/unfreeze "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.Anchored = false
                 end
             end)
         end
     end
-        for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/freeze "..player.Name:lower() or msg:lower() == "/freeze "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/freeze "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/freeze "..player.DisplayName:lower() then
                     player.Character.HumanoidRootPart.Anchored = true
                 end
             end)
         end
     end
 
-    for i, adminCmd in pairs(adminCmd) do
+    for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/kick "..player.Name:lower() or msg:lower() == "/kick "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/kick "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/kick "..player.DisplayName:lower() then
                     player:Kick("Kicked")
                 end
             end)
         end
     end
-        for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/kill "..player.Name:lower() or msg:lower() == "/kill "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/kill "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/kill "..player.DisplayName:lower() then
                     player.Character.Humanoid.Health=0
                 end
             end)
         end
     end
 
-        for i, adminCmd in pairs(adminCmd) do
+        for i, adminCmds in pairs(adminCmd) do
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
-                if v.Name == adminCmd and msg:lower() == "/bring "..player.Name:lower() or msg:lower() == "/bring "..player.DisplayName:lower() then
+                if v.Name == adminCmds and msg:lower() == "/bring "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/bring "..player.DisplayName:lower() then
                 player.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
                 end
             end)
