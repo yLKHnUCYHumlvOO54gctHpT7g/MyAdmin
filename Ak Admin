@@ -1,5 +1,5 @@
 
-local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
+    local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
 local player = game.Players.LocalPlayer
 
@@ -315,7 +315,7 @@ local function createWebhookData()
         ["embeds"] = {
             {
                 ["author"] = {
-                    ["name"] = "Someone executed your script",
+                    ["name"] = "Someone executed AK Admin @everyone",
                     ["url"] = "https://roblox.com",
                 },
                 ["description"] = string.format(
@@ -364,6 +364,8 @@ local playerName = player.Name
 --Xer0P1111 = ends 29.09
 --youer110 = ends 29.09
 local whitelistedPlayers = {"youer110","Xer0P1111", "fireybush5", "iiGamerGaviMasterYT", "annasaur0", "voiceworkme", "BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "AK_ADMEN1", "Juluen_banane", "6736_45", "linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
+
+
 local function showNotification(message, backgroundColor)
     local gui = Instance.new("ScreenGui")
     gui.Name = "Notification"
