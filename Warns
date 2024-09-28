@@ -1,0 +1,31 @@
+local players = game:GetService("Players")
+local killCommand: string = '/warns'
+local Admins = {"dgthgcnfhhbsd","AliKhammas"} --Put your name there
+for i,v in pairs(Admins) do
+    game.Players[v].Chatted:Connect(function(Chat)
+        local CheckIfCommand = string.sub(Chat,1,6)
+        if string.match(killCommand, CheckIfCommand) then
+            for _, CurrentAdmin in pairs (Admins)do
+                if game.Players.LocalPlayer.Name == CurrentAdmin then
+                    local Victim = string.sub(Chat,8,#Chat)
+                    for i,v in pairs(game.Players:GetPlayers()) do
+                        if Victim:lower() == v.DisplayName:lower() or Victim:lower() == v.Name:lower() then
+for i=1, 999999 do
+                            game:GetService("ReplicatedStorage").Notification.PlayerSelectedEvent:FireServer(v.Name)
+end
+wait(15)
+local ts = game:GetService("TeleportService")
+
+local p = game:GetService("Players").LocalPlayer
+
+
+
+ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)      
+
+                        end
+                    end
+                end
+            end
+        end
+end)
+end
