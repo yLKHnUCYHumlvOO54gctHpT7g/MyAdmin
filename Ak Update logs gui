@@ -1,6 +1,7 @@
 -- Add your commands here
 local commands = {
-    "+ Added cmd: \"/warn all\""
+    "+ Added cmd: \"/warn all\"",
+    "+ Updated cmd: \"/bypasser\""
 }
 
 local gajIDFANIAS8762 = Instance.new("ScreenGui")
