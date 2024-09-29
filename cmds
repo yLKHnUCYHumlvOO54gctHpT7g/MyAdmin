@@ -147,6 +147,7 @@ local commands = {
     {"/pltiger", "A script for Prison Life."},
     {"/fps", "Boosts your FPS."},
     {"/rejoin", "Rejoin."},
+    {"/warn all", "warns all player in the game Mic up."},
     {"/cmdbar", "a commandbar that lets you execute commands in without the chat and /."},
     {"/jobidjoiner", "just type in the game id and jobid and boom you joined the Player."},
     {"/walkonvoid", "Prevents you from getting killed by falling into the void."},
