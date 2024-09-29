@@ -579,6 +579,7 @@ local cmds = {
         ["/chaoshub"] = "https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
         ["/warn all"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Warnall",
         ["/aimbot"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot",
+        ["/warnpower"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Warns",
         ["/protonadmin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin",
         ["/triviabooth"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/triviabooth",
         ["/chatbot"] = "https://raw.githubusercontent.com/Guerric9018/chatbothub/main/ChatbotHub.lua",
