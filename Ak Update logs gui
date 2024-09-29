@@ -1,7 +1,7 @@
 -- Add your commands here
 local commands = {
     "+ Added cmd: \"/warn all\"",
-    "+ Updated cmd: \"/bypasser\""
+    "+ Updated cmd: \"/bypasser\"",
     "+ Added cmd: \"/givepower (display name)\""
 }
 
