@@ -1,5 +1,41 @@
 local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
+
+if game.ReplicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
+    oldChat = true
+end
+local function Chat(msg)
+    if oldChat then
+        game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
+    else
+        game.TextChatService.TextChannels.RBXGeneral:SendAsync(msg)
+    end
+end
+
+
+local Owners = {
+    "IIIlIIIllIlIllIII",
+    "AliKhammas1234",
+    "AliKhammas",
+    "dgthgcnfhhbsd",
+    "AK_ADMEN1",
+    "GYATT_DAMN1",
+    "328ml"
+}
+
+for i,adminname in pairs(Owners) do
+game.Players.PlayerAdded:Connect(function(plr)
+if plr.Name == adminname then
+Chat("An ak owner has joined your server!")
+end
+end)
+game.Players.PlayerRemoving:Connect(function(plr)
+if plr.Name == adminname then
+Chat("An ak owner has left your server!")
+end
+end)
+end
+
 local player = game.Players.LocalPlayer
 
     for i, adminCmds in pairs(adminCmd) do
@@ -430,13 +466,7 @@ sendWebhook(webhookUrl, webhookData)
 
 local player = game.Players.LocalPlayer
 local playerName = player.Name
---auggs = ends 29.09
---annasaur0 = ends 29.09
---iiGamerGaviMasterYT = ends 29.09
---fireybush5 = ends 29.09
---Xer0P1111 = ends 29.09
---youer110 = ends 29.09
-local whitelistedPlayers = {"clogingpen", "coolroblox123rock", "Alikhammas1234", "Mohii012", "youer110","Xer0P1111", "fireybush5", "iiGamerGaviMasterYT", "annasaur0", "voiceworkme", "BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "AK_ADMEN1", "Juluen_banane", "6736_45", "linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
+local whitelistedPlayers = {"coolroblox123rock", "Alikhammas1234", "Mohii012", "BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "AK_ADMEN1", "Juluen_banane", "6736_45", "linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
 
 
 local function showNotification(message, backgroundColor)
