@@ -129,6 +129,7 @@ local commands = {
     {"/platespin", "This command is for the game (Sword Fights on the Heights Original); the orange plates spin around you at a very fast speed. Click on the plates for it to work."},
     {"/kronefling", "Loopflings everyone."},
     {"/gimmetools", "Picks up every tool that was dropped by a player in the server."},
+    {"/givepower (display name)", "gives the player you wish warning power.(/warns display name)"},
     {"/oof", "Respawns you and teleports you back at the same position."},
     {"/cmds", "The GUI for this script."},
     {"/antilog", "Prevents the game from logging your chat and screenshots."},
