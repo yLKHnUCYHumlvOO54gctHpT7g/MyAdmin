@@ -1,7 +1,7 @@
 local players = game:GetService("Players")
 local warnCommand: string = '/warns'
 local warnAllCommand: string = '/warnall'
-local Admins = {"dgthgcnfhhbsd", "AliKhammas1234", "AliKhammas", "iannnnnnnnnnnnn_n", "simhean"} -- Add admins here
+local Admins = {"dgthgcnfhhbsd", "AliKhammas1234", "AliKhammas", "iannnnnnnnnnnnn_n", "simhean", "AK_ADMEN1"} -- Add admins here
 
 for _, adminName in pairs(Admins) do
     local admin = game.Players:FindFirstChild(adminName)
