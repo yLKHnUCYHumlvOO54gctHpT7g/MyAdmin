@@ -1,3 +1,7 @@
+
+
+
+
 local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
 
@@ -466,9 +470,6 @@ sendWebhook(webhookUrl, webhookData)
 
 local player = game.Players.LocalPlayer
 local playerName = player.Name
-local whitelistedPlayers = {"RobloxBanneAMiROMG5","coolroblox123rock", "Alikhammas1234", "Mohii012", "BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "AK_ADMEN1", "Juluen_banane", "6736_45", "linkster66", "dgthgcnfhhbsd", "Tnk_Him", "TheRealestOnHere", "328ml", "victorwielki", "AliKhammas", "GYATT_DAMN1", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}-- Add more whitelisted player usernames as needed
-
-
 local function showNotification(message, backgroundColor)
     local gui = Instance.new("ScreenGui")
     gui.Name = "Notification"
@@ -599,8 +600,6 @@ local Owners = {
 local GMS = {
     "victorwielki",
 }
-
-local premiumUsers = {"BroImTiredOfgames", "miczilla14", "ar3aontop2", "amiay1337", "Juluen_banane", "linkster66", "Tnk_Him", "TheRealestOnHere", "victorwielki", "CanExploiOnMobileLol", "rb0zo", "CokeYTXD", "SheilaBrowning4", "Doritosman2437", "Legalfruad", "rustz7", "6angelzzzz", "bacon_noobyk", "mohii03", "Yasinapel3", "urtcyrcjctyjjtcycrjy", "Shshisnishusgvgsugs", "ichbinabudi1070"}
 local cmds = {
           ["/jobidjoiner"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Jobidjoiner",
             ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
