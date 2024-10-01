@@ -639,6 +639,7 @@ local cmds = {
         ["/bypasser"] = "https://raw.githubusercontent.com/shadow62x/catbypass/main/upfix",
         ["/bladeball"] = "https://raw.githubusercontent.com/FFJ1/Roblox-Exploits/main/scripts/Loader.lua",
         ["/nonofling"] = "https://raw.githubusercontent.com/Alikhammass/antifling./main/Antifling",
+        ["/infect"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Infect",
         ["/swordreach"] = "https://raw.githubusercontent.com/Alikhammass/emoji/main/swordreach",
         ["/byebye all"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/quickfling",
         ["/pltiger"] = "https://raw.githubusercontent.com/H17S32/Tiger_Admin/main/Tiger%20Admin%203.0",
