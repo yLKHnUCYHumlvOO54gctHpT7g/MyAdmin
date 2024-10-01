@@ -663,9 +663,10 @@ tag.Adornee = player.Character.Head
 tag.Parent = player.Character.Head
 
 for _, username in ipairs(getgenv().premiumUsers) do
+for i,v in pairs(game.Players:GetPlayers()) do
 local realuser = username:lower()
-    if game.Players:FindFirstChild(realuser) then
-    local otherPlayer = game.Players[realuser]
+if v.Name:lower() == realuser then
+    local otherPlayer = game.Players[v.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -688,6 +689,7 @@ local realuser = username:lower()
 
         otherTag.Parent = otherPlayer.Character.Head
     end
+end
 end
 end
 
@@ -898,9 +900,10 @@ for _, username in ipairs(Scripters) do
 end
 end
 for _, username in ipairs(getgenv().premiumUsers) do
+for i,v in pairs(game.Players:GetPlayers()) do
 local realuser = username:lower()
-    if game.Players:FindFirstChild(realuser) then
-    local otherPlayer = game.Players[realuser]
+if v.Name:lower() == realuser then
+    local otherPlayer = game.Players[v.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -925,7 +928,7 @@ local realuser = username:lower()
     end
 end
 end
-
+end 
 
 for _, username in ipairs(Owners) do
     if game.Players:FindFirstChild(username) then
@@ -1057,9 +1060,10 @@ for _, username in ipairs(Advertisers) do
 end
 end
 for _, username in ipairs(getgenv().premiumUsers) do
+for i,v in pairs(game.Players:GetPlayers()) do
 local realuser = username:lower()
-    if game.Players:FindFirstChild(realuser) then
-    local otherPlayer = game.Players[realuser]
+if v.Name:lower() == realuser then
+    local otherPlayer = game.Players[v.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -1082,6 +1086,7 @@ local realuser = username:lower()
 
         otherTag.Parent = otherPlayer.Character.Head
     end
+end
 end
 end
 for _, username in ipairs(Scripters) do
