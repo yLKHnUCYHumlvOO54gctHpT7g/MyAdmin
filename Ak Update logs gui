@@ -2,6 +2,7 @@
 local commands = {
     "+ Added cmd: \"/warn all\"",
     "+ Updated cmd: \"/bypasser\"",
+    "+ added cmd: \"/infect\"",
     "+ Added cmd: \"/givepower (display name)\""
 }
 
