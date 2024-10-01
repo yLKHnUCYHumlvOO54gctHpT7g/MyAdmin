@@ -500,7 +500,7 @@ local function showNotification(message, backgroundColor)
 end
  
 local isWhitelisted = false
-for _, whitelistedUser in ipairs(whitelistedPlayers) do
+for _, whitelistedUser in ipairs(getgenv().whitelistedPlayers) do
     if playerName:lower() == whitelistedUser:lower() then
         isWhitelisted = true
         break
@@ -662,7 +662,7 @@ end)
 tag.Adornee = player.Character.Head
 tag.Parent = player.Character.Head
 
-for _, username in ipairs(premiumUsers) do
+for _, username in ipairs(getgenv().premiumUsers) do
     if game.Players:FindFirstChild(username) then
     local otherPlayer = game.Players[username]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
@@ -896,7 +896,7 @@ for _, username in ipairs(Scripters) do
     end
 end
 end
-for _, username in ipairs(premiumUsers) do
+for _, username in ipairs(getgenv().premiumUsers) do
     if game.Players:FindFirstChild(username) then
     local otherPlayer = game.Players[username]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
