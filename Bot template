@@ -125,7 +125,7 @@ ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)                end
         for i, v in pairs(game.Players:GetPlayers()) do
             v.Chatted:Connect(function(msg)
                 if v.Name == adminCmds and msg:lower() == "/trip "..player.Name:lower() or v.Name == adminCmds and msg:lower() == "/trip "..player.DisplayName:lower() then
-                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.X,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Y+2,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Z)
+                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.X,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Y+5,game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame.Position.Z)
 game.Players.LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)                end
             end)
         end
