@@ -36,7 +36,8 @@ getgenv().whitelistedPlayers = {
     "RobloxBanneAMiROMG5",
     "drgdrgdrgdrgdg121n",
     "fireybush5",
-    "forhelpingboi8"
+    "forhelpingboi8",
+    "Tallguy019"
 }
 
 getgenv().premiumUsers = {
@@ -70,7 +71,8 @@ getgenv().premiumUsers = {
     "RobloxBanneAMiROMG5",
     "drgdrgdrgdrgdg121n",
     "fireybush5",
-    "forhelpingboi8"
+    "forhelpingboi8",
+    "Tallguy019"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
