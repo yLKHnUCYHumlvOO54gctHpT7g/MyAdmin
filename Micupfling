@@ -1,5 +1,5 @@
-local flingForce = 100000
-local spinPower = 100000
+local flingForce = 999999
+local spinPower = 999999
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
