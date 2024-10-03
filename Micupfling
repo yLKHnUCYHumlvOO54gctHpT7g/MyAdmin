@@ -1,5 +1,5 @@
-local flingForce = 9999999999999999999
-local spinPower = 1
+local flingForce = 999999
+local spinPower = 999999999999
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
@@ -60,10 +60,10 @@ local function align(Part0, Part1)
 
     local ap = Instance.new("AlignPosition", att0)
     ap.ApplyAtCenterOfMass = true
-    ap.MaxForce = 999e9
-    ap.MaxVelocity = 999e9
+    ap.MaxForce = 99e9
+    ap.MaxVelocity = 99e9
     ap.ReactionForceEnabled = false
-    ap.Responsiveness = 500
+    ap.Responsiveness = 1000
     ap.RigidityEnabled = false
     ap.Attachment0 = att0
     ap.Attachment1 = att1
