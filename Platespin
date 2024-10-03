@@ -91,15 +91,25 @@ local function spinPart(part, power)
     end
 end
 
--- Handle parts named "Wobbly"
+-- Function to handle parts named "Wobbly"
 local function handlePart(v)
     if v.Name ~= "Wobbly" then
         return
     end
-    
+
     v:ClearAllChildren()
     v.CanCollide = false  -- Ensure the part doesn't collide with other objects
     
+    -- Set CFrames for the Wobbly parts based on their positions
+    local newCFrames = {
+        CFrame.new(87.8022995, 233.506561, -28.0461788, 0.0211223252, 2.18218588e-06, -0.9997769, 0.706885397, 0.707170367, 0.0149359386, 0.707012653, -0.707043171, 0.0149355391),
+        CFrame.new(87.8022995, 233.506561, -28.0461788, 0.0211275108, -7.10994097e-10, -0.999776781, -0.000931725313, 0.999999583, -1.96901419e-05, 0.999776363, 0.000931933348, 0.0211275015),
+        CFrame.new(87.8022995, 233.506561, -28.0461788, 0.021118952, 1.32023808e-06, -0.999776959, 0.866299808, -0.499189168, 0.0182987675, -0.499077797, -0.866493046, -0.0105434963)
+    }
+
+    -- Set the CFrame of the part
+    v.CFrame = newCFrames[#partsToAlign + 1]  -- Set the CFrame based on the current count of aligned parts
+
     local part = Instance.new("Part", v)
     part.CFrame = v.CFrame
     part.CanCollide = false  -- Ensure the player cannot collide with it
@@ -110,14 +120,14 @@ local function handlePart(v)
     configureBlueParts(part)  -- Make blue parts invisible and non-collidable
     align(v, part)
     spawn(function()
-        spinPart(part, spinPower)  -- Spin power of 600
+        spinPart(part, spinPower)  -- Spin power of 800
     end)
 
     table.insert(partsToAlign, part)
 end
 
 -- Apply functions to all "Wobbly" parts in the workspace
-for i, v in pairs(workspace:GetChildren()) do
+for _, v in pairs(workspace:GetChildren()) do
     handlePart(v)
 end
 
