@@ -1,4 +1,4 @@
-local flingForce = 99999999999
+local flingForce = 9999999999999999999
 local spinPower = 1
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
