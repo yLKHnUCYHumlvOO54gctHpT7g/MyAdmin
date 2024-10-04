@@ -5,83 +5,94 @@ local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
 local camera = workspace.CurrentCamera
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local shiftLockEnabled = false
 
--- Create the button for shift lock
-local screenGui = Instance.new("ScreenGui")
-screenGui.Parent = player:WaitForChild("PlayerGui")
+-- Function to create the shift lock button
+local function createShiftLockButton()
+    -- Create the ScreenGui for the shift lock button
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "ShiftLockGui"
+    screenGui.Parent = player:WaitForChild("PlayerGui")
 
-local shiftLockButton = Instance.new("TextButton")
-shiftLockButton.Size = UDim2.new(0, 80, 0, 80)
-shiftLockButton.Position = UDim2.new(0.9, 0, 0.9, 0)
-shiftLockButton.BackgroundColor3 = Color3.fromRGB(34, 34, 34) -- Dark background color
-shiftLockButton.AutoButtonColor = false
-shiftLockButton.Text = ""
-shiftLockButton.BorderSizePixel = 0
-shiftLockButton.BackgroundTransparency = 0.5 -- Make the button partially transparent
-shiftLockButton.Parent = screenGui
+    -- Create the button for shift lock
+    local shiftLockButton = Instance.new("TextButton")
+    shiftLockButton.Size = UDim2.new(0, 80, 0, 80)
+    shiftLockButton.Position = UDim2.new(0.9, 0, 0.9, 0)
+    shiftLockButton.BackgroundColor3 = Color3.fromRGB(34, 34, 34) -- Dark background color
+    shiftLockButton.AutoButtonColor = false
+    shiftLockButton.Text = ""
+    shiftLockButton.BorderSizePixel = 0
+    shiftLockButton.BackgroundTransparency = 0.5 -- Make the button partially transparent
+    shiftLockButton.Parent = screenGui
 
--- Create a rounded square shape for the button
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0.2, 0) -- Rounded square corners
-corner.Parent = shiftLockButton
+    -- Create a rounded square shape for the button
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0.2, 0) -- Rounded square corners
+    corner.Parent = shiftLockButton
 
--- Create a TextLabel for the "S"
-local shiftLockText = Instance.new("TextLabel")
-shiftLockText.Size = UDim2.new(1, 0, 1, 0)  -- Full size of the button
-shiftLockText.Position = UDim2.new(0, 0, 0, 0)
-shiftLockText.Text = "S" -- Shift lock symbol
-shiftLockText.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text color
-shiftLockText.TextScaled = true -- Scale text to fit the button
-shiftLockText.TextSize = 30 -- Set text size to make it smaller
-shiftLockText.BackgroundTransparency = 1 -- No background
-shiftLockText.Parent = shiftLockButton
+    -- Create a TextLabel for the "S"
+    local shiftLockText = Instance.new("TextLabel")
+    shiftLockText.Size = UDim2.new(1, 0, 1, 0)  -- Full size of the button
+    shiftLockText.Position = UDim2.new(0, 0, 0, 0)
+    shiftLockText.Text = "S" -- Shift lock symbol
+    shiftLockText.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text color
+    shiftLockText.TextScaled = true -- Scale text to fit the button
+    shiftLockText.TextSize = 30 -- Set text size to make it smaller
+    shiftLockText.BackgroundTransparency = 1 -- No background
+    shiftLockText.Parent = shiftLockButton
 
--- Add a subtle highlight on hover
-shiftLockButton.MouseEnter:Connect(function()
-    shiftLockButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Lighter background on hover
-end)
+    -- Add a subtle highlight on hover
+    shiftLockButton.MouseEnter:Connect(function()
+        shiftLockButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Lighter background on hover
+    end)
 
-shiftLockButton.MouseLeave:Connect(function()
-    shiftLockButton.BackgroundColor3 = Color3.fromRGB(34, 34, 34) -- Restore original color
-end)
+    shiftLockButton.MouseLeave:Connect(function()
+        shiftLockButton.BackgroundColor3 = Color3.fromRGB(34, 34, 34) -- Restore original color
+    end)
 
--- Function to toggle shift lock
-local function toggleShiftLock()
-    shiftLockEnabled = not shiftLockEnabled
-end
-
--- Rotate the character to face the camera's direction when shift lock is enabled
-local function rotateCharacterToFaceCamera()
-    if shiftLockEnabled and humanoidRootPart then
-        local cameraLookVector = camera.CFrame.LookVector
-        local newDirection = Vector3.new(cameraLookVector.X, 0, cameraLookVector.Z).Unit
-        local targetPosition = humanoidRootPart.Position + newDirection
-        humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position, targetPosition)
+    -- Function to toggle shift lock
+    local function toggleShiftLock()
+        shiftLockEnabled = not shiftLockEnabled
     end
-end
 
--- Update the camera position and rotate the character every frame
-local function updateCameraAndCharacter()
-    if shiftLockEnabled then
-        rotateCharacterToFaceCamera()
+    -- Rotate the character to face the camera's direction when shift lock is enabled
+    local function rotateCharacterToFaceCamera(humanoidRootPart)
+        if shiftLockEnabled and humanoidRootPart then
+            local cameraLookVector = camera.CFrame.LookVector
+            local newDirection = Vector3.new(cameraLookVector.X, 0, cameraLookVector.Z).Unit
+            local targetPosition = humanoidRootPart.Position + newDirection
+            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position, targetPosition)
+        end
     end
+
+    -- Update the camera position and rotate the character every frame
+    local function updateCameraAndCharacter()
+        local character = player.Character
+        if character then
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+            rotateCharacterToFaceCamera(humanoidRootPart)
+        end
+    end
+
+    -- Connect button click to toggle shift lock
+    shiftLockButton.MouseButton1Click:Connect(toggleShiftLock)
+
+    -- Update camera and character every frame
+    RunService.RenderStepped:Connect(updateCameraAndCharacter)
 end
 
--- Connect button click to toggle shift lock
-shiftLockButton.MouseButton1Click:Connect(toggleShiftLock)
+-- Initial button creation
+createShiftLockButton()
 
--- Update camera and character every frame
-RunService.RenderStepped:Connect(updateCameraAndCharacter)
+-- Function to handle character respawning
+local function onCharacterAdded()
+    shiftLockEnabled = false -- Reset shift lock state
+    wait(2) -- Wait for 2 seconds
+    createShiftLockButton() -- Recreate the shift lock button
+end
 
--- Reset the camera and reinitialize variables if the character respawns
-player.CharacterAdded:Connect(function(newCharacter)
-    character = newCharacter
-    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    shiftLockEnabled = false
-end)
+-- Connect character added event to handle respawn
+player.CharacterAdded:Connect(onCharacterAdded)
 
 -- Debugging information
 print("Shift lock button created. Check if it's visible.")
