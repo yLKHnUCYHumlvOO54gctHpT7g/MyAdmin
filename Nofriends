@@ -1,1 +1,49 @@
+local exceptions = {
+    "Alikhammas",
+    "Alikhammas1234",
+    "AK_ADMEN1"
+}
 
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
+local HttpService = game:GetService("HttpService")
+
+local function isException(playerName)
+    for _, name in pairs(exceptions) do
+        if name == playerName then
+            return true
+        end
+    end
+    return false
+end
+
+local function findServer()
+    local gameId = game.PlaceId
+    local url = "https://games.roblox.com/v1/games/" .. gameId .. "/servers/Public?sortOrder=Desc&limit=100"
+
+    local success, result = pcall(function()
+        return HttpService:JSONDecode(game:HttpGet(url))
+    end)
+
+    if success then
+        for _, server in pairs(result.data) do
+            if server.playing < server.maxPlayers and server.playing >= (server.maxPlayers - 5) then
+                return server.id
+            end
+        end
+    end
+    return nil
+end
+
+local function serverHop()
+    local serverId = findServer()
+    if serverId then
+        TeleportService:TeleportToPlaceInstance(game.PlaceId, serverId, Players.LocalPlayer)
+    end
+end
+
+Players.PlayerAdded:Connect(function(player)
+    if player:IsFriendsWith(Players.LocalPlayer.UserId) and not isException(player.Name) then
+        serverHop()
+    end
+end)
