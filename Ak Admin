@@ -39,8 +39,7 @@ getgenv().whitelistedPlayers = {
     "forhelpingboi8",
     "Tallguy019",
     "jovanibandi",
-    "vvskez",
-    "mmmmmfemboys"
+    "Omg223568"
 }
 
 getgenv().premiumUsers = {
@@ -77,8 +76,7 @@ getgenv().premiumUsers = {
     "forhelpingboi8",
     "Tallguy019",
     "jovanibandi",
-    "mmmmmfemboys",
-    "vvskez"
+    "Omg223568"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
