@@ -627,6 +627,7 @@ local cmds = {
         ["/platespin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Platespin",
         ["/kronefling"] = "https://raw.githubusercontent.com/Alikhammass/antifling./main/loopfling",
         ["/gimmetools"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/gimmetools",
+        ["/chainedpower"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Chainedpower",
         ["/oof"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof",
         ["/mcfling"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfling",
         ["/cmds"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/cmds",
