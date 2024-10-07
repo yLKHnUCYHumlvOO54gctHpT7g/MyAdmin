@@ -520,7 +520,6 @@ kickPlayer()
     -- Code to execute for non-whitelisted players
     print("You are not whitelisted. Execute non-whitelisted logic here.")
 else
-    print("you are whitelisted")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/AK%20intro"))()
 
 
