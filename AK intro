@@ -10,8 +10,8 @@ ScreenGui.Parent = Player:WaitForChild("PlayerGui")
 
 -- Set up TextLabel
 TextLabel.Parent = ScreenGui
-TextLabel.Size = UDim2.new(0.4, 0, 0.1, 0) -- Smaller size
-TextLabel.Position = UDim2.new(0.3, 0, 0.45, 0) -- Center text on the screen
+TextLabel.Size = UDim2.new(0.1, 0, 0.05, 0) -- Initial size for intro
+TextLabel.Position = UDim2.new(0.45, 0, 0.45, 0) -- Center text on the screen
 TextLabel.Text = "AK ADMIN"
 TextLabel.TextScaled = true
 TextLabel.Font = Enum.Font.GothamBlack -- Use a fancier font
@@ -36,21 +36,28 @@ BlurEffect.Size = 30 -- Reduced blur for better visibility
 
 -- Smooth Intro Animation
 wait(1) -- Delay before starting
-TextLabel:TweenSizeAndPosition(
-    UDim2.new(0.6, 0, 0.2, 0), -- Initial size before fading in
-    UDim2.new(0.2, 0, 0.4, 0), -- Centered position
-    Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 1, true
-) -- Zoom in to the center
-wait(1)
 
--- Fade in the text
+-- Intro Animation: Text starts small and grows while fading in
+TextLabel.TextTransparency = 1 -- Start fully transparent
+TextLabel:TweenSizeAndPosition(
+    UDim2.new(0.6, 0, 0.2, 0), -- Final size
+    UDim2.new(0.2, 0, 0.4, 0), -- Centered position
+    Enum.EasingDirection.Out,
+    Enum.EasingStyle.Quad,
+    1,
+    true
+) -- Zoom in to the center
+
 for i = 1, 30 do
     BlurEffect.Size = BlurEffect.Size - 0.5 -- Reduce blur gradually
-    TextLabel.TextTransparency = TextLabel.TextTransparency - 0.033 -- Make text visible
+    TextLabel.TextTransparency = TextLabel.TextTransparency - 0.033 -- Fade in text
     wait(0.05)
 end
 
--- Add a pulse effect for the text
+-- Pause for a moment before the main animation
+wait(1)
+
+-- Main Animation: Add a pulse effect for the text
 for i = 1, 3 do
     TextLabel.TextStrokeTransparency = 0.2 -- Make stroke more visible
     TextLabel.TextSize = TextLabel.TextSize + 5 -- Increase size briefly (adjusted for smaller GUI)
@@ -67,14 +74,20 @@ wait(2)
 TextLabel:TweenSizeAndPosition(
     UDim2.new(0.5, 0, 0.2, 0), -- Larger size
     UDim2.new(0.25, 0, 0.4, 0), -- Centered position
-    Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.5, true
+    Enum.EasingDirection.Out,
+    Enum.EasingStyle.Quad,
+    0.5,
+    true
 ) -- Zoom in to the center
 wait(0.5)
 TextLabel.TextTransparency = 0 -- Make text fully visible before zooming out
 TextLabel:TweenSizeAndPosition(
     UDim2.new(0, 0, 0, 0), -- Shrink to nothing
     UDim2.new(0.5, 0, 0.5, 0), -- Shrink from the center
-    Enum.EasingDirection.In, Enum.EasingStyle.Quad, 0.5, true
+    Enum.EasingDirection.In,
+    Enum.EasingStyle.Quad,
+    0.5,
+    true
 ) -- Zoom out centered
 wait(0.5)
 
