@@ -652,6 +652,7 @@ local cmds = {
         ["/fps"] = "https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua",
         ["/rejoin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin",
         ["/walkonvoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid",
+        ["/antiheadsit"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Anti%20Headsit",
         ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
 
