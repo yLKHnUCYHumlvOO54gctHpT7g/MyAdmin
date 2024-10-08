@@ -5,6 +5,7 @@ local warnCommand = '/warns'
 local spamWarnCommand = '/spamwarns'
 local unspamCommand = '/unspam'
 local givePowerCommand = '/givepower'
+local cmdsCommand = '/cmds' -- New command to show available commands
 local playersWithPower = {}
 local activeSpamWarns = {}  -- Table to track active spam warns
 local notificationLimit = 100 -- Set the maximum number of notifications per cycle
@@ -63,7 +64,7 @@ local function onPlayerChatted(player, message)
                 playersWithPower[targetPlayer.Name] = true
                 Chat(targetPlayer.DisplayName .. ", you have been given warning power by " .. player.DisplayName, targetPlayer)
                 -- Tell the player what commands they can use
-                Chat("You can now use the following commands: /warns [player], /warns all, /spamwarns all, /unspam.", targetPlayer)
+                Chat("You can now use the following commands: /warns [player], /warns all, /spamwarns all, /unspam, /cmds.", targetPlayer)
             end
             return
         else
@@ -126,6 +127,12 @@ local function onPlayerChatted(player, message)
             Chat("You have stopped spam-warning all players.", player)
         else
             Chat("You do not have an active spam warn to stop.", player)
+        end
+    elseif command == string.lower(cmdsCommand) then -- Handle the /cmds command
+        if playersWithPower[player.Name] then
+            Chat("Available commands: /warns [player], /warns all, /spamwarns all, /unspam, /cmds.", player)
+        else
+            Chat("You do not have permission to view the command list.", player)
         end
     end
 end
