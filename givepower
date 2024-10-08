@@ -8,6 +8,7 @@ local givePowerCommand = '/givepower'
 local cmdsCommand = '/cmds' -- New command to show available commands
 local playersWithPower = {}
 local activeSpamWarns = {}  -- Table to track active spam warns
+local spamWarningOwners = {} -- Track who initiated the spam warning
 local notificationLimit = 100 -- Set the maximum number of notifications per cycle
 local notificationInterval = 0.1 -- Time interval between cycles (in seconds)
 local oldChat = false
@@ -22,17 +23,16 @@ local function Chat(msg, player)
     if oldChat then
         ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
     else
-        -- Assuming TextChatService is already initialized and used
         game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(msg)
     end
 end
 
 local function spamWarnAll(player)
     while activeSpamWarns[player.Name] do
-        local sentNotifications = 0 -- Reset notification count for each cycle
+        local sentNotifications = 0 
         
         for _, victimPlayer in ipairs(Players:GetPlayers()) do
-            if not activeSpamWarns[player.Name] then -- Stop if the player called /unspam
+            if not activeSpamWarns[player.Name] then
                 return
             end
             
@@ -44,7 +44,7 @@ local function spamWarnAll(player)
             end
         end
 
-        wait(notificationInterval) -- Wait for the specified interval before the next cycle
+        wait(notificationInterval)
     end
 end
 
@@ -67,8 +67,9 @@ local function onPlayerChatted(player, message)
             if not playersWithPower[targetPlayer.Name] then
                 playersWithPower[targetPlayer.Name] = true
                 Chat(targetPlayer.DisplayName .. ", you have been given warning power by " .. player.DisplayName, targetPlayer)
-                -- Tell the player what commands they can use
                 Chat("You can now use the following commands: /warns [player], /warns all, /spamwarns all, /unspam, /cmds.", targetPlayer)
+            else
+                Chat(targetPlayer.DisplayName .. " already has warning power.", player)
             end
             return
         else
@@ -117,6 +118,7 @@ local function onPlayerChatted(player, message)
         if playersWithPower[player.Name] then
             if not activeSpamWarns[player.Name] then
                 activeSpamWarns[player.Name] = true
+                spamWarningOwners[player.Name] = player.Name -- Track who initiated the spam warning
                 Chat("You are now spam-warning all players in the server.", player)
                 spamWarnAll(player) -- Start the spam warn loop
             else
@@ -126,13 +128,17 @@ local function onPlayerChatted(player, message)
             Chat("You do not have permission to spam warn players.", player)
         end
     elseif command == string.lower(unspamCommand) then
-        if playersWithPower[player.Name] and activeSpamWarns[player.Name] then
-            activeSpamWarns[player.Name] = false
+        if playersWithPower[player.Name] then
+            -- Stop spam warnings for all players
+            for spamOwner, _ in pairs(activeSpamWarns) do
+                activeSpamWarns[spamOwner] = false
+            end
             Chat("You have stopped spam-warning all players.", player)
+            spamWarningOwners = {} -- Clear all spam warning owners
         else
-            Chat("There is no active spam-warning to stop.", player)
+            Chat("You do not have permission to stop spam warnings.", player)
         end
-    elseif command == string.lower(cmdsCommand) then -- Handle the /cmds command
+    elseif command == string.lower(cmdsCommand) then
         if playersWithPower[player.Name] then
             Chat("Available commands: /warns [player], /warns all, /spamwarns all, /unspam, /cmds.", player)
         else
