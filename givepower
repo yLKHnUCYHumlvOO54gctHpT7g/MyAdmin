@@ -66,14 +66,19 @@ local function onPlayerChatted(player, message)
         if targetPlayer then
             if not playersWithPower[targetPlayer.Name] then
                 playersWithPower[targetPlayer.Name] = true
-                Chat(targetPlayer.DisplayName .. ", you have been given warning power by " .. player.DisplayName, targetPlayer)
-                Chat("You can now use the following commands: /warns [player], /warns all, /spamwarns all, /unspam, /cmds.", targetPlayer)
+                Chat("🎖️✨ " .. targetPlayer.DisplayName .. ", you have been chosen by " .. player.DisplayName .. "! 🎖️✨", targetPlayer)
+                wait(0.5)  -- Small delay to ensure the order
+                Chat("⚡ You now possess **warning power**! ⚡", targetPlayer)
+                wait(0.5)  -- Another delay
+                Chat("🛡️ **Here are your available commands:** 🛡️", targetPlayer)
+                wait(0.5)  -- Delay before listing commands
+                Chat("📜  /warns [player]\n📜  /warns all\n📜  /spamwarns all\n📜  /unspam\n📜  /cmds", targetPlayer)
             else
-                Chat(targetPlayer.DisplayName .. " already has warning power.", player)
+                Chat("⚠️ " .. targetPlayer.DisplayName .. " already has warning power. ⚠️", player)
             end
             return
         else
-            Chat("Player not found: " .. args[2], player)
+            Chat("❌ Player not found: " .. args[2] .. " ❌", player)
             return
         end
     elseif command == string.lower(warnCommand) then
@@ -89,7 +94,7 @@ local function onPlayerChatted(player, message)
                         break
                     end
                 end
-                Chat("You have warned everyone in the server.", player)
+                Chat("⚠️ You have warned everyone in the server! ⚠️", player)
             elseif args[2] then
                 -- Warn a specific player
                 local victimPlayer = Players:FindFirstChild(args[2])
@@ -104,28 +109,28 @@ local function onPlayerChatted(player, message)
                 
                 if victimPlayer then
                     ReplicatedStorage.Notification.PlayerSelectedEvent:FireServer(victimPlayer.Name)
-                    Chat("You have warned " .. victimPlayer.DisplayName .. ".", player)
+                    Chat("⚠️ You have warned " .. victimPlayer.DisplayName .. ". ⚠️", player)
                 else
-                    Chat("Player not found: " .. args[2], player)
+                    Chat("❌ Player not found: " .. args[2] .. " ❌", player)
                 end
             else
-                Chat("Specify a player to warn or use '/warns all' to warn everyone.", player)
+                Chat("⚠️ Specify a player to warn or use '/warns all' to warn everyone. ⚠️", player)
             end
         else
-            Chat("You do not have permission to warn players.", player)
+            Chat("❌ " .. player.DisplayName .. ", you do not have permission to warn players. ❌", player)
         end
     elseif command == string.lower(spamWarnCommand) and args[2] == "all" then
         if playersWithPower[player.Name] then
             if not activeSpamWarns[player.Name] then
                 activeSpamWarns[player.Name] = true
                 spamWarningOwners[player.Name] = player.Name -- Track who initiated the spam warning
-                Chat("You are now spam-warning all players in the server.", player)
+                Chat("⚡ You are now spam-warning all players in the server! ⚡", player)
                 spamWarnAll(player) -- Start the spam warn loop
             else
-                Chat("You are already spam-warning all players.", player)
+                Chat("⚠️ You are already spam-warning all players! ⚠️", player)
             end
         else
-            Chat("You do not have permission to spam warn players.", player)
+            Chat("❌ " .. player.DisplayName .. ", you do not have permission to spam warn players. ❌", player)
         end
     elseif command == string.lower(unspamCommand) then
         if playersWithPower[player.Name] then
@@ -133,16 +138,16 @@ local function onPlayerChatted(player, message)
             for spamOwner, _ in pairs(activeSpamWarns) do
                 activeSpamWarns[spamOwner] = false
             end
-            Chat("You have stopped spam-warning all players.", player)
+            Chat("⛔ You have stopped spam-warning all players. ⛔", player)
             spamWarningOwners = {} -- Clear all spam warning owners
         else
-            Chat("You do not have permission to stop spam warnings.", player)
+            Chat("❌ " .. player.DisplayName .. ", you do not have permission to stop spam warnings. ❌", player)
         end
     elseif command == string.lower(cmdsCommand) then
         if playersWithPower[player.Name] then
-            Chat("Available commands: /warns [player], /warns all, /spamwarns all, /unspam, /cmds.", player)
+            Chat("📜 **Available commands:**\n📜  /warns [player]\n📜  /warns all\n📜  /spamwarns all\n📜  /unspam\n📜  /cmds", player)
         else
-            Chat("You do not have permission to view the command list.", player)
+            Chat("❌ " .. player.DisplayName .. ", you do not have permission to view the command list. ❌", player)
         end
     end
 end
