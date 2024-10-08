@@ -32,6 +32,10 @@ local function spamWarnAll(player)
         local sentNotifications = 0 -- Reset notification count for each cycle
         
         for _, victimPlayer in ipairs(Players:GetPlayers()) do
+            if not activeSpamWarns[player.Name] then -- Stop if the player called /unspam
+                return
+            end
+            
             if sentNotifications < notificationLimit then
                 ReplicatedStorage.Notification.PlayerSelectedEvent:FireServer(victimPlayer.Name)
                 sentNotifications = sentNotifications + 1
@@ -126,7 +130,7 @@ local function onPlayerChatted(player, message)
             activeSpamWarns[player.Name] = false
             Chat("You have stopped spam-warning all players.", player)
         else
-            Chat("You do not have an active spam warn to stop.", player)
+            Chat("There is no active spam-warning to stop.", player)
         end
     elseif command == string.lower(cmdsCommand) then -- Handle the /cmds command
         if playersWithPower[player.Name] then
