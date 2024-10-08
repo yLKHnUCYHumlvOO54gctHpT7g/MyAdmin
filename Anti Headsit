@@ -1,0 +1,68 @@
+-- Made by AnthonyIsntHere
+-- This will teleport you to the void if someone sits on your head
+
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local Character, Humanoid, RootPart, Head
+
+local Camera = workspace.CurrentCamera
+local IsVoiding = false
+
+-- Function to check if any player is sitting on your head
+local function IsSittingOnHead()
+    if RootPart and Head then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= Player then
+                local playerCharacter = player.Character
+                local playerHumanoid = playerCharacter and playerCharacter:FindFirstChildWhichIsA("Humanoid")
+                local playerRootPart = playerHumanoid and playerHumanoid.RootPart
+                local playerHead = playerCharacter and playerCharacter:FindFirstChild("Head")
+
+                -- Ensure the player's humanoid and root part exist
+                if playerHumanoid and playerRootPart and playerHead then
+                    -- Check if the player is physically sitting on your head
+                    local distanceToHead = (Head.Position - playerHead.Position).Magnitude
+                    
+                    if distanceToHead < 1.5 and playerHumanoid:GetState() == Enum.HumanoidStateType.Seated then
+                        return true  -- Player is sitting on your head
+                    end
+                end
+            end
+        end
+    end
+    return false  -- No player sitting on your head
+end
+
+-- Set the void limit to be bypassed
+workspace.FallenPartsDestroyHeight = 0 / 0
+
+while true do
+    -- Refresh the character components
+    Character = Player.Character
+    Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid")
+    RootPart = Humanoid and Humanoid.RootPart
+    Head = Character and Character:FindFirstChild("Head")  -- Get the player's head
+
+    -- Teleport to the void only if a player is sitting on your head
+    if IsSittingOnHead() and Humanoid and RootPart and not IsVoiding then
+        IsVoiding = true  -- Set the voiding flag to prevent multiple activations
+
+        local CurrentPosition = RootPart.CFrame  -- Store current position
+        local Timer = tick()  -- Set a timer for duration
+
+        -- Teleport to the void
+        repeat
+            RootPart.CFrame = CFrame.new(0, -499, 0) * CFrame.Angles(math.rad(90), 0, 0)
+            RootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
+            task.wait()
+        until tick() > Timer + 1  -- Wait for 1 second
+
+        -- Return to the original position
+        RootPart.CFrame = CurrentPosition
+        Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)  -- Reset humanoid state
+
+        IsVoiding = false  -- Reset the voiding flag
+    end
+
+    task.wait(0.1)  -- Add a small wait to prevent script overload
+end
