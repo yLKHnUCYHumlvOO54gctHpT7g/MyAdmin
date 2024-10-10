@@ -653,6 +653,7 @@ local cmds = {
         ["/rejoin"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin",
         ["/walkonvoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid",
         ["/antiheadsit"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Anti%20Headsit",
+        ["/dropkick"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Dropkick",
         ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
 
