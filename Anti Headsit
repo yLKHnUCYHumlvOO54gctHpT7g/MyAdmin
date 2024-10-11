@@ -1,58 +1,91 @@
 -- Made by AnthonyIsntHere
--- This will teleport you to the void if someone sits on your head
+-- This will teleport you to the void and kill anyone who either sits exactly on your head or uses the bang animation on you
 
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local Character, Humanoid, RootPart, Head
-
 local Camera = workspace.CurrentCamera
 local IsVoiding = false
 
--- Function to check if any player is sitting on your head
-local function IsSittingOnHead()
+-- Function to check if a player is sitting exactly on your head
+local function IsPlayerSittingOnHead()
     if RootPart and Head then
-        for _, player in ipairs(Players:GetPlayers()) do
-            if player ~= Player then
-                local playerCharacter = player.Character
-                local playerHumanoid = playerCharacter and playerCharacter:FindFirstChildWhichIsA("Humanoid")
-                local playerRootPart = playerHumanoid and playerHumanoid.RootPart
-                local playerHead = playerCharacter and playerCharacter:FindFirstChild("Head")
+        for _, otherPlayer in ipairs(Players:GetPlayers()) do
+            if otherPlayer ~= Player then
+                local otherCharacter = otherPlayer.Character
+                local otherHumanoid = otherCharacter and otherCharacter:FindFirstChildWhichIsA("Humanoid")
+                local otherRootPart = otherHumanoid and otherHumanoid.RootPart
+                local otherHead = otherCharacter and otherCharacter:FindFirstChild("Head")
 
-                -- Ensure the player's humanoid and root part exist
-                if playerHumanoid and playerRootPart and playerHead then
-                    -- Check if the player is physically sitting on your head
-                    local distanceToHead = (Head.Position - playerHead.Position).Magnitude
-                    
-                    if distanceToHead < 1.5 and playerHumanoid:GetState() == Enum.HumanoidStateType.Seated then
-                        return true  -- Player is sitting on your head
+                -- Ensure the other player's humanoid and root part exist
+                if otherHumanoid and otherRootPart and otherHead then
+                    local distance = (Head.Position - otherHead.Position).Magnitude
+
+                    -- Strictly check if the player is sitting exactly on your head
+                    if distance <= 1 and otherHumanoid:GetState() == Enum.HumanoidStateType.Seated then
+                        return otherPlayer  -- Return the player sitting on your head
                     end
                 end
             end
         end
     end
-    return false  -- No player sitting on your head
+    return nil  -- No player is sitting on your head
 end
 
--- Set the void limit to be bypassed
+-- Function to check if a player is using the bang animation on you
+local function IsUsingBangAnimation()
+    if RootPart then
+        for _, otherPlayer in ipairs(Players:GetPlayers()) do
+            if otherPlayer ~= Player then
+                local otherCharacter = otherPlayer.Character
+                local otherHumanoid = otherCharacter and otherCharacter:FindFirstChildWhichIsA("Humanoid")
+                local otherRootPart = otherHumanoid and otherHumanoid.RootPart
+
+                -- Check if the player is close enough and playing the "bang" animation
+                if otherRootPart and (RootPart.Position - otherRootPart.Position).Magnitude < 2 then
+                    for _, animTrack in ipairs(otherHumanoid:GetPlayingAnimationTracks()) do
+                        if animTrack.Animation and (animTrack.Animation.AnimationId:match("148840371") or animTrack.Animation.AnimationId:match("5918726674")) then
+                            return otherPlayer  -- Return the player using the bang animation
+                        end
+                    end
+                end
+            end
+        end
+    end
+    return nil  -- No player is using the bang animation near you
+end
+
+-- Bypass the void limit
 workspace.FallenPartsDestroyHeight = 0 / 0
 
 while true do
-    -- Refresh the character components
+    -- Refresh character components
     Character = Player.Character
     Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid")
     RootPart = Humanoid and Humanoid.RootPart
-    Head = Character and Character:FindFirstChild("Head")  -- Get the player's head
+    Head = Character and Character:FindFirstChild("Head")  -- Get your head part
 
-    -- Teleport to the void only if a player is sitting on your head
-    if IsSittingOnHead() and Humanoid and RootPart and not IsVoiding then
-        IsVoiding = true  -- Set the voiding flag to prevent multiple activations
+    -- Check if a player is sitting on your head or using the bang animation on you
+    local sittingPlayer = IsPlayerSittingOnHead()
+    local bangPlayer = IsUsingBangAnimation()
 
-        local CurrentPosition = RootPart.CFrame  -- Store current position
-        local Timer = tick()  -- Set a timer for duration
+    if (sittingPlayer or bangPlayer) and Humanoid and RootPart and not IsVoiding then
+        IsVoiding = true  -- Set voiding flag to prevent multiple activations
+        local offender = sittingPlayer or bangPlayer  -- The player to kill
 
-        -- Teleport to the void by setting the CFrame to NaN
+        -- Kill the offending player
+        local offenderHumanoid = offender.Character:FindFirstChildWhichIsA("Humanoid")
+        if offenderHumanoid then
+            offenderHumanoid.Health = 0  -- Kill the player
+        end
+
+        -- Teleport yourself to the void
+        local CurrentPosition = RootPart.CFrame  -- Store your current position
+        local Timer = tick()
+
         repeat
-            RootPart.CFrame = CFrame.new(0/0, 0/0, 0/0)  -- Set position to NaN
+            -- Teleport to the void
+            RootPart.CFrame = CFrame.new(0, -499, 0) * CFrame.Angles(math.rad(90), 0, 0)
             RootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
             task.wait()
         until tick() > Timer + 1  -- Wait for 1 second
@@ -61,8 +94,8 @@ while true do
         RootPart.CFrame = CurrentPosition
         Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)  -- Reset humanoid state
 
-        IsVoiding = false  -- Reset the voiding flag
+        IsVoiding = false  -- Reset voiding flag
     end
 
-    task.wait(0.1)  -- Add a small wait to prevent script overload
+    task.wait(0.1)  -- Small wait to prevent overload
 end
