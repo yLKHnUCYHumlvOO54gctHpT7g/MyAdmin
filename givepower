@@ -83,6 +83,7 @@ local function trackBlacklist(player)
     end
 end
 
+-- Function to handle chat commands
 local function onPlayerChatted(player, message)
     if blacklist[player.Name] and blacklist[player.Name].isBlacklisted then
         return -- No more messages after player is blacklisted
@@ -178,18 +179,37 @@ local function onPlayerChatted(player, message)
         end
     elseif command == string.lower(unspamCommand) then
         if playersWithPower[player.Name] then
-            for spamOwner, _ in pairs(activeSpamWarns) do
-                if activeSpamWarns[spamOwner] then
-                    Chat("⛔ You have stopped spam-warnings initiated by " .. spamOwner .. ".", player)
+            if args[2] then
+                local targetPlayer = Players:FindFirstChild(args[2])
+                if not targetPlayer then
+                    for _, p in ipairs(Players:GetPlayers()) do
+                        if string.lower(p.DisplayName) == string.lower(args[2]) then
+                            targetPlayer = p
+                            break
+                        end
+                    end
                 end
-                activeSpamWarns[spamOwner] = false
+                
+                if targetPlayer and activeSpamWarns[targetPlayer.Name] then
+                    activeSpamWarns[targetPlayer.Name] = false
+                    Chat("⛔ You have stopped spam-warnings for " .. targetPlayer.DisplayName .. ".", player)
+                else
+                    Chat("❌ " .. (targetPlayer and targetPlayer.DisplayName or "Player not found: " .. args[2]), player)
+                end
+            else
+                for spamOwner, _ in pairs(activeSpamWarns) do
+                    if activeSpamWarns[spamOwner] then
+                        activeSpamWarns[spamOwner] = false
+                    end
+                end
+                Chat("⛔ You have stopped all spam-warnings.", player)
             end
         else
             trackBlacklist(player)
         end
     elseif command == string.lower(cmdsCommand) then
         if playersWithPower[player.Name] then
-            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /cmds", player)
+            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam [player]\n📜 /unspam\n📜 /cmds", player)
         else
             Chat("❌ You are not authorized to view the command list.", player)
         end
