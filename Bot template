@@ -655,6 +655,7 @@ local cmds = {
         ["/antiheadsit"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Anti%20Headsit",
         ["/dropkick"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Dropkick",
         ["/antivoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Antivoid",
+        ["/usercreationcracked"] = "https://cracklua.github.io/cracks/UserCreation",
         ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
 
