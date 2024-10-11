@@ -50,9 +50,9 @@ while true do
         local CurrentPosition = RootPart.CFrame  -- Store current position
         local Timer = tick()  -- Set a timer for duration
 
-        -- Teleport to the void
+        -- Teleport to the void by setting the CFrame to NaN
         repeat
-            RootPart.CFrame = CFrame.new(0, -499, 0) * CFrame.Angles(math.rad(90), 0, 0)
+            RootPart.CFrame = CFrame.new(0/0, 0/0, 0/0)  -- Set position to NaN
             RootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
             task.wait()
         until tick() > Timer + 1  -- Wait for 1 second
