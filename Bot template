@@ -629,6 +629,7 @@ local cmds = {
         ["/chainedpower"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Chainedpower",
         ["/oof"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/oof",
         ["/mcfling"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfling",
+        ["/mcfling"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfliin",
         ["/cmds"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/cmds",
         ["/antilog"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/antilogger",
         ["/donttouchme"] = "https://raw.githubusercontent.com/0Ben1/fe./main/Fling%20GUI",
