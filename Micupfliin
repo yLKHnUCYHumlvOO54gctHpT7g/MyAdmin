@@ -6,140 +6,157 @@ local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local Workspace = game:GetService("Workspace")
 
-local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local function initializeScript()
+    local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-local Folder = Instance.new("Folder", Workspace)
-local Part = Instance.new("Part", Folder)
-local Attachment1 = Instance.new("Attachment", Part)
-Part.Anchored = true
-Part.CanCollide = false
-Part.Transparency = 1
+    local Folder = Instance.new("Folder", Workspace)
+    local Part = Instance.new("Part", Folder)
+    local Attachment1 = Instance.new("Attachment", Part)
+    Part.Anchored = true
+    Part.CanCollide = false
+    Part.Transparency = 1
 
-if not getgenv().Network then
-    getgenv().Network = {
-        BaseParts = {},
-        Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
-    }
+    if not getgenv().Network then
+        getgenv().Network = {
+            BaseParts = {},
+            Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
+        }
 
-    Network.RetainPart = function(Part)
-        if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
-            table.insert(Network.BaseParts, Part)
-            Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
-            Part.CanCollide = false
+        Network.RetainPart = function(Part)
+            if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
+                table.insert(Network.BaseParts, Part)
+                Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+                Part.CanCollide = false
+            end
         end
+
+        local function EnablePartControl()
+            LocalPlayer.ReplicationFocus = Workspace
+            RunService.Heartbeat:Connect(function()
+                sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+                for _, Part in pairs(Network.BaseParts) do
+                    if Part:IsDescendantOf(Workspace) then
+                        Part.Velocity = Network.Velocity
+                    end
+                end
+            end)
+        end
+
+        EnablePartControl()
     end
 
-    local function EnablePartControl()
-        LocalPlayer.ReplicationFocus = Workspace
-        RunService.Heartbeat:Connect(function()
-            sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
-            for _, Part in pairs(Network.BaseParts) do
-                if Part:IsDescendantOf(Workspace) then
-                    Part.Velocity = Network.Velocity
+    local function ForcePart(v)
+        if v:IsA("Part") and not v.Anchored and not v.Parent:FindFirstChild("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
+            for _, x in next, v:GetChildren() do
+                if x:IsA("BodyAngularVelocity") or x:IsA("BodyForce") or x:IsA("BodyGyro") or x:IsA("BodyPosition") or x:IsA("BodyThrust") or x:IsA("BodyVelocity") or x:IsA("RocketPropulsion") then
+                    x:Destroy()
                 end
             end
-        end)
-    end
-
-    EnablePartControl()
-end
-
-local function ForcePart(v)
-    if v:IsA("Part") and not v.Anchored and not v.Parent:FindFirstChild("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
-        for _, x in next, v:GetChildren() do
-            if x:IsA("BodyAngularVelocity") or x:IsA("BodyForce") or x:IsA("BodyGyro") or x:IsA("BodyPosition") or x:IsA("BodyThrust") or x:IsA("BodyVelocity") or x:IsA("RocketPropulsion") then
-                x:Destroy()
+            if v:FindFirstChild("Attachment") then
+                v:FindFirstChild("Attachment"):Destroy()
             end
+            if v:FindFirstChild("AlignPosition") then
+                v:FindFirstChild("AlignPosition"):Destroy()
+            end
+            if v:FindFirstChild("Torque") then
+                v:FindFirstChild("Torque"):Destroy()
+            end
+            v.CanCollide = false
+            local Torque = Instance.new("Torque", v)
+            Torque.Torque = Vector3.new(100000, 100000, 100000)
+            local AlignPosition = Instance.new("AlignPosition", v)
+            local Attachment2 = Instance.new("Attachment", v)
+            Torque.Attachment0 = Attachment2
+            AlignPosition.MaxForce = 9999999999999999
+            AlignPosition.MaxVelocity = math.huge
+            AlignPosition.Responsiveness = 200
+            AlignPosition.Attachment0 = Attachment2
+            AlignPosition.Attachment1 = Attachment1
         end
-        if v:FindFirstChild("Attachment") then
-            v:FindFirstChild("Attachment"):Destroy()
-        end
-        if v:FindFirstChild("AlignPosition") then
-            v:FindFirstChild("AlignPosition"):Destroy()
-        end
-        if v:FindFirstChild("Torque") then
-            v:FindFirstChild("Torque"):Destroy()
-        end
-        v.CanCollide = false
-        local Torque = Instance.new("Torque", v)
-        Torque.Torque = Vector3.new(100000, 100000, 100000)
-        local AlignPosition = Instance.new("AlignPosition", v)
-        local Attachment2 = Instance.new("Attachment", v)
-        Torque.Attachment0 = Attachment2
-        AlignPosition.MaxForce = 9999999999999999
-        AlignPosition.MaxVelocity = math.huge
-        AlignPosition.Responsiveness = 200
-        AlignPosition.Attachment0 = Attachment2
-        AlignPosition.Attachment1 = Attachment1
     end
-end
 
-local blackHoleActive = true
+    local blackHoleActive = true
 
-local function toggleBlackHole()
-    blackHoleActive = not blackHoleActive
-    if blackHoleActive then
-        for _, v in next, Workspace:GetDescendants() do
-            ForcePart(v)
-        end
-
-        Workspace.DescendantAdded:Connect(function(v)
-            if blackHoleActive then
+    local function toggleBlackHole()
+        blackHoleActive = not blackHoleActive
+        if blackHoleActive then
+            for _, v in next, Workspace:GetDescendants() do
                 ForcePart(v)
             end
-        end)
 
-        spawn(function()
-            while blackHoleActive and RunService.RenderStepped:Wait() do
-                Attachment1.WorldCFrame = humanoidRootPart.CFrame
+            Workspace.DescendantAdded:Connect(function(v)
+                if blackHoleActive then
+                    ForcePart(v)
+                end
+            end)
+
+            spawn(function()
+                while blackHoleActive and RunService.RenderStepped:Wait() do
+                    Attachment1.WorldCFrame = humanoidRootPart.CFrame
+                end
+            end)
+        end
+    end
+
+    local function createControlButton()
+        local screenGui = Instance.new("ScreenGui")
+        local button = Instance.new("TextButton")
+        local frame = Instance.new("Frame")
+        local uicorner = Instance.new("UICorner")
+        local uistroke = Instance.new("UIStroke")
+
+        screenGui.Name = "BlackHoleControlGUI"
+        screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+        frame.Name = "Frame"
+        frame.Parent = screenGui
+        frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        frame.Position = UDim2.new(0.5, -100, 0, 90)
+        frame.Size = UDim2.new(0, 220, 0, 80)
+
+        button.Name = "ToggleBlackHoleButton"
+        button.Size = UDim2.new(0, 200, 0, 50)
+        button.Position = UDim2.new(0, 10, 0, 15)
+        button.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+        button.TextColor3 = Color3.fromRGB(240, 240, 240)
+        button.Font = Enum.Font.Gotham
+        button.TextSize = 20
+        button.Text = "Activate Ball"
+        button.Parent = frame
+
+        uicorner.CornerRadius = UDim.new(0, 10)
+        uicorner.Parent = button
+
+        uistroke.Parent = button
+        uistroke.Color = Color3.fromRGB(0, 0, 0)
+        uistroke.Thickness = 1
+
+        button.MouseButton1Click:Connect(function()
+            toggleBlackHole()
+            if blackHoleActive then
+                button.Text = "Deactivate Ball"
+            else
+                button.Text = "Activate Ball"
             end
         end)
     end
-end
 
-local function createControlButton()
-    local screenGui = Instance.new("ScreenGui")
-    local button = Instance.new("TextButton")
-    local frame = Instance.new("Frame")
-    local uicorner = Instance.new("UICorner")
-    local uistroke = Instance.new("UIStroke")
+    createControlButton()
+    toggleBlackHole()
 
-    screenGui.Name = "BlackHoleControlGUI"
-    screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    -- Handle character death
+    LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function()
+        blackHoleActive = false
+        sethiddenproperty(LocalPlayer, "SimulationRadius", 100) -- Reset simulation radius
+        Folder:Destroy() -- Clean up the folder
+        LocalPlayer.PlayerGui:FindFirstChild("BlackHoleControlGUI"):Destroy() -- Remove the GUI
+    end)
 
-    frame.Name = "Frame"
-    frame.Parent = screenGui
-    frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    frame.Position = UDim2.new(0.5, -100, 0, 90)
-    frame.Size = UDim2.new(0, 220, 0, 80)
-
-    button.Name = "ToggleBlackHoleButton"
-    button.Size = UDim2.new(0, 200, 0, 50)
-    button.Position = UDim2.new(0, 10, 0, 15)
-    button.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    button.TextColor3 = Color3.fromRGB(240, 240, 240) -- Changed to a lighter shade for better contrast
-    button.Font = Enum.Font.Gotham -- Lighter font style
-    button.TextSize = 20 -- Text size for readability
-    button.Text = "Activate Ball" -- Text changed to "Activate Ball"
-    button.Parent = frame
-
-    uicorner.CornerRadius = UDim.new(0, 10)
-    uicorner.Parent = button
-
-    uistroke.Parent = button
-    uistroke.Color = Color3.fromRGB(0, 0, 0) -- Changed stroke color to black for better visibility
-    uistroke.Thickness = 1 -- Thinner outline
-
-    button.MouseButton1Click:Connect(function()
-        toggleBlackHole()
-        if blackHoleActive then
-            button.Text = "Deactivate Ball"
-        else
-            button.Text = "Activate Ball"
-        end
+    -- Handle respawn
+    LocalPlayer.CharacterAdded:Connect(function()
+        initializeScript() -- Reinitialize the script on respawn
     end)
 end
 
-createControlButton()
-toggleBlackHole()
+initializeScript()
