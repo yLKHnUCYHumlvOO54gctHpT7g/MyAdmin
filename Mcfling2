@@ -1,53 +1,46 @@
-local flingForce = 100000
-local spinPower = 100000
-local player = game.Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local PhysicsService = game:GetService("PhysicsService")
+local LocalPlayer = Players.LocalPlayer
+local Workspace = game:GetService("Workspace")
+
+local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-local rs = game:GetService("RunService")
-local physicsService = game:GetService("PhysicsService")
+
 local partsToAlign = {}
-local selectedPart = nil
 local isAlive = true
-local originalPosition = humanoidRootPart.Position
 
 -- Setup collision groups for player interactions
 local function setupCollisionGroups()
-    if not physicsService:CollisionGroupExists("BypassBarrier") then
-        physicsService:CreateCollisionGroup("BypassBarrier")
+    if not PhysicsService:CollisionGroupExists("BypassBarrier") then
+        PhysicsService:CreateCollisionGroup("BypassBarrier")
     end
     
-    if not physicsService:CollisionGroupExists("Barrier") then
-        physicsService:CreateCollisionGroup("Barrier")
+    if not PhysicsService:CollisionGroupExists("Barrier") then
+        PhysicsService:CreateCollisionGroup("Barrier")
     end
     
     -- Set collision rules: BypassBarrier should not collide with Barrier
-    physicsService:CollisionGroupSetCollidable("BypassBarrier", "Barrier", false)
+    PhysicsService:CollisionGroupSetCollidable("BypassBarrier", "Barrier", false)
 end
 
 local function configurePart(part)
-    part.Transparency = 1  -- Set to invisible
+    part.Transparency = 1  -- Invisible
     part.CanCollide = false
-    physicsService:SetPartCollisionGroup(part, "BypassBarrier")  -- Set the part to the "BypassBarrier" collision group
+    PhysicsService:SetPartCollisionGroup(part, "BypassBarrier")  -- Set to the "BypassBarrier" collision group
 end
 
-local function applyFlingForce(part)
-    while true do
-        if part.Parent and isAlive then
-            local randomDirection = Vector3.new(math.random() * 2 - 1, math.random() * 2 - 1, math.random() * 2 - 1).unit
-            for i = 1, 10 do
-                local bodyVelocity = Instance.new("BodyVelocity", part)
-                bodyVelocity.Velocity = randomDirection * flingForce
-                bodyVelocity.MaxForce = Vector3.new(flingForce, flingForce, flingForce)
-                local bodyVelocityOpposite = bodyVelocity:Clone()
-                bodyVelocityOpposite.Velocity = -randomDirection * flingForce
-                bodyVelocityOpposite.Parent = part
-                task.wait(0.05)
-                bodyVelocity:Destroy()  -- Clean up after use
-                bodyVelocityOpposite:Destroy()
-            end
-        end
-        rs.RenderStepped:Wait()
-    end
+-- Fling methods
+local function applyFlingMethods(part)
+    -- Fling method using BodyVelocity
+    local bodyVelocity = Instance.new("BodyVelocity", part)
+    bodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)  -- Max force to fling players
+    bodyVelocity.Velocity = Vector3.new(math.random(-10000, 10000), math.random(10000, 20000), math.random(-10000, 10000))  -- Random high fling velocity
+
+    -- Spin method using BodyAngularVelocity
+    local bodyAngularVelocity = Instance.new("BodyAngularVelocity", part)
+    bodyAngularVelocity.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)  -- Unlimited torque for spinning
+    bodyAngularVelocity.AngularVelocity = Vector3.new(math.random(-10000, 10000), math.random(-10000, 10000), math.random(-10000, 10000))  -- Random high angular velocity
 end
 
 -- Attach the part to the player using AlignPosition and AlignOrientation
@@ -58,28 +51,30 @@ local function align(Part0, Part1)
     local att1 = Instance.new("Attachment", Part1)
     local att0 = Instance.new("Attachment", Part0)
 
+    -- AlignPosition to keep the part strongly attached
     local ap = Instance.new("AlignPosition", att0)
     ap.ApplyAtCenterOfMass = true
-    ap.MaxForce = 99e9
-    ap.MaxVelocity = 99e9
+    ap.MaxForce = math.huge  -- Unlimited force to prevent detachment
+    ap.MaxVelocity = math.huge  -- Ensure very fast attachment movement
     ap.ReactionForceEnabled = false
-    ap.Responsiveness = 200
-    ap.RigidityEnabled = false
+    ap.Responsiveness = 999999999  -- Maximum responsiveness
+    ap.RigidityEnabled = true  -- Acts like welded together
     ap.Attachment0 = att0
     ap.Attachment1 = att1
 
+    -- AlignOrientation to maintain rotation
     local ao = Instance.new("AlignOrientation", att0)
-    ao.MaxAngularVelocity = 99e9
-    ao.MaxTorque = 99e9
+    ao.MaxAngularVelocity = math.huge  -- Infinite angular velocity
+    ao.MaxTorque = math.huge  -- Unlimited torque
     ao.PrimaryAxisOnly = false
     ao.ReactionTorqueEnabled = false
-    ao.Responsiveness = 200
-    ao.RigidityEnabled = false
+    ao.Responsiveness = 999999999  -- Maximum responsiveness
+    ao.RigidityEnabled = true  -- Acts like welded
     ao.Attachment0 = att0
     ao.Attachment1 = att1
 
     spawn(function()
-        while rs.Heartbeat:Wait() and Part0 and Part0.Parent do
+        while RunService.Heartbeat:Wait() and Part0 and Part0.Parent do
             if humanoidRootPart and isAlive then
                 Part1.Position = humanoidRootPart.Position
             end
@@ -96,62 +91,40 @@ local function handlePart(v)
         part.CanCollide = false
         part.Anchored = true
         part.Size = v.Size + Vector3.new(0.1, 0.1, 0.1)
-        part.Transparency = 1  -- Set to invisible
+        part.Transparency = 1  -- Invisible
         configurePart(part)
         align(v, part)
-        spawn(function()
-            applyFlingForce(part)
-        end)
+        applyFlingMethods(part)  -- Apply all fling methods
 
         -- Set up collision groups
-        physicsService:CreateCollisionGroup("LocalPlayer")
-        physicsService:CreateCollisionGroup("OtherPlayers")
-        physicsService:CollisionGroupSetCollidable("LocalPlayer", "LocalPlayer", false)
-        physicsService:CollisionGroupSetCollidable("LocalPlayer", "OtherPlayers", false)
-        physicsService:CollisionGroupSetCollidable("OtherPlayers", "OtherPlayers", true)
-        physicsService:CollisionGroupSetCollidable("OtherPlayers", "LocalPlayer", false)
-        physicsService:SetPartCollisionGroup(part, "LocalPlayer")
+        PhysicsService:CreateCollisionGroup("LocalPlayer")
+        PhysicsService:CreateCollisionGroup("OtherPlayers")
+        PhysicsService:CollisionGroupSetCollidable("LocalPlayer", "LocalPlayer", false)
+        PhysicsService:CollisionGroupSetCollidable("LocalPlayer", "OtherPlayers", false)
+        PhysicsService:CollisionGroupSetCollidable("OtherPlayers", "OtherPlayers", true)
+        PhysicsService:CollisionGroupSetCollidable("OtherPlayers", "LocalPlayer", false)
+        PhysicsService:SetPartCollisionGroup(part, "LocalPlayer")
         table.insert(partsToAlign, part)
-        
+
         -- Teleport to part when detached
-        rs.RenderStepped:Connect(function()
+        RunService.RenderStepped:Connect(function()
             if part and humanoidRootPart and (part.Position - humanoidRootPart.Position).Magnitude > 5 then
-                humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0) -- Teleport to the part if it detaches
+                humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0) -- Teleport to the part if detached
             end
         end)
     end
 end
 
 -- Search for the first unanchored model named "Part"
-for _, v in pairs(workspace:GetDescendants()) do
+for _, v in pairs(Workspace:GetDescendants()) do
     if v:IsA("BasePart") and not v.Anchored and v.Name == "Part" then
-        selectedPart = v -- Find the first valid unanchored part
+        handlePart(v)
         break
     end
 end
 
-if selectedPart then
-    handlePart(selectedPart)  -- Handle the found part
-else
-    warn("No unanchored part named 'Part' found.")
-end
-
-local function freezePlayer(duration)
-    humanoidRootPart.Anchored = true
-    task.wait(duration)
-    humanoidRootPart.Anchored = false
-end
-
-local function returnPartsToPlayer()
-    for _, part in ipairs(partsToAlign) do
-        if part and part.Parent then
-            part.CFrame = humanoidRootPart.CFrame + Vector3.new(0, 3, 0)
-        end
-    end
-end
-
 -- Character events
-player.CharacterAdded:Connect(function(newCharacter)
+LocalPlayer.CharacterAdded:Connect(function(newCharacter)
     character = newCharacter
     humanoidRootPart = character:WaitForChild("HumanoidRootPart")
     isAlive = true
