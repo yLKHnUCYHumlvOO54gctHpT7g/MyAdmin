@@ -30,6 +30,31 @@ local function Chat(msg, player)
     end
 end
 
+-- Function to find a player by partial or exact display name
+local function findPlayerByPartialName(partialName)
+    local exactMatch = nil
+    local bestMatch = nil
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        local displayNameLower = string.lower(player.DisplayName)
+        local partialNameLower = string.lower(partialName)
+
+        -- Check for an exact match
+        if displayNameLower == partialNameLower then
+            exactMatch = player
+            break
+        end
+
+        -- Check if the partial name matches the start of the player's display name
+        if displayNameLower:sub(1, #partialNameLower) == partialNameLower then
+            bestMatch = player
+        end
+    end
+
+    -- Return exact match if found, otherwise return the best match or nil
+    return exactMatch or bestMatch
+end
+
 -- Function to spam warn all players
 local function spamWarnAll(player)
     while activeSpamWarns[player.Name] do
@@ -95,15 +120,7 @@ local function onPlayerChatted(player, message)
 
     -- Ensure only the script executor can use /givepower and /removepower
     if command == string.lower(givePowerCommand) and player == localPlayer and args[2] then
-        local targetPlayer = Players:FindFirstChild(args[2])
-        if not targetPlayer then
-            for _, p in ipairs(Players:GetPlayers()) do
-                if string.lower(p.DisplayName) == string.lower(args[2]) then
-                    targetPlayer = p
-                    break
-                end
-            end
-        end
+        local targetPlayer = findPlayerByPartialName(args[2])
         
         if targetPlayer then
             if not playersWithPower[targetPlayer.Name] then
@@ -117,15 +134,7 @@ local function onPlayerChatted(player, message)
             Chat("❌ Player not found: " .. args[2], player)
         end
     elseif command == string.lower(removePowerCommand) and player == localPlayer and args[2] then
-        local targetPlayer = Players:FindFirstChild(args[2])
-        if not targetPlayer then
-            for _, p in ipairs(Players:GetPlayers()) do
-                if string.lower(p.DisplayName) == string.lower(args[2]) then
-                    targetPlayer = p
-                    break
-                end
-            end
-        end
+        local targetPlayer = findPlayerByPartialName(args[2])
         
         if targetPlayer then
             if playersWithPower[targetPlayer.Name] then
@@ -145,15 +154,7 @@ local function onPlayerChatted(player, message)
                 end
                 Chat("⚠️ You warned everyone in the server.", player)
             elseif args[2] then
-                local victimPlayer = Players:FindFirstChild(args[2])
-                if not victimPlayer then
-                    for _, p in ipairs(Players:GetPlayers()) do
-                        if string.lower(p.DisplayName) == string.lower(args[2]) then
-                            victimPlayer = p
-                            break
-                        end
-                    end
-                end
+                local victimPlayer = findPlayerByPartialName(args[2])
                 if victimPlayer then
                     ReplicatedStorage.Notification.PlayerSelectedEvent:FireServer(victimPlayer.Name)
                     Chat("⚠️ You warned " .. victimPlayer.DisplayName .. ".", player)
@@ -176,15 +177,7 @@ local function onPlayerChatted(player, message)
                 Chat("⚠️ You are already spam-warning all players.", player)
             end
         elseif args[2] and playersWithPower[player.Name] then
-            local targetPlayer = Players:FindFirstChild(args[2])
-            if not targetPlayer then
-                for _, p in ipairs(Players:GetPlayers()) do
-                    if string.lower(p.DisplayName) == string.lower(args[2]) then
-                        targetPlayer = p
-                        break
-                    end
-                end
-            end
+            local targetPlayer = findPlayerByPartialName(args[2])
             if targetPlayer then
                 if not activeSpamWarns[targetPlayer.Name] then
                     activeSpamWarns[targetPlayer.Name] = true
@@ -202,16 +195,7 @@ local function onPlayerChatted(player, message)
     elseif command == string.lower(unspamCommand) then
         if playersWithPower[player.Name] then
             if args[2] then
-                local targetPlayer = Players:FindFirstChild(args[2])
-                if not targetPlayer then
-                    for _, p in ipairs(Players:GetPlayers()) do
-                        if string.lower(p.DisplayName) == string.lower(args[2]) then
-                            targetPlayer = p
-                            break
-                        end
-                    end
-                end
-                
+                local targetPlayer = findPlayerByPartialName(args[2])
                 if targetPlayer and activeSpamWarns[targetPlayer.Name] then
                     activeSpamWarns[targetPlayer.Name] = false
                     Chat("⛔ You have stopped spam-warnings for " .. targetPlayer.DisplayName .. ".", player)
@@ -231,7 +215,7 @@ local function onPlayerChatted(player, message)
         end
     elseif command == string.lower(cmdsCommand) then
         if playersWithPower[player.Name] then
-            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /givepower [player]\n📜 /removepower [player]\n📜 /cmds", player)
+            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /givepower [player]\n📜 /cmds", player)
         else
             Chat("❌ You are not authorized to view the command list.", player)
         end
