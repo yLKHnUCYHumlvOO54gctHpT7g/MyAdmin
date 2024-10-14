@@ -46,7 +46,7 @@ getgenv().whitelistedPlayers = {
     "TheRealGabbyChan6",
     "cheat_user1173",
     "TheBestSkidScripts",
-    "AKbestpro100"
+    "AKbestever1000"
 }
 
 getgenv().premiumUsers = {
@@ -90,7 +90,7 @@ getgenv().premiumUsers = {
     "TheRealGabbyChan6",
     "cheat_user1173",
     "TheBestSkidScripts",
-    "AKbestpro100"
+    "AKbestever1000"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
