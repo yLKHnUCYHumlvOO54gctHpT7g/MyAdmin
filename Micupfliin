@@ -1,8 +1,6 @@
---[[
-    WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
-]]
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local Workspace = game:GetService("Workspace")
 
@@ -99,38 +97,77 @@ local function initializeScript()
         end
     end
 
+    local function makeButtonDraggable(button)
+        local dragging = false
+        local dragInput, dragStart, startPos
+
+        local function update(input)
+            local delta = input.Position - dragStart
+            button.Position = UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset + delta.X,
+                startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y
+            )
+        end
+
+        button.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging = true
+                dragStart = input.Position
+                startPos = button.Position
+
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragging = false
+                    end
+                end)
+            end
+        end)
+
+        button.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                dragInput = input
+            end
+        end)
+
+        UserInputService.InputChanged:Connect(function(input)
+            if input == dragInput and dragging then
+                update(input)
+            end
+        end)
+    end
+
     local function createControlButton()
         local screenGui = Instance.new("ScreenGui")
         local button = Instance.new("TextButton")
         local frame = Instance.new("Frame")
         local uicorner = Instance.new("UICorner")
-        local uistroke = Instance.new("UIStroke")
+
+        -- Create a small toggle button near the leaderboards
+        local toggleGuiButton = Instance.new("TextButton")
 
         screenGui.Name = "BlackHoleControlGUI"
         screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
         frame.Name = "Frame"
         frame.Parent = screenGui
-        frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         frame.Position = UDim2.new(0.5, -100, 0, 90)
         frame.Size = UDim2.new(0, 220, 0, 80)
+        frame.BackgroundTransparency = 1  -- No background for cleaner look
 
         button.Name = "ToggleBlackHoleButton"
         button.Size = UDim2.new(0, 200, 0, 50)
         button.Position = UDim2.new(0, 10, 0, 15)
-        button.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-        button.TextColor3 = Color3.fromRGB(240, 240, 240)
-        button.Font = Enum.Font.Gotham
-        button.TextSize = 20
+        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- Softer color for the button
+        button.TextColor3 = Color3.fromRGB(240, 240, 240) -- Keep the text light
+        button.Font = Enum.Font.Gotham -- Clean and normal font
+        button.TextSize = 18 -- Thinner text for readability
         button.Text = "Activate Ball"
         button.Parent = frame
 
-        uicorner.CornerRadius = UDim.new(0, 10)
+        uicorner.CornerRadius = UDim.new(0, 12)
         uicorner.Parent = button
-
-        uistroke.Parent = button
-        uistroke.Color = Color3.fromRGB(0, 0, 0)
-        uistroke.Thickness = 1
 
         button.MouseButton1Click:Connect(function()
             toggleBlackHole()
@@ -140,6 +177,38 @@ local function initializeScript()
                 button.Text = "Activate Ball"
             end
         end)
+
+        -- Set up the small toggle button with improved design
+        toggleGuiButton.Name = "ToggleGuiButton"
+        toggleGuiButton.Size = UDim2.new(0, 50, 0, 50)
+        toggleGuiButton.Position = UDim2.new(1, -60, 0.5, -25)  -- Near the leaderboards
+        toggleGuiButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        toggleGuiButton.TextColor3 = Color3.fromRGB(240, 240, 240)
+        toggleGuiButton.Font = Enum.Font.Gotham
+        toggleGuiButton.TextSize = 14
+        toggleGuiButton.Text = "Show"
+        toggleGuiButton.Parent = screenGui
+
+        -- Add rounded corners to the small toggle button
+        local buttonCorner = Instance.new("UICorner")
+        buttonCorner.CornerRadius = UDim.new(0, 12)
+        buttonCorner.Parent = toggleGuiButton
+
+        -- Add drag functionality to the small button
+        makeButtonDraggable(toggleGuiButton)
+
+        -- Function to toggle visibility of the main GUI
+        toggleGuiButton.MouseButton1Click:Connect(function()
+            frame.Visible = not frame.Visible
+            if frame.Visible then
+                toggleGuiButton.Text = "Hide"
+            else
+                toggleGuiButton.Text = "Show"
+            end
+        end)
+
+        -- Initially hide the main control panel
+        frame.Visible = false
     end
 
     createControlButton()
