@@ -1,7 +1,9 @@
+-- Services
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local localPlayer = Players.LocalPlayer -- Script executor
 
+-- Variables for commands
 local warnCommand = '/warns'
 local spamWarnCommand = '/spamwarns'
 local unspamCommand = '/unspam'
@@ -10,7 +12,10 @@ local removePowerCommand = '/removepower'
 local cmdsCommand = '/cmds'
 local silentChatCommand = '/silentchat'
 local loudChatCommand = '/loudchat'
+local spamboardCommand = '/spamboard'
+local unspamboardCommand = '/unspamboard'
 
+-- Variables for admin and chat control
 local playersWithPower = {}
 local activeSpamWarns = {}
 local blacklist = {}
@@ -18,7 +23,48 @@ local maxAttempts = 4
 local notificationLimit = 100
 local notificationInterval = 0.1
 local oldChat = false
-local isSilent = false -- New variable to control chat behavior
+local isSilent = false
+
+-- Variables for message spamming
+local submitNote = ReplicatedStorage:WaitForChild("SubmitNote")
+local messagess = {
+    "AK ADMIN is now live! Use it wisely!",
+    "Experience the power of AK ADMIN!",
+    "AK ADMIN: Your ultimate control tool!",
+    "Stay tuned for more AK ADMIN features!",
+    "AK ADMIN is ready to assist you!",
+    "Join the AK ADMIN revolution!",
+    "Unlock your potential with AK ADMIN!",
+    "AK ADMIN: Elevate your game!",
+    "Don’t forget to check out AK ADMIN!",
+    "AK ADMIN is your friend in this game!",
+    "Utilize AK ADMIN for enhanced gameplay!",
+    "AK ADMIN: Power at your fingertips!",
+    "With AK ADMIN, you hold the keys!",
+    "AK ADMIN: A new era of control!",
+    "Be a master with AK ADMIN!",
+    "AK ADMIN is your secret weapon!",
+    "AK ADMIN is taking the game by storm!",
+    "Become unstoppable with AK ADMIN!",
+    "AK ADMIN: The future is now!",
+    "AK ADMIN for all your needs!",
+    "AK ADMIN is the key to success!",
+    "AK ADMIN empowers players!",
+    "Don't miss out on AK ADMIN!",
+    "AK ADMIN: Your path to victory!",
+    "Step up your game with AK ADMIN!",
+    "AK ADMIN: The choice of champions!",
+    "Unlock secrets with AK ADMIN!",
+    "AK ADMIN: A must-have for serious players!",
+    "AK ADMIN will change how you play!",
+    "Embrace the power of AK ADMIN!",
+    "AK ADMIN is here to make a difference!",
+    "Transform your experience with AK ADMIN!",
+    "AK ADMIN: Your ally in the game!",
+    "AK ADMIN: Fuel your ambition!"
+}
+local isSpamming = false
+local spamCoroutine
 
 -- Check if the old chat system is being used
 if ReplicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
@@ -36,14 +82,12 @@ local function Chat(msg, player)
     end
 end
 
--- Function to find a player by partial name (must match start of display name or username)
+-- Function to find a player by partial name
 local function findPlayerByPartialName(partialName)
     partialName = string.lower(partialName)
     for _, player in ipairs(Players:GetPlayers()) do
         local displayNameLower = string.lower(player.DisplayName)
         local usernameLower = string.lower(player.Name)
-
-        -- Check if the partial name matches the beginning of either the DisplayName or Username
         if displayNameLower:sub(1, #partialName) == partialName or usernameLower:sub(1, #partialName) == partialName then
             return player
         end
@@ -57,7 +101,6 @@ local function spamWarnAll(player)
         local sentNotifications = 0
         for _, victimPlayer in ipairs(Players:GetPlayers()) do
             if not activeSpamWarns[player.Name] then return end
-
             if sentNotifications < notificationLimit then
                 ReplicatedStorage.Notification.PlayerSelectedEvent:FireServer(victimPlayer.Name)
                 sentNotifications = sentNotifications + 1
@@ -86,10 +129,8 @@ local function trackBlacklist(player)
     if not blacklist[player.Name] then
         blacklist[player.Name] = { attempts = 0, isBlacklisted = false }
     end
-
     local data = blacklist[player.Name]
     data.attempts = data.attempts + 1
-
     if data.attempts >= maxAttempts then
         data.isBlacklisted = true
         Chat("🚫 You have been blacklisted, " .. player.DisplayName .. ".", player)
@@ -102,25 +143,20 @@ end
 -- Function to handle chat commands
 local function onPlayerChatted(player, message)
     if blacklist[player.Name] and blacklist[player.Name].isBlacklisted then return end
-
-    -- Only process messages that start with a command (starting with '/')
-    if not string.sub(message, 1, 1) == "/" then
-        return -- Ignore normal chat messages
-    end
-
+    if not string.sub(message, 1, 1) == "/" then return end -- Ignore normal chat messages
     local args = message:split(" ")
     local command = string.lower(args[1])
 
     -- Silent chat command
     if command == string.lower(silentChatCommand) and player == localPlayer then
         isSilent = true
-        Chat("🔕 Silent chat mode activated.", player) -- Optional notification
+        Chat("🔕 Silent chat mode activated.", player)
         return
 
     -- Loud chat command
     elseif command == string.lower(loudChatCommand) and player == localPlayer then
         isSilent = false
-        Chat("🔊 Loud chat mode activated.", player) -- Optional notification
+        Chat("🔊 Loud chat mode activated.", player)
         return
     end
 
@@ -217,33 +253,60 @@ local function onPlayerChatted(player, message)
                     Chat("❌ " .. (targetPlayer and targetPlayer.DisplayName or "Player not found: " .. args[2]), player)
                 end
             else
-                for spamOwner, _ in pairs(activeSpamWarns) do
-                    activeSpamWarns[spamOwner] = false
-                end
+                activeSpamWarns[player.Name] = false
                 Chat("⛔ You have stopped all spam-warnings.", player)
             end
         else
             trackBlacklist(player)
         end
 
-    -- Cmds command
+    -- Show commands for powered players
     elseif command == string.lower(cmdsCommand) then
         if playersWithPower[player.Name] then
-            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /unspam [player]\n📜 /silentchat\n📜 /loudchat\n📜 /cmds", player)
+            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /unspam [player]\n📜 /silentchat\n📜 /loudchat\n📜 /spamboard\n📜 /cmds", player)
+             else
+            trackBlacklist(player)
+        end
+
+    -- Spamboard command
+    elseif command == string.lower(spamboardCommand) and player == localPlayer then
+        if not isSpamming then
+            isSpamming = true
+            Chat("🌀 Starting the spamboard.", player)
+            spamCoroutine = coroutine.create(function()
+
+for i = 1, 10000 do
+                    for _, msgg in pairs(messagess) do
+                        submitNote:FireServer(msgg)
+                    end
+                end
+            end)
+            coroutine.resume(spamCoroutine)
         else
-            Chat("❌ You are not authorized to view the command list.", player)
+            Chat("⚠️ Spamboard is already running.", player)
+        end
+
+    -- Unspamboard command
+    elseif command == string.lower(unspamboardCommand) and player == localPlayer then
+        if isSpamming then
+            isSpamming = false
+            Chat("🛑 Stopping the spamboard.", player)
+        else
+            Chat("⚠️ Spamboard is not running.", player)
         end
     end
 end
 
+-- Listen to player chats
 Players.PlayerAdded:Connect(function(player)
     player.Chatted:Connect(function(message)
         onPlayerChatted(player, message)
     end)
 end)
 
-for _, player in ipairs(Players:GetPlayers()) do
-    player.Chatted:Connect(function(message)
-        onPlayerChatted(player, message)
-    end)
-end
+-- Listen to local player chat (in case they are already in the game)
+localPlayer.Chatted:Connect(function(message)
+    onPlayerChatted(localPlayer, message)
+end)
+
+print("⚡ Admin and Spamboard commands are ready to use.")
