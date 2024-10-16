@@ -8,6 +8,8 @@ local unspamCommand = '/unspam'
 local givePowerCommand = '/givepower'
 local removePowerCommand = '/removepower'
 local cmdsCommand = '/cmds'
+local silentChatCommand = '/silentchat'
+local loudChatCommand = '/loudchat'
 
 local playersWithPower = {}
 local activeSpamWarns = {}
@@ -16,6 +18,7 @@ local maxAttempts = 4
 local notificationLimit = 100
 local notificationInterval = 0.1
 local oldChat = false
+local isSilent = false -- New variable to control chat behavior
 
 -- Check if the old chat system is being used
 if ReplicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
@@ -24,10 +27,12 @@ end
 
 -- Function to send a message
 local function Chat(msg, player)
-    if oldChat then
-        ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
-    else
-        game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(msg)
+    if not isSilent then -- Check if chat is not in silent mode
+        if oldChat then
+            ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
+        else
+            game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(msg)
+        end
     end
 end
 
@@ -105,6 +110,19 @@ local function onPlayerChatted(player, message)
 
     local args = message:split(" ")
     local command = string.lower(args[1])
+
+    -- Silent chat command
+    if command == string.lower(silentChatCommand) and player == localPlayer then
+        isSilent = true
+        Chat("🔕 Silent chat mode activated.", player) -- Optional notification
+        return
+
+    -- Loud chat command
+    elseif command == string.lower(loudChatCommand) and player == localPlayer then
+        isSilent = false
+        Chat("🔊 Loud chat mode activated.", player) -- Optional notification
+        return
+    end
 
     -- Give power command (only the script executor can use)
     if command == string.lower(givePowerCommand) and player == localPlayer and args[2] then
@@ -211,7 +229,7 @@ local function onPlayerChatted(player, message)
     -- Cmds command
     elseif command == string.lower(cmdsCommand) then
         if playersWithPower[player.Name] then
-            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /unspam [player]\n📜 /cmds", player)
+            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /unspam [player]\n📜 /silentchat\n📜 /loudchat\n📜 /cmds", player)
         else
             Chat("❌ You are not authorized to view the command list.", player)
         end
