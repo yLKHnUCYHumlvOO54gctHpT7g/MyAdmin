@@ -168,6 +168,10 @@ local commands = {
     {"/spam on", "for the game (Chained 2 players Obby)."},
     {"/spam on", "for the game (Chained 2 players Obby)."},
     {"/serverhopmost", "Server hops to the server with the most players."},
+    {"/antiheadsit", "self explained."},
+    {"/antivoid", "deletes the void."},
+    {"/dropkick", "performs a dropkick on nearby players."},
+    {"/usercreationcracked", "cracked bypasser"},
     {"/serverhoplow", "Server hops to a low-populated server."},
     {"/chatbot", "Join Discord, claim points, and enter the key."}
 }
