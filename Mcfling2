@@ -1,152 +1,231 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local PhysicsService = game:GetService("PhysicsService")
+local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local Workspace = game:GetService("Workspace")
 
-local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local function initializeScript()
+    local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
-local partsToAlign = {}
-local isAlive = true
+    local Folder = Instance.new("Folder", Workspace)
+    local Part = Instance.new("Part", Folder)
+    local Attachment1 = Instance.new("Attachment", Part)
+    Part.Anchored = true
+    Part.CanCollide = false
+    Part.Transparency = 1
 
--- Setup collision groups for player interactions
-local function setupCollisionGroups()
-    if not PhysicsService:CollisionGroupExists("BypassBarrier") then
-        PhysicsService:CreateCollisionGroup("BypassBarrier")
-    end
-    
-    if not PhysicsService:CollisionGroupExists("Barrier") then
-        PhysicsService:CreateCollisionGroup("Barrier")
-    end
-    
-    -- Set collision rules: BypassBarrier should not collide with Barrier
-    PhysicsService:CollisionGroupSetCollidable("BypassBarrier", "Barrier", false)
-end
+    if not getgenv().Network then
+        getgenv().Network = {
+            BaseParts = {},
+            Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
+        }
 
-local function configurePart(part)
-    part.Transparency = 1  -- Invisible
-    part.CanCollide = false
-    PhysicsService:SetPartCollisionGroup(part, "BypassBarrier")  -- Set to the "BypassBarrier" collision group
-end
-
--- Fling methods
-local function applyFlingMethods(part)
-    -- Fling method using BodyVelocity
-    local bodyVelocity = Instance.new("BodyVelocity", part)
-    bodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)  -- Max force to fling players
-    bodyVelocity.Velocity = Vector3.new(math.random(-10000, 10000), math.random(10000, 20000), math.random(-10000, 10000))  -- Random high fling velocity
-
-    -- Spin method using BodyAngularVelocity
-    local bodyAngularVelocity = Instance.new("BodyAngularVelocity", part)
-    bodyAngularVelocity.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)  -- Unlimited torque for spinning
-    bodyAngularVelocity.AngularVelocity = Vector3.new(math.random(-10000, 10000), math.random(-10000, 10000), math.random(-10000, 10000))  -- Random high angular velocity
-end
-
--- Attach the part to the player using AlignPosition and AlignOrientation
-local function align(Part0, Part1)
-    if not (Part0 and Part1) then return end -- Check if parts are valid
-
-    Part0.CustomPhysicalProperties = PhysicalProperties.new(0.1, 0.1, 0.1, 0.1, 0.1)
-    local att1 = Instance.new("Attachment", Part1)
-    local att0 = Instance.new("Attachment", Part0)
-
-    -- AlignPosition to keep the part strongly attached
-    local ap = Instance.new("AlignPosition", att0)
-    ap.ApplyAtCenterOfMass = true
-    ap.MaxForce = math.huge  -- Unlimited force to prevent detachment
-    ap.MaxVelocity = math.huge  -- Ensure very fast attachment movement
-    ap.ReactionForceEnabled = false
-    ap.Responsiveness = 999999999  -- Maximum responsiveness
-    ap.RigidityEnabled = true  -- Acts like welded together
-    ap.Attachment0 = att0
-    ap.Attachment1 = att1
-
-    -- AlignOrientation to maintain rotation
-    local ao = Instance.new("AlignOrientation", att0)
-    ao.MaxAngularVelocity = math.huge  -- Infinite angular velocity
-    ao.MaxTorque = math.huge  -- Unlimited torque
-    ao.PrimaryAxisOnly = false
-    ao.ReactionTorqueEnabled = false
-    ao.Responsiveness = 999999999  -- Maximum responsiveness
-    ao.RigidityEnabled = true  -- Acts like welded
-    ao.Attachment0 = att0
-    ao.Attachment1 = att1
-
-    spawn(function()
-        while RunService.Heartbeat:Wait() and Part0 and Part0.Parent do
-            if humanoidRootPart and isAlive then
-                Part1.Position = humanoidRootPart.Position
+        Network.RetainPart = function(Part)
+            if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
+                table.insert(Network.BaseParts, Part)
+                Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+                Part.CanCollide = false
             end
         end
-    end)
-end
 
-local function handlePart(v)
-    if v:IsA("BasePart") and not v.Anchored and not game.Players:GetPlayerFromCharacter(v.Parent) then
-        v:ClearAllChildren()
-        v.CanCollide = false
-        local part = Instance.new("Part", v)
-        part.CFrame = v.CFrame
-        part.CanCollide = false
-        part.Anchored = true
-        part.Size = v.Size + Vector3.new(0.1, 0.1, 0.1)
-        part.Transparency = 1  -- Invisible
-        configurePart(part)
-        align(v, part)
-        applyFlingMethods(part)  -- Apply all fling methods
+        local function EnablePartControl()
+            LocalPlayer.ReplicationFocus = Workspace
+            RunService.Heartbeat:Connect(function()
+                sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+                for _, Part in pairs(Network.BaseParts) do
+                    if Part:IsDescendantOf(Workspace) then
+                        Part.Velocity = Network.Velocity
+                    end
+                end
+            end)
+        end
 
-        -- Set up collision groups
-        PhysicsService:CreateCollisionGroup("LocalPlayer")
-        PhysicsService:CreateCollisionGroup("OtherPlayers")
-        PhysicsService:CollisionGroupSetCollidable("LocalPlayer", "LocalPlayer", false)
-        PhysicsService:CollisionGroupSetCollidable("LocalPlayer", "OtherPlayers", false)
-        PhysicsService:CollisionGroupSetCollidable("OtherPlayers", "OtherPlayers", true)
-        PhysicsService:CollisionGroupSetCollidable("OtherPlayers", "LocalPlayer", false)
-        PhysicsService:SetPartCollisionGroup(part, "LocalPlayer")
-        table.insert(partsToAlign, part)
+        EnablePartControl()
+    end
 
-        -- Teleport to part when detached
-        RunService.RenderStepped:Connect(function()
-            if part and humanoidRootPart and (part.Position - humanoidRootPart.Position).Magnitude > 5 then
-                humanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 5, 0) -- Teleport to the part if detached
+    local function ForcePart(v)
+        if v:IsA("Part") and not v.Anchored and not v.Parent:FindFirstChild("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
+            for _, x in next, v:GetChildren() do
+                if x:IsA("BodyAngularVelocity") or x:IsA("BodyForce") or x:IsA("BodyGyro") or x:IsA("BodyPosition") or x:IsA("BodyThrust") or x:IsA("BodyVelocity") or x:IsA("RocketPropulsion") then
+                    x:Destroy()
+                end
+            end
+            if v:FindFirstChild("Attachment") then
+                v:FindFirstChild("Attachment"):Destroy()
+            end
+            if v:FindFirstChild("AlignPosition") then
+                v:FindFirstChild("AlignPosition"):Destroy()
+            end
+            if v:FindFirstChild("Torque") then
+                v:FindFirstChild("Torque"):Destroy()
+            end
+            v.CanCollide = false
+            local Torque = Instance.new("Torque", v)
+            Torque.Torque = Vector3.new(100000, 100000, 100000)
+            local AlignPosition = Instance.new("AlignPosition", v)
+            local Attachment2 = Instance.new("Attachment", v)
+            Torque.Attachment0 = Attachment2
+            AlignPosition.MaxForce = 9999999999999999
+            AlignPosition.MaxVelocity = math.huge
+            AlignPosition.Responsiveness = 200
+            AlignPosition.Attachment0 = Attachment2
+            AlignPosition.Attachment1 = Attachment1
+        end
+    end
+
+    local blackHoleActive = true
+
+    local function toggleBlackHole()
+        blackHoleActive = not blackHoleActive
+        if blackHoleActive then
+            for _, v in next, Workspace:GetDescendants() do
+                ForcePart(v)
+            end
+
+            Workspace.DescendantAdded:Connect(function(v)
+                if blackHoleActive then
+                    ForcePart(v)
+                end
+            end)
+
+            spawn(function()
+                while blackHoleActive and RunService.RenderStepped:Wait() do
+                    Attachment1.WorldCFrame = humanoidRootPart.CFrame
+                end
+            end)
+        end
+    end
+
+    local function makeButtonDraggable(button)
+        local dragging = false
+        local dragInput, dragStart, startPos
+
+        local function update(input)
+            local delta = input.Position - dragStart
+            button.Position = UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset + delta.X,
+                startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y
+            )
+        end
+
+        button.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                dragging = true
+                dragStart = input.Position
+                startPos = button.Position
+
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragging = false
+                    end
+                end)
+            end
+        end)
+
+        button.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                dragInput = input
+            end
+        end)
+
+        UserInputService.InputChanged:Connect(function(input)
+            if input == dragInput and dragging then
+                update(input)
             end
         end)
     end
-end
 
--- Search for the first unanchored model named "Part"
-for _, v in pairs(Workspace:GetDescendants()) do
-    if v:IsA("BasePart") and not v.Anchored and v.Name == "Part" then
-        handlePart(v)
-        break
+    local function createControlButton()
+        local screenGui = Instance.new("ScreenGui")
+        local button = Instance.new("TextButton")
+        local frame = Instance.new("Frame")
+        local uicorner = Instance.new("UICorner")
+
+        -- Create a small toggle button near the leaderboards
+        local toggleGuiButton = Instance.new("TextButton")
+
+        screenGui.Name = "BlackHoleControlGUI"
+        screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+
+        frame.Name = "Frame"
+        frame.Parent = screenGui
+        frame.Position = UDim2.new(0.5, -100, 0, 90)
+        frame.Size = UDim2.new(0, 220, 0, 80)
+        frame.BackgroundTransparency = 1  -- No background for cleaner look
+
+        button.Name = "ToggleBlackHoleButton"
+        button.Size = UDim2.new(0, 200, 0, 50)
+        button.Position = UDim2.new(0, 10, 0, 15)
+        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- Softer color for the button
+        button.TextColor3 = Color3.fromRGB(240, 240, 240) -- Keep the text light
+        button.Font = Enum.Font.Gotham -- Clean and normal font
+        button.TextSize = 18 -- Thinner text for readability
+        button.Text = "Activate Ball"
+        button.Parent = frame
+
+        uicorner.CornerRadius = UDim.new(0, 12)
+        uicorner.Parent = button
+
+        button.MouseButton1Click:Connect(function()
+            toggleBlackHole()
+            if blackHoleActive then
+                button.Text = "Deactivate Ball"
+            else
+                button.Text = "Activate Ball"
+            end
+        end)
+
+        -- Set up the small toggle button with improved design
+        toggleGuiButton.Name = "ToggleGuiButton"
+        toggleGuiButton.Size = UDim2.new(0, 50, 0, 50)
+        toggleGuiButton.Position = UDim2.new(1, -60, 0.5, -25)  -- Near the leaderboards
+        toggleGuiButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        toggleGuiButton.TextColor3 = Color3.fromRGB(240, 240, 240)
+        toggleGuiButton.Font = Enum.Font.Gotham
+        toggleGuiButton.TextSize = 14
+        toggleGuiButton.Text = "Show"
+        toggleGuiButton.Parent = screenGui
+
+        -- Add rounded corners to the small toggle button
+        local buttonCorner = Instance.new("UICorner")
+        buttonCorner.CornerRadius = UDim.new(0, 12)
+        buttonCorner.Parent = toggleGuiButton
+
+        -- Add drag functionality to the small button
+        makeButtonDraggable(toggleGuiButton)
+
+        -- Function to toggle visibility of the main GUI
+        toggleGuiButton.MouseButton1Click:Connect(function()
+            frame.Visible = not frame.Visible
+            if frame.Visible then
+                toggleGuiButton.Text = "Hide"
+            else
+                toggleGuiButton.Text = "Show"
+            end
+        end)
+
+        -- Initially hide the main control panel
+        frame.Visible = false
     end
-end
 
--- Character events
-LocalPlayer.CharacterAdded:Connect(function(newCharacter)
-    character = newCharacter
-    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-    isAlive = true
-    for _, part in ipairs(partsToAlign) do
-        if part and part.Parent then
-            align(part.Parent, part)
-        end
-    end
-end)
+    createControlButton()
+    toggleBlackHole()
 
-character:WaitForChild("Humanoid").Died:Connect(function()
-    isAlive = false
-end)
+    -- Handle character death
+    LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function()
+        blackHoleActive = false
+        sethiddenproperty(LocalPlayer, "SimulationRadius", 100) -- Reset simulation radius
+        Folder:Destroy() -- Clean up the folder
+        LocalPlayer.PlayerGui:FindFirstChild("BlackHoleControlGUI"):Destroy() -- Remove the GUI
+    end)
 
--- Setup collision groups
-setupCollisionGroups()
-
--- Ensure the script runs smoothly across servers
-if humanoidRootPart then
-    humanoidRootPart.AncestryChanged:Connect(function(_, parent)
-        if not parent then
-            isAlive = false
-        end
+    -- Handle respawn
+    LocalPlayer.CharacterAdded:Connect(function()
+        initializeScript() -- Reinitialize the script on respawn
     end)
 end
+
+initializeScript()
