@@ -173,6 +173,7 @@ local commands = {
     {"/dropkick", "performs a dropkick on nearby players."},
     {"/usercreationcracked", "cracked bypasser"},
     {"/serverhoplow", "Server hops to a low-populated server."},
+    {"/walkonair", "adds an invisible baseplate."},
     {"/chatbot", "Join Discord, claim points, and enter the key."}
 }
 
