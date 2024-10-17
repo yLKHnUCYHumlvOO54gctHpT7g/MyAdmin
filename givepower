@@ -133,10 +133,10 @@ local function trackBlacklist(player)
     data.attempts = data.attempts + 1
     if data.attempts >= maxAttempts then
         data.isBlacklisted = true
-        Chat("🚫 You have been blacklisted, " .. player.DisplayName .. ".", player)
+        Chat("🚫 | You have been blacklisted, " .. player.DisplayName .. ".", player)
         Chat(player.DisplayName .. " has been blacklisted for unauthorized command usage.", player)
     else
-        Chat("❌ " .. player.DisplayName .. ", you are not authorized to use this command. Attempt " .. data.attempts .. "/" .. maxAttempts .. ".", player)
+        Chat("❌ | " .. player.DisplayName .. ", you are not authorized to use this command. Attempt " .. data.attempts .. "/" .. maxAttempts .. ".", player)
     end
 end
 
@@ -150,13 +150,13 @@ local function onPlayerChatted(player, message)
     -- Silent chat command
     if command == string.lower(silentChatCommand) and player == localPlayer then
         isSilent = true
-        Chat("🔕 Silent chat mode activated.", player)
+        Chat("🔕 | Silent chat mode activated.", player)
         return
 
     -- Loud chat command
     elseif command == string.lower(loudChatCommand) and player == localPlayer then
         isSilent = false
-        Chat("🔊 Loud chat mode activated.", player)
+        Chat("🔊 | Loud chat mode activated.", player)
         return
     end
 
@@ -166,13 +166,13 @@ local function onPlayerChatted(player, message)
         if targetPlayer then
             if not playersWithPower[targetPlayer.Name] then
                 playersWithPower[targetPlayer.Name] = true
-                Chat("✨ " .. targetPlayer.DisplayName .. " has been given power by " .. player.DisplayName .. ".", targetPlayer)
+                Chat("✨ | " .. targetPlayer.DisplayName .. " has been given power by " .. player.DisplayName .. ".", targetPlayer)
                 Chat("Type '/cmds' to see your available commands.", targetPlayer)
             else
-                Chat("⚠️ " .. targetPlayer.DisplayName .. " already has power.", player)
+                Chat("⚠️ | " .. targetPlayer.DisplayName .. " already has power.", player)
             end
         else
-            Chat("❌ Player not found: " .. args[2], player)
+            Chat("❌ | Player not found: " .. args[2], player)
         end
 
     -- Remove power command (only the script executor can use)
@@ -181,12 +181,12 @@ local function onPlayerChatted(player, message)
         if targetPlayer then
             if playersWithPower[targetPlayer.Name] then
                 playersWithPower[targetPlayer.Name] = nil
-                Chat("⚡ " .. targetPlayer.DisplayName .. " has had their power removed by " .. player.DisplayName .. ".", targetPlayer)
+                Chat("⚡ | " .. targetPlayer.DisplayName .. " has had their power removed by " .. player.DisplayName .. ".", targetPlayer)
             else
-                Chat("❌ " .. targetPlayer.DisplayName .. " does not have power.", player)
+                Chat("❌ | " .. targetPlayer.DisplayName .. " does not have power.", player)
             end
         else
-            Chat("❌ Player not found: " .. args[2], player)
+            Chat("❌ | Player not found: " .. args[2], player)
         end
 
     -- Warn command
@@ -196,17 +196,17 @@ local function onPlayerChatted(player, message)
                 for _, victimPlayer in ipairs(Players:GetPlayers()) do
                     ReplicatedStorage.Notification.PlayerSelectedEvent:FireServer(victimPlayer.Name)
                 end
-                Chat("⚠️ You warned everyone in the server.", player)
+                Chat("⚠️ | You warned everyone in the server.", player)
             elseif args[2] then
                 local victimPlayer = findPlayerByPartialName(args[2])
                 if victimPlayer then
                     ReplicatedStorage.Notification.PlayerSelectedEvent:FireServer(victimPlayer.Name)
-                    Chat("⚠️ You warned " .. victimPlayer.DisplayName .. ".", player)
+                    Chat("⚠️ | You warned " .. victimPlayer.DisplayName .. ".", player)
                 else
-                    Chat("❌ Player not found: " .. args[2], player)
+                    Chat("❌ | Player not found: " .. args[2], player)
                 end
             else
-                Chat("⚠️ Specify a player to warn or use '/warns all' to warn everyone.", player)
+                Chat("⚠️ | Specify a player to warn or use '/warns all' to warn everyone.", player)
             end
         else
             trackBlacklist(player)
@@ -218,23 +218,23 @@ local function onPlayerChatted(player, message)
             if args[2] == "all" then
                 if not activeSpamWarns[player.Name] then
                     activeSpamWarns[player.Name] = true
-                    Chat("⚡ You are now spam-warning all players.", player)
+                    Chat("⚡ | You are now spam-warning all players.", player)
                     spamWarnAll(player)
                 else
-                    Chat("⚠️ You are already spam-warning all players.", player)
+                    Chat("⚠️ | You are already spam-warning all players.", player)
                 end
             elseif args[2] then
                 local targetPlayer = findPlayerByPartialName(args[2])
                 if targetPlayer then
                     if not activeSpamWarns[targetPlayer.Name] then
                         activeSpamWarns[targetPlayer.Name] = true
-                        Chat("⚡ You are now spam-warning " .. targetPlayer.DisplayName .. ".", player)
+                        Chat("⚡ | You are now spam-warning " .. targetPlayer.DisplayName .. ".", player)
                         spamWarnPlayer(player, targetPlayer)
                     else
-                        Chat("⚠️ " .. targetPlayer.DisplayName .. " is already being spam-warned.", player)
+                        Chat("⚠️ | " .. targetPlayer.DisplayName .. " is already being spam-warned.", player)
                     end
                 else
-                    Chat("❌ Player not found: " .. args[2], player)
+                    Chat("❌ | Player not found: " .. args[2], player)
                 end
             end
         else
@@ -248,13 +248,13 @@ local function onPlayerChatted(player, message)
                 local targetPlayer = findPlayerByPartialName(args[2])
                 if targetPlayer and activeSpamWarns[targetPlayer.Name] then
                     activeSpamWarns[targetPlayer.Name] = false
-                    Chat("⛔ You have stopped spam-warnings for " .. targetPlayer.DisplayName .. ".", player)
+                    Chat("⛔ | You have stopped spam-warnings for " .. targetPlayer.DisplayName .. ".", player)
                 else
-                    Chat("❌ " .. (targetPlayer and targetPlayer.DisplayName or "Player not found: " .. args[2]), player)
+                    Chat("❌ |  " .. (targetPlayer and targetPlayer.DisplayName or "Player not found: " .. args[2]), player)
                 end
             else
                 activeSpamWarns[player.Name] = false
-                Chat("⛔ You have stopped all spam-warnings.", player)
+                Chat("⛔ | You have stopped all spam-warnings.", player)
             end
         else
             trackBlacklist(player)
@@ -263,7 +263,7 @@ local function onPlayerChatted(player, message)
     -- Show commands for powered players
     elseif command == string.lower(cmdsCommand) then
         if playersWithPower[player.Name] then
-            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /unspam [player]\n📜 /silentchat\n📜 /loudchat\n📜 /spamboard\n📜 /cmds", player)
+            Chat("📜 | Your available commands: | /warns [player] | /warns all | /spamwarns all | /spamwarns [player] | /unspam | /unspam [player] | /silentchat | /loudchat | /spamboard |", player)
              else
             trackBlacklist(player)
         end
@@ -272,7 +272,7 @@ local function onPlayerChatted(player, message)
     elseif command == string.lower(spamboardCommand) and player == localPlayer then
         if not isSpamming then
             isSpamming = true
-            Chat("🌀 Starting the spamboard.", player)
+            Chat("🌀 | Starting the spamboard.", player)
             spamCoroutine = coroutine.create(function()
 
 for i = 1, 10000 do
@@ -283,16 +283,16 @@ for i = 1, 10000 do
             end)
             coroutine.resume(spamCoroutine)
         else
-            Chat("⚠️ Spamboard is already running.", player)
+            Chat("⚠️ | Spamboard is already running.", player)
         end
 
     -- Unspamboard command
     elseif command == string.lower(unspamboardCommand) and player == localPlayer then
         if isSpamming then
             isSpamming = false
-            Chat("🛑 Stopping the spamboard.", player)
+            Chat("🛑 | Stopping the spamboard.", player)
         else
-            Chat("⚠️ Spamboard is not running.", player)
+            Chat("⚠️ | Spamboard is not running.", player)
         end
     end
 end
