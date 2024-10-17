@@ -1,10 +1,10 @@
 -- Add your commands here
 local commands = {
-    "+ Added cmd: \"/f3x house\"",
-    "+ Added cmd: \"/f3x triangle\"",
-    "+ Added cmd: \"/f3x sun\"",
-    "+ Added cmd: \"/shiftlock\"",
-    "+ Added cmd: \"/nofriends\""
+    "+ Added cmd: \"/antivoid\"",
+    "+ Added cmd: \"/antiheadsit\"",
+    "+ Added cmd: \"/dropkick\"",
+    "+ Added cmd: \"/usercreationcracked\"",
+    "+ Added cmd: \"/walkonair\""
 }
 
 local gajIDFANIAS8762 = Instance.new("ScreenGui")
