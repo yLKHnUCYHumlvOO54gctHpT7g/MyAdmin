@@ -1,5 +1,11 @@
--- Load black hole script
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfliin"))()
+-- Load black hole script at the start
+local success, err = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfliin"))()
+end)
+
+if not success then
+    warn("Failed to load script: " .. err)
+end
 
 local flingForce = 999999999999999
 local spinPower = 9999999999999999
