@@ -1,231 +1,267 @@
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local Gui = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local Box = Instance.new("TextBox")
+local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local Label = Instance.new("TextLabel")
+local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+local Button = Instance.new("TextButton")
+local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+local ToggleButton = Instance.new("TextButton") -- Toggle button for GUI visibility
+
+--Properties:
+
+Gui.Name = "TargetBallFlingGui"
+Gui.Parent = gethui()
+Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Main.Name = "Main"
+Main.Parent = Gui
+Main.BackgroundColor3 = Color3.fromRGB(45, 45, 45) -- Darker background for a professional look
+Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Main.BorderSizePixel = 0
+Main.Position = UDim2.new(0.35, 0, 0.4, 0) -- Centered position
+Main.Size = UDim2.new(0.3, 0, 0.2, 0)
+Main.Active = true
+Main.Draggable = true
+
+Box.Name = "Box"
+Box.Parent = Main
+Box.BackgroundColor3 = Color3.fromRGB(65, 65, 65) -- Slightly lighter
+Box.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Box.BorderSizePixel = 0
+Box.Position = UDim2.new(0.1, 0, 0.2, 0)
+Box.Size = UDim2.new(0.8, 0, 0.3, 0)
+Box.FontFace = Font.new("rbxasset://fonts/families/SourceSansSemibold.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+Box.PlaceholderText = "Player here"
+Box.Text = ""
+Box.TextColor3 = Color3.fromRGB(255, 255, 255)
+Box.TextScaled = true
+Box.TextSize = 28 -- Adjusted size for better readability
+Box.TextWrapped = true
+
+UITextSizeConstraint.Parent = Box
+UITextSizeConstraint.MaxTextSize = 31
+
+Label.Name = "Label"
+Label.Parent = Main
+Label.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Label.BorderSizePixel = 0
+Label.Size = UDim2.new(1, 0, 0.15, 0)
+Label.FontFace = Font.new("rbxasset://fonts/families/Nunito.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
+Label.Text = "Target Ball Fling"
+Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+Label.TextScaled = true
+Label.TextSize = 18
+Label.TextWrapped = true
+
+UITextSizeConstraint_2.Parent = Label
+UITextSizeConstraint_2.MaxTextSize = 21
+
+Button.Name = "Button"
+Button.Parent = Main
+Button.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Button.BorderSizePixel = 0
+Button.Position = UDim2.new(0.15, 0, 0.6, 0)
+Button.Size = UDim2.new(0.7, 0, 0.25, 0)
+Button.Font = Enum.Font.Nunito
+Button.Text = "Ball Fling | Off"
+Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+Button.TextScaled = true
+Button.TextSize = 28
+Button.TextWrapped = true
+
+UITextSizeConstraint_3.Parent = Button
+UITextSizeConstraint_3.MaxTextSize = 28
+
+-- New Toggle Button Properties for GUI Visibility
+ToggleButton.Name = "ToggleButton"
+ToggleButton.Parent = Gui
+ToggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ToggleButton.Position = UDim2.new(0.8, 0, 0.1, 0) -- Position at the top right corner
+ToggleButton.Size = UDim2.new(0.05, 0, 0.05, 0) -- Smaller size
+ToggleButton.Text = "X" -- Using a hamburger icon for a clean look
+ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.TextScaled = true
+ToggleButton.Font = Enum.Font.Nunito
+ToggleButton.BorderSizePixel = 0
+ToggleButton.Active = true
+ToggleButton.Draggable = true
+
+-- Scripts:
+
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 
-local function initializeScript()
-    local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local character
+local humanoidRootPart
 
-    local Folder = Instance.new("Folder", Workspace)
-    local Part = Instance.new("Part", Folder)
-    local Attachment1 = Instance.new("Attachment", Part)
-    Part.Anchored = true
-    Part.CanCollide = false
-    Part.Transparency = 1
+mainStatus = true
+UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+	if input.KeyCode == Enum.KeyCode.RightControl and not gameProcessedEvent then
+		mainStatus = not mainStatus
+		Main.Visible = mainStatus
+	end
+end)
 
-    if not getgenv().Network then
-        getgenv().Network = {
-            BaseParts = {},
-            Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
-        }
+local Folder = Instance.new("Folder", Workspace)
+local Part = Instance.new("Part", Folder)
+local Attachment1 = Instance.new("Attachment", Part)
+Part.Anchored = true
+Part.CanCollide = false
+Part.Transparency = 1
 
-        Network.RetainPart = function(Part)
-            if typeof(Part) == "Instance" and Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
-                table.insert(Network.BaseParts, Part)
-                Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
-                Part.CanCollide = false
-            end
-        end
+if not getgenv().Network then
+	getgenv().Network = {
+		BaseParts = {},
+		Velocity = Vector3.new(14.46262424, 14.46262424, 14.46262424)
+	}
 
-        local function EnablePartControl()
-            LocalPlayer.ReplicationFocus = Workspace
-            RunService.Heartbeat:Connect(function()
-                sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
-                for _, Part in pairs(Network.BaseParts) do
-                    if Part:IsDescendantOf(Workspace) then
-                        Part.Velocity = Network.Velocity
-                    end
-                end
-            end)
-        end
+	Network.RetainPart = function(Part)
+		if Part:IsA("BasePart") and Part:IsDescendantOf(Workspace) then
+			table.insert(Network.BaseParts, Part)
+			Part.CustomPhysicalProperties = PhysicalProperties.new(0, 0, 0, 0, 0)
+			Part.CanCollide = false
+		end
+	end
 
-        EnablePartControl()
-    end
+	local function EnablePartControl()
+		LocalPlayer.ReplicationFocus = Workspace
+		RunService.Heartbeat:Connect(function()
+			sethiddenproperty(LocalPlayer, "SimulationRadius", math.huge)
+			for _, Part in pairs(Network.BaseParts) do
+				if Part:IsDescendantOf(Workspace) then
+					Part.Velocity = Network.Velocity
+				end
+			end
+		end)
+	end
 
-    local function ForcePart(v)
-        if v:IsA("Part") and not v.Anchored and not v.Parent:FindFirstChild("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
-            for _, x in next, v:GetChildren() do
-                if x:IsA("BodyAngularVelocity") or x:IsA("BodyForce") or x:IsA("BodyGyro") or x:IsA("BodyPosition") or x:IsA("BodyThrust") or x:IsA("BodyVelocity") or x:IsA("RocketPropulsion") then
-                    x:Destroy()
-                end
-            end
-            if v:FindFirstChild("Attachment") then
-                v:FindFirstChild("Attachment"):Destroy()
-            end
-            if v:FindFirstChild("AlignPosition") then
-                v:FindFirstChild("AlignPosition"):Destroy()
-            end
-            if v:FindFirstChild("Torque") then
-                v:FindFirstChild("Torque"):Destroy()
-            end
-            v.CanCollide = false
-            local Torque = Instance.new("Torque", v)
-            Torque.Torque = Vector3.new(100000, 100000, 100000)
-            local AlignPosition = Instance.new("AlignPosition", v)
-            local Attachment2 = Instance.new("Attachment", v)
-            Torque.Attachment0 = Attachment2
-            AlignPosition.MaxForce = 9999999999999999
-            AlignPosition.MaxVelocity = math.huge
-            AlignPosition.Responsiveness = 200
-            AlignPosition.Attachment0 = Attachment2
-            AlignPosition.Attachment1 = Attachment1
-        end
-    end
-
-    local blackHoleActive = true
-
-    local function toggleBlackHole()
-        blackHoleActive = not blackHoleActive
-        if blackHoleActive then
-            for _, v in next, Workspace:GetDescendants() do
-                ForcePart(v)
-            end
-
-            Workspace.DescendantAdded:Connect(function(v)
-                if blackHoleActive then
-                    ForcePart(v)
-                end
-            end)
-
-            spawn(function()
-                while blackHoleActive and RunService.RenderStepped:Wait() do
-                    Attachment1.WorldCFrame = humanoidRootPart.CFrame
-                end
-            end)
-        end
-    end
-
-    local function makeButtonDraggable(button)
-        local dragging = false
-        local dragInput, dragStart, startPos
-
-        local function update(input)
-            local delta = input.Position - dragStart
-            button.Position = UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset + delta.X,
-                startPos.Y.Scale,
-                startPos.Y.Offset + delta.Y
-            )
-        end
-
-        button.InputBegan:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                dragging = true
-                dragStart = input.Position
-                startPos = button.Position
-
-                input.Changed:Connect(function()
-                    if input.UserInputState == Enum.UserInputState.End then
-                        dragging = false
-                    end
-                end)
-            end
-        end)
-
-        button.InputChanged:Connect(function(input)
-            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-                dragInput = input
-            end
-        end)
-
-        UserInputService.InputChanged:Connect(function(input)
-            if input == dragInput and dragging then
-                update(input)
-            end
-        end)
-    end
-
-    local function createControlButton()
-        local screenGui = Instance.new("ScreenGui")
-        local button = Instance.new("TextButton")
-        local frame = Instance.new("Frame")
-        local uicorner = Instance.new("UICorner")
-
-        -- Create a small toggle button near the leaderboards
-        local toggleGuiButton = Instance.new("TextButton")
-
-        screenGui.Name = "BlackHoleControlGUI"
-        screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
-
-        frame.Name = "Frame"
-        frame.Parent = screenGui
-        frame.Position = UDim2.new(0.5, -100, 0, 90)
-        frame.Size = UDim2.new(0, 220, 0, 80)
-        frame.BackgroundTransparency = 1  -- No background for cleaner look
-
-        button.Name = "ToggleBlackHoleButton"
-        button.Size = UDim2.new(0, 200, 0, 50)
-        button.Position = UDim2.new(0, 10, 0, 15)
-        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- Softer color for the button
-        button.TextColor3 = Color3.fromRGB(240, 240, 240) -- Keep the text light
-        button.Font = Enum.Font.Gotham -- Clean and normal font
-        button.TextSize = 18 -- Thinner text for readability
-        button.Text = "Activate Ball"
-        button.Parent = frame
-
-        uicorner.CornerRadius = UDim.new(0, 12)
-        uicorner.Parent = button
-
-        button.MouseButton1Click:Connect(function()
-            toggleBlackHole()
-            if blackHoleActive then
-                button.Text = "Deactivate Ball"
-            else
-                button.Text = "Activate Ball"
-            end
-        end)
-
-        -- Set up the small toggle button with improved design
-        toggleGuiButton.Name = "ToggleGuiButton"
-        toggleGuiButton.Size = UDim2.new(0, 50, 0, 50)
-        toggleGuiButton.Position = UDim2.new(1, -60, 0.5, -25)  -- Near the leaderboards
-        toggleGuiButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        toggleGuiButton.TextColor3 = Color3.fromRGB(240, 240, 240)
-        toggleGuiButton.Font = Enum.Font.Gotham
-        toggleGuiButton.TextSize = 14
-        toggleGuiButton.Text = "Show"
-        toggleGuiButton.Parent = screenGui
-
-        -- Add rounded corners to the small toggle button
-        local buttonCorner = Instance.new("UICorner")
-        buttonCorner.CornerRadius = UDim.new(0, 12)
-        buttonCorner.Parent = toggleGuiButton
-
-        -- Add drag functionality to the small button
-        makeButtonDraggable(toggleGuiButton)
-
-        -- Function to toggle visibility of the main GUI
-        toggleGuiButton.MouseButton1Click:Connect(function()
-            frame.Visible = not frame.Visible
-            if frame.Visible then
-                toggleGuiButton.Text = "Hide"
-            else
-                toggleGuiButton.Text = "Show"
-            end
-        end)
-
-        -- Initially hide the main control panel
-        frame.Visible = false
-    end
-
-    createControlButton()
-    toggleBlackHole()
-
-    -- Handle character death
-    LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function()
-        blackHoleActive = false
-        sethiddenproperty(LocalPlayer, "SimulationRadius", 100) -- Reset simulation radius
-        Folder:Destroy() -- Clean up the folder
-        LocalPlayer.PlayerGui:FindFirstChild("BlackHoleControlGUI"):Destroy() -- Remove the GUI
-    end)
-
-    -- Handle respawn
-    LocalPlayer.CharacterAdded:Connect(function()
-        initializeScript() -- Reinitialize the script on respawn
-    end)
+	EnablePartControl()
 end
 
-initializeScript()
+local function ForcePart(v)
+	if v:IsA("BasePart") and not v.Anchored and not v.Parent:FindFirstChildOfClass("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
+		for _, x in ipairs(v:GetChildren()) do
+			if x:IsA("BodyMover") or x:IsA("RocketPropulsion") then
+				x:Destroy()
+			end
+		end
+		if v:FindFirstChild("Attachment") then
+			v:FindFirstChild("Attachment"):Destroy()
+		end
+		if v:FindFirstChild("AlignPosition") then
+			v:FindFirstChild("AlignPosition"):Destroy()
+		end
+		if v:FindFirstChild("Torque") then
+			v:FindFirstChild("Torque"):Destroy()
+		end
+		v.CanCollide = false
+		local Torque = Instance.new("Torque", v)
+		Torque.Torque = Vector3.new(100000, 100000, 100000)
+		local AlignPosition = Instance.new("AlignPosition", v)
+		local Attachment2 = Instance.new("Attachment", v)
+		Torque.Attachment0 = Attachment2
+		AlignPosition.MaxForce = math.huge
+		AlignPosition.MaxVelocity = math.huge
+		AlignPosition.Responsiveness = 200
+		AlignPosition.Attachment0 = Attachment2
+		AlignPosition.Attachment1 = Attachment1
+	end
+end
+
+local blackHoleActive = false
+local DescendantAddedConnection
+
+local function toggleBlackHole()
+	blackHoleActive = not blackHoleActive
+	if blackHoleActive then
+		Button.Text = "Ball Fling | On"
+		for _, v in ipairs(Workspace:GetDescendants()) do
+			ForcePart(v)
+		end
+
+		DescendantAddedConnection = Workspace.DescendantAdded:Connect(function(v)
+			if blackHoleActive then
+				ForcePart(v)
+			end
+		end)
+
+		spawn(function()
+			while blackHoleActive and RunService.RenderStepped:Wait() do
+				Attachment1.WorldCFrame = humanoidRootPart.CFrame
+			end
+		end)
+	else
+		Button.Text = "Ball Fling | Off"
+		if DescendantAddedConnection then
+			DescendantAddedConnection:Disconnect()
+		end
+	end
+end
+
+local function getPlayer(name)
+	local lowerName = string.lower(name)
+	for _, p in pairs(Players:GetPlayers()) do
+		local lowerPlayer = string.lower(p.Name)
+		if string.find(lowerPlayer, lowerName) then
+			return p
+		elseif string.find(string.lower(p.DisplayName), lowerName) then
+			return p
+		end
+	end
+	return nil
+end
+
+Button.MouseButton1Click:Connect(function()
+	if blackHoleActive then
+		toggleBlackHole()
+	end
+	local playerName = Box.Text
+	local targetPlayer = getPlayer(playerName)
+
+	if targetPlayer then
+		character = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
+		humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+		toggleBlackHole()
+	else
+		print("Please input a valid player!")
+	end
+end)
+
+ToggleButton.MouseButton1Click:Connect(function()
+	Main.Visible = not Main.Visible -- Toggle the main GUI visibility
+end)
+
+-- Draggable function for Toggle Button
+ToggleButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		local dragStart = input.Position
+		local startPos = ToggleButton.Position
+
+		local function update(input)
+			local delta = input.Position - dragStart
+			ToggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+
+		local function endDrag()
+			UserInputService.InputChanged:Disconnect(update)
+			UserInputService.InputEnded:Disconnect(endDrag)
+		end
+
+		UserInputService.InputChanged:Connect(update)
+		UserInputService.InputEnded:Connect(endDrag)
+	end
+end)
+
+coroutine.wrap(JUBNQKI_fake_script)()
