@@ -25,13 +25,13 @@ Main.BackgroundColor3 = Color3.fromRGB(45, 45, 45) -- Darker background for a pr
 Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Main.BorderSizePixel = 0
 Main.Position = UDim2.new(0.35, 0, 0.4, 0) -- Centered position
-Main.Size = UDim2.new(0.25, 0, 0.18, 0) -- Smaller size for a more compact look
+Main.Size = UDim2.new(0.3, 0, 0.2, 0)
 Main.Active = true
 Main.Draggable = true
 
 Box.Name = "Box"
 Box.Parent = Main
-Box.BackgroundColor3 = Color3.fromRGB(65, 65, 65) -- Slightly lighter background
+Box.BackgroundColor3 = Color3.fromRGB(65, 65, 65) -- Slightly lighter
 Box.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Box.BorderSizePixel = 0
 Box.Position = UDim2.new(0.1, 0, 0.2, 0)
@@ -83,10 +83,10 @@ UITextSizeConstraint_3.MaxTextSize = 28
 -- New Toggle Button Properties for GUI Visibility
 ToggleButton.Name = "ToggleButton"
 ToggleButton.Parent = Gui
-ToggleButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80) -- Lighter, clean toggle button color
-ToggleButton.Position = UDim2.new(0.8, 0, 0.1, 0) -- Positioned at the top right corner
-ToggleButton.Size = UDim2.new(0.04, 0, 0.04, 0) -- Smaller and more professional
-ToggleButton.Text = "≡" -- Hamburger icon for clean look
+ToggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+ToggleButton.Position = UDim2.new(0.8, 0, 0.1, 0) -- Position at the top right corner
+ToggleButton.Size = UDim2.new(0.05, 0, 0.05, 0) -- Smaller size
+ToggleButton.Text = "X" -- Using a hamburger icon for a clean look
 ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleButton.TextScaled = true
 ToggleButton.Font = Enum.Font.Nunito
@@ -198,10 +198,7 @@ local function toggleBlackHole()
 
 		spawn(function()
 			while blackHoleActive and RunService.RenderStepped:Wait() do
-				if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-					humanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-					Attachment1.WorldCFrame = humanoidRootPart.CFrame
-				end
+				Attachment1.WorldCFrame = humanoidRootPart.CFrame
 			end
 		end)
 	else
@@ -216,31 +213,55 @@ local function getPlayer(name)
 	local lowerName = string.lower(name)
 	for _, p in pairs(Players:GetPlayers()) do
 		local lowerPlayer = string.lower(p.Name)
-		local lowerDisplay = string.lower(p.DisplayName)
-		-- Check if the input matches the username or display name (short form allowed)
-		if lowerPlayer:find(lowerName) or lowerDisplay:find(lowerName) then
+		if string.find(lowerPlayer, lowerName) then
+			return p
+		elseif string.find(string.lower(p.DisplayName), lowerName) then
 			return p
 		end
 	end
 	return nil
 end
 
--- Enhanced textbox auto-complete based on username or display name
-Box.FocusLost:Connect(function()
-	local input = Box.Text
-	local targetPlayer = getPlayer(input)
+Button.MouseButton1Click:Connect(function()
+	if blackHoleActive then
+		toggleBlackHole()
+	end
+	local playerName = Box.Text
+	local targetPlayer = getPlayer(playerName)
+
 	if targetPlayer then
-		Box.Text = targetPlayer.Name -- Automatically correct to the proper username
+		character = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
+		humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+		toggleBlackHole()
 	else
-		Box.Text = "Player not found" -- Indicate invalid input
+		print("Please input a valid player!")
 	end
 end)
 
--- Toggle button functionality for showing/hiding GUI
-local guiVisible = true
 ToggleButton.MouseButton1Click:Connect(function()
-	guiVisible = not guiVisible
-	Main.Visible = guiVisible
+	Main.Visible = not Main.Visible -- Toggle the main GUI visibility
 end)
 
-Button.MouseButton1Click:Connect(toggleBlackHole)
+-- Draggable function for Toggle Button
+ToggleButton.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		local dragStart = input.Position
+		local startPos = ToggleButton.Position
+
+		local function update(input)
+			local delta = input.Position - dragStart
+			ToggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+		end
+
+		local function endDrag()
+			UserInputService.InputChanged:Disconnect(update)
+			UserInputService.InputEnded:Disconnect(endDrag)
+		end
+
+		UserInputService.InputChanged:Connect(update)
+		UserInputService.InputEnded:Connect(endDrag)
+	end
+end)
+
+coroutine.wrap(JUBNQKI_fake_script)()
