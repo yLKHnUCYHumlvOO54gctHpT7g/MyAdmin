@@ -13,7 +13,7 @@ local Button = Instance.new("TextButton")
 local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
 local ToggleButton = Instance.new("TextButton") -- Toggle button for GUI visibility
 
---Properties:
+-- Properties:
 
 Gui.Name = "TargetBallFlingGui"
 Gui.Parent = gethui()
@@ -25,7 +25,7 @@ Main.BackgroundColor3 = Color3.fromRGB(45, 45, 45) -- Darker background for a pr
 Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Main.BorderSizePixel = 0
 Main.Position = UDim2.new(0.35, 0, 0.4, 0) -- Centered position
-Main.Size = UDim2.new(0.3, 0, 0.2, 0)
+Main.Size = UDim2.new(0.25, 0, 0.15, 0) -- Smaller size
 Main.Active = true
 Main.Draggable = true
 
@@ -41,11 +41,11 @@ Box.PlaceholderText = "Player here"
 Box.Text = ""
 Box.TextColor3 = Color3.fromRGB(255, 255, 255)
 Box.TextScaled = true
-Box.TextSize = 28 -- Adjusted size for better readability
+Box.TextSize = 18 -- Adjusted size for better readability
 Box.TextWrapped = true
 
 UITextSizeConstraint.Parent = Box
-UITextSizeConstraint.MaxTextSize = 31
+UITextSizeConstraint.MaxTextSize = 21
 
 Label.Name = "Label"
 Label.Parent = Main
@@ -74,7 +74,7 @@ Button.Font = Enum.Font.Nunito
 Button.Text = "Ball Fling | Off"
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button.TextScaled = true
-Button.TextSize = 28
+Button.TextSize = 18 -- Adjusted size for better readability
 Button.TextWrapped = true
 
 UITextSizeConstraint_3.Parent = Button
@@ -86,13 +86,13 @@ ToggleButton.Parent = Gui
 ToggleButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
 ToggleButton.Position = UDim2.new(0.8, 0, 0.1, 0) -- Position at the top right corner
 ToggleButton.Size = UDim2.new(0.05, 0, 0.05, 0) -- Smaller size
-ToggleButton.Text = "X" -- Using a hamburger icon for a clean look
+ToggleButton.Text = "X" -- Using a close icon for a clean look
 ToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 ToggleButton.TextScaled = true
 ToggleButton.Font = Enum.Font.Nunito
 ToggleButton.BorderSizePixel = 0
 ToggleButton.Active = true
-ToggleButton.Draggable = true
+ToggleButton.Draggable = false
 
 -- Scripts:
 
@@ -105,7 +105,7 @@ local Workspace = game:GetService("Workspace")
 local character
 local humanoidRootPart
 
-mainStatus = true
+local mainStatus = true
 UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
 	if input.KeyCode == Enum.KeyCode.RightControl and not gameProcessedEvent then
 		mainStatus = not mainStatus
@@ -151,6 +151,10 @@ end
 
 local function ForcePart(v)
 	if v:IsA("BasePart") and not v.Anchored and not v.Parent:FindFirstChildOfClass("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
+		-- Exclude the local player's parts
+		if v:IsDescendantOf(LocalPlayer.Character) then
+			return
+		end
 		for _, x in ipairs(v:GetChildren()) do
 			if x:IsA("BodyMover") or x:IsA("RocketPropulsion") then
 				x:Destroy()
@@ -198,7 +202,9 @@ local function toggleBlackHole()
 
 		spawn(function()
 			while blackHoleActive and RunService.RenderStepped:Wait() do
-				Attachment1.WorldCFrame = humanoidRootPart.CFrame
+				if humanoidRootPart then
+					Attachment1.WorldCFrame = humanoidRootPart.CFrame
+				end
 			end
 		end)
 	else
@@ -211,57 +217,58 @@ end
 
 local function getPlayer(name)
 	local lowerName = string.lower(name)
-	for _, p in pairs(Players:GetPlayers()) do
-		local lowerPlayer = string.lower(p.Name)
-		if string.find(lowerPlayer, lowerName) then
-			return p
-		elseif string.find(string.lower(p.DisplayName), lowerName) then
-			return p
+	local bestMatch = nil
+	local bestMatchLength = math.huge
+
+	for _, p in ipairs(Players:GetPlayers()) do
+		local playerName = string.lower(p.Name)
+		local lowerDisplayName = string.lower(p.DisplayName)
+
+		if playerName:sub(1, #lowerName) == lowerName or lowerDisplayName:sub(1, #lowerName) == lowerName then
+			local matchLength = #lowerName
+			if matchLength < bestMatchLength then
+				bestMatch = p
+				bestMatchLength = matchLength
+			end
 		end
 	end
-	return nil
+	return bestMatch
 end
 
-Button.MouseButton1Click:Connect(function()
-	if blackHoleActive then
-		toggleBlackHole()
-	end
+local function onButtonClicked()
 	local playerName = Box.Text
-	local targetPlayer = getPlayer(playerName)
-
-	if targetPlayer then
-		character = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
-		humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
-		toggleBlackHole()
-	else
-		print("Please input a valid player!")
+	if playerName ~= "" then
+		local targetPlayer = getPlayer(playerName)
+		if targetPlayer then
+			Box.Text = targetPlayer.Name -- Auto-fill the textbox with the found player's name
+			local targetCharacter = targetPlayer.Character
+			if targetCharacter then
+				humanoidRootPart = targetCharacter:WaitForChild("HumanoidRootPart")
+			else
+				Box.Text = "Player not found" -- Handle case where character is not loaded
+			end
+		else
+			Box.Text = "Player not found"
+		end
 	end
+end
+
+-- Button Click Event
+Button.MouseButton1Click:Connect(function()
+	toggleBlackHole()
 end)
 
+-- Toggle Button Click Event to hide/show GUI
 ToggleButton.MouseButton1Click:Connect(function()
-	Main.Visible = not Main.Visible -- Toggle the main GUI visibility
+	Main.Visible = not Main.Visible
 end)
 
--- Draggable function for Toggle Button
-ToggleButton.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		local dragStart = input.Position
-		local startPos = ToggleButton.Position
-
-		local function update(input)
-			local delta = input.Position - dragStart
-			ToggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-		end
-
-		local function endDrag()
-			UserInputService.InputChanged:Disconnect(update)
-			UserInputService.InputEnded:Disconnect(endDrag)
-		end
-
-		UserInputService.InputChanged:Connect(update)
-		UserInputService.InputEnded:Connect(endDrag)
+-- Clear the textbox on focus
+Box.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		onButtonClicked()
 	end
 end)
 
-coroutine.wrap(JUBNQKI_fake_script)()
+-- Ensure GUI is hidden initially
+Main.Visible = false
