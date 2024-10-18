@@ -656,6 +656,7 @@ local cmds = {
         ["/antivoid"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Antivoid",
         ["/walkonair"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Walkonair",
         ["/usercreationcracked"] = "https://cracklua.github.io/cracks/UserCreation",
+        ["/freecam"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Freecam",
         ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
 
