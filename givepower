@@ -263,7 +263,7 @@ local function onPlayerChatted(player, message)
     -- Show commands for powered players
     elseif command == string.lower(cmdsCommand) then
         if playersWithPower[player.Name] then
-            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /unspam [player]\n📜 /silentchat\n📜 /loudchat\n📜 /spamboard\n📜 /cmds", player)
+            Chat("📜 Your available commands:\n📜 /warns [player],All \n 📜 /spamwarns [player],All\n📜 /unspam\n📜 /unspam [player]\n📜 /silentchat\n📜 /loudchat\n📜 /spamboard\n📜 /cmds", player)
              else
             trackBlacklist(player)
         end
