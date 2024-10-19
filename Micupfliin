@@ -224,14 +224,15 @@ local function getPlayer(name)
 		local playerName = string.lower(p.Name)
 		local lowerDisplayName = string.lower(p.DisplayName)
 
-		if playerName:sub(1, #lowerName) == lowerName or lowerDisplayName:sub(1, #lowerName) == lowerName then
-			local matchLength = #lowerName
+		if string.sub(playerName, 1, #lowerName) == lowerName or string.sub(lowerDisplayName, 1, #lowerName) == lowerName then
+			local matchLength = math.min(#lowerName, #playerName)
 			if matchLength < bestMatchLength then
 				bestMatch = p
 				bestMatchLength = matchLength
 			end
 		end
 	end
+
 	return bestMatch
 end
 
@@ -241,34 +242,32 @@ local function onButtonClicked()
 		local targetPlayer = getPlayer(playerName)
 		if targetPlayer then
 			Box.Text = targetPlayer.Name -- Auto-fill the textbox with the found player's name
+			local function applyBallFling(targetCharacter)
+				humanoidRootPart = targetCharacter:WaitForChild("HumanoidRootPart")
+				-- Apply the fling effect when the character respawns
+				toggleBlackHole() -- Reapply fling effect when character is found
+			end
+
 			local targetCharacter = targetPlayer.Character
 			if targetCharacter then
-				humanoidRootPart = targetCharacter:WaitForChild("HumanoidRootPart")
+				applyBallFling(targetCharacter) -- Apply fling to the current character
 			else
 				Box.Text = "Player not found" -- Handle case where character is not loaded
 			end
+
+			-- Connect to CharacterAdded to reapply the effect on respawn
+			targetPlayer.CharacterAdded:Connect(function(newCharacter)
+				applyBallFling(newCharacter) -- Reapply fling when respawned
+			end)
 		else
 			Box.Text = "Player not found"
 		end
 	end
 end
 
--- Button Click Event
-Button.MouseButton1Click:Connect(function()
-	toggleBlackHole()
-end)
+Button.MouseButton1Click:Connect(onButtonClicked)
 
--- Toggle Button Click Event to hide/show GUI
+-- Toggle the GUI visibility
 ToggleButton.MouseButton1Click:Connect(function()
 	Main.Visible = not Main.Visible
 end)
-
--- Clear the textbox on focus
-Box.FocusLost:Connect(function(enterPressed)
-	if enterPressed then
-		onButtonClicked()
-	end
-end)
-
--- Ensure GUI is hidden initially
-Main.Visible = false
