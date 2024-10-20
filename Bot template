@@ -725,18 +725,6 @@ end
 -- Connect the chat event
 LocalPlayer.Chatted:Connect(onChatted)
 
--- Function to trigger commands based on user input (if needed)
-local function triggerCommand(input)
-    executeCommand(input)
-end
-game.Players.LocalPlayer.Chatted:Connect(function(msg)
-for i,v in pairs(cmds) do
-if msg == i then
-loadstring(game:HttpGet(v))()
-print("command "..i.." has been run")
-end
-end
-end)
 -- Check if the player executing the script is the owner
 
 -- Attach the tag to the player's head
