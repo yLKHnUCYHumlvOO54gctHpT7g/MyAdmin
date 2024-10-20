@@ -599,7 +599,6 @@ local Owners = {
 local GMS = {
     "victorwielki",
 }
--- List of commands and their corresponding URLs
 local StarterGui = game:GetService("StarterGui")
 local ChatService = game:GetService("Chat")
 local Players = game:GetService("Players")
@@ -675,12 +674,22 @@ local cmds = {
     ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
 
+-- Store the last command executed to prevent double execution
+local lastCommandExecuted = ""
+
 -- Function to execute command
 local function executeCommand(command)
+    -- Check if the command has been executed recently
+    if command == lastCommandExecuted then
+        return
+    end
+
     if cmds[command] then
+        lastCommandExecuted = command  -- Update the last executed command
+
         -- Send a notification when a command is executed
         StarterGui:SetCore("SendNotification", {
-            Title = "Command Executed✅",
+            Title = "Command Executed ✅",
             Text = command,
             Duration = 5
         })
@@ -696,6 +705,16 @@ local function executeCommand(command)
     end
 end
 
+-- Listen for chat messages
+local function onChatted(message)
+    local command = message:match("^(/%w+)")  -- Match commands starting with /
+    if command then
+        executeCommand(command)
+    end
+end
+
+-- Connect chat listener
+LocalPlayer.Chatted:Connect(onChatted)
 -- Listen for chat messages
 local function onChatted(message)
     if message:sub(1, 1) == "/" then
