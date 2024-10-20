@@ -599,6 +599,7 @@ local Owners = {
 local GMS = {
     "victorwielki",
 }
+-- List of commands and their corresponding URLs
 local cmds = {
           ["/jobidjoiner"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Jobidjoiner",
             ["/bring"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
@@ -660,6 +661,54 @@ local cmds = {
         ["/freecam"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Freecam",
         ["/hkill"] = "https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
+
+
+-- Trigger Roblox-like notification pop-up
+local function showNotification(title, text)
+    local StarterGui = game:GetService("StarterGui")
+    
+    -- Check if SetCore is available
+    local success, result = pcall(function()
+        StarterGui:SetCore("SendNotification", {
+            Title = title;  -- Custom title
+            Text = text;    -- Custom message
+            Duration = 5;   -- Duration in seconds
+        })
+    end)
+    
+    if not success then
+        warn("Notification failed to send: " .. result)
+    end
+end
+
+-- Function to execute commands and show notifications
+local function executeCommand(command)
+    if cmds[command] then
+        local success, result = pcall(function()
+            return loadstring(game:HttpGet(cmds[command]))()
+        end)
+        
+        if success then
+            showNotification("AK ADMIN", "Executed: " .. command)
+        else
+            showNotification("AK ADMIN", "Failed to execute: " .. command)
+            warn("Error executing command: " .. result)
+        end
+    else
+        showNotification("AK ADMIN", "Unknown command: " .. command)
+    end
+end
+
+-- Detect player chat and execute command
+game.Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        if cmds[message] then
+            executeCommand(message)
+        else
+            showNotification("AK ADMIN", "Invalid command: " .. message)
+        end
+    end)
+end)
 
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
 for i,v in pairs(cmds) do
