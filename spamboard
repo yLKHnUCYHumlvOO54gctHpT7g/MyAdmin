@@ -1,0 +1,82 @@
+local replicatedStorage = game.ReplicatedStorage
+local submitNote = replicatedStorage:WaitForChild("SubmitNote")
+
+-- Extensive list of messages to spam
+local messages = {
+    "AK ADMIN is now live! Use it wisely!",
+    "Experience the power of AK ADMIN!",
+    "AK ADMIN: Your ultimate control tool!",
+    "Stay tuned for more AK ADMIN features!",
+    "AK ADMIN is ready to assist you!",
+    "Join the AK ADMIN revolution!",
+    "Unlock your potential with AK ADMIN!",
+    "AK ADMIN: Elevate your game!",
+    "Don’t forget to check out AK ADMIN!",
+    "AK ADMIN is your friend in this game!",
+    "Utilize AK ADMIN for enhanced gameplay!",
+    "AK ADMIN: Power at your fingertips!",
+    "With AK ADMIN, you hold the keys!",
+    "AK ADMIN: A new era of control!",
+    "Be a master with AK ADMIN!",
+    "AK ADMIN is your secret weapon!",
+    "AK ADMIN is taking the game by storm!",
+    "Become unstoppable with AK ADMIN!",
+    "AK ADMIN: The future is now!",
+    "AK ADMIN for all your needs!",
+    "AK ADMIN is the key to success!",
+    "AK ADMIN empowers players!",
+    "Don't miss out on AK ADMIN!",
+    "AK ADMIN: Your path to victory!",
+    "Step up your game with AK ADMIN!",
+    "AK ADMIN: The choice of champions!",
+    "Unlock secrets with AK ADMIN!",
+    "AK ADMIN: A must-have for serious players!",
+    "AK ADMIN will change how you play!",
+    "Embrace the power of AK ADMIN!",
+    "AK ADMIN is here to make a difference!",
+    "Transform your experience with AK ADMIN!",
+    "AK ADMIN: Your ally in the game!",
+    "AK ADMIN: Fuel your ambition!"
+}
+
+-- Toggle control
+local isSpamming = false
+local spamCoroutine
+
+-- Function to start spamming
+local function startSpamming()
+    isSpamming = true
+
+    -- Create a new coroutine to handle the spamming process
+    spamCoroutine = coroutine.create(function()
+        for i = 1, 5000 do  -- Execute the loop 5000 times
+            if not isSpamming then break end -- Check if spamming is toggled off
+
+            -- Randomly select a message to send
+            local message = messages[math.random(1, #messages)]
+
+            -- Fire the selected message to the server
+            submitNote:FireServer(message)
+        end
+
+        -- Optional: Notify that the spamming is complete
+        submitNote:FireServer("Finished sending 5000 AK ADMIN messages!")
+    end)
+
+    -- Start the coroutine
+    coroutine.resume(spamCoroutine)
+end
+
+-- Function to stop spamming
+local function stopSpamming()
+    isSpamming = false
+    submitNote:FireServer("All messages cleared!")
+end
+
+-- Start spamming immediately upon execution
+startSpamming()
+
+-- Optional: Connect to a way to stop spamming (e.g., when a specific player leaves or after a certain time)
+-- Example of stopping after a delay of 30 seconds
+wait(30)  -- Adjust the duration as needed
+stopSpamming()
