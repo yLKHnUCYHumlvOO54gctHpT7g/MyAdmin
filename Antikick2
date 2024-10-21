@@ -93,7 +93,6 @@ if getgenv().ED_AntiKick.SendNotifications then
 	StarterGui:SetCore("SendNotification", {
 		Title = "AKs - Anti-Kick",
 		Text = "Anti-Kick script loaded!",
-		Icon = "rbxassetid://15145938867",
 		Duration = 3
 	})
 end
