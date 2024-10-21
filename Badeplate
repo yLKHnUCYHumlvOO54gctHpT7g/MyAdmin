@@ -1,0 +1,75 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Create a large second baseplate
+local secondBaseplatePosition = Vector3.new(108.033035, -6, -24.9428463) -- Position for the second baseplate
+local secondBaseplate = Instance.new("Part")
+secondBaseplate.Size = Vector3.new(1024, 1, 1024)
+secondBaseplate.Position = secondBaseplatePosition
+secondBaseplate.Anchored = true
+secondBaseplate.Name = "SecondBaseplate"
+secondBaseplate.BrickColor = BrickColor.new("Medium green")
+secondBaseplate.Material = Enum.Material.Grass
+secondBaseplate.CanCollide = true
+secondBaseplate.Parent = game.Workspace
+
+-- Create GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "BaseplateToggleGUI"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 150, 0, 50)
+toggleButton.Position = UDim2.new(0.1, 0, 0.9, 0)
+toggleButton.Text = "Toggle Baseplate"
+toggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 127)
+toggleButton.TextScaled = true
+toggleButton.Font = Enum.Font.SourceSans
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.Parent = screenGui
+
+-- Styling for curved corners
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = toggleButton
+
+-- Noclip functionality
+local function noclipUpdate()
+    -- Disable collision for all character parts except the second baseplate
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") and part ~= secondBaseplate then
+            part.CanCollide = false -- Noclip through everything except the second baseplate
+        end
+    end
+end
+
+-- Ensure noclip applies as soon as the character loads
+noclipUpdate()
+
+-- Make the player jump
+local function makePlayerJump()
+    if humanoid then
+        humanoid:ChangeState(Enum.HumanoidStateType.Jumping) -- Make the player jump
+    end
+end
+
+-- Toggle baseplate visibility and teleport or jump
+local baseplateVisible = true
+toggleButton.MouseButton1Click:Connect(function()
+    baseplateVisible = not baseplateVisible
+    if baseplateVisible then
+        -- Teleport the player to the second baseplate directly beneath them
+        local currentPosition = humanoidRootPart.Position
+        local newY = secondBaseplate.Position.Y + 5 -- Slightly above the second baseplate to prevent getting stuck
+        humanoidRootPart.CFrame = CFrame.new(currentPosition.X, newY, currentPosition.Z)
+    else
+        makePlayerJump() -- Make the player jump when toggled off
+    end
+end)
+
+-- Continuously ensure the player can noclip through everything except second baseplate
+game:GetService("RunService").Stepped:Connect(function()
+    noclipUpdate()
+end)
