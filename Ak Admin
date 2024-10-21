@@ -55,7 +55,8 @@ getgenv().whitelistedPlayers = {
     "COOL_BOY96566",
     "clogingpen",
     "ledorwas",
-    "alekswinsskill"
+    "alekswinsskill",
+    "XimenaDaPlugg"
 }
 
 getgenv().premiumUsers = {
@@ -107,7 +108,8 @@ getgenv().premiumUsers = {
     "COOL_BOY96566",
     "clogingpen",
     "ledorwas",
-    "alekswinsskill"
+    "alekswinsskill",
+    "XimenaDaPlugg"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
