@@ -227,7 +227,7 @@ local function onPlayerChatted(player, message)
 
     -- Cmds command (List available commands)
     elseif command == string.lower(cmdsCommand) and playersWithPower[player.Name] then
-        Chat("📜 Available commands: /warns, /spamwarns, /unspam, /givepower, /removepower", player)
+        Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /unspam [player]\n📜", player)
 
     -- Track blacklist attempts for unauthorized commands
     else
