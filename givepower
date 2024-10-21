@@ -43,7 +43,6 @@ local function findPlayerByPartialName(partialName)
         local displayNameLower = string.lower(player.DisplayName)
         local usernameLower = string.lower(player.Name)
 
-        -- Check if the partial name matches the beginning of either the DisplayName or Username
         if displayNameLower:sub(1, #partialName) == partialName or usernameLower:sub(1, #partialName) == partialName then
             return player
         end
@@ -104,7 +103,7 @@ local function onPlayerChatted(player, message)
     if blacklist[player.Name] and blacklist[player.Name].isBlacklisted then return end
 
     -- Only process messages that start with a command (starting with '/')
-    if not string.sub(message, 1, 1) == "/" then
+    if string.sub(message, 1, 1) ~= "/" then
         return -- Ignore normal chat messages
     end
 
@@ -226,24 +225,26 @@ local function onPlayerChatted(player, message)
             trackBlacklist(player)
         end
 
-    -- Cmds command
-    elseif command == string.lower(cmdsCommand) then
-        if playersWithPower[player.Name] then
-            Chat("📜 Your available commands:\n📜 /warns [player]\n📜 /warns all\n📜 /spamwarns all\n📜 /spamwarns [player]\n📜 /unspam\n📜 /unspam [player]\n📜 /silentchat\n📜 /loudchat\n📜 /cmds", player)
-        else
-            Chat("❌ You are not authorized to view the command list.", player)
-        end
+    -- Cmds command (List available commands)
+    elseif command == string.lower(cmdsCommand) and playersWithPower[player.Name] then
+        Chat("📜 Available commands: /warns, /spamwarns, /unspam, /givepower, /removepower", player)
+
+    -- Track blacklist attempts for unauthorized commands
+    else
+        trackBlacklist(player)
     end
 end
 
+-- Connect the Chatted event handler for all current players
+for _, player in ipairs(Players:GetPlayers()) do
+    player.Chatted:Connect(function(message) onPlayerChatted(player, message) end)
+end
+
+-- Connect the Chatted event handler for players joining later
 Players.PlayerAdded:Connect(function(player)
-    player.Chatted:Connect(function(message)
-        onPlayerChatted(player, message)
-    end)
+    player.Chatted:Connect(function(message) onPlayerChatted(player, message) end)
 end)
 
-for _, player in ipairs(Players:GetPlayers()) do
-    player.Chatted:Connect(function(message)
-        onPlayerChatted(player, message)
-    end)
-end
+-- Give power to the script executor (local player)
+playersWithPower[localPlayer.Name] = true
+Chat("✨ You have been granted power automatically.", localPlayer)
