@@ -1,4 +1,6 @@
--- Load black hole script at the start
+local success, err = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Badeplate"))()
+end)
 local success, err = pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Mcfling2"))()
 end)
@@ -6,10 +8,8 @@ end)
 if not success then
     warn("Failed to load script: " .. err)
 end
--- Load black hole script at the start
 local success, err = pcall(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfliin"))()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Mcfling2"))()
 end)
 
 if not success then
