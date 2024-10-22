@@ -1,0 +1,38 @@
+local whitelistedUsers = {
+    "Alikhammas",  -- Your username
+    "Username1",   -- Add more usernames as needed
+    "Username2",
+    "Username3"
+}
+
+local player = game.Players.LocalPlayer
+
+wait(1) -- Add a short wait
+
+print("Checking player: " .. player.Name) -- Debugging output
+
+-- Normalize player name to avoid case sensitivity issues
+local playerName = player.Name:lower()
+
+-- Check if the player is in the whitelist
+local isWhitelisted = false
+for _, username in ipairs(whitelistedUsers) do
+    if username:lower() == playerName then
+        isWhitelisted = true
+        break
+    end
+end
+
+if isWhitelisted then
+    -- Send notification to the player
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Access Granted",
+        Text = "You are authorized to run this script.",
+        Duration = 5
+    })
+
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfling"))()
+else
+    print("Player not whitelisted. Kicking: " .. player.Name) -- Debugging output
+    player:Kick("You are not authorized to execute this script.")
+end
