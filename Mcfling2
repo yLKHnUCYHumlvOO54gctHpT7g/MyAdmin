@@ -74,26 +74,31 @@ local function initializeScript()
         end
     end
 
-    local blackHoleActive = true
+    local ballActive = true
 
-    local function toggleBlackHole()
-        blackHoleActive = not blackHoleActive
-        if blackHoleActive then
+    local function toggleBall()
+        ballActive = not ballActive
+        if ballActive then
             for _, v in next, Workspace:GetDescendants() do
                 ForcePart(v)
             end
 
             Workspace.DescendantAdded:Connect(function(v)
-                if blackHoleActive then
+                if ballActive then
                     ForcePart(v)
                 end
             end)
 
             spawn(function()
-                while blackHoleActive and RunService.RenderStepped:Wait() do
+                while ballActive and RunService.RenderStepped:Wait() do
                     Attachment1.WorldCFrame = humanoidRootPart.CFrame
                 end
             end)
+        else
+            -- Freeze ball by anchoring all affected parts
+            for _, part in ipairs(Network.BaseParts) do
+                part.Anchored = true
+            end
         end
     end
 
@@ -147,7 +152,7 @@ local function initializeScript()
         -- Create a small toggle button near the leaderboards
         local toggleGuiButton = Instance.new("TextButton")
 
-        screenGui.Name = "BlackHoleControlGUI"
+        screenGui.Name = "BallControlGUI"
         screenGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
         frame.Name = "Frame"
@@ -156,25 +161,25 @@ local function initializeScript()
         frame.Size = UDim2.new(0, 220, 0, 80)
         frame.BackgroundTransparency = 1  -- No background for cleaner look
 
-        button.Name = "ToggleBlackHoleButton"
+        button.Name = "ToggleBallButton"
         button.Size = UDim2.new(0, 200, 0, 50)
         button.Position = UDim2.new(0, 10, 0, 15)
         button.BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- Softer color for the button
         button.TextColor3 = Color3.fromRGB(240, 240, 240) -- Keep the text light
         button.Font = Enum.Font.Gotham -- Clean and normal font
         button.TextSize = 18 -- Thinner text for readability
-        button.Text = "Activate Ball"
+        button.Text = "Bring Ball"
         button.Parent = frame
 
         uicorner.CornerRadius = UDim.new(0, 12)
         uicorner.Parent = button
 
         button.MouseButton1Click:Connect(function()
-            toggleBlackHole()
-            if blackHoleActive then
-                button.Text = "Deactivate Ball"
+            toggleBall()
+            if ballActive then
+                button.Text = "Freeze Ball"
             else
-                button.Text = "Activate Ball"
+                button.Text = "Bring Ball"
             end
         end)
 
@@ -196,6 +201,7 @@ local function initializeScript()
 
         -- Add drag functionality to the small button
         makeButtonDraggable(toggleGuiButton)
+        makeButtonDraggable(button)
 
         -- Function to toggle visibility of the main GUI
         toggleGuiButton.MouseButton1Click:Connect(function()
@@ -212,14 +218,14 @@ local function initializeScript()
     end
 
     createControlButton()
-    toggleBlackHole()
+    toggleBall()
 
     -- Handle character death
     LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function()
-        blackHoleActive = false
+        ballActive = false
         sethiddenproperty(LocalPlayer, "SimulationRadius", 100) -- Reset simulation radius
         Folder:Destroy() -- Clean up the folder
-        LocalPlayer.PlayerGui:FindFirstChild("BlackHoleControlGUI"):Destroy() -- Remove the GUI
+        LocalPlayer.PlayerGui:FindFirstChild("BallControlGUI"):Destroy() -- Remove the GUI
     end)
 
     -- Handle respawn
