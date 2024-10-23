@@ -11,6 +11,8 @@ local Label = Instance.new("TextLabel")
 local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
 local Button = Instance.new("TextButton")
 local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+local ViewButton = Instance.new("TextButton") -- View button added for target viewing
+local UITextSizeConstraint_4 = Instance.new("UITextSizeConstraint")
 local ToggleButton = Instance.new("TextButton") -- Toggle button for GUI visibility
 
 -- Properties:
@@ -24,24 +26,24 @@ Main.Parent = Gui
 Main.BackgroundColor3 = Color3.fromRGB(45, 45, 45) -- Darker background for a professional look
 Main.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Main.BorderSizePixel = 0
-Main.Position = UDim2.new(0.35, 0, 0.4, 0) -- Centered position
-Main.Size = UDim2.new(0.25, 0, 0.15, 0) -- Smaller size
+Main.Position = UDim2.new(0.35, 0, 0.35, 0) -- Adjusted position for centering
+Main.Size = UDim2.new(0.2, 0, 0.2, 0) -- Made smaller for better fitting
 Main.Active = true
 Main.Draggable = true
 
 Box.Name = "Box"
 Box.Parent = Main
-Box.BackgroundColor3 = Color3.fromRGB(65, 65, 65) -- Slightly lighter
+Box.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
 Box.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Box.BorderSizePixel = 0
-Box.Position = UDim2.new(0.1, 0, 0.2, 0)
-Box.Size = UDim2.new(0.8, 0, 0.3, 0)
+Box.Position = UDim2.new(0.1, 0, 0.2, 0) -- Slightly adjusted for spacing
+Box.Size = UDim2.new(0.8, 0, 0.15, 0) -- Adjusted to fit better
 Box.FontFace = Font.new("rbxasset://fonts/families/SourceSansSemibold.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
 Box.PlaceholderText = "Player here"
 Box.Text = ""
 Box.TextColor3 = Color3.fromRGB(255, 255, 255)
 Box.TextScaled = true
-Box.TextSize = 18 -- Adjusted size for better readability
+Box.TextSize = 18
 Box.TextWrapped = true
 
 UITextSizeConstraint.Parent = Box
@@ -68,17 +70,35 @@ Button.Parent = Main
 Button.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
 Button.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Button.BorderSizePixel = 0
-Button.Position = UDim2.new(0.15, 0, 0.6, 0)
-Button.Size = UDim2.new(0.7, 0, 0.25, 0)
+Button.Position = UDim2.new(0.15, 0, 0.45, 0)
+Button.Size = UDim2.new(0.7, 0, 0.2, 0)
 Button.Font = Enum.Font.Nunito
 Button.Text = "Ball Fling | Off"
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button.TextScaled = true
-Button.TextSize = 18 -- Adjusted size for better readability
+Button.TextSize = 18
 Button.TextWrapped = true
 
 UITextSizeConstraint_3.Parent = Button
 UITextSizeConstraint_3.MaxTextSize = 28
+
+-- New View Button Properties
+ViewButton.Name = "ViewButton"
+ViewButton.Parent = Main
+ViewButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
+ViewButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ViewButton.BorderSizePixel = 0
+ViewButton.Position = UDim2.new(0.15, 0, 0.7, 0) -- Positioned below the Ball Fling button
+ViewButton.Size = UDim2.new(0.7, 0, 0.2, 0) -- Same size as Ball Fling button
+ViewButton.Font = Enum.Font.Nunito
+ViewButton.Text = "View Target | Off"
+ViewButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+ViewButton.TextScaled = true
+ViewButton.TextSize = 18
+ViewButton.TextWrapped = true
+
+UITextSizeConstraint_4.Parent = ViewButton
+UITextSizeConstraint_4.MaxTextSize = 28
 
 -- New Toggle Button Properties for GUI Visibility
 ToggleButton.Name = "ToggleButton"
@@ -151,7 +171,6 @@ end
 
 local function ForcePart(v)
 	if v:IsA("BasePart") and not v.Anchored and not v.Parent:FindFirstChildOfClass("Humanoid") and not v.Parent:FindFirstChild("Head") and v.Name ~= "Handle" then
-		-- Exclude the local player's parts
 		if v:IsDescendantOf(LocalPlayer.Character) then
 			return
 		end
@@ -241,23 +260,21 @@ local function onButtonClicked()
 	if playerName ~= "" then
 		local targetPlayer = getPlayer(playerName)
 		if targetPlayer then
-			Box.Text = targetPlayer.Name -- Auto-fill the textbox with the found player's name
+			Box.Text = targetPlayer.Name
 			local function applyBallFling(targetCharacter)
 				humanoidRootPart = targetCharacter:WaitForChild("HumanoidRootPart")
-				-- Apply the fling effect when the character respawns
-				toggleBlackHole() -- Reapply fling effect when character is found
+				toggleBlackHole()
 			end
 
 			local targetCharacter = targetPlayer.Character
 			if targetCharacter then
-				applyBallFling(targetCharacter) -- Apply fling to the current character
+				applyBallFling(targetCharacter)
 			else
-				Box.Text = "Player not found" -- Handle case where character is not loaded
+				Box.Text = "Player not found"
 			end
 
-			-- Connect to CharacterAdded to reapply the effect on respawn
 			targetPlayer.CharacterAdded:Connect(function(newCharacter)
-				applyBallFling(newCharacter) -- Reapply fling when respawned
+				applyBallFling(newCharacter)
 			end)
 		else
 			Box.Text = "Player not found"
@@ -266,6 +283,27 @@ local function onButtonClicked()
 end
 
 Button.MouseButton1Click:Connect(onButtonClicked)
+
+-- View button script
+local viewing = false
+local camera = Workspace.CurrentCamera
+
+ViewButton.MouseButton1Click:Connect(function()
+	viewing = not viewing
+	if viewing then
+		local playerName = Box.Text
+		local targetPlayer = getPlayer(playerName)
+		if targetPlayer and targetPlayer.Character then
+			ViewButton.Text = "View Target | On"
+			camera.CameraSubject = targetPlayer.Character:FindFirstChild("Humanoid")
+		else
+			ViewButton.Text = "Player not found"
+		end
+	else
+		ViewButton.Text = "View Target | Off"
+		camera.CameraSubject = LocalPlayer.Character:FindFirstChild("Humanoid")
+	end
+end)
 
 -- Toggle the GUI visibility
 ToggleButton.MouseButton1Click:Connect(function()
