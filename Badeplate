@@ -4,7 +4,7 @@ local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 
 -- Create a large second baseplate (invisible)
-local secondBaseplatePosition = Vector3.new(108.033035, -6, -24.9428463) -- Position for the second baseplate
+local secondBaseplatePosition = Vector3.new(108.033035, -6, -24.9428463)
 local secondBaseplate = Instance.new("Part")
 secondBaseplate.Size = Vector3.new(1024, 1, 1024)
 secondBaseplate.Position = secondBaseplatePosition
@@ -13,33 +13,33 @@ secondBaseplate.Name = "SecondBaseplate"
 secondBaseplate.BrickColor = BrickColor.new("Medium green")
 secondBaseplate.Material = Enum.Material.Grass
 secondBaseplate.CanCollide = true
-secondBaseplate.Transparency = 1 -- Make the second baseplate invisible
+secondBaseplate.Transparency = 1 -- Invisible baseplate
 secondBaseplate.Parent = game.Workspace
 
--- Set baseplate surface to be smooth to prevent unwanted forces
+-- Smooth surface for the baseplate
 secondBaseplate.TopSurface = Enum.SurfaceType.Smooth
 secondBaseplate.BottomSurface = Enum.SurfaceType.Smooth
 
 -- Create GUI
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "BaseplateToggleGUI"
-screenGui.ResetOnSpawn = false -- Prevent GUI from resetting after respawn
+screenGui.ResetOnSpawn = false -- Don't reset GUI on respawn
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Create a smaller, sleeker toggle button
+-- Create the smaller toggle button
 local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.new(0, 100, 0, 40) -- Smaller size for a cleaner look
+toggleButton.Size = UDim2.new(0, 100, 0, 40) -- Smaller size
 toggleButton.Position = UDim2.new(0.1, 0, 0.9, 0)
-toggleButton.Text = "underground"
-toggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Darker, professional background
-toggleButton.TextSize = 14 -- Set a smaller, fixed, and readable text size
-toggleButton.Font = Enum.Font.SourceSans -- Simple, easy-to-read font
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- Plain white text
+toggleButton.Text = "Toggle Baseplate"
+toggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+toggleButton.TextSize = 14
+toggleButton.Font = Enum.Font.SourceSans
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 toggleButton.Parent = screenGui
 
 -- Styling for curved corners
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8) -- Slightly smaller corner radius
+corner.CornerRadius = UDim.new(0, 8)
 corner.Parent = toggleButton
 
 -- Make the button draggable
@@ -83,24 +83,9 @@ end)
 local function noclipUpdate()
     for _, part in pairs(character:GetDescendants()) do
         if part:IsA("BasePart") then
-            part.CanCollide = (part == secondBaseplate) -- Only enable collision with the second baseplate
+            part.CanCollide = (part == secondBaseplate) -- Only enable collision with second baseplate
         end
     end
-end
-
--- Store original JumpPower
-local originalJumpPower = humanoid.JumpPower
-
--- Disable jumping only
-local function disableJumping()
-    humanoid.JumpPower = 0
-    humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
-end
-
--- Enable jumping (restore original JumpPower)
-local function enableJumping()
-    humanoid.JumpPower = originalJumpPower
-    humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
 end
 
 -- Clear any existing velocity and force-related objects
@@ -112,22 +97,18 @@ local function clearForces()
     end
 end
 
--- Check if any invisible force (like BodyMovers) is applied
-local function clearCharacterForces()
-    for _, part in pairs(character:GetDescendants()) do
-        if part:IsA("BodyMover") then
-            part:Destroy() -- Clear any potential external force
-        end
-    end
-end
+-- Slowly float the player upwards
+local function floatUp()
+    clearForces() -- Remove any existing forces before applying new ones
 
--- Teleport the player above the second baseplate
-local function teleportToBaseplate()
-    clearForces() -- Ensure no external forces are affecting the character
-    clearCharacterForces() -- Make sure no forces exist in character parts
-    local currentPosition = humanoidRootPart.Position
-    local newY = secondBaseplate.Position.Y + 5 -- Slightly above the second baseplate
-    humanoidRootPart.CFrame = CFrame.new(currentPosition.X, newY, currentPosition.Z)
+    -- Apply a BodyVelocity to float the player upwards
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.Velocity = Vector3.new(0, 2, 0) -- Adjusted to float upwards at a slower speed
+    bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0) -- Only affect the Y axis
+    bodyVelocity.Parent = humanoidRootPart
+
+    -- Automatically remove BodyVelocity after a short delay to stop floating
+    game:GetService("Debris"):AddItem(bodyVelocity, 2) -- Float for 2 seconds
 end
 
 -- Store deleted parts to restore them later
@@ -137,8 +118,8 @@ local deletedParts = {}
 local function deletePartsOnBaseplate()
     for _, part in pairs(game.Workspace:GetChildren()) do
         if part:IsA("BasePart") and part ~= secondBaseplate and part.Position.Y <= secondBaseplate.Position.Y + 1 then
-            table.insert(deletedParts, part) -- Save the part in the table
-            part.Parent = nil -- Remove the part from the workspace without destroying it
+            table.insert(deletedParts, part)
+            part.Parent = nil -- Temporarily remove parts
         end
     end
 end
@@ -146,45 +127,42 @@ end
 -- Restore all parts that were deleted from the second baseplate
 local function restorePartsOnBaseplate()
     for _, part in pairs(deletedParts) do
-        part.Parent = game.Workspace -- Restore the part back to the workspace
+        part.Parent = game.Workspace -- Restore parts
     end
-    deletedParts = {} -- Clear the deleted parts table
+    deletedParts = {} -- Clear deleted parts table
 end
 
--- Variable to track baseplate visibility state
+-- Toggle baseplate visibility and handle floating
 local baseplateVisible = true
 
--- Toggle baseplate visibility and handle jumping
 toggleButton.MouseButton1Click:Connect(function()
     baseplateVisible = not baseplateVisible
     if baseplateVisible then
-        -- On first toggle: teleport the player to the baseplate, disable jumping
-        secondBaseplate.Transparency = 1 -- Keep the baseplate invisible
+        -- On first toggle: teleport to the baseplate and disable jumping
+        secondBaseplate.Transparency = 1 -- Invisible baseplate
         secondBaseplate.CanCollide = true
-        teleportToBaseplate()
-        disableJumping()
-        deletePartsOnBaseplate() -- Clear the baseplate of all interfering parts
+        deletePartsOnBaseplate() -- Remove interfering parts
+        clearForces() -- Ensure no external forces are affecting the character
     else
-        -- On second toggle: re-enable jumping, restore deleted parts, and make the player jump automatically
-        enableJumping()
-        restorePartsOnBaseplate() -- Restore the previously deleted parts
-        humanoid:ChangeState(Enum.HumanoidStateType.Jumping) -- Make the player jump
+        -- On second toggle: enable noclip and float the player up
+        restorePartsOnBaseplate() -- Restore deleted parts
+        floatUp() -- Slowly float up
+        noclipUpdate() -- Enable noclip while floating
     end
 end)
 
 -- Continuously ensure the player can noclip through everything except second baseplate
 game:GetService("RunService").Stepped:Connect(function()
     noclipUpdate()
-    clearCharacterForces() -- Continuously clear forces that may affect upward movement
 end)
 
--- Function to handle respawn and reapply changes
+-- Handle respawn and reapply changes
 local function onCharacterAdded(newCharacter)
     character = newCharacter
     humanoidRootPart = character:WaitForChild("HumanoidRootPart")
     humanoid = character:WaitForChild("Humanoid")
 
-    -- Reapply noclip, baseplate behavior, and jump disabling after respawn
+    -- Reapply noclip, baseplate behavior, and jumping behavior after respawn
     noclipUpdate()
     clearForces()
 end
