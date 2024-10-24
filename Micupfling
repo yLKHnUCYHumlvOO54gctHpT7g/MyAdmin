@@ -1,3 +1,26 @@
+--[[
+	WARNING: Heads up! This script has not been verified by ScriptBlox. Use at your own risk!
+]]
+
+-- Function to set camera occlusion mode
+local function ncamera()
+    local ps = game:GetService("Players")
+    local lp = ps.LocalPlayer
+
+    lp.DevCameraOcclusionMode = Enum.DevCameraOcclusionMode.Invisicam
+end
+
+-- Initialize camera settings
+ncamera()
+
+-- Connect to CharacterAdded event to reset camera settings when the character is added
+local ps = game:GetService("Players")
+local lp = ps.LocalPlayer
+
+lp.CharacterAdded:Connect(function()
+    ncamera()
+end)
+
 local hasExecutedBadeplate = false
 local hasExecutedMcfling2 = false
 local hasExecutedMicupfliin = false
