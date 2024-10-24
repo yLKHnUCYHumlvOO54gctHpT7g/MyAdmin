@@ -3,7 +3,8 @@ local whitelistedUsers = {
     "rxsan_75",   -- Add more usernames as needed
     "Ledorwas22",
     "Dubistecklig",
-    "kitler_264"
+    "kitler_264",
+    "Robloxian74630436"
 }
 
 local player = game.Players.LocalPlayer
