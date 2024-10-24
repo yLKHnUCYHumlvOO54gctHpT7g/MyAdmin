@@ -50,7 +50,8 @@ getgenv().whitelistedPlayers = {
     "xMeowLoveCatx",
     "udie_d",
     "Truyqyy",
-    "certifiedleanmaker"
+    "certifiedleanmaker",
+    "goekaycool"
 }
 
 getgenv().premiumUsers = {
@@ -97,7 +98,9 @@ getgenv().premiumUsers = {
     "xMeowLoveCatx",
     "udie_d",
     "Truyqyy",
-    "certifiedleanmaker"
+    "certifiedleanmaker",
+    "goekaycool"
+
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
