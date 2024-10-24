@@ -1,19 +1,41 @@
-local success, err = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Badeplate"))()
-end)
-local success, err = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Mcfling2"))()
-end)
+local hasExecutedBadeplate = false
+local hasExecutedMcfling2 = false
+local hasExecutedMicupfliin = false
 
-if not success then
-    warn("Failed to load script: " .. err)
+if not hasExecutedBadeplate then
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Badeplate"))()
+    end)
+    
+    if not success then
+        warn("Failed to load Badeplate script: " .. err)
+    else
+        hasExecutedBadeplate = true
+    end
 end
-local success, err = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfliin"))()
-end)
 
-if not success then
-    warn("Failed to load script: " .. err)
+if not hasExecutedMcfling2 then
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Mcfling2"))()
+    end)
+    
+    if not success then
+        warn("Failed to load Mcfling2 script: " .. err)
+    else
+        hasExecutedMcfling2 = true
+    end
+end
+
+if not hasExecutedMicupfliin then
+    local success, err = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Micupfliin"))()
+    end)
+    
+    if not success then
+        warn("Failed to load Micupfliin script: " .. err)
+    else
+        hasExecutedMicupfliin = true
+    end
 end
 
 local flingForce = 999999999999999
