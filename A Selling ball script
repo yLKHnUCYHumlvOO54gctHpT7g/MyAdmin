@@ -2,7 +2,7 @@ local whitelistedUsers = {
     "Alikhammas",  -- Your username
     "rxsan_75",   -- Add more usernames as needed
     "Ledorwas22",
-    "Username3"
+    "Dubistecklig"
 }
 
 local player = game.Players.LocalPlayer
