@@ -6,7 +6,8 @@ local whitelistedUsers = {
     "kitler_264",
     "Robloxian74630436",
     "UnxableDev",
-    "tfmfbf"
+    "tfmfbf",
+    "goekaycool"
 }
 
 local player = game.Players.LocalPlayer
