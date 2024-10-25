@@ -1,5 +1,5 @@
 -- Made by AnthonyIsntHere
--- This will teleport you to the void and kill anyone who either sits exactly on your head or uses the bang animation on you
+-- This will teleport you to the void and kill anyone who either sits directly above your head or uses the bang animation on you
 
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
@@ -7,8 +7,8 @@ local Character, Humanoid, RootPart, Head
 local Camera = workspace.CurrentCamera
 local IsVoiding = false
 
--- Function to check if a player is sitting exactly on your head
-local function IsPlayerSittingOnHead()
+-- Function to check if a player is sitting above your head
+local function IsPlayerSittingAboveHead()
     if RootPart and Head then
         for _, otherPlayer in ipairs(Players:GetPlayers()) do
             if otherPlayer ~= Player then
@@ -19,17 +19,19 @@ local function IsPlayerSittingOnHead()
 
                 -- Ensure the other player's humanoid and root part exist
                 if otherHumanoid and otherRootPart and otherHead then
-                    local distance = (Head.Position - otherHead.Position).Magnitude
-
-                    -- Strictly check if the player is sitting exactly on your head
-                    if distance <= 1 and otherHumanoid:GetState() == Enum.HumanoidStateType.Seated then
-                        return otherPlayer  -- Return the player sitting on your head
+                    -- Check if the other player is directly above the head within a short vertical range
+                    local verticalDistance = (Head.Position.Y - otherRootPart.Position.Y)
+                    local horizontalDistance = (Vector2.new(Head.Position.X, Head.Position.Z) - Vector2.new(otherRootPart.Position.X, otherRootPart.Position.Z)).Magnitude
+                    
+                    -- Check if the player is sitting slightly above you, without requiring direct contact
+                    if verticalDistance > 0 and verticalDistance <= 1.5 and horizontalDistance <= 0.5 and otherHumanoid:GetState() == Enum.HumanoidStateType.Seated then
+                        return otherPlayer  -- Return the player sitting above your head
                     end
                 end
             end
         end
     end
-    return nil  -- No player is sitting on your head
+    return nil  -- No player is sitting above your head
 end
 
 -- Function to check if a player is using the bang animation on you
@@ -65,8 +67,8 @@ while true do
     RootPart = Humanoid and Humanoid.RootPart
     Head = Character and Character:FindFirstChild("Head")  -- Get your head part
 
-    -- Check if a player is sitting on your head or using the bang animation on you
-    local sittingPlayer = IsPlayerSittingOnHead()
+    -- Check if a player is sitting above your head or using the bang animation on you
+    local sittingPlayer = IsPlayerSittingAboveHead()
     local bangPlayer = IsUsingBangAnimation()
 
     if (sittingPlayer or bangPlayer) and Humanoid and RootPart and not IsVoiding then
