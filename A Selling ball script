@@ -9,7 +9,8 @@ local whitelistedUsers = {
     "tfmfbf",
     "goekaycool",
     "SAMSEMI",
-    "Hamudi_boss123"
+    "Hamudi_boss123",
+    "c0i5n7e5r2c3b1"
 }
 
 local player = game.Players.LocalPlayer
