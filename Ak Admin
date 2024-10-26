@@ -53,7 +53,8 @@ getgenv().whitelistedPlayers = {
     "certifiedleanmaker",
     "goekaycool",
     "selfrevelation",
-    "SebyIz"
+    "SebyIz",
+    "Edgeboss7575"
 }
 
 getgenv().premiumUsers = {
@@ -103,7 +104,8 @@ getgenv().premiumUsers = {
     "certifiedleanmaker",
     "goekaycool",
     "selfrevelation",
-    "SebyIz"
+    "SebyIz",
+    "Edgeboss7575"
 
 }
 
