@@ -13,7 +13,7 @@ local function teleportAndReturn()
 
     local originalCFrame = humanoidRootPart.CFrame
     local targetPosition = Vector3.new(244.93862915039062, 3.0289804935455322, -92.26840209960938)
-    local floatUpHeight = 20
+    local floatUpHeight = 30
 
     local function disableAnimations()
         for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
