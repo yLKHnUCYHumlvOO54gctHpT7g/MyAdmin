@@ -1,3 +1,19 @@
+-- Script A (loadstring script)
+local success, result = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar"))()
+end)
+
+if not success then
+    warn("Failed to load script: " .. tostring(result))
+else
+    print("Script loaded successfully!")
+end
+
+-- Script B (another script that may rely on the loaded script)
+-- This will execute after the loadstring script
+-- Example content:
+print("This is Script B, running after Script A.")
+
 local adminCmd = {"AK_ADMEN1","328ml","GYATT_DAMN1","IIIlIIIllIlIllIII","AliKhammas1234","dgthgcnfhhbsd","AliKhammas","YournothimbuddyXD"};
 if game.ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents") then
 	oldChat = true;
