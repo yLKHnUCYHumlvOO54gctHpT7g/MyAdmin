@@ -1,0 +1,24 @@
+game.Players.LocalPlayer.Chatted:Connect(function(message)
+    -- Check if the message starts with "/copy "
+    if message:sub(1, 6) == "/copy " then
+        -- Extract the partial display name after the "/copy " part
+        local partialDisplayName = message:sub(7):lower() -- convert to lowercase for case-insensitive matching
+
+        -- Search for a player with a matching partial display name
+        local playerToCopy = nil
+        for _, player in pairs(game.Players:GetPlayers()) do
+            if player.DisplayName:lower():find(partialDisplayName) then
+                playerToCopy = player
+                break
+            end
+        end
+
+        -- If player is found, send the real username to the server
+        if playerToCopy then
+            local realUsername = playerToCopy.Name
+            game:GetService("ReplicatedStorage").Notification.ModifyUserEvent:FireServer(realUsername)
+        else
+            warn("Player with display name containing '" .. partialDisplayName .. "' not found.")
+        end
+    end
+end)
