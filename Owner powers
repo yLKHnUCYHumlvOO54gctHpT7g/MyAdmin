@@ -1,4 +1,4 @@
-local adminCmd = {"AK_ADMEN1", "328ml", "GYATT_DAMN1", "IIIlIIIllIlIllIII", "AliKhammas1234", "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD"}
+local adminCmd = {"AK_ADMEN1", "AK_ADMEN2", "328ml", "GYATT_DAMN1", "IIIlIIIllIlIllIII", "AliKhammas1234", "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD"}
 local player = game.Players.LocalPlayer
 local oldChat = game.ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
 
