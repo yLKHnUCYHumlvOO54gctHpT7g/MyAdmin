@@ -4,82 +4,59 @@ local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = Players.LocalPlayer
 local Workspace = game:GetService("Workspace")
 
--- First script: The teleport function
+-- Teleportation and floating function
 local function teleportAndReturn()
     local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
     local humanoid = character:WaitForChild("Humanoid")
     local camera = Workspace.CurrentCamera
 
-    -- Store the original position and CFrame
     local originalCFrame = humanoidRootPart.CFrame
-
-    -- The target position to teleport to
     local targetPosition = Vector3.new(244.93862915039062, 3.0289804935455322, -92.26840209960938)
-    local floatUpHeight = 50 -- Height to float up
+    local floatUpHeight = 20
 
-    -- Disable player animations
     local function disableAnimations()
         for _, track in pairs(humanoid:GetPlayingAnimationTracks()) do
-            track:Stop() -- Stop all currently playing animations
+            track:Stop()
         end
-        humanoid.AutoRotate = false -- Prevent automatic rotation during float
+        humanoid.AutoRotate = false
     end
 
-    -- Re-enable animations
     local function enableAnimations()
         humanoid.AutoRotate = true
     end
 
-    -- Function to teleport, float up, move back, float down, and fix camera
     disableAnimations()
-
-    -- Capture the initial camera position
     local initialCameraCFrame = camera.CFrame
-
-    -- Step 1: Teleport to the target position directly using CFrame
     humanoidRootPart.CFrame = CFrame.new(targetPosition)
-
-    -- Step 2: Fix the camera to the initial position
     camera.CameraType = Enum.CameraType.Scriptable
     camera.CFrame = initialCameraCFrame
 
-    -- TweenService setup
     local tweenService = game:GetService("TweenService")
 
-    -- Step 3: Tween upwards to avoid obstacles (float up)
     local floatUpInfo = TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-    local goalFloatUp = {}
-    goalFloatUp.CFrame = humanoidRootPart.CFrame + Vector3.new(0, floatUpHeight, 0)
-
+    local goalFloatUp = {CFrame = humanoidRootPart.CFrame + Vector3.new(0, floatUpHeight, 0)}
     local floatUpTween = tweenService:Create(humanoidRootPart, floatUpInfo, goalFloatUp)
     floatUpTween:Play()
     floatUpTween.Completed:Wait()
 
-    -- Step 4: Tween back to the original X, Z position while at the float-up height
     local moveBackInfo = TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-    local goalMoveBack = {}
-    goalMoveBack.CFrame = CFrame.new(originalCFrame.Position.X, targetPosition.Y + floatUpHeight, originalCFrame.Position.Z)
-
+    local goalMoveBack = {CFrame = CFrame.new(originalCFrame.Position.X, targetPosition.Y + floatUpHeight, originalCFrame.Position.Z)}
     local moveBackTween = tweenService:Create(humanoidRootPart, moveBackInfo, goalMoveBack)
     moveBackTween:Play()
     moveBackTween.Completed:Wait()
 
-    -- Step 5: Float back down to the original position
-    local floatDownInfo = TweenInfo.new(1.5, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
-    local goalFloatDown = {}
-    goalFloatDown.CFrame = originalCFrame
-
+    local floatDownInfo = TweenInfo.new(2, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut)
+    local goalFloatDown = {CFrame = originalCFrame}
     local floatDownTween = tweenService:Create(humanoidRootPart, floatDownInfo, goalFloatDown)
     floatDownTween:Play()
     floatDownTween.Completed:Wait()
 
-    -- Re-enable animations and reset camera
     enableAnimations()
-    camera.CameraType = Enum.CameraType.Custom -- Return camera control to the player
+    camera.CameraType = Enum.CameraType.Custom
 end
 
--- Second script: Ball control and GUI
+-- Ball control and GUI
 local function initializeScript()
     local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
@@ -171,7 +148,6 @@ local function initializeScript()
                 end
             end)
         else
-            -- Freeze ball by anchoring all affected parts
             for _, part in ipairs(Network.BaseParts) do
                 part.Anchored = true
             end
@@ -225,7 +201,6 @@ local function initializeScript()
         local frame = Instance.new("Frame")
         local uicorner = Instance.new("UICorner")
 
-        -- Create a small toggle button near the leaderboards
         local toggleGuiButton = Instance.new("TextButton")
 
         screenGui.Name = "BallControlGUI"
@@ -235,39 +210,35 @@ local function initializeScript()
         frame.Parent = screenGui
         frame.Position = UDim2.new(0.5, -100, 0, 90)
         frame.Size = UDim2.new(0, 220, 0, 80)
-        frame.BackgroundTransparency = 1  -- No background for cleaner look
+        frame.BackgroundTransparency = 1
 
         button.Name = "ToggleBallButton"
         button.Size = UDim2.new(0, 200, 0, 50)
         button.Position = UDim2.new(0, 10, 0, 15)
-        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60) -- Softer color for the button
-        button.TextColor3 = Color3.fromRGB(240, 240, 240) -- Keep the text light
-        button.Font = Enum.Font.Gotham -- Clean and normal font
-        button.TextSize = 18 -- Thinner text for readability
+        button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        button.TextColor3 = Color3.fromRGB(240, 240, 240)
+        button.Font = Enum.Font.Gotham
+        button.TextSize = 18
         button.Text = "Bring Ball"
         button.Parent = frame
 
         uicorner.CornerRadius = UDim.new(0, 12)
         uicorner.Parent = button
 
-        -- Connect button to toggle the ball and teleport
         button.MouseButton1Click:Connect(function()
             if not ballActive then
-                -- Bring ball and teleport
-                toggleBall() -- Toggle the ball to "bring"
-                teleportAndReturn() -- Call the teleport function from the first script
+                toggleBall()
+                teleportAndReturn()
                 button.Text = "Freeze Ball"
             else
-                -- Freeze the ball, but no teleport
-                toggleBall() -- Toggle the ball to "freeze"
+                toggleBall()
                 button.Text = "Bring Ball"
             end
         end)
 
-        -- Set up the small toggle button with improved design
         toggleGuiButton.Name = "ToggleGuiButton"
         toggleGuiButton.Size = UDim2.new(0, 50, 0, 50)
-        toggleGuiButton.Position = UDim2.new(1, -60, 0.5, -25)  -- Near the leaderboards
+        toggleGuiButton.Position = UDim2.new(1, -60, 0.5, -25)
         toggleGuiButton.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
         toggleGuiButton.TextColor3 = Color3.fromRGB(240, 240, 240)
         toggleGuiButton.Font = Enum.Font.Gotham
@@ -275,43 +246,33 @@ local function initializeScript()
         toggleGuiButton.Text = "Show"
         toggleGuiButton.Parent = screenGui
 
-        -- Add rounded corners to the small toggle button
         local buttonCorner = Instance.new("UICorner")
         buttonCorner.CornerRadius = UDim.new(0, 12)
         buttonCorner.Parent = toggleGuiButton
 
-        -- Add drag functionality to the small button
         makeButtonDraggable(toggleGuiButton)
         makeButtonDraggable(button)
 
-        -- Function to toggle visibility of the main GUI
         toggleGuiButton.MouseButton1Click:Connect(function()
             frame.Visible = not frame.Visible
-            if frame.Visible then
-                toggleGuiButton.Text = "Hide"
-            else
-                toggleGuiButton.Text = "Show"
-            end
+            toggleGuiButton.Text = frame.Visible and "Hide" or "Show"
         end)
 
-        -- Initially hide the main control panel
         frame.Visible = false
     end
 
     createControlButton()
     toggleBall()
 
-    -- Handle character death
     LocalPlayer.Character:WaitForChild("Humanoid").Died:Connect(function()
         ballActive = false
-        sethiddenproperty(LocalPlayer, "SimulationRadius", 100) -- Reset simulation radius
-        Folder:Destroy() -- Clean up the folder
-        LocalPlayer.PlayerGui:FindFirstChild("BallControlGUI"):Destroy() -- Remove the GUI
+        sethiddenproperty(LocalPlayer, "SimulationRadius", 100)
+        Folder:Destroy()
+        LocalPlayer.PlayerGui:FindFirstChild("BallControlGUI"):Destroy()
     end)
 
-    -- Handle respawn
     LocalPlayer.CharacterAdded:Connect(function()
-        initializeScript() -- Reinitialize the script on respawn
+        initializeScript()
     end)
 end
 
