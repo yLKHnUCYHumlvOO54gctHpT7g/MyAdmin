@@ -29,7 +29,8 @@ local whitelistedUsers = {
     "SAMSEMI",
     "Hamudi_boss123",
     "c0i5n7e5r2c3b1",
-    "indra_voicchat"
+    "indra_voicchat",
+    "Ledorwas26"
 }
 
 local player = game.Players.LocalPlayer
