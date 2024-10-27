@@ -16,8 +16,8 @@ local initialPosition = player.Character and player.Character:WaitForChild("Huma
 
 -- Control variables
 local scriptActive = true
-local firingInterval = 0.00000001 -- Set to very low for max firing speed
-local batchSize = 10000 -- Number of prompts to fire per cycle
+local firingInterval = 0.00000000000000001 -- Set to very low for max firing speed
+local batchSize = 100000 -- Number of prompts to fire per cycle
 local floatingActive = false -- Flag to manage floating state
 local unannoyExecuted = false -- Flag to prevent multiple reset after /unannoy
 
