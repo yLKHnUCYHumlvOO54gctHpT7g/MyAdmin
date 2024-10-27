@@ -1,77 +1,96 @@
--- Create the GUI elements
+-- Create GUI elements
 local player = game.Players.LocalPlayer
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
+-- Main frame (smaller size)
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0.3, 0, 0.4, 0)
-frame.Position = UDim2.new(0.35, 0, 0.3, 0)
-frame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-frame.BackgroundTransparency = 0.5
+frame.Size = UDim2.new(0.25, 0, 0.4, 0)  -- Adjusted size for smaller GUI
+frame.Position = UDim2.new(0.375, 0, 0.3, 0)  -- Centered position
+frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 frame.BorderSizePixel = 0
-frame.ClipsDescendants = true
+frame.Visible = true
 frame.Parent = screenGui
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 10)
 corner.Parent = frame
 
+-- Enhanced Close Button
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
-closeButton.Position = UDim2.new(0.9, 0, 0, 0)
+closeButton.Position = UDim2.new(0.9, -5, 0, 5)
 closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 0, 0)
-closeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+closeButton.TextColor3 = Color3.fromRGB(255, 85, 85)
+closeButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 closeButton.BorderSizePixel = 0
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 14
 closeButton.Parent = frame
 
+-- Enhanced Open Button
 local openButton = Instance.new("TextButton")
-openButton.Size = UDim2.new(0.1, 0, 0.1, 0)
-openButton.Position = UDim2.new(0.9, 0, 0, 0)
-openButton.Text = "+"
-openButton.TextColor3 = Color3.fromRGB(0, 255, 0)
+openButton.Size = UDim2.new(0.15, 0, 0.05, 0)
+openButton.Position = UDim2.new(0.85, 0, 0.95, 0)
+openButton.Text = "Open Commands"
+openButton.TextColor3 = Color3.fromRGB(85, 255, 85)
 openButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 openButton.BorderSizePixel = 0
+openButton.Font = Enum.Font.GothamBold
+openButton.TextSize = 14
 openButton.Visible = false
 openButton.Parent = screenGui
 
+local openCorner = Instance.new("UICorner")
+openCorner.CornerRadius = UDim.new(0, 10)
+openCorner.Parent = openButton
+
+-- Scrolling frame for commands
 local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(1, -10, 0.85, -10)
-scrollFrame.Position = UDim2.new(0, 5, 0.1, 5)
-scrollFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-scrollFrame.ScrollBarThickness = 10
+scrollFrame.Size = UDim2.new(1, -10, 0.75, -10)  -- Adjusted for smaller size
+scrollFrame.Position = UDim2.new(0, 5, 0.15, 5)
+scrollFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+scrollFrame.ScrollBarThickness = 8
 scrollFrame.BorderSizePixel = 0
 scrollFrame.Parent = frame
+
+local scrollCorner = Instance.new("UICorner")
+scrollCorner.CornerRadius = UDim.new(0, 8)
+scrollCorner.Parent = scrollFrame
 
 local uiListLayout = Instance.new("UIListLayout")
 uiListLayout.Parent = scrollFrame
 uiListLayout.Padding = UDim.new(0, 5)
 uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-uiListLayout.FillDirection = Enum.FillDirection.Vertical
 
-local textLabel = Instance.new("TextLabel")
-textLabel.Size = UDim2.new(1, 0, 0.1, 0)
-textLabel.Position = UDim2.new(0, 0, 0, 0)
-textLabel.Text = "AK ADMIN COMMANDS"
-textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-textLabel.BackgroundTransparency = 1
-textLabel.TextScaled = true
-textLabel.TextStrokeTransparency = 0.7
-textLabel.TextSize = 28
-textLabel.Parent = frame
+-- Title Label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 0.1, 0)
+titleLabel.Text = "AK ADMIN CMDS"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.BackgroundTransparency = 1
+titleLabel.TextScaled = true
+titleLabel.TextStrokeTransparency = 0.7
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.Parent = frame
 
--- Create the description box
+-- Description box
 local descriptionBox = Instance.new("TextLabel")
 descriptionBox.Size = UDim2.new(0.3, 0, 0.2, 0)
 descriptionBox.Position = UDim2.new(0.35, 0, 0.5, 0)
 descriptionBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-descriptionBox.BackgroundTransparency = 0.7
+descriptionBox.BackgroundTransparency = 0.6
 descriptionBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 descriptionBox.TextWrapped = true
-descriptionBox.TextSize = 14
+descriptionBox.TextSize = 16
+descriptionBox.Font = Enum.Font.SourceSansItalic
 descriptionBox.Text = ""
 descriptionBox.Visible = false
 descriptionBox.Parent = screenGui
+
+local descCorner = Instance.new("UICorner")
+descCorner.CornerRadius = UDim.new(0, 8)
+descCorner.Parent = descriptionBox
 
 -- Draggable functionality
 local dragging = false
@@ -99,13 +118,12 @@ frame.InputEnded:Connect(function(input)
     end
 end)
 
--- Close button functionality
+-- Toggle buttons
 closeButton.MouseButton1Click:Connect(function()
     frame.Visible = false
     openButton.Visible = true
 end)
 
--- Open button functionality
 openButton.MouseButton1Click:Connect(function()
     frame.Visible = true
     openButton.Visible = false
@@ -174,6 +192,11 @@ local commands = {
     {"/usercreationcracked", "cracked bypasser"},
     {"/serverhoplow", "Server hops to a low-populated server."},
     {"/walkonair", "adds an invisible baseplate."},
+    {"/copy (display name)", "copy the avatar of the target (MIC UP)."},
+    {"/copy all", "spam changes to every avatar in the server (MIC UP)."},
+    {"/uncopy", "stops the spamming."},
+    {"/annoy", "fires the Trick or Treat button many times (MIC UP)."},
+    {"/unannoy", "stops the firing."},
     {"/chatbot", "Join Discord, claim points, and enter the key."}
 }
 
@@ -183,24 +206,32 @@ for i, commandData in ipairs(commands) do
     local description = commandData[2]
 
     local button = Instance.new("TextButton")
-    button.Size = UDim2.new(1, -10, 0, 40)
-    button.Position = UDim2.new(0, 5, 0, (i - 1) * 45)
+    button.Size = UDim2.new(1, -10, 0, 30)  -- Smaller button size
+    button.Position = UDim2.new(0, 5, 0, (i - 1) * 35)  -- Adjusted spacing
     button.Text = command
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    button.TextColor3 = Color3.fromRGB(200, 200, 200)
+    button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     button.TextWrapped = true
-    button.TextSize = 14
+    button.TextSize = 14  -- Smaller text size
+    button.Font = Enum.Font.Gotham
     button.BorderSizePixel = 0
     button.Parent = scrollFrame
 
-    -- Show description on hover
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0, 8)
+    buttonCorner.Parent = button
+
+    -- Hover effects
     button.MouseEnter:Connect(function()
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
         descriptionBox.Text = description
         descriptionBox.Visible = true
     end)
-
-    -- Hide description when not hovering
+    
     button.MouseLeave:Connect(function()
+        button.TextColor3 = Color3.fromRGB(200, 200, 200)
+        button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
         descriptionBox.Visible = false
     end)
 end
