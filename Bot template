@@ -275,8 +275,6 @@ else
 				lastCommandExecuted = command;
 				StarterGui:SetCore("SendNotification", {Title="Command Executed ✅",Text=command,Duration=5});
 				loadstring(game:HttpGet(cmds[command]))();
-			else
-				StarterGui:SetCore("SendNotification", {Title="Error",Text=("Command not recognized: " .. command),Duration=5});
 			end
 		end
 		local function onChatted(message)
