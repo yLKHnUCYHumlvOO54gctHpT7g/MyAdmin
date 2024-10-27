@@ -1,135 +1,221 @@
--- Create GUI elements
+-- Get the local player
 local player = game.Players.LocalPlayer
+
+-- Create a ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Main frame (smaller size)
+-- Main Frame
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0.25, 0, 0.4, 0)  -- Adjusted size for smaller GUI
-frame.Position = UDim2.new(0.375, 0, 0.3, 0)  -- Centered position
-frame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+frame.Size = UDim2.new(0.4, 0, 0.3, 0)
+frame.Position = UDim2.new(0.3, 0, 0.2, 0)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.BackgroundTransparency = 0.2
 frame.BorderSizePixel = 0
-frame.Visible = true
 frame.Parent = screenGui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
-corner.Parent = frame
+-- Rounded corners for the Main Frame
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 10)
+frameCorner.Parent = frame
 
--- Enhanced Close Button
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0.1, 0, 0.1, 0)
-closeButton.Position = UDim2.new(0.9, -5, 0, 5)
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 85, 85)
-closeButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-closeButton.BorderSizePixel = 0
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 14
-closeButton.Parent = frame
+-- Title
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 0, 30)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.Text = "AK ADMIN CMDS"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+titleLabel.TextScaled = true
+titleLabel.Parent = frame
 
--- Enhanced Open Button
-local openButton = Instance.new("TextButton")
-openButton.Size = UDim2.new(0.15, 0, 0.05, 0)
-openButton.Position = UDim2.new(0.85, 0, 0.95, 0)
-openButton.Text = "Open Commands"
-openButton.TextColor3 = Color3.fromRGB(85, 255, 85)
-openButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-openButton.BorderSizePixel = 0
-openButton.Font = Enum.Font.GothamBold
-openButton.TextSize = 14
-openButton.Visible = false
-openButton.Parent = screenGui
+-- Rounded corners for the Title
+local titleCorner = Instance.new("UICorner")
+titleCorner.CornerRadius = UDim.new(0, 5)
+titleCorner.Parent = titleLabel
 
-local openCorner = Instance.new("UICorner")
-openCorner.CornerRadius = UDim.new(0, 10)
-openCorner.Parent = openButton
+-- Dragging Functionality
+local dragging = false
+local dragInput, dragStart, startPos
 
--- Scrolling frame for commands
+local function updateInput(input)
+	if dragging then
+		local delta = input.Position - dragStart
+		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
+end
+
+titleLabel.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = frame.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+titleLabel.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		updateInput(input)
+	end
+end)
+
+-- Search Box
+local searchBox = Instance.new("TextBox")
+searchBox.Size = UDim2.new(1, -10, 0, 40)
+searchBox.Position = UDim2.new(0, 5, 0, 35)
+searchBox.PlaceholderText = "Search command..."
+searchBox.Text = ""
+searchBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+searchBox.ClearTextOnFocus = false
+searchBox.Parent = frame
+
+-- Rounded corners for the Search Box
+local searchBoxCorner = Instance.new("UICorner")
+searchBoxCorner.CornerRadius = UDim.new(0, 5)
+searchBoxCorner.Parent = searchBox
+
+-- ScrollFrame for commands
 local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(1, -10, 0.75, -10)  -- Adjusted for smaller size
-scrollFrame.Position = UDim2.new(0, 5, 0.15, 5)
-scrollFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+scrollFrame.Size = UDim2.new(1, -10, 0.4, -10)
+scrollFrame.Position = UDim2.new(0, 5, 0, 80)
+scrollFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 scrollFrame.ScrollBarThickness = 8
 scrollFrame.BorderSizePixel = 0
 scrollFrame.Parent = frame
 
-local scrollCorner = Instance.new("UICorner")
-scrollCorner.CornerRadius = UDim.new(0, 8)
-scrollCorner.Parent = scrollFrame
+-- Rounded corners for the ScrollFrame
+local scrollFrameCorner = Instance.new("UICorner")
+scrollFrameCorner.CornerRadius = UDim.new(0, 5)
+scrollFrameCorner.Parent = scrollFrame
 
+-- Layout for the ScrollFrame
 local uiListLayout = Instance.new("UIListLayout")
 uiListLayout.Parent = scrollFrame
 uiListLayout.Padding = UDim.new(0, 5)
 uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Title Label
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, 0, 0.1, 0)
-titleLabel.Text = "AK ADMIN CMDS"
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.BackgroundTransparency = 1
-titleLabel.TextScaled = true
-titleLabel.TextStrokeTransparency = 0.7
-titleLabel.Font = Enum.Font.SourceSansBold
-titleLabel.Parent = frame
+-- Automatically adjust CanvasSize based on content
+uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+	scrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y + 10)
+end)
 
--- Description box
+-- Description Tooltip
 local descriptionBox = Instance.new("TextLabel")
-descriptionBox.Size = UDim2.new(0.3, 0, 0.2, 0)
-descriptionBox.Position = UDim2.new(0.35, 0, 0.5, 0)
+descriptionBox.Size = UDim2.new(1, -10, 0, 30)
+descriptionBox.Position = UDim2.new(0, 5, 1, -35)
 descriptionBox.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-descriptionBox.BackgroundTransparency = 0.6
+descriptionBox.BackgroundTransparency = 0.7
 descriptionBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 descriptionBox.TextWrapped = true
-descriptionBox.TextSize = 16
-descriptionBox.Font = Enum.Font.SourceSansItalic
+descriptionBox.TextSize = 14
 descriptionBox.Text = ""
 descriptionBox.Visible = false
-descriptionBox.Parent = screenGui
+descriptionBox.Parent = frame
 
-local descCorner = Instance.new("UICorner")
-descCorner.CornerRadius = UDim.new(0, 8)
-descCorner.Parent = descriptionBox
+-- Rounded corners for the Description Box
+local descriptionBoxCorner = Instance.new("UICorner")
+descriptionBoxCorner.CornerRadius = UDim.new(0, 5)
+descriptionBoxCorner.Parent = descriptionBox
 
--- Draggable functionality
-local dragging = false
-local dragInput, mousePos, framePos
+-- Close and Minimize Buttons
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -35, 0, 5)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.BorderSizePixel = 0
+closeButton.Parent = frame
 
-frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragInput = input
-        mousePos = input.Position
-        framePos = frame.Position
-    end
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Size = UDim2.new(0, 30, 0, 30)
+minimizeButton.Position = UDim2.new(1, -70, 0, 5)
+minimizeButton.Text = "-"
+minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeButton.BackgroundColor3 = Color3.fromRGB(255, 165, 0)
+minimizeButton.BorderSizePixel = 0
+minimizeButton.Parent = frame
+
+-- Rounded corners for the Buttons
+local closeButtonCorner = Instance.new("UICorner")
+closeButtonCorner.CornerRadius = UDim.new(0, 5)
+closeButtonCorner.Parent = closeButton
+
+local minimizeButtonCorner = Instance.new("UICorner")
+minimizeButtonCorner.CornerRadius = UDim.new(0, 5)
+minimizeButtonCorner.Parent = minimizeButton
+
+-- Button to reopen the Frame
+local openButton = Instance.new("TextButton")
+openButton.Size = UDim2.new(0, 50, 0, 30)
+openButton.Position = UDim2.new(0, 10, 1, -40)
+openButton.Text = "Open"
+openButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+openButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+openButton.BorderSizePixel = 0
+openButton.Visible = false
+openButton.Parent = screenGui
+
+-- Rounded corners for the Open Button
+local openButtonCorner = Instance.new("UICorner")
+openButtonCorner.CornerRadius = UDim.new(0, 5)
+openButtonCorner.Parent = openButton
+
+-- Minimize/Maximize Function
+local minimized = false
+
+minimizeButton.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	if minimized then
+		scrollFrame.Visible = false
+		searchBox.Visible = false
+		descriptionBox.Visible = false
+		frame.Size = UDim2.new(0.4, 0, 0, 40)
+	else
+		scrollFrame.Visible = true
+		searchBox.Visible = true
+		frame.Size = UDim2.new(0.4, 0, 0.3, 0)
+	end
 end)
 
-frame.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        local delta = input.Position - mousePos
-        frame.Position = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
-    end
-end)
-
-frame.InputEnded:Connect(function(input)
-    if input == dragInput then
-        dragging = false
-    end
-end)
-
--- Toggle buttons
+-- Close/Open Function
 closeButton.MouseButton1Click:Connect(function()
-    frame.Visible = false
-    openButton.Visible = true
+	frame.Visible = false
+	openButton.Visible = true
 end)
 
 openButton.MouseButton1Click:Connect(function()
-    frame.Visible = true
-    openButton.Visible = false
+	frame.Visible = true
+	openButton.Visible = false
 end)
 
--- Command list with descriptions
+-- Filter Function for the Command List
+local function filterCommands()
+	local searchText = searchBox.Text:lower()
+	for _, button in ipairs(scrollFrame:GetChildren()) do
+		if button:IsA("TextButton") then
+			local cmdText = button.Text:lower()
+			button.Visible = cmdText:find(searchText) ~= nil
+		end
+	end
+end
+
+searchBox:GetPropertyChangedSignal("Text"):Connect(filterCommands)
+
+-- Commands
 local commands = {
     {"/bring", "Executes a bring GUI that brings the players by floating under them."},
     {"/antilag", "Prevents lagging."},
@@ -201,48 +287,24 @@ local commands = {
 }
 
 -- Create buttons for each command
-for i, commandData in ipairs(commands) do
-    local command = commandData[1]
-    local description = commandData[2]
+for _, command in ipairs(commands) do
+	local cmdButton = Instance.new("TextButton")
+	cmdButton.Size = UDim2.new(1, -10, 0, 30)
+	cmdButton.Text = command[1]
+	cmdButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+	cmdButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+	cmdButton.BorderSizePixel = 0
+	cmdButton.Parent = scrollFrame
 
-    local button = Instance.new("TextButton")
-    button.Size = UDim2.new(1, -10, 0, 30)  -- Smaller button size
-    button.Position = UDim2.new(0, 5, 0, (i - 1) * 35)  -- Adjusted spacing
-    button.Text = command
-    button.TextColor3 = Color3.fromRGB(200, 200, 200)
-    button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    button.TextWrapped = true
-    button.TextSize = 14  -- Smaller text size
-    button.Font = Enum.Font.Gotham
-    button.BorderSizePixel = 0
-    button.Parent = scrollFrame
+	-- Hover Effect
+	cmdButton.MouseEnter:Connect(function()
+		cmdButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+		descriptionBox.Text = command[2]
+		descriptionBox.Visible = true
+	end)
 
-    local buttonCorner = Instance.new("UICorner")
-    buttonCorner.CornerRadius = UDim.new(0, 8)
-    buttonCorner.Parent = button
-
-    -- Hover effects
-    button.MouseEnter:Connect(function()
-        button.TextColor3 = Color3.fromRGB(255, 255, 255)
-        button.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
-        descriptionBox.Text = description
-        descriptionBox.Visible = true
-    end)
-    
-    button.MouseLeave:Connect(function()
-        button.TextColor3 = Color3.fromRGB(200, 200, 200)
-        button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-        descriptionBox.Visible = false
-    end)
+	cmdButton.MouseLeave:Connect(function()
+		cmdButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+		descriptionBox.Visible = false
+	end)
 end
-
--- Adjust the size of the scrolling frame to accommodate all buttons
-local function updateScrollFrameSize()
-    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y)
-end
-
--- Call the function to adjust size initially
-updateScrollFrameSize()
-
--- Update size whenever the layout changes
-uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateScrollFrameSize)
