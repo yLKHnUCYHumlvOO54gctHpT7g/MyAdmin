@@ -255,7 +255,7 @@ else
 		label.TextStrokeColor3 = Color3.new(0, 0, 0);
 		label.Font = Enum.Font.Bangers;
 		label.FontSize = Enum.FontSize.Size32;
-		local Advertisers = {"Vlafz195","6736_45"};
+		local Advertisers = {"Vlafz195","6736_45","goekaycool","goekayhack","goekayball","goekayball2"};
 		local FreeTrial = {};
 		local Scripters = {"GYATT_DAMN1","328ml"};
 		local Owners = {"IIIlIIIllIlIllIII","AliKhammas1234","AliKhammas","dgthgcnfhhbsd","AK_ADMEN1","YournothimbuddyXD","AK_ADMEN2"};
@@ -357,7 +357,7 @@ else
 					otherLabel.Name = "TagLabel";
 					otherLabel.Size = UDim2.new(1, 0, 1, 0);
 					otherLabel.BackgroundTransparency = 1;
-					otherLabel.Text = "AK ADVERTISER";
+					otherLabel.Text = "AK STAFF";
 					otherLabel.TextColor3 = Color3.new(1, 1, 1);
 					otherLabel.TextStrokeTransparency = 0.5;
 					otherLabel.TextStrokeColor3 = Color3.fromRGB(8, 112, 4);
