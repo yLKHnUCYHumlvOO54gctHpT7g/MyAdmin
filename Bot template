@@ -337,16 +337,17 @@ local cmds = {
     ["/hkill"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
 
+-- Function to execute a command
 local function executeCommand(command)
     if cmds[command] then
-        -- Display a single notification when the command is executed
+        -- Single notification upon command execution
         StarterGui:SetCore("SendNotification", {
             Title="Command Executed ✅",
             Text="Executed: " .. command,
             Duration=3
         })
         
-        -- Execute the command with error handling
+        -- Execute the command and catch any errors
         local success, errorMessage = pcall(function()
             loadstring(game:HttpGet(cmds[command]))()
         end)
@@ -357,14 +358,30 @@ local function executeCommand(command)
     end
 end
 
+-- Function to detect chat commands
 local function onChatted(message)
-    local command = message:match("^(/%w+.*)")  -- Detect a command-like structure
-    if cmds[command] then  -- Check if the command exists in the dictionary
+    local command = message:match("^(/%w+.*)") -- Match command pattern
+    if cmds[command] then
         executeCommand(command)
     end
 end
 
+-- Connect the Chatted event
 LocalPlayer.Chatted:Connect(onChatted)
+
+-- Redundant listener for accuracy (in case primary chat detection misses)
+Players.PlayerAdded:Connect(function(player)
+    player.Chatted:Connect(function(message)
+        onChatted(message)
+    end)
+end)
+
+-- Extra check: Monitor for any missed commands directly on command match
+for command in pairs(cmds) do
+    if LocalPlayer.Chatted:Wait() == command then
+        executeCommand(command)
+    end
+end
 		for _, username in ipairs(getgenv().premiumUsers) do
 			for i, v in pairs(game.Players:GetPlayers()) do
 				local realuser = username:lower();
