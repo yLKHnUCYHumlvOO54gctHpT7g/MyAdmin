@@ -296,6 +296,7 @@ local cmds = {
     ["/antilag"]="https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
     ["/breakghost"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Breakghost",
     ["/antibang"]="https://pastebin.com/raw/5iSqpqf6",
+    ["/stealbooth"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Stealbooth",
     ["/chaoshub"]="https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
     ["/warn all"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Warnall",
     ["/aimbot"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot",
