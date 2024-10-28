@@ -1,5 +1,8 @@
 -- Script A (loadstring script)
 local success, result = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton"))()
+end)
+local success, result = pcall(function()
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar"))()
 end)
 
@@ -291,6 +294,7 @@ local cmds = {
     ["/annoy"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Annoy",
     ["/spamboard"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/spamboard",
     ["/antilag"]="https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
+    ["/breakghost"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Breakghost",
     ["/antibang"]="https://pastebin.com/raw/5iSqpqf6",
     ["/chaoshub"]="https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
     ["/warn all"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Warnall",
