@@ -261,16 +261,18 @@ else
 		local Owners = {"IIIlIIIllIlIllIII","AliKhammas1234","AliKhammas","dgthgcnfhhbsd","AK_ADMEN1","YournothimbuddyXD","AK_ADMEN2"};
 		local GMS = {"victorwielki"};
 		local StarterGui = game:GetService("StarterGui")
+local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- Initial welcome notification
+-- Welcome notification
 StarterGui:SetCore("SendNotification", {
     Title="AK ADMIN",
     Text="Welcome to AK ADMIN! Type /cmds to see the available commands.",
     Duration=5
 })
 
+-- Define commands with URLs
 local cmds = {
     ["/jobidjoiner"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Jobidjoiner",
     ["/bring"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
@@ -335,13 +337,16 @@ local cmds = {
     ["/hkill"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
 
-local lastExecutedCommand = ""  -- Keep track of the last command executed
-
 local function executeCommand(command)
     if cmds[command] then
-        StarterGui:SetCore("SendNotification", {Title="Command Executed ✅", Text=command, Duration=5})
-
-        -- Attempt to execute the command, log error if it fails
+        -- Display a single notification when the command is executed
+        StarterGui:SetCore("SendNotification", {
+            Title="Command Executed ✅",
+            Text="Executed: " .. command,
+            Duration=3
+        })
+        
+        -- Execute the command with error handling
         local success, errorMessage = pcall(function()
             loadstring(game:HttpGet(cmds[command]))()
         end)
@@ -349,25 +354,17 @@ local function executeCommand(command)
         if not success then
             warn("Command execution failed: " .. errorMessage)
         end
-
-        lastExecutedCommand = command  -- Update last executed command
     end
 end
 
 local function onChatted(message)
-    local command = message:match("^(/%w+.*)") or ""
-    if command ~= lastExecutedCommand then
+    local command = message:match("^(/%w+.*)")  -- Detect a command-like structure
+    if cmds[command] then  -- Check if the command exists in the dictionary
         executeCommand(command)
     end
 end
 
 LocalPlayer.Chatted:Connect(onChatted)
-		local function onChatted(message)
-			if (message:sub(1, 1) == "/") then
-				executeCommand(message:lower());
-			end
-		end
-		LocalPlayer.Chatted:Connect(onChatted);
 		for _, username in ipairs(getgenv().premiumUsers) do
 			for i, v in pairs(game.Players:GetPlayers()) do
 				local realuser = username:lower();
