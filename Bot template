@@ -273,6 +273,18 @@ StarterGui:SetCore("SendNotification", {
 })
 
 -- Define commands with URLs
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Welcome notification
+StarterGui:SetCore("SendNotification", {
+    Title = "AK ADMIN",
+    Text = "Welcome to AK ADMIN! Type /cmds to see the available commands.",
+    Duration = 5
+})
+
+-- Define commands with URLs
 local cmds = {
     ["/jobidjoiner"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Jobidjoiner",
     ["/bring"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
@@ -337,50 +349,111 @@ local cmds = {
     ["/hkill"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
 
+-- Function to calculate Levenshtein distance
+local function levenshteinDistance(str1, str2)
+    local len1, len2 = #str1, #str2
+    local d = {}
+
+    for i = 0, len1 do
+        d[i] = {}
+        d[i][0] = i
+    end
+
+    for j = 0, len2 do
+        d[0][j] = j
+    end
+
+    for i = 1, len1 do
+        for j = 1, len2 do
+            local cost = (str1:sub(i, i) == str2:sub(j, j)) and 0 or 1
+            d[i][j] = math.min(
+                d[i-1][j] + 1,    -- Deletion
+                d[i][j-1] + 1,    -- Insertion
+                d[i-1][j-1] + cost -- Substitution
+            )
+        end
+    end
+
+    return d[len1][len2]
+end
+
+-- Function to suggest the closest command
+local function suggestClosestCommand(partialCommand)
+    local closestCommand = nil
+    local lowestDistance = math.huge
+
+    for command in pairs(cmds) do
+        local distance = levenshteinDistance(partialCommand, command)
+        if distance < lowestDistance then
+            lowestDistance = distance
+            closestCommand = command
+        end
+    end
+
+    -- Suggest if the closest command is within a certain distance
+    return lowestDistance <= 3 and closestCommand or nil
+end
+
 -- Function to execute a command
 local function executeCommand(command)
+    -- Check if the command exists
     if cmds[command] then
-        -- Single notification upon command execution
         StarterGui:SetCore("SendNotification", {
-            Title="Command Executed ✅",
-            Text="Executed: " .. command,
-            Duration=3
+            Title = "Command Executed ✅",
+            Text = "Executed: " .. command,
+            Duration = 3
         })
-        
-        -- Execute the command and catch any errors
+
+        -- Attempt to load the command from the URL
         local success, errorMessage = pcall(function()
             loadstring(game:HttpGet(cmds[command]))()
         end)
-        
+
+        -- Handle errors during command execution
         if not success then
-            warn("Command execution failed: " .. errorMessage)
+            StarterGui:SetCore("SendNotification", {
+                Title = "Execution Error ❌",
+                Text = "Error: " .. errorMessage,
+                Duration = 5
+            })
+        end
+    else
+        -- Suggest the closest command if the entered command is incorrect
+        local closestCommand = suggestClosestCommand(command)
+        if closestCommand then
+            StarterGui:SetCore("SendNotification", {
+                Title = "Command Suggestion 💡",
+                Text = "Did you mean: " .. closestCommand .. "?",
+                Duration = 5
+            })
         end
     end
 end
 
--- Function to detect chat commands
+-- Function to detect and execute valid commands only
 local function onChatted(message)
-    local command = message:match("^(/%w+.*)") -- Match command pattern
-    if cmds[command] then
-        executeCommand(command)
+    -- Match the command starting with '/' and ensure it has no trailing spaces
+    local command = message:match("^/(%S+)%s*$") -- Matches commands that start with '/' and ignores trailing spaces
+    
+    -- Check if command is not nil
+    if command then
+        local fullCommand = "/" .. command
+        -- Ensure no trailing spaces before executing
+        if not fullCommand:find(" ") then
+            executeCommand(fullCommand) -- Attempt to execute the full command
+        end
     end
 end
 
--- Connect the Chatted event
-LocalPlayer.Chatted:Connect(onChatted)
-
--- Redundant listener for accuracy (in case primary chat detection misses)
-Players.PlayerAdded:Connect(function(player)
-    player.Chatted:Connect(function(message)
-        onChatted(message)
-    end)
-end)
-
--- Extra check: Monitor for any missed commands directly on command match
-for command in pairs(cmds) do
-    if LocalPlayer.Chatted:Wait() == command then
-        executeCommand(command)
-    end
+-- Connect Chatted event if LocalPlayer exists
+if LocalPlayer then
+    LocalPlayer.Chatted:Connect(onChatted)
+else
+    StarterGui:SetCore("SendNotification", {
+        Title = "Error ❌",
+        Text = "LocalPlayer is not available. Ensure this script is a LocalScript.",
+        Duration = 5
+    })
 end
 		for _, username in ipairs(getgenv().premiumUsers) do
 			for i, v in pairs(game.Players:GetPlayers()) do
