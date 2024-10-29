@@ -66,7 +66,7 @@ ImageLabel.BorderSizePixel = 0
 ImageLabel.Position = UDim2.new(0.0371747203, 0, 0.195121944, 0)
 ImageLabel.Size = UDim2.new(0, 36, 0, 25)
 ImageLabel.Image = "http://www.roblox.com/asset/?id=15145938849"
-
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
 ImageLabel.MouseButton1Click:Connect(function()
 	AkaScreenGui:Destroy()
 end)
@@ -74,9 +74,9 @@ end)
 TextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local command = TextBox.Text:lower() -- Get and lower case the command text
-        if cmds[command] then
+        if _G.cmds[command] then
             -- Load and run the command's script
-            loadstring(game:HttpGet(cmds[command]))()
+            loadstring(game:HttpGet(_G.cmds[command]))()
             print("Command " .. command .. " has been run.")
         else
             print("Invalid command: " .. command)
