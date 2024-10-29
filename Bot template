@@ -264,21 +264,10 @@ else
 		local Owners = {"IIIlIIIllIlIllIII","AliKhammas1234","AliKhammas","dgthgcnfhhbsd","AK_ADMEN1","YournothimbuddyXD","AK_ADMEN2"};
 		local GMS = {"victorwielki"};
 		local StarterGui = game:GetService("StarterGui")
-local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- Welcome notification
-StarterGui:SetCore("SendNotification", {
-    Title="AK ADMIN",
-    Text="Welcome to AK ADMIN! Type /cmds to see the available commands.",
-    Duration=5
-})
 
--- Define commands with URLs
-local StarterGui = game:GetService("StarterGui")
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
 
 -- Welcome notification
 StarterGui:SetCore("SendNotification", {
@@ -288,66 +277,28 @@ StarterGui:SetCore("SendNotification", {
 })
 
 -- Define commands with URLs
-local response = game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/A%20
--- Function to calculate Levenshtein distance
-local function levenshteinDistance(str1, str2)
-    local len1, len2 = #str1, #str2
-    local d = {}
+-- Create a GUI for the command bar
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
 
-    for i = 0, len1 do
-        d[i] = {}
-        d[i][0] = i
-    end
-
-    for j = 0, len2 do
-        d[0][j] = j
-    end
-
-    for i = 1, len1 do
-        for j = 1, len2 do
-            local cost = (str1:sub(i, i) == str2:sub(j, j)) and 0 or 1
-            d[i][j] = math.min(
-                d[i-1][j] + 1,    -- Deletion
-                d[i][j-1] + 1,    -- Insertion
-                d[i-1][j-1] + cost -- Substitution
-            )
-        end
-    end
-
-    return d[len1][len2]
+game.Players.LocalPlayer.Chatted:Connect(function(msg)
+for i,v in pairs(_G.cmds) do
+if msg == i then
+loadstring(game:HttpGet(v))()
+print("command "..i.." has been run")
 end
-
--- Function to suggest the closest command
-local function suggestClosestCommand(partialCommand)
-    local closestCommand = nil
-    local lowestDistance = math.huge
-
-    for command in pairs(cmds) do
-        local distance = levenshteinDistance(partialCommand, command)
-        if distance < lowestDistance then
-            lowestDistance = distance
-            closestCommand = command
-        end
-    end
-
-    -- Suggest if the closest command is within a certain distance
-    return lowestDistance <= 3 and closestCommand or nil
 end
+end)
+
 
 -- Function to execute a command
 local function executeCommand(command)
     -- Check if the command exists
-    if cmds[command] then
+    if _G.cmds[command] then
         StarterGui:SetCore("SendNotification", {
             Title = "Command Executed ✅",
             Text = "Executed: " .. command,
             Duration = 3
         })
-
-        -- Attempt to load the command from the URL
-        local success, errorMessage = pcall(function()
-            loadstring(game:HttpGet(cmds[command]))()
-        end)
 
         -- Handle errors during command execution
         if not success then
