@@ -288,7 +288,7 @@ StarterGui:SetCore("SendNotification", {
 })
 
 -- Define commands with URLs
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/A%20Update%20cmds"))()
+local response = game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/A%20
 -- Function to calculate Levenshtein distance
 local function levenshteinDistance(str1, str2)
     local len1, len2 = #str1, #str2
