@@ -243,6 +243,7 @@ local commands = {
     {"/fps", "Boosts FPS."},
     {"/rejoin", "Rejoin the game."},
     {"/warn all", "Warns all players in Mic Up."},
+    {"/clearchat", "Clears the chat."},
     {"/cmdbar", "A command bar for executing commands without using chat."},
     {"/jobidjoiner", "Join a player by entering game ID and job ID."},
     {"/walkonvoid", "Prevents you from dying by falling into the void."},
