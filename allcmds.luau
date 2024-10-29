@@ -1,4 +1,5 @@
 _G.cmds = {
+    ["/clearchat"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/clearcmd.luau",
     ["/jobidjoiner"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Jobidjoiner",
     ["/bring"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Bring",
     ["/annoy"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Annoy",
