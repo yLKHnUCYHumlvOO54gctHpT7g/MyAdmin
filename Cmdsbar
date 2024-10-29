@@ -1,0 +1,86 @@
+-- Instances
+
+local AkaScreenGui = Instance.new("ScreenGui")
+local BarFrame = Instance.new("Frame")
+local TextBox = Instance.new("TextBox")
+local UICorner = Instance.new("UICorner")
+local UIScale = Instance.new("UIScale")
+local back = Instance.new("ImageLabel")
+local ImageLabel = Instance.new("ImageButton")
+local InvisibleButton = Instance.new("TextButton") -- Invisible button for clicking
+
+-- Properties
+
+AkaScreenGui.Name = "AkaScreenGui"
+AkaScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+AkaScreenGui.ResetOnSpawn = false
+
+BarFrame.Name = "BarFrame"
+BarFrame.Parent = AkaScreenGui
+BarFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+BarFrame.BackgroundColor3 = Color3.new(0.117647, 0.117647, 0.117647)
+BarFrame.BorderColor3 = Color3.new(0, 0, 0)
+BarFrame.BorderSizePixel = 0
+BarFrame.Position = UDim2.new(0.5, 0, 0.846319556, 0)
+BarFrame.Size = UDim2.new(0, 269, 0, 41)
+
+TextBox.Parent = BarFrame
+TextBox.BackgroundColor3 = Color3.new(1, 1, 1)
+TextBox.BackgroundTransparency = 1
+TextBox.Position = UDim2.new(0.224340498, 0, 0, 0)
+TextBox.Size = UDim2.new(0.75549835, 0, 0.0256090853, 40)
+TextBox.ZIndex = 2
+TextBox.Font = Enum.Font.Gotham
+TextBox.PlaceholderColor3 = Color3.new(0.45098, 0.45098, 0.45098)
+TextBox.PlaceholderText = "Command Bar"
+TextBox.Text = ""
+TextBox.TextColor3 = Color3.new(0.686275, 0.686275, 0.686275)
+TextBox.TextSize = 14
+TextBox.TextStrokeColor3 = Color3.new(0.686275, 0.686275, 0.686275)
+TextBox.TextXAlignment = Enum.TextXAlignment.Left
+
+UICorner.Parent = BarFrame
+UICorner.CornerRadius = UDim.new(0, 4)
+
+UIScale.Parent = BarFrame
+
+back.Name = "back"
+back.Parent = BarFrame
+back.Active = true
+back.AnchorPoint = Vector2.new(0.5, 0.5)
+back.BackgroundColor3 = Color3.new(1, 1, 1)
+back.BackgroundTransparency = 1
+back.Position = UDim2.new(0.525431216, 0, 0.704668343, 0)
+back.Size = UDim2.new(1.12866259, 48, 1.68359303, 48)
+back.ZIndex = -2
+back.Image = "rbxassetid://6049668989"
+back.ImageColor3 = Color3.new(0, 0, 0)
+back.ScaleType = Enum.ScaleType.Slice
+back.SliceCenter = Rect.new(128, 128, 128, 128)
+
+ImageLabel.Parent = BarFrame
+ImageLabel.BackgroundColor3 = Color3.new(1, 1, 1)
+ImageLabel.BackgroundTransparency = 1
+ImageLabel.BorderColor3 = Color3.new(0, 0, 0)
+ImageLabel.BorderSizePixel = 0
+ImageLabel.Position = UDim2.new(0.0371747203, 0, 0.195121944, 0)
+ImageLabel.Size = UDim2.new(0, 36, 0, 25)
+ImageLabel.Image = "http://www.roblox.com/asset/?id=15145938849"
+
+ImageLabel.MouseButton1Click:Connect(function()
+	AkaScreenGui:Destroy()
+end)
+-- Handle command input from TextBox
+TextBox.FocusLost:Connect(function(enterPressed)
+    if enterPressed then
+        local command = TextBox.Text:lower() -- Get and lower case the command text
+        if cmds[command] then
+            -- Load and run the command's script
+            loadstring(game:HttpGet(cmds[command]))()
+            print("Command " .. command .. " has been run.")
+        else
+            print("Invalid command: " .. command)
+        end
+        TextBox.Text = "" -- Clear the input box after command execution
+    end
+end)
