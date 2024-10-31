@@ -1,4 +1,5 @@
 G.cmds = {
-    ["[test]"] = "asdf",
-    ["test"] = "tewst"
+    ["[[test]]"] = "asdf,",
+    ["[test]"] = "tewst",
+    ["asdfasdf"] = "SDFSAdf",
 }
