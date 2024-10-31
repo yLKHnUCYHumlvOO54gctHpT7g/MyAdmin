@@ -1,4 +1,4 @@
 G.cmds = {
     ,
-    ["cmd"] = "cmd"
+    ["asdfas"] = "dsf"
 }
