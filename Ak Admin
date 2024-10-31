@@ -57,8 +57,7 @@ getgenv().whitelistedPlayers = {
     "goekayhack",
     "goekayball",
     "goekayball2",
-    "Sefda6213",
-    "nigga"
+    "Sefda6213"
 }
 
 getgenv().premiumUsers = {
@@ -108,8 +107,7 @@ getgenv().premiumUsers = {
     "certifiedleanmaker",
     "selfrevelation",
     "SebyIz",
-    "Sefda6213",
-    "nigga"
+    "Sefda6213"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Ak%20Admin")))()
