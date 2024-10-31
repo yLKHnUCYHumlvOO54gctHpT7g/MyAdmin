@@ -1,3 +1,4 @@
+
 local isCopying = false
 
 game.Players.LocalPlayer.Chatted:Connect(function(message)
@@ -8,8 +9,8 @@ game.Players.LocalPlayer.Chatted:Connect(function(message)
 
         for i,v in pairs(game.Players:GetChildren()) do
             if v.Name:sub(1,#command):lower() == command:lower() or v.DisplayName:sub(1,#command):lower() == command:lower() then
-                game:GetService("ReplicatedStorage").Notification.ModifyUserEvent:FireServer(v.Name)
-                game:GetService("ReplicatedStorage").Notification.ModifyUserEvent:FireServer(v.DisplayName)
+                game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(v.Name)
+                game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(v.DisplayName)
             end
         end
             
@@ -32,7 +33,7 @@ game.Players.LocalPlayer.Chatted:Connect(function(message)
 
                     -- Send each username to the server
                     for _, realUsername in ipairs(allUsernames) do
-                        game:GetService("ReplicatedStorage").Notification.ModifyUserEvent:FireServer(realUsername)
+                        game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(realUsername)
                     end
 
                     wait(0.1) -- Reduced wait time to stop instantly on /uncopy
