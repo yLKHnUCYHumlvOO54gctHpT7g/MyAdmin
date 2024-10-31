@@ -17,7 +17,7 @@ local ToggleButton = Instance.new("TextButton") -- Toggle button for GUI visibil
 
 -- Properties:
 
-Gui.Name = "TargetBallFlingGui"
+Gui.Name = "Unanchored fling"
 Gui.Parent = gethui()
 Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
@@ -56,7 +56,7 @@ Label.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Label.BorderSizePixel = 0
 Label.Size = UDim2.new(1, 0, 0.15, 0)
 Label.FontFace = Font.new("rbxasset://fonts/families/Nunito.json", Enum.FontWeight.Bold, Enum.FontStyle.Normal)
-Label.Text = "Target Ball Fling"
+Label.Text = "Unanchor Fling"
 Label.TextColor3 = Color3.fromRGB(255, 255, 255)
 Label.TextScaled = true
 Label.TextSize = 18
@@ -73,7 +73,7 @@ Button.BorderSizePixel = 0
 Button.Position = UDim2.new(0.15, 0, 0.45, 0)
 Button.Size = UDim2.new(0.7, 0, 0.2, 0)
 Button.Font = Enum.Font.Nunito
-Button.Text = "Ball Fling | Off"
+Button.Text = "Unanchor Fling | Off"
 Button.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button.TextScaled = true
 Button.TextSize = 18
@@ -88,8 +88,8 @@ ViewButton.Parent = Main
 ViewButton.BackgroundColor3 = Color3.fromRGB(65, 65, 65)
 ViewButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
 ViewButton.BorderSizePixel = 0
-ViewButton.Position = UDim2.new(0.15, 0, 0.7, 0) -- Positioned below the Ball Fling button
-ViewButton.Size = UDim2.new(0.7, 0, 0.2, 0) -- Same size as Ball Fling button
+ViewButton.Position = UDim2.new(0.15, 0, 0.7, 0) -- Positioned below the Unanchor fling button
+ViewButton.Size = UDim2.new(0.7, 0, 0.2, 0) -- Same size as Unanchor fling button
 ViewButton.Font = Enum.Font.Nunito
 ViewButton.Text = "View Target | Off"
 ViewButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -208,7 +208,7 @@ local DescendantAddedConnection
 local function toggleBlackHole()
 	blackHoleActive = not blackHoleActive
 	if blackHoleActive then
-		Button.Text = "Ball Fling | On"
+		Button.Text = "Unanchor fling | On"
 		for _, v in ipairs(Workspace:GetDescendants()) do
 			ForcePart(v)
 		end
@@ -227,7 +227,7 @@ local function toggleBlackHole()
 			end
 		end)
 	else
-		Button.Text = "Ball Fling | Off"
+		Button.Text = "Unanchor fling | Off"
 		if DescendantAddedConnection then
 			DescendantAddedConnection:Disconnect()
 		end
