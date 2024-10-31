@@ -1,4 +1,4 @@
 G.cmds = {
 ,
-    ["sdt"] = "aasgd"
+    ["bismilah"] = "test"
 }
