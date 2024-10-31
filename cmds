@@ -210,7 +210,7 @@ local commands = {
     {"/protonadmin", "Just another Admin script."},
     {"/triviabooth", "(Patched)"},
     {"/walkonwalls", "Rewrites gravity and lets you walk on any surface."},
-    {"/MCfling", "Touch the unanchored ball at the corner of the map. Touch players and fling!"},
+    {"/unanchorfling", "Go near unanchored parts and fling the target with it."},
     {"/chatquiz", "Allows you to chat quizzes with other players."},
     {"/invis", "Invisibility toggle."},
     {"/f3x sun", "The same game as /f3x."},
@@ -272,6 +272,7 @@ local commands = {
     {"/rainbowmic", "Gets the rainbow mic from the vending machine."},
     {"/rainbowdonut", "Gets the rainbow donut from the vending machine."},
     {"/demonmic", "Gets the demon mic from the vending machine."},
+    {"/goto", "Teleport to player of choice."},
 }
 
 -- Update commands in the UI
