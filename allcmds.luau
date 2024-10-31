@@ -1,4 +1,4 @@
 G.cmds = {
     ,
-    ["sdg"] = "sdg"
+    ["as"] = "as"
 }
