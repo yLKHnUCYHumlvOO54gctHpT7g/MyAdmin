@@ -59,7 +59,8 @@ getgenv().whitelistedPlayers = {
     "goekayball2",
     "Sefda6213",
     "pullqxlegion",
-    "alt1lr"
+    "alt1lr",
+    "asd"
 }
 
 getgenv().premiumUsers = {
@@ -111,7 +112,8 @@ getgenv().premiumUsers = {
     "SebyIz",
     "Sefda6213",
     "pullqxlegion",
-    "alt1lr"
+    "alt1lr",
+    "asd"
 }
 
-loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Ak%20Admin")))()
+loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
