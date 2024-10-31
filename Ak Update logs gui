@@ -6,6 +6,7 @@ local commands = {
     "+ Added cmd: \"/goto\"",
     "= Updated cmd: \"/copy\"",
     "- Patched cmd: \"/spamboard\"",
+    "- Patched cmd: \"/mcfling\"",
 }
 
 local gajIDFANIAS8762 = Instance.new("ScreenGui")
