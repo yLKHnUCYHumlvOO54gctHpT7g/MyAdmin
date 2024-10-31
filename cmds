@@ -268,7 +268,10 @@ local commands = {
     {"/uncopy", "stops the spamming."},
     {"/annoy", "fires the Trick or Treat button many times (MIC UP)."},
     {"/unannoy", "stops the firing."},
-    {"/chatbot", "Join Discord, claim points, and enter the key."}
+    {"/chatbot", "Join Discord, claim points, and enter the key."},
+    {"/rainbowmic", "Gets the rainbow mic from the vending machine."},
+    {"/rainbowdonut", "Gets the rainbow donut from the vending machine."},
+    {"/demonmic", "Gets the demon mic from the vending machine."},
 }
 
 -- Update commands in the UI
