@@ -2,7 +2,8 @@
 local commands = {
     "+ Added cmd: \"/rainbowmic\"",
     "+ Added cmd: \"/rainbowdonut\"",
-    "+ Added cmd: \"/demonmic\""
+    "+ Added cmd: \"/demonmic\"",
+    "+ Added cmd: \"/goto\"",
 }
 
 local gajIDFANIAS8762 = Instance.new("ScreenGui")
