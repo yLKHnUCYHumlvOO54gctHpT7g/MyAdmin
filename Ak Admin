@@ -57,7 +57,10 @@ getgenv().whitelistedPlayers = {
     "goekayhack",
     "goekayball",
     "goekayball2",
-    "Sefda6213"
+    "Sefda6213",
+    "…",
+    "sdfgagf",
+    "lolipop"
 }
 
 getgenv().premiumUsers = {
@@ -107,7 +110,10 @@ getgenv().premiumUsers = {
     "certifiedleanmaker",
     "selfrevelation",
     "SebyIz",
-    "Sefda6213"
+    "Sefda6213",
+    "…",
+    "sdfgagf",
+    "lolipop"
 }
 
-loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
+loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Ak%20Admin")))()
