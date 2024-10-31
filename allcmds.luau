@@ -62,5 +62,8 @@ _G.cmds = {
     ["/walkonair"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Walkonair",
     ["/usercreationcracked"]="https://cracklua.github.io/cracks/UserCreation",
     ["/freecam"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Freecam",
+    ["/demonmic"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/DemonMic",
+    ["/rainbowmic"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Rainbowmic",
+    ["/rainbowdonut"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Rainbowdonut",
     ["/hkill"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
