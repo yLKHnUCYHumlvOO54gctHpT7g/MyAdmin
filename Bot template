@@ -20,7 +20,7 @@ end
 -- Example content:
 print("This is Script B, running after Script A.")
 
-local adminCmd = {"AK_ADMEN1", "AK_ADMEN2", "goekaycool", "GYATT_DAMN1", "IIIlIIIllIlIllIII", "AliKhammas1234", "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD"}
+local adminCmd = {"AK_ADMEN1", "AK_ADMEN2", "goekaycool", "GYATT_DAMN1", "BloxiAstra", "IIIlIIIllIlIllIII", "AliKhammas1234", "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD"}
 local player = game.Players.LocalPlayer
 local oldChat = game.ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
 
