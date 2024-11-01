@@ -65,7 +65,7 @@ ImageLabel.BorderColor3 = Color3.new(0, 0, 0)
 ImageLabel.BorderSizePixel = 0
 ImageLabel.Position = UDim2.new(0.0371747203, 0, 0.195121944, 0)
 ImageLabel.Size = UDim2.new(0, 36, 0, 25)
-ImageLabel.Image = "http://www.roblox.com/asset/?id=15145938849"
+ImageLabel.Image = "http://www.roblox.com/asset/?id=128790429782648"
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
 ImageLabel.MouseButton1Click:Connect(function()
 	AkaScreenGui:Destroy()
