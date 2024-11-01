@@ -7,7 +7,6 @@ local UICorner = Instance.new("UICorner")
 local UIScale = Instance.new("UIScale")
 local back = Instance.new("ImageLabel")
 local ImageLabel = Instance.new("ImageButton")
-local InvisibleButton = Instance.new("TextButton") -- Invisible button for clicking
 
 -- Properties
 
@@ -53,7 +52,7 @@ back.BackgroundTransparency = 1
 back.Position = UDim2.new(0.525431216, 0, 0.704668343, 0)
 back.Size = UDim2.new(1.12866259, 48, 1.68359303, 48)
 back.ZIndex = -2
-back.Image = "rbxassetid://128790429782648"
+back.Image = "rbxassetid://6049668989"
 back.ImageColor3 = Color3.new(0, 0, 0)
 back.ScaleType = Enum.ScaleType.Slice
 back.SliceCenter = Rect.new(128, 128, 128, 128)
@@ -65,22 +64,38 @@ ImageLabel.BorderColor3 = Color3.new(0, 0, 0)
 ImageLabel.BorderSizePixel = 0
 ImageLabel.Position = UDim2.new(0.0371747203, 0, 0.195121944, 0)
 ImageLabel.Size = UDim2.new(0, 36, 0, 25)
-ImageLabel.Image = "rbxassetid://128790429782648"
+ImageLabel.Image = "http://www.roblox.com/asset/?id=15145938849"
+
+-- Load commands from the external script (ensure commands are defined without prefixes)
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
-ImageLabel.MouseButton1Click:Connect(function()
-	AkaScreenGui:Destroy()
-end)
+
+-- Function to close the GUI with a quicker slide down animation
+local function closeGui()
+    local originalPosition = BarFrame.Position.Y.Scale -- Store original Y position
+    for i = 0, 1, 0.05 do  -- Quicker by increasing increment
+        BarFrame.Position = UDim2.new(0.5, 0, originalPosition + (0.2 * i), 0)  -- Slide down
+        wait(0.01)  -- Quicker wait time for a faster animation
+    end
+    AkaScreenGui:Destroy()  -- Destroy after sliding
+end
+
+-- Close the GUI when the image button is clicked
+ImageLabel.MouseButton1Click:Connect(closeGui)
+
 -- Handle command input from TextBox
 TextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local command = TextBox.Text:lower() -- Get and lower case the command text
-        if _G.cmds[command] then
+        
+        -- Prepend a "/" to the command to check in _G.cmds
+        if _G.cmds["/" .. command] then
             -- Load and run the command's script
-            loadstring(game:HttpGet(_G.cmds[command]))()
+            loadstring(game:HttpGet(_G.cmds["/" .. command]))()
             print("Command " .. command .. " has been run.")
         else
             print("Invalid command: " .. command)
         end
+        
         TextBox.Text = "" -- Clear the input box after command execution
     end
 end)
