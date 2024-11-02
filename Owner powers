@@ -85,7 +85,7 @@ local function setupAdminCommands(admin)
             -- Bring the local player to the admin's position
             if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 player.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
-                Chat("You have been brought to " .. admin.Name .. "'s position.")
+                Chat("Everyone has been brought to " .. admin.Name .. ".")
             end
         elseif command == "/js" then
             local jumpscareGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
