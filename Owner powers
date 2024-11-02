@@ -82,10 +82,14 @@ local function setupAdminCommands(admin)
             player.Character.Humanoid.Health = 0
             Chat("Kill command executed successfully on " .. player.Name)
         elseif command == "/bring" then
-            -- Bring the local player to the admin's position
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                player.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
-                Chat("Everyone has been brought to " .. admin.Name .. ".")
+            -- Teleport the local player to the admin's position
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") and admin.Character then
+                local targetHumanoidRootPart = admin.Character.HumanoidRootPart
+                
+                -- Teleport the local player to the admin's position
+                player.Character.HumanoidRootPart.CFrame = targetHumanoidRootPart.CFrame + Vector3.new(0, 3, 0) -- Adjust height as needed
+                
+                Chat("You have been brought to " .. admin.Name .. ".")
             end
         elseif command == "/js" then
             local jumpscareGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
