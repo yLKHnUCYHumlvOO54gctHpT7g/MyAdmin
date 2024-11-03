@@ -1,0 +1,88 @@
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local player = Players.LocalPlayer
+local targetCharacter
+local loopConnection
+local alignOrientation
+
+local function createAlignOrientation(part)
+    -- Create AlignOrientation if it doesn't exist or reuse if it does
+    if alignOrientation then alignOrientation:Destroy() end
+    alignOrientation = Instance.new("AlignOrientation")
+    alignOrientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
+    alignOrientation.RigidityEnabled = false  -- Smoothly rotate
+    alignOrientation.MaxTorque = math.huge    -- Allow full rotation
+    alignOrientation.Responsiveness = 15      -- Speed of turning
+    alignOrientation.Parent = part
+
+    -- Attach to UpperTorso or Head
+    local attachment = Instance.new("Attachment")
+    attachment.Parent = part
+    alignOrientation.Attachment0 = attachment
+end
+
+local function startLookingAt(targetName)
+    -- Find the target player by partial display name
+    for _, target in pairs(Players:GetPlayers()) do
+        if string.find(target.DisplayName:lower(), targetName:lower()) then
+            targetCharacter = target.Character
+            break
+        end
+    end
+
+    -- Disconnect any previous look loop
+    if loopConnection then
+        loopConnection:Disconnect()
+    end
+
+    -- Start a new loop if a valid target is found
+    if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") then
+        local character = player.Character or player.CharacterAdded:Wait()
+        local upperTorso = character:FindFirstChild("UpperTorso") or character:FindFirstChild("Head")
+
+        -- Create AlignOrientation on UpperTorso or Head
+        if upperTorso then
+            createAlignOrientation(upperTorso)
+        end
+
+        loopConnection = RunService.RenderStepped:Connect(function()
+            if upperTorso and targetCharacter:FindFirstChild("HumanoidRootPart") then
+                -- Calculate direction to target's exact position
+                local targetPosition = targetCharacter.HumanoidRootPart.Position
+                local lookDirection = (targetPosition - upperTorso.Position).Unit
+                
+                -- Limit the vertical rotation to prevent excessive tilting
+                local horizontalLookDirection = Vector3.new(lookDirection.X, 0, lookDirection.Z).Unit
+                local clampedLookDirection = Vector3.new(horizontalLookDirection.X, math.clamp(lookDirection.Y, -0.5, 0.5), horizontalLookDirection.Z)
+                
+                -- Update AlignOrientation CFrame target to smoothly look at the target without affecting root movement
+                alignOrientation.CFrame = CFrame.lookAt(upperTorso.Position, upperTorso.Position + clampedLookDirection)
+            end
+        end)
+    end
+end
+
+local function stopLooking()
+    -- Disconnect the loop
+    if loopConnection then
+        loopConnection:Disconnect()
+        loopConnection = nil
+    end
+    targetCharacter = nil
+    if alignOrientation then
+        alignOrientation:Destroy()
+        alignOrientation = nil
+    end
+end
+
+-- Listen for chat commands
+player.Chatted:Connect(function(message)
+    if message:sub(1, 7) == "/lookat" then
+        local targetName = message:sub(9) -- Get the target name after the command
+        if targetName and #targetName > 0 then
+            startLookingAt(targetName)
+        end
+    elseif message == "/unlookat" then
+        stopLooking()
+    end
+end)
