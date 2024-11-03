@@ -6,16 +6,21 @@ local loopConnection
 local alignOrientation
 
 local function createAlignOrientation(part)
-    -- Create AlignOrientation if it doesn't exist or reuse if it does
-    if alignOrientation then alignOrientation:Destroy() end
+    -- Destroy any existing AlignOrientation to avoid duplicates
+    if alignOrientation then
+        alignOrientation:Destroy()
+        alignOrientation = nil
+    end
+    
+    -- Create a new AlignOrientation for smooth rotation
     alignOrientation = Instance.new("AlignOrientation")
     alignOrientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
-    alignOrientation.RigidityEnabled = false  -- Smoothly rotate
-    alignOrientation.MaxTorque = math.huge    -- Allow full rotation
-    alignOrientation.Responsiveness = 15      -- Speed of turning
+    alignOrientation.RigidityEnabled = false  -- Smooth rotation
+    alignOrientation.MaxTorque = math.huge    -- Full rotation allowed
+    alignOrientation.Responsiveness = 15      -- Adjusts turning speed
     alignOrientation.Parent = part
 
-    -- Attach to UpperTorso or Head
+    -- Attach AlignOrientation to UpperTorso or Head
     local attachment = Instance.new("Attachment")
     attachment.Parent = part
     alignOrientation.Attachment0 = attachment
@@ -30,12 +35,17 @@ local function startLookingAt(targetName)
         end
     end
 
-    -- Disconnect any previous look loop
+    -- Clean up any previous connections and AlignOrientation instances
     if loopConnection then
         loopConnection:Disconnect()
+        loopConnection = nil
+    end
+    if alignOrientation then
+        alignOrientation:Destroy()
+        alignOrientation = nil
     end
 
-    -- Start a new loop if a valid target is found
+    -- Start a new look-at loop if a valid target is found
     if targetCharacter and targetCharacter:FindFirstChild("HumanoidRootPart") then
         local character = player.Character or player.CharacterAdded:Wait()
         local upperTorso = character:FindFirstChild("UpperTorso") or character:FindFirstChild("Head")
@@ -47,7 +57,7 @@ local function startLookingAt(targetName)
 
         loopConnection = RunService.RenderStepped:Connect(function()
             if upperTorso and targetCharacter:FindFirstChild("HumanoidRootPart") then
-                -- Calculate direction to target's exact position
+                -- Calculate the direction to the target’s position
                 local targetPosition = targetCharacter.HumanoidRootPart.Position
                 local lookDirection = (targetPosition - upperTorso.Position).Unit
                 
@@ -55,7 +65,7 @@ local function startLookingAt(targetName)
                 local horizontalLookDirection = Vector3.new(lookDirection.X, 0, lookDirection.Z).Unit
                 local clampedLookDirection = Vector3.new(horizontalLookDirection.X, math.clamp(lookDirection.Y, -0.5, 0.5), horizontalLookDirection.Z)
                 
-                -- Update AlignOrientation CFrame target to smoothly look at the target without affecting root movement
+                -- Update AlignOrientation to smoothly face the target
                 alignOrientation.CFrame = CFrame.lookAt(upperTorso.Position, upperTorso.Position + clampedLookDirection)
             end
         end)
@@ -63,22 +73,22 @@ local function startLookingAt(targetName)
 end
 
 local function stopLooking()
-    -- Disconnect the loop
+    -- Disconnect the loop connection and clean up AlignOrientation
     if loopConnection then
         loopConnection:Disconnect()
         loopConnection = nil
     end
-    targetCharacter = nil
     if alignOrientation then
         alignOrientation:Destroy()
         alignOrientation = nil
     end
+    targetCharacter = nil
 end
 
--- Listen for chat commands
+-- Listen for chat commands and handle start/stop commands
 player.Chatted:Connect(function(message)
     if message:sub(1, 7) == "/lookat" then
-        local targetName = message:sub(9) -- Get the target name after the command
+        local targetName = message:sub(9) -- Extract the target name after the command
         if targetName and #targetName > 0 then
             startLookingAt(targetName)
         end
