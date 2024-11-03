@@ -4,6 +4,7 @@ _G.cmds = {
     ["/annoy"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Annoy",
     ["/clearchat"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/clearcmd.luau", 
     ["/tptoplr"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/TPtoplayer",
+    ["/stopglide"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stopglide.lua",
     ["/antilag"]="https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
     ["/breakghost"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Breakghost",
     ["/antibang"]="https://pastebin.com/raw/5iSqpqf6",
