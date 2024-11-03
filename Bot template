@@ -1,3 +1,17 @@
+local function RemoveAtmosphereAndSetFog()
+    local Lighting = game:GetService("Lighting")
+    Lighting.FogEnd = 100000
+    
+    for _, v in pairs(Lighting:GetDescendants()) do
+        if v:IsA("Atmosphere") then
+            v:Destroy()
+        end
+    end
+end
+
+-- Call the function
+RemoveAtmosphereAndSetFog()
+
 -- Script A (loadstring script)
 local success, result = pcall(function()
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton"))()
