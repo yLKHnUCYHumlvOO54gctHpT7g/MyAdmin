@@ -323,51 +323,15 @@ else
 			Notification:Notify({Title="AK ADMIN LOADER",Description="Executing..."}, {OutlineColor=Color3.fromRGB(80, 80, 80),Time=5,Type="default"});
 		end
 		wait(0.5);
-		Notification:Notify({
-    Title = "SUCCESS",
-    Description = "AK ADMIN PREMIUM Successfully loaded thanks for using AK ADMIN, Enjoy!"
-}, {
-    OutlineColor = Color3.fromRGB(80, 80, 80),
-    Time = 5,
-    Type = "default"
-})
-
-local function AC()
-    while _G.AC == true do
-        for i, v in pairs(workspace:GetChildren()) do
-            if v:IsA("Model") then
-                if game.Players:FindFirstChild(v.Name) then
-                    if v:FindFirstChildWhichIsA("Tool") then
-                        local tool = v:FindFirstChildWhichIsA("Tool")
-                        tool:Destroy()
-                    end
-                end
-            end
-        end
-    end
-end
-
-Notification:Notify({
-    Title = "SUCCESS",
-    Description = "AK ADMIN PREMIUM Successfully loaded thanks for using AK ADMIN, Enjoy!",
-    ButtonText = "Bet ✅",
-    Callback = function()
-        for i, v in pairs(workspace:GetChildren()) do
-            if v:IsA("Model") then
-                if game.Players:FindFirstChild(v.Name) then
-                    if v:FindFirstChildWhichIsA("Tool") then
-                        local tool = v:FindFirstChildWhichIsA("Tool")
-                        tool:Destroy()
-                    end
-                end
-            end
-        end
-    end
-}, {
-    OutlineColor = Color3.fromRGB(80, 80, 80),
-    Time = 5,
-    Type = "default"
-})
+		Notification:Notify({Title="SUCCESS",Description="AK ADMIN PREMIUM Successfully loaded thanks for using AK ADMIN, Enjoy!"}, {OutlineColor=Color3.fromRGB(80, 80, 80),Time=5,Type="default"});
+		local function AC()
+			while _G.AC == true do
+				for i, v in pairs(workspace:GetChildren()) do
+					if v:IsA("Model") then
+						if game.Players:FindFirstChild(v.Name) then
+							if v:FindFirstChildWhichIsA("Tool") then
+								local tool = v:FindFirstChildWhichIsA("Tool");
+								tool:Destroy();
 							end
 						end
 					end
