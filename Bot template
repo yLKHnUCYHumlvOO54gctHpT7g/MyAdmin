@@ -9,29 +9,6 @@ local function RemoveAtmosphereAndSetFog()
     end
 end
 
-local replicatedStorage = game:GetService("ReplicatedStorage")
-local textChatService = game:GetService("TextChatService")
-local oldChat = false
-
--- Check if the old chat system is being used
-if replicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
-    oldChat = true
-end
-
--- Function to send a message
-local function Chat(msg)
-    if oldChat then
-        -- Old chat system
-        replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
-    else
-        -- New chat system
-        textChatService.TextChannels.RBXGeneral:SendAsync(msg)
-    end
-end
-
--- Example usage with modified message
-Chat("AK ADMIN | Join Server Code: /akadmin")
-
 -- Call the function
 RemoveAtmosphereAndSetFog()
 
