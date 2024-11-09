@@ -63,8 +63,7 @@ getgenv().whitelistedPlayers = {
     "Polpy_kid",
     "qs2w8",
     "roblox",
-    "Alikhammas",
-    "Lolipop"
+    "Alikhammas"
 }
 
 getgenv().premiumUsers = {
@@ -120,8 +119,7 @@ getgenv().premiumUsers = {
     "Polpy_kid",
     "qs2w8",
     "roblox",
-    "Alikhammas",
-    "Lolipop"
+    "Alikhammas"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
