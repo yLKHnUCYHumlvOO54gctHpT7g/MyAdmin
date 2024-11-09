@@ -18,7 +18,6 @@ getgenv().whitelistedPlayers = {
     "TheRealestOnHere",
     "328ml",
     "victorwielki",
-    "AliKhammas",
     "GYATT_DAMN1",
     "CanExploiOnMobileLol",
     "rb0zo",
@@ -61,7 +60,8 @@ getgenv().whitelistedPlayers = {
     "pullqxlegion",
     "alt1lr",
     "Polpy_kid",
-    "qs2w8"
+    "qs2w8",
+    "Testing"
 }
 
 getgenv().premiumUsers = {
@@ -115,7 +115,8 @@ getgenv().premiumUsers = {
     "pullqxlegion",
     "alt1lr",
     "Polpy_kid",
-    "qs2w8"
+    "qs2w8",
+    "Testing"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
