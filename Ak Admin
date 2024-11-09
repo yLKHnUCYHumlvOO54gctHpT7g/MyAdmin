@@ -62,7 +62,6 @@ getgenv().whitelistedPlayers = {
     "alt1lr",
     "Polpy_kid",
     "qs2w8",
-    "testing",
     "Alikhammas"
 }
 
@@ -118,7 +117,6 @@ getgenv().premiumUsers = {
     "alt1lr",
     "Polpy_kid",
     "qs2w8",
-    "testing",
     "Alikhammas"
 }
 
