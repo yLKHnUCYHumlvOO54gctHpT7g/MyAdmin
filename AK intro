@@ -4,99 +4,97 @@ local TextLabel = Instance.new("TextLabel")
 local BlurEffect = Instance.new("BlurEffect")
 local UIGradient = Instance.new("UIGradient")
 local UICorner = Instance.new("UICorner")
+local UIStroke = Instance.new("UIStroke")
+local TweenService = game:GetService("TweenService")
 
 -- Set up ScreenGui
 ScreenGui.Parent = Player:WaitForChild("PlayerGui")
 
 -- Set up TextLabel
 TextLabel.Parent = ScreenGui
-TextLabel.Size = UDim2.new(0.1, 0, 0.05, 0) -- Initial size for intro
-TextLabel.Position = UDim2.new(0.45, 0, 0.45, 0) -- Center text on the screen
-TextLabel.Text = "AK ADMIN"
+TextLabel.Size = UDim2.new(0.1, 0, 0.05, 0)
+TextLabel.Position = UDim2.new(0.45, 0, 0.45, 0)
+TextLabel.Text = "AK"  -- Only "AK"
 TextLabel.TextScaled = true
-TextLabel.Font = Enum.Font.GothamBlack -- Use a fancier font
-TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255) -- Keep text color white
-TextLabel.TextStrokeTransparency = 0.1 -- Make stroke more visible
-TextLabel.TextTransparency = 1 -- Start off invisible
+TextLabel.Font = Enum.Font.GothamBlack
+TextLabel.TextColor3 = Color3.fromRGB(192, 192, 192)  -- Gray color
+TextLabel.BackgroundTransparency = 1
+TextLabel.TextStrokeTransparency = 1
+TextLabel.TextTransparency = 1
+TextLabel.Rotation = 0
 
--- Add UIGradient to the text (White fading to purple)
+-- 3D Effect with UIStroke
+UIStroke.Parent = TextLabel
+UIStroke.Color = Color3.fromRGB(169, 169, 169)  -- Gray color
+UIStroke.Thickness = 2  -- Thinner stroke for smoother appearance
+UIStroke.Transparency = 1
+
+-- Gradient setup (gray tones)
 UIGradient.Parent = TextLabel
 UIGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 255, 255)), -- White at start
-    ColorSequenceKeypoint.new(1, Color3.fromRGB(128, 0, 128)) -- Purple at end
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(211, 211, 211)),
+    ColorSequenceKeypoint.new(0.5, Color3.fromRGB(192, 192, 192)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(169, 169, 169))
 }
+UIGradient.Rotation = 0
 
--- Add UICorner to the TextLabel for smoother corners
+-- Round corners
 UICorner.Parent = TextLabel
 UICorner.CornerRadius = UDim.new(0.2, 0)
 
--- Set up BlurEffect
+-- Blur effect
 BlurEffect.Parent = game.Lighting
-BlurEffect.Size = 30 -- Reduced blur for better visibility
+BlurEffect.Size = 0
 
--- Smooth Intro Animation
-wait(1) -- Delay before starting
-
--- Intro Animation: Text starts small and grows while fading in
-TextLabel.TextTransparency = 1 -- Start fully transparent
-TextLabel:TweenSizeAndPosition(
-    UDim2.new(0.6, 0, 0.2, 0), -- Final size
-    UDim2.new(0.2, 0, 0.4, 0), -- Centered position
-    Enum.EasingDirection.Out,
-    Enum.EasingStyle.Quad,
-    1,
-    true
-) -- Zoom in to the center
-
-for i = 1, 30 do
-    BlurEffect.Size = BlurEffect.Size - 0.5 -- Reduce blur gradually
-    TextLabel.TextTransparency = TextLabel.TextTransparency - 0.033 -- Fade in text
-    wait(0.05)
-end
-
--- Pause for a moment before the main animation
+-- Initial animation: Appearance with rotation and size change
 wait(1)
 
--- Main Animation: Add a pulse effect for the text
-for i = 1, 3 do
-    TextLabel.TextStrokeTransparency = 0.2 -- Make stroke more visible
-    TextLabel.TextSize = TextLabel.TextSize + 5 -- Increase size briefly (adjusted for smaller GUI)
-    wait(0.2)
-    TextLabel.TextStrokeTransparency = 0.1 -- Restore stroke transparency to be more visible
-    TextLabel.TextSize = TextLabel.TextSize - 5 -- Reset size
-    wait(0.2)
-end
+-- Disable UIStroke during the intro to avoid artifacts
+UIStroke.Enabled = false
 
--- Final touch before outro
-wait(2)
+-- Smooth intro: Rotation and size animation
+local rotationTween = TweenService:Create(TextLabel, TweenInfo.new(3, Enum.EasingStyle.Back), {Rotation = 360})
+local sizeTween = TweenService:Create(TextLabel, TweenInfo.new(3, Enum.EasingStyle.Elastic), {
+    Size = UDim2.new(0.5, 0, 0.15, 0),
+    Position = UDim2.new(0.25, 0, 0.4, 0)
+})
+rotationTween:Play()
+sizeTween:Play()
 
--- Improved Outro Animation: Zoom in centered, then out, with fade effect
-TextLabel:TweenSizeAndPosition(
-    UDim2.new(0.5, 0, 0.2, 0), -- Larger size
-    UDim2.new(0.25, 0, 0.4, 0), -- Centered position
-    Enum.EasingDirection.Out,
-    Enum.EasingStyle.Quad,
-    0.5,
-    true
-) -- Zoom in to the center
-wait(0.5)
-TextLabel.TextTransparency = 0 -- Make text fully visible before zooming out
-TextLabel:TweenSizeAndPosition(
-    UDim2.new(0, 0, 0, 0), -- Shrink to nothing
-    UDim2.new(0.5, 0, 0.5, 0), -- Shrink from the center
-    Enum.EasingDirection.In,
-    Enum.EasingStyle.Quad,
-    0.5,
-    true
-) -- Zoom out centered
-wait(0.5)
-
--- Fade out while zooming out
-for i = 0, 1, 0.1 do
-    TextLabel.TextTransparency = 1 - i -- Gradually fade out
+-- Smooth fade-in effect
+for i = 1, 40 do
+    local transparency = 1 - (i / 40)
+    TextLabel.TextTransparency = transparency
+    BlurEffect.Size = i / 2
     wait(0.05)
 end
 
--- Remove BlurEffect and ScreenGui after outro animation completes
+-- Hold the text visible for a moment
+wait(1.5)
+
+-- Re-enable UIStroke for the outro
+UIStroke.Enabled = true  -- Enable outline for the fade-out
+
+-- Reverse deletion: Fade out letter-by-letter from the last character
+local text = TextLabel.Text
+local length = #text
+
+-- Reverse letter deletion animation (like erasing the text from last letter to first)
+for i = length, 1, -1 do
+    -- Cut the text to progressively remove one character at a time (reverse)
+    TextLabel.Text = text:sub(1, i - 1)  -- This removes the last character one by one
+
+    -- Smoothly reduce text transparency and blur effect
+    TextLabel.TextTransparency = 1 - (i / length)  -- Gradually make the text fully transparent
+    BlurEffect.Size = 20 - (i / 2)  -- Gradually reduce the blur as the text disappears
+
+    -- Add smooth delay for the gradual effect
+    wait(0.1)  -- Adjust this to make the effect smoother or faster
+end
+
+-- Once all letters are deleted, the blur effect should also be at 0
+BlurEffect.Size = 0
+
+-- Clean-up (just in case)
 BlurEffect:Destroy()
 ScreenGui:Destroy()
