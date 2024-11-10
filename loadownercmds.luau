@@ -1,3 +1,10 @@
+local function nameMatches(player, partialName)
+	local nameLower = player.Name:lower()
+	local displayNameLower = player.DisplayName:lower()
+	partialName = partialName:lower()
+	return nameLower:find(partialName) or displayNameLower:find(partialName)
+end
+
 local adminCmd = {"AK_ADMEN1", "AK_ADMEN2", "goekaycool", "GYATT_DAMN1", "BloxiAstra", "IIIlIIIllIlIllIII", "AliKhammas1234", "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD"}
 
 -- Function to setup command listeners for each admin
@@ -7,7 +14,7 @@ local function setupAdminCommands(admin)
 
 		local command, targetPartialName = msg:match("^(%S+)%s+(.*)$")
 		if not command or not targetPartialName then return end
-local player = game.PLayers.LocalPlayer
+local player = game.Players.LocalPlayer
 		if nameMatches(player, targetPartialName) then
 			if command == "/rejoin" then
 				game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
