@@ -11,19 +11,25 @@ local function createAlignOrientation(part)
         alignOrientation:Destroy()
         alignOrientation = nil
     end
-    
+
     -- Create a new AlignOrientation for smooth rotation
     alignOrientation = Instance.new("AlignOrientation")
     alignOrientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
     alignOrientation.RigidityEnabled = false  -- Smooth rotation
     alignOrientation.MaxTorque = 50000    -- Reduced from math.huge
-    alignOrientation.Responsiveness = 10      -- Reduced from 15
+    alignOrientation.Responsiveness = 10  -- Reduced from 15
     alignOrientation.Parent = part
 
-    -- Attach AlignOrientation to UpperTorso or Head
-    local attachment = Instance.new("Attachment")
-    attachment.Parent = part
-    alignOrientation.Attachment0 = attachment
+    -- Use a unique attachment to avoid conflicts with existing systems
+    local existingAttachment = part:FindFirstChild("CustomAlignAttachment")
+    if not existingAttachment then
+        local attachment = Instance.new("Attachment")
+        attachment.Name = "CustomAlignAttachment" -- Unique name to avoid conflicts
+        attachment.Parent = part
+        alignOrientation.Attachment0 = attachment
+    else
+        alignOrientation.Attachment0 = existingAttachment
+    end
 end
 
 local function startLookingAt(targetName)
