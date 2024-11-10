@@ -1,4 +1,3 @@
--- Add your commands here
 local commands = {
     "+ Added cmd: /lookat (display name), /unlookat",
     "+ Added cmd: /stopglide",
@@ -19,63 +18,64 @@ gajIDFANIAS8762.Name = "UpdateLogGui"
 gajIDFANIAS8762.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 gajIDFANIAS8762.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
+-- Adjusted frame size for smaller display
 Frame.Parent = gajIDFANIAS8762
-Frame.BackgroundColor3 = Color3.fromRGB(128, 128, 128) -- Grey background
-Frame.BackgroundTransparency = 0.5 -- Transparent background
+Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35) -- Darker, subtle background color
+Frame.BackgroundTransparency = 0.7 -- Slight transparency for modern look
 Frame.BorderSizePixel = 0
-Frame.Position = UDim2.new(0.5, -250, 0, 10) -- Centered at the top
-Frame.Size = UDim2.new(0, 500, 0, 150) -- Adjusted size for wider display
+Frame.Position = UDim2.new(0.5, -220, 0, 10) -- Smaller width, still centered
+Frame.Size = UDim2.new(0, 440, 0, 120) -- Reduced size for a more compact display
 
 UICorner.Parent = Frame
-UICorner.CornerRadius = UDim.new(0.1, 0) -- Curved corners
+UICorner.CornerRadius = UDim.new(0.1, 0) -- Rounded corners for the frame
 
--- Centered Title
+-- Centered Title with more refined font and size
 TitleLabel.Parent = Frame
 TitleLabel.BackgroundTransparency = 1
-TitleLabel.Position = UDim2.new(0.5, 0, 0.05, 0) -- Higher in the middle
+TitleLabel.Position = UDim2.new(0.5, 0, 0.05, 0)
 TitleLabel.AnchorPoint = Vector2.new(0.5, 0) -- Anchor point to center
-TitleLabel.Size = UDim2.new(0, 500, 0, 40)
+TitleLabel.Size = UDim2.new(0, 440, 0, 30)
 TitleLabel.Font = Enum.Font.GothamBold
 TitleLabel.Text = "AK UPDATE LOGS"
 TitleLabel.TextColor3 = Color3.new(1, 1, 1)
-TitleLabel.TextSize = 28 -- Title size
-TitleLabel.TextStrokeTransparency = 0.5 -- Stroke for better visibility
+TitleLabel.TextSize = 24 -- Slightly smaller title
+TitleLabel.TextStrokeTransparency = 0.4 -- Softer stroke for visibility
 
--- Close Button
+-- Close Button with a more modern, subtle design
 CloseButton.Parent = Frame
 CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red background
 CloseButton.Position = UDim2.new(0.93, 0, 0.05, 0) -- Positioned at the top right
-CloseButton.Size = UDim2.new(0, 30, 0, 30) -- Adjusted size to fit better
+CloseButton.Size = UDim2.new(0, 25, 0, 25) -- Smaller, more compact button
 CloseButton.Font = Enum.Font.GothamBold
 CloseButton.Text = "X"
 CloseButton.TextColor3 = Color3.new(1, 1, 1)
-CloseButton.TextSize = 20
-CloseButton.TextStrokeTransparency = 0.5 -- Stroke for visibility
-CloseButton.BackgroundTransparency = 0.5 -- Semi-transparent button
-UICorner:Clone().Parent = CloseButton -- Curved corners for the button
+CloseButton.TextSize = 18
+CloseButton.TextStrokeTransparency = 0.4
+CloseButton.BackgroundTransparency = 0.7 -- Semi-transparent button
+UICorner:Clone().Parent = CloseButton -- Rounded corners for the button
 
--- Layout for commands
+-- Layout for commands, positioned below the title
 local commandListFrame = Instance.new("Frame")
 commandListFrame.Parent = Frame
 commandListFrame.BackgroundTransparency = 1
 commandListFrame.Position = UDim2.new(0.05, 0, 0.25, 0) -- Positioned further down
-commandListFrame.Size = UDim2.new(0, 470, 0, 80) -- Adjusted size
+commandListFrame.Size = UDim2.new(0, 420, 0, 70) -- Reduced size
 
 UIListLayout.Parent = commandListFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Padding = UDim.new(0, 2) -- Reduced space between command items
+UIListLayout.Padding = UDim.new(0, 5) -- Increased space between commands for clarity
 
 -- Add command labels dynamically
 local function addCommands()
     for _, command in ipairs(commands) do
         local commandLabel = Instance.new("TextLabel")
         commandLabel.Parent = commandListFrame
-        commandLabel.Size = UDim2.new(1, 0, 0, 25) -- Fixed height for readability
+        commandLabel.Size = UDim2.new(1, 0, 0, 20) -- Reduced height for commands
         commandLabel.BackgroundTransparency = 1
         commandLabel.Font = Enum.Font.Gotham
         commandLabel.Text = command
         commandLabel.TextColor3 = Color3.new(1, 1, 1) -- White text
-        commandLabel.TextSize = 16 -- Smaller text size
+        commandLabel.TextSize = 14 -- Smaller text for commands
         commandLabel.TextWrapped = true
     end
 end
@@ -85,8 +85,8 @@ addCommands() -- Add initial commands
 -- Resize Frame based on number of commands
 local function resizeFrame()
     local commandCount = #commands
-    local frameHeight = math.clamp(commandCount * 30 + 70, 150, 300) -- Adjust height based on number of commands, within limits
-    Frame.Size = UDim2.new(0, 500, 0, frameHeight) -- Maintain width
+    local frameHeight = math.clamp(commandCount * 25 + 70, 120, 200) -- Adjusted height for a smaller range
+    Frame.Size = UDim2.new(0, 440, 0, frameHeight) -- Maintain width
 end
 
 -- Run the resize function to set initial size
@@ -94,13 +94,13 @@ resizeFrame()
 
 -- Slide-in animation for the entire GUI
 local function slideIn()
-    Frame.Position = UDim2.new(0.5, -250, -1, 0) -- Start off-screen
-    Frame:TweenPosition(UDim2.new(0.5, -250, 0, 10), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 1, true)
+    Frame.Position = UDim2.new(0.5, -220, -1, 0) -- Start off-screen
+    Frame:TweenPosition(UDim2.new(0.5, -220, 0, 10), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.8, true)
 end
 
 -- Slide-out animation for closing GUI
 local function slideOut()
-    Frame:TweenPosition(UDim2.new(0.5, -250, -1, 0), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 1, true, function()
+    Frame:TweenPosition(UDim2.new(0.5, -220, -1, 0), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 0.8, true, function()
         gajIDFANIAS8762:Destroy() -- Destroy GUI after animation
     end)
 end
