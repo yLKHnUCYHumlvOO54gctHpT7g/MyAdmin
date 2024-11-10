@@ -61,4 +61,3 @@ end
 setupChatCommand()
 
 -- Confirmation message
-print("Proximity prompts firing script initiated.")
