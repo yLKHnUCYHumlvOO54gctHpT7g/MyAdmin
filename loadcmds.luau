@@ -89,10 +89,22 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
                 -- Try to suggest a command
                 local suggestion = suggestClosestCommand(command)
                 if suggestion then
+                    -- If the command exactly matches the suggestion (ignoring case),
+                    -- execute it instead of showing the suggestion
+                    if command:lower() == suggestion:lower() then
+                        executeCommand(suggestion)
+                    else
+                        game:GetService("StarterGui"):SetCore("SendNotification", {
+                            Title = "Command Suggestion 💡",
+                            Text = "Did you mean: " .. suggestion .. "?",
+                            Duration = 5
+                        })
+                    end
+                else
                     game:GetService("StarterGui"):SetCore("SendNotification", {
-                        Title = "Command Suggestion 💡",
-                        Text = "Did you mean: " .. suggestion .. "?",
-                        Duration = 5
+                        Title = "Unknown Command ❌",
+                        Text = "Command not found",
+                        Duration = 3
                     })
                 end
             end
