@@ -83,7 +83,10 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
         
         -- Only proceed if there's a command (non-empty after "/")
         if command and #command > 0 then
-            if _G.cmds[command] then
+            -- Make sure to check for the command properly in _G.cmds
+            local matchedCommand = _G.cmds[command:lower()]  -- Ensure case-insensitive matching
+            
+            if matchedCommand then
                 executeCommand(command)
             else
                 -- Try to suggest a command
