@@ -5,110 +5,152 @@ local commands = {
     "+ REVAMPED TAG SYSTEM",
 }
 
-local gajIDFANIAS8762 = Instance.new("ScreenGui")
+local gui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local UICorner = Instance.new("UICorner")
 local TitleLabel = Instance.new("TextLabel")
+local commandListFrame = Instance.new("Frame")
 local UIListLayout = Instance.new("UIListLayout")
 local CloseButton = Instance.new("TextButton")
 
 -- Properties
+gui.Name = "UpdateLogGui"
+gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-gajIDFANIAS8762.Name = "UpdateLogGui"
-gajIDFANIAS8762.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-gajIDFANIAS8762.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
--- Adjusted frame size for smaller display
-Frame.Parent = gajIDFANIAS8762
-Frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35) -- Darker, subtle background color
-Frame.BackgroundTransparency = 0.7 -- Slight transparency for modern look
+Frame.Parent = gui
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+Frame.BackgroundTransparency = 0.15
 Frame.BorderSizePixel = 0
-Frame.Position = UDim2.new(0.5, -220, 0, 10) -- Smaller width, still centered
-Frame.Size = UDim2.new(0, 440, 0, 120) -- Reduced size for a more compact display
+Frame.AnchorPoint = Vector2.new(0.5, 0)
+Frame.Position = UDim2.new(0.5, 0, 0, 20)
+Frame.Size = UDim2.new(0, 440, 0, 140)
 
 UICorner.Parent = Frame
-UICorner.CornerRadius = UDim.new(0.1, 0) -- Rounded corners for the frame
+UICorner.CornerRadius = UDim.new(0.04, 0)
 
--- Centered Title with more refined font and size
+-- Gradient
+local gradient = Instance.new("UIGradient")
+gradient.Parent = Frame
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 40, 60)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(25, 25, 40))
+})
+gradient.Rotation = 45
+
+-- Title
 TitleLabel.Parent = Frame
 TitleLabel.BackgroundTransparency = 1
-TitleLabel.Position = UDim2.new(0.5, 0, 0.05, 0)
-TitleLabel.AnchorPoint = Vector2.new(0.5, 0) -- Anchor point to center
-TitleLabel.Size = UDim2.new(0, 440, 0, 30)
+TitleLabel.Position = UDim2.new(0, 20, 0, 10)
+TitleLabel.Size = UDim2.new(1, -40, 0, 30)
 TitleLabel.Font = Enum.Font.GothamBold
-TitleLabel.Text = "AK UPDATE LOGS"
-TitleLabel.TextColor3 = Color3.new(1, 1, 1)
-TitleLabel.TextSize = 24 -- Slightly smaller title
-TitleLabel.TextStrokeTransparency = 0.4 -- Softer stroke for visibility
+TitleLabel.Text = "Update Log"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextSize = 24
 
--- Close Button with a more modern, subtle design
-CloseButton.Parent = Frame
-CloseButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red background
-CloseButton.Position = UDim2.new(0.93, 0, 0.05, 0) -- Positioned at the top right
-CloseButton.Size = UDim2.new(0, 25, 0, 25) -- Smaller, more compact button
-CloseButton.Font = Enum.Font.GothamBold
-CloseButton.Text = "X"
-CloseButton.TextColor3 = Color3.new(1, 1, 1)
-CloseButton.TextSize = 18
-CloseButton.TextStrokeTransparency = 0.4
-CloseButton.BackgroundTransparency = 0.7 -- Semi-transparent button
-UICorner:Clone().Parent = CloseButton -- Rounded corners for the button
-
--- Layout for commands, positioned below the title
-local commandListFrame = Instance.new("Frame")
+-- Command List Frame
 commandListFrame.Parent = Frame
 commandListFrame.BackgroundTransparency = 1
-commandListFrame.Position = UDim2.new(0.05, 0, 0.25, 0) -- Positioned further down
-commandListFrame.Size = UDim2.new(0, 420, 0, 70) -- Reduced size
+commandListFrame.Position = UDim2.new(0, 20, 0, 50)
+commandListFrame.Size = UDim2.new(1, -40, 1, -60)
 
 UIListLayout.Parent = commandListFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Padding = UDim.new(0, 5) -- Increased space between commands for clarity
+UIListLayout.Padding = UDim.new(0, 8)
 
--- Add command labels dynamically
+-- Close Button
+CloseButton.Parent = Frame
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 85, 85)
+CloseButton.BackgroundTransparency = 0.3
+CloseButton.Position = UDim2.new(1, -30, 0, 10)
+CloseButton.Size = UDim2.new(0, 20, 0, 20)
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.Text = "×"
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.TextSize = 20
+
+local closeButtonCorner = Instance.new("UICorner")
+closeButtonCorner.CornerRadius = UDim.new(0.5, 0)
+closeButtonCorner.Parent = CloseButton
+
+-- Add commands
 local function addCommands()
     for _, command in ipairs(commands) do
         local commandLabel = Instance.new("TextLabel")
         commandLabel.Parent = commandListFrame
-        commandLabel.Size = UDim2.new(1, 0, 0, 20) -- Reduced height for commands
-        commandLabel.BackgroundTransparency = 1
-        commandLabel.Font = Enum.Font.Gotham
-        commandLabel.Text = command
-        commandLabel.TextColor3 = Color3.new(1, 1, 1) -- White text
-        commandLabel.TextSize = 14 -- Smaller text for commands
+        commandLabel.Size = UDim2.new(1, 0, 0, 24)
+        commandLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+        commandLabel.BackgroundTransparency = 0.8
+        commandLabel.Font = Enum.Font.GothamMedium
+        commandLabel.Text = "  " .. command
+        commandLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+        commandLabel.TextSize = 14
+        commandLabel.TextXAlignment = Enum.TextXAlignment.Left
         commandLabel.TextWrapped = true
+        
+        local uiCorner = Instance.new("UICorner")
+        uiCorner.CornerRadius = UDim.new(0, 6)
+        uiCorner.Parent = commandLabel
+        
+        -- Hover effect
+        commandLabel.MouseEnter:Connect(function()
+            game:GetService("TweenService"):Create(commandLabel, 
+                TweenInfo.new(0.2), 
+                {
+                    BackgroundTransparency = 0.6,
+                    BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+                }
+            ):Play()
+        end)
+        
+        commandLabel.MouseLeave:Connect(function()
+            game:GetService("TweenService"):Create(commandLabel, 
+                TweenInfo.new(0.2), 
+                {
+                    BackgroundTransparency = 0.8,
+                    BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+                }
+            ):Play()
+        end)
     end
 end
 
-addCommands() -- Add initial commands
-
--- Resize Frame based on number of commands
+-- Resize Frame based on content
 local function resizeFrame()
     local commandCount = #commands
-    local frameHeight = math.clamp(commandCount * 25 + 70, 120, 200) -- Adjusted height for a smaller range
-    Frame.Size = UDim2.new(0, 440, 0, frameHeight) -- Maintain width
+    local frameHeight = math.clamp(commandCount * 25 + 70, 120, 400)
+    Frame.Size = UDim2.new(0, 440, 0, frameHeight)
 end
 
--- Run the resize function to set initial size
-resizeFrame()
-
--- Slide-in animation for the entire GUI
+-- Animations
 local function slideIn()
-    Frame.Position = UDim2.new(0.5, -220, -1, 0) -- Start off-screen
-    Frame:TweenPosition(UDim2.new(0.5, -220, 0, 10), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.8, true)
+    Frame.Position = UDim2.new(1.5, 0, 0, 20)
+    Frame:TweenPosition(
+        UDim2.new(0.5, 0, 0, 20),
+        Enum.EasingDirection.Out,
+        Enum.EasingStyle.Sine,
+        0.8,
+        true
+    )
 end
 
--- Slide-out animation for closing GUI
 local function slideOut()
-    Frame:TweenPosition(UDim2.new(0.5, -220, -1, 0), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 0.8, true, function()
-        gajIDFANIAS8762:Destroy() -- Destroy GUI after animation
-    end)
+    Frame:TweenPosition(
+        UDim2.new(-0.5, 0, 0, 20),
+        Enum.EasingDirection.In,
+        Enum.EasingStyle.Sine,
+        0.8,
+        true,
+        function()
+            gui:Destroy()
+        end
+    )
 end
 
--- Connect close button to slide out function
-CloseButton.MouseButton1Click:Connect(function()
-    slideOut()
-end)
+-- Initialize
+addCommands()
+resizeFrame()
+slideIn()
 
--- Run animations
-slideIn() -- Ensure sliding animation runs on first execution
+-- Connect close button
+CloseButton.MouseButton1Click:Connect(slideOut)
