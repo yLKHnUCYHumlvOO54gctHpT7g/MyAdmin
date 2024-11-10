@@ -59,7 +59,6 @@ getgenv().whitelistedPlayers = {
     "pullqxlegion",
     "alt1lr",
     "Polpy_kid",
-    "qs2w8",
     "AliKhammas",
     "Deutschland_Guys",
     "BloxiAstra"
@@ -115,7 +114,6 @@ getgenv().premiumUsers = {
     "pullqxlegion",
     "alt1lr",
     "Polpy_kid",
-    "qs2w8",
     "Deutschland_Guys",
     "BloxiAstra"
 }
