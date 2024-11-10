@@ -46,13 +46,22 @@ UICorner.CornerRadius = UDim.new(0.2, 0)
 BlurEffect.Parent = game.Lighting
 BlurEffect.Size = 0
 
+-- Add sound effects with the provided IDs
+local introSound = Instance.new("Sound", ScreenGui)
+introSound.SoundId = "rbxassetid://464067838"  -- Intro sound "kaching"
+introSound.Volume = 0.5
+introSound.Looped = false
+
+local outroSound = Instance.new("Sound", ScreenGui)
+outroSound.SoundId = "rbxassetid://1910795334"  -- New outro sound
+outroSound.Volume = 0.5
+outroSound.Looped = false
+
 -- Initial animation: Appearance with rotation and size change
 wait(1)
-
--- Disable UIStroke during the intro to avoid artifacts
 UIStroke.Enabled = false
+introSound:Play()  -- Play the intro sound
 
--- Smooth intro: Rotation and size animation
 local rotationTween = TweenService:Create(TextLabel, TweenInfo.new(3, Enum.EasingStyle.Back), {Rotation = 360})
 local sizeTween = TweenService:Create(TextLabel, TweenInfo.new(3, Enum.EasingStyle.Elastic), {
     Size = UDim2.new(0.5, 0, 0.15, 0),
@@ -69,32 +78,35 @@ for i = 1, 40 do
     wait(0.05)
 end
 
--- Hold the text visible for a moment
+-- Wait for the intro sound to finish
+introSound.Ended:Wait()
+
+-- Now start the outro sound
+outroSound:Play()
+
+-- Hold the text visible for a moment before the fade-out
 wait(1.5)
 
 -- Re-enable UIStroke for the outro
-UIStroke.Enabled = true  -- Enable outline for the fade-out
+UIStroke.Enabled = true
 
 -- Reverse deletion: Fade out letter-by-letter from the last character
 local text = TextLabel.Text
 local length = #text
 
--- Reverse letter deletion animation (like erasing the text from last letter to first)
 for i = length, 1, -1 do
-    -- Cut the text to progressively remove one character at a time (reverse)
-    TextLabel.Text = text:sub(1, i - 1)  -- This removes the last character one by one
-
-    -- Smoothly reduce text transparency and blur effect
-    TextLabel.TextTransparency = 1 - (i / length)  -- Gradually make the text fully transparent
-    BlurEffect.Size = 20 - (i / 2)  -- Gradually reduce the blur as the text disappears
-
-    -- Add smooth delay for the gradual effect
-    wait(0.1)  -- Adjust this to make the effect smoother or faster
+    TextLabel.Text = text:sub(1, i - 1)
+    TextLabel.TextTransparency = 1 - (i / length)
+    BlurEffect.Size = 20 - (i / 2)
+    wait(0.1)
 end
 
 -- Once all letters are deleted, the blur effect should also be at 0
 BlurEffect.Size = 0
 
--- Clean-up (just in case)
+-- Clean-up after the outro sound finishes
+outroSound:Stop()  -- Stop the outro sound when it's done
+
+-- Clean-up
 BlurEffect:Destroy()
 ScreenGui:Destroy()
