@@ -95,8 +95,6 @@
 				createTag(player, "AK ADVERTISER")
 			elseif table.find(FreeTrial, player.Name) then
 				createTag(player, "AK TRIAL")
-			elseif table.find(getgenv().premiumUsers, player.Name) then
-				createTag(player, "AK USER")
 			end
 		end
 
@@ -107,7 +105,7 @@
 
 		-- Apply tags to new players who join
 		game.Players.PlayerAdded:Connect(function(plr)
-player.CharacterAppearanceLoaded:Connect(function(character)
+plr.CharacterAppearanceLoaded:Connect(function(character)
 wait(0.1)
 applyPlayerTag(plr)
 end)
