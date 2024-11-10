@@ -3,7 +3,7 @@ local commands = {
     "+ Added cmd: \"/lookat (display name), /unlookat\"",
     "+ Added cmd: \"/stopglide\"",
     "+ Added cmd: \"/tptoplayer"",
-    "+ REVAMPED TAG SYSTEM",
+    "+ REVAMPED TAG SYSTEM"
 }
 
 local gajIDFANIAS8762 = Instance.new("ScreenGui")
