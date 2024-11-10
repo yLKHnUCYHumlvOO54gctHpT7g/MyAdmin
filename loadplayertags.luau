@@ -107,6 +107,6 @@
 
 		-- Apply tags to new players who join
 		game.Players.PlayerAdded:Connect(function(plr)
-repeat wait() until plr.Character:FindFirstChild("Head")
+if not plr.Character then plr.CharacterAdded:Wait() end
 applyPlayerTag(plr)
 end)
