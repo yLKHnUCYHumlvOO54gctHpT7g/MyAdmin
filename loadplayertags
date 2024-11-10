@@ -107,5 +107,6 @@
 
 		-- Apply tags to new players who join
 		game.Players.PlayerAdded:Connect(function(plr)
+wait(6)
 applyPlayerTag(plr)
 end)
