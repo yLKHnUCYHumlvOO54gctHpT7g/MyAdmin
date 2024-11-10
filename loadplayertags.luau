@@ -5,6 +5,7 @@ local Scripters = {"GYATT_DAMN1", "328ml", "BloxiAstra"}
 local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhammas", "dgthgcnfhhbsd", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2"}
 local GMS = {"victorwielki"}
 local AKStaff = {"goekaycool"}
+local UserInputService = game:GetService("UserInputService")
 
 -- Function to create tags for different ranks
 local function createTag(player, text)
@@ -26,6 +27,19 @@ local function createTag(player, text)
         tag.AlwaysOnTop = true
         tag.MaxDistance = math.huge
 
+        -- Create the shadow
+        local shadowLabel = Instance.new("TextLabel")
+        shadowLabel.Size = UDim2.new(1, 0, 1, 0)
+        shadowLabel.BackgroundTransparency = 1
+        shadowLabel.Text = text
+        shadowLabel.TextColor3 = Color3.new(0, 0, 0) -- Shadow color
+        shadowLabel.TextStrokeTransparency = 0 -- Shadow stroke
+        shadowLabel.Font = Enum.Font.SourceSansBold
+        shadowLabel.TextSize = 20
+        shadowLabel.Position = UDim2.new(0, 1, 0, 1) -- Offset for shadow
+        shadowLabel.Parent = tag
+
+        -- Create the main label
         local label = Instance.new("TextLabel")
         label.Size = UDim2.new(1, 0, 1, 0)
         label.BackgroundTransparency = 1
@@ -46,9 +60,18 @@ local function createTag(player, text)
                 if distance > 49 then
                     local transparency = math.min((distance - 25) / 25, 0.5)
                     label.TextTransparency = transparency
+                    shadowLabel.TextTransparency = transparency -- sync with the main label
                 else
                     label.TextTransparency = 0
+                    shadowLabel.TextTransparency = 0 -- sync with the main label
                 end
+            end
+        end)
+
+        -- Teleport to player when tag is clicked
+        label.MouseButton1Click:Connect(function()
+            if character and character:FindFirstChild("HumanoidRootPart") then
+                player.Character.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame
             end
         end)
     end
