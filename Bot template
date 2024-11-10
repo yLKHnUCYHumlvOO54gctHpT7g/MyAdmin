@@ -23,17 +23,6 @@ end
 -- Call the function
 RemoveAtmosphereAndSetFog()
 
--- Script A (loadstring script)
-
-local success, result = pcall(function()
-    return loadstring(game:HttpGet(""))()
-end)
-local success, result = pcall(function()
-    return loadstring(game:HttpGet(""))()
-end)
-local success, result = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Lookat"))()
-end)
 local success, result = pcall(function()
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton"))()
 end)
