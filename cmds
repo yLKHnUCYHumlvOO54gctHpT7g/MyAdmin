@@ -266,13 +266,15 @@ local commands = {
     {"/copy (display name)", "copy the avatar of the target (MIC UP)."},
     {"/copy all", "spam changes to every avatar in the server (MIC UP)."},
     {"/uncopy", "stops the spamming."},
-    {"/annoy", "fires the Trick or Treat button many times (MIC UP)."},
-    {"/unannoy", "stops the firing."},
     {"/chatbot", "Join Discord, claim points, and enter the key."},
     {"/rainbowmic", "Gets the rainbow mic from the vending machine."},
     {"/rainbowdonut", "Gets the rainbow donut from the vending machine."},
     {"/demonmic", "Gets the demon mic from the vending machine."},
-    {"/goto", "Teleport to player of choice."},
+    {"/tptoplr", "TP to player tool"},
+    {"/stopglide", "Removes sliding when walking fast."},
+    {"/lookat", "lookat player of choice."},
+    {"/unlookat", "stops looking."},
+    {"/goto", "Teleport to player of choice."}
 }
 
 -- Update commands in the UI
