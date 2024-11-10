@@ -5,6 +5,8 @@ StarterGui:SetCore("SendNotification", {
     Duration = 5
 })
 
+local prefix = "/" -- Prefix for commands
+
 -- Function to find the closest matching command
 local function suggestClosestCommand(input)
     if not input then return nil end
@@ -44,29 +46,29 @@ local function executeCommand(command)
         end)
         
         if success then
-            StarterGui:SetCore("SendNotification", {
+            game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = "Command Executed ✅",
                 Text = "Executed: " .. command,
                 Duration = 3
             })
         else
-            StarterGui:SetCore("SendNotification", {
+            game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = "Execution Error ❌",
                 Text = "Error executing command",
                 Duration = 5
             })
         end
     else
-        -- Suggestion handling (will only occur when there is no exact match)
+        -- Try to find a similar command
         local suggestion = suggestClosestCommand(command)
         if suggestion then
-            StarterGui:SetCore("SendNotification", {
+            game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = "Command Suggestion 💡",
                 Text = "Did you mean: " .. suggestion .. "?",
                 Duration = 5
             })
         else
-            StarterGui:SetCore("SendNotification", {
+            game:GetService("StarterGui"):SetCore("SendNotification", {
                 Title = "Unknown Command ❌",
                 Text = "Command not found",
                 Duration = 3
@@ -77,31 +79,21 @@ end
 
 -- Connect chat event to command execution
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    -- Define the prefix
-    local prefix = "/"
-    
-    -- Only proceed if the message starts with the prefix
+    -- Check if the message starts with the prefix
     if msg:sub(1, #prefix) == prefix then
-        -- Remove prefix and any leading/trailing whitespace, convert to lowercase for comparison
+        -- Remove prefix, trim spaces, and convert to lowercase for comparison
         local command = msg:sub(#prefix + 1):lower():match("^%s*(.-)%s*$")
         
-        -- Check if the command exists and execute it
         if _G.cmds[command] then
             executeCommand(command)
         else
-            -- Only suggest a command if no exact match was found
+            -- Try to suggest a command
             local suggestion = suggestClosestCommand(command)
             if suggestion then
-                StarterGui:SetCore("SendNotification", {
+                game:GetService("StarterGui"):SetCore("SendNotification", {
                     Title = "Command Suggestion 💡",
                     Text = "Did you mean: " .. suggestion .. "?",
                     Duration = 5
-                })
-            else
-                StarterGui:SetCore("SendNotification", {
-                    Title = "Unknown Command ❌",
-                    Text = "Command not found",
-                    Duration = 3
                 })
             end
         end
