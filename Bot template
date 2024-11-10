@@ -61,14 +61,6 @@ local function Chat(msg)
 	end
 end
 
--- Function to check if a player's name or display name contains a given substring
-local function nameMatches(player, partialName)
-	local nameLower = player.Name:lower()
-	local displayNameLower = player.DisplayName:lower()
-	partialName = partialName:lower()
-	return nameLower:find(partialName) or displayNameLower:find(partialName)
-end
-
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadownercmds.luau"))()
 
 
