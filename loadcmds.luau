@@ -1,3 +1,4 @@
+
 local StarterGui = game:GetService("StarterGui")
 StarterGui:SetCore("SendNotification", {
     Title = "AK ADMIN",
@@ -94,10 +95,22 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
             if fullCommand == suggestion:lower() then
                 executeCommand(suggestion)
             else
+                -- Create buttons for the suggestion
+                local bindable = Instance.new("BindableFunction")
+                
+                function bindable.OnInvoke(response)
+                    if response == "Yes" then
+                        executeCommand(suggestion)
+                    end
+                end
+                
                 game:GetService("StarterGui"):SetCore("SendNotification", {
                     Title = "Command Suggestion 💡",
                     Text = "Did you mean: " .. suggestion .. "?",
-                    Duration = 5
+                    Duration = 10,
+                    Button1 = "Yes",
+                    Button2 = "No",
+                    Callback = bindable
                 })
             end
         else
