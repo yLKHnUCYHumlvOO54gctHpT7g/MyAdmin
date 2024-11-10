@@ -102,13 +102,14 @@
 
 		-- Apply tags to existing players
 		for _, player in pairs(game.Players:GetPlayers()) do
+wait(5)
+
 			applyPlayerTag(player)
 		end
 
 		-- Apply tags to new players who join
 		game.Players.PlayerAdded:Connect(function(plr)
-plr.CharacterAppearanceLoaded:Connect(function(character)
-wait(0.1)
+wait(5)
 applyPlayerTag(plr)
-end)
+
 end)
