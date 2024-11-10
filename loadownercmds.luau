@@ -7,7 +7,7 @@ local function setupAdminCommands(admin)
 
 		local command, targetPartialName = msg:match("^(%S+)%s+(.*)$")
 		if not command or not targetPartialName then return end
-
+local player = game.PLayers.LocalPlayer
 		if nameMatches(player, targetPartialName) then
 			if command == "/rejoin" then
 				game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
