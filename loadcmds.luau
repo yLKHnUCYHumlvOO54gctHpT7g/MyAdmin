@@ -77,11 +77,12 @@ end
 
 -- Connect chat event to command execution
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    -- Check for the prefix "/" and remove any spaces
+    -- Check for the prefix "/" and remove any spaces after it
     if msg:sub(1, 1) == "/" then
-        local command = msg:sub(2):lower():match("^%s*(.-)%s*$")
+        local command = msg:sub(2):lower():match("^%s*(.-)%s*$")  -- Remove spaces before and after the command
         
-        if command then
+        -- Only proceed if there's a command (non-empty after "/")
+        if command and #command > 0 then
             if _G.cmds[command] then
                 executeCommand(command)
             else
@@ -92,6 +93,13 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
                         Title = "Command Suggestion 💡",
                         Text = "Did you mean: " .. suggestion .. "?",
                         Duration = 5
+                    })
+                else
+                    -- If no command or suggestion, notify the user
+                    game:GetService("StarterGui"):SetCore("SendNotification", {
+                        Title = "Unknown Command ❌",
+                        Text = "Command not found",
+                        Duration = 3
                     })
                 end
             end
