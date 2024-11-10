@@ -16,8 +16,8 @@ local function createAlignOrientation(part)
     alignOrientation = Instance.new("AlignOrientation")
     alignOrientation.Mode = Enum.OrientationAlignmentMode.OneAttachment
     alignOrientation.RigidityEnabled = false  -- Smooth rotation
-    alignOrientation.MaxTorque = math.huge    -- Full rotation allowed
-    alignOrientation.Responsiveness = 15      -- Adjusts turning speed
+    alignOrientation.MaxTorque = 50000    -- Reduced from math.huge
+    alignOrientation.Responsiveness = 10      -- Reduced from 15
     alignOrientation.Parent = part
 
     -- Attach AlignOrientation to UpperTorso or Head
@@ -55,7 +55,7 @@ local function startLookingAt(targetName)
             createAlignOrientation(upperTorso)
         end
 
-        loopConnection = RunService.RenderStepped:Connect(function()
+        loopConnection = RunService.Heartbeat:Connect(function()
             if upperTorso and targetCharacter:FindFirstChild("HumanoidRootPart") then
                 -- Calculate the direction to the target’s position
                 local targetPosition = targetCharacter.HumanoidRootPart.Position
@@ -63,10 +63,13 @@ local function startLookingAt(targetName)
                 
                 -- Limit the vertical rotation to prevent excessive tilting
                 local horizontalLookDirection = Vector3.new(lookDirection.X, 0, lookDirection.Z).Unit
-                local clampedLookDirection = Vector3.new(horizontalLookDirection.X, math.clamp(lookDirection.Y, -0.5, 0.5), horizontalLookDirection.Z)
+                local clampedLookDirection = Vector3.new(horizontalLookDirection.X, math.clamp(lookDirection.Y, -0.3, 0.3), horizontalLookDirection.Z)
                 
-                -- Update AlignOrientation to smoothly face the target
-                alignOrientation.CFrame = CFrame.lookAt(upperTorso.Position, upperTorso.Position + clampedLookDirection)
+                -- Add distance check to prevent looking when too close
+                local distance = (targetPosition - upperTorso.Position).Magnitude
+                if distance > 2 then -- Only look if target is more than 2 studs away
+                    alignOrientation.CFrame = CFrame.lookAt(upperTorso.Position, upperTorso.Position + clampedLookDirection)
+                end
             end
         end)
     end
