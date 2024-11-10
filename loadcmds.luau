@@ -88,18 +88,22 @@ end
 
 -- Connect chat event to command execution
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    local command = msg:lower():match("^%s*(.-)%s*$")
-    
-    if command and _G.cmds[command] then
-        executeCommand(command)
-    else
-        local suggestion = suggestClosestCommand(command)
-        if suggestion then
-            StarterGui:SetCore("SendNotification", {
-                Title = "Command Suggestion 💡",
-                Text = "Did you mean: " .. suggestion .. "?",
-                Duration = 5
-            })
+    -- Only process commands that start with "/"
+    if msg:sub(1, 1) == "/" then
+        -- Remove the prefix for command processing
+        local command = msg:sub(2):lower():match("^%s*(.-)%s*$")
+        
+        if command and _G.cmds[command] then
+            executeCommand(command)
+        else
+            local suggestion = suggestClosestCommand(command)
+            if suggestion then
+                StarterGui:SetCore("SendNotification", {
+                    Title = "Command Suggestion 💡",
+                    Text = "Did you mean: " .. suggestion .. "?",
+                    Duration = 5
+                })
+            end
         end
     end
 end)
