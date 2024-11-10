@@ -1,3 +1,4 @@
+local adminCmd = {"AK_ADMEN1", "AK_ADMEN2", "goekaycool", "GYATT_DAMN1", "BloxiAstra", "IIIlIIIllIlIllIII", "AliKhammas1234", "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD"}
 
 -- Function to setup command listeners for each admin
 local function setupAdminCommands(admin)
