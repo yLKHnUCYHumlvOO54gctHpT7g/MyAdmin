@@ -61,8 +61,7 @@ getgenv().whitelistedPlayers = {
     "Polpy_kid",
     "qs2w8",
     "BloxiAstra",
-    "AliKhammas",
-    "Deutschland_Guys"
+    "AliKhammas"
 }
 
 getgenv().premiumUsers = {
@@ -116,7 +115,7 @@ getgenv().premiumUsers = {
     "alt1lr",
     "Polpy_kid",
     "qs2w8",
-    "Deutschland_Guys"
+    "BloxiAstra"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
