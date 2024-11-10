@@ -95,6 +95,8 @@
 				createTag(player, "AK ADVERTISER")
 			elseif table.find(FreeTrial, player.Name) then
 				createTag(player, "AK TRIAL")
+			elseif table.find(getgenv().premiumUsers, player.Name) then
+				createTag(player, "AK USER")
 			end
 		end
 
