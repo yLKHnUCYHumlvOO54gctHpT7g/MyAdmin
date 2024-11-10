@@ -77,36 +77,21 @@ end
 
 -- Connect chat event to command execution
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    -- Only process messages that start with "/"
-    if msg:sub(1,1) == "/" then
-        -- Remove the "/" and any spaces, convert to lowercase
-        local command = msg:sub(2):lower():match("^%s*(.-)%s*$")
-        
-        if command then
-            if _G.cmds[command] then
-                executeCommand(command)
-            else
-                -- Try to suggest a command
-                local suggestion = suggestClosestCommand(command)
-                if suggestion then
-                    -- If the command exactly matches the suggestion (ignoring case),
-                    -- execute it instead of showing the suggestion
-                    if command:lower() == suggestion:lower() then
-                        executeCommand(suggestion)
-                    else
-                        game:GetService("StarterGui"):SetCore("SendNotification", {
-                            Title = "Command Suggestion 💡",
-                            Text = "Did you mean: " .. suggestion .. "?",
-                            Duration = 5
-                        })
-                    end
-                else
-                    game:GetService("StarterGui"):SetCore("SendNotification", {
-                        Title = "Unknown Command ❌",
-                        Text = "Command not found",
-                        Duration = 3
-                    })
-                end
+    -- Remove any spaces and convert to lowercase for comparison
+    local command = msg:lower():match("^%s*(.-)%s*$")
+    
+    if command then
+        if _G.cmds[command] then
+            executeCommand(command)
+        else
+            -- Try to suggest a command
+            local suggestion = suggestClosestCommand(command)
+            if suggestion then
+                game:GetService("StarterGui"):SetCore("SendNotification", {
+                    Title = "Command Suggestion 💡",
+                    Text = "Did you mean: " .. suggestion .. "?",
+                    Duration = 5
+                })
             end
         end
     end
