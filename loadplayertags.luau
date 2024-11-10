@@ -5,7 +5,6 @@ local Scripters = {"GYATT_DAMN1", "328ml", "BloxiAstra"}
 local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhammas", "dgthgcnfhhbsd", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2"}
 local GMS = {"victorwielki"}
 local AKStaff = {"goekaycool"}
-local UserInputService = game:GetService("UserInputService")
 
 -- Function to create tags for different ranks
 local function createTag(player, text)
@@ -67,13 +66,6 @@ local function createTag(player, text)
                 end
             end
         end)
-
-        -- Teleport to player when tag is clicked
-        label.MouseButton1Click:Connect(function()
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                player.Character.HumanoidRootPart.CFrame = character.HumanoidRootPart.CFrame
-            end
-        end)
     end
 
     -- Apply the tag if the character is loaded
@@ -116,3 +108,30 @@ end
 game.Players.PlayerAdded:Connect(function(plr)
     applyPlayerTag(plr)
 end)
+
+-- Function to teleport to the clicked player
+local function onPlayerClick(targetPlayer)
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        player.Character:MoveTo(targetPlayer.Character.HumanoidRootPart.Position)
+    end
+end
+
+-- Detect clicks on players with tags
+local function detectPlayerClick()
+    local mouse = player:GetMouse()
+
+    mouse.Button1Click:Connect(function()
+        local target = mouse.Target
+        if target and target.Parent then
+            local character = target.Parent
+            local head = character:FindFirstChild("Head")
+            if head and head:FindFirstChild("RankTag") then
+                -- Teleport to the player when clicked
+                onPlayerClick(game.Players:GetPlayerFromCharacter(character))
+            end
+        end
+    end)
+end
+
+-- Start detecting player clicks
+detectPlayerClick()
