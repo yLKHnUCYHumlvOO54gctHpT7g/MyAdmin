@@ -24,7 +24,7 @@ Frame.BackgroundTransparency = 0.15
 Frame.BorderSizePixel = 0
 Frame.AnchorPoint = Vector2.new(0.5, 0)
 Frame.Position = UDim2.new(0.5, 0, 0, 20)
-Frame.Size = UDim2.new(0, 440, 0, 140)
+Frame.Size = UDim2.new(0, 460, 0, 160)
 
 UICorner.Parent = Frame
 UICorner.CornerRadius = UDim.new(0.04, 0)
@@ -52,7 +52,7 @@ TitleLabel.TextSize = 24
 commandListFrame.Parent = Frame
 commandListFrame.BackgroundTransparency = 1
 commandListFrame.Position = UDim2.new(0, 20, 0, 50)
-commandListFrame.Size = UDim2.new(1, -40, 1, -60)
+commandListFrame.Size = UDim2.new(1, -40, 1, -80)
 
 UIListLayout.Parent = commandListFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -62,7 +62,7 @@ UIListLayout.Padding = UDim.new(0, 8)
 CloseButton.Parent = Frame
 CloseButton.BackgroundColor3 = Color3.fromRGB(255, 85, 85)
 CloseButton.BackgroundTransparency = 0.3
-CloseButton.Position = UDim2.new(1, -30, 0, 10)
+CloseButton.Position = UDim2.new(1, -35, 0, 10)
 CloseButton.Size = UDim2.new(0, 20, 0, 20)
 CloseButton.Font = Enum.Font.GothamBold
 CloseButton.Text = "×"
@@ -118,12 +118,25 @@ end
 -- Resize Frame based on content
 local function resizeFrame()
     local commandCount = #commands
-    local frameHeight = math.clamp(commandCount * 25 + 70, 120, 400)
-    Frame.Size = UDim2.new(0, 440, 0, frameHeight)
+    local frameHeight = math.clamp(commandCount * 25 + 90, 140, 420)
+    Frame.Size = UDim2.new(0, 460, 0, frameHeight)
 end
+
+-- Persistent BlurEffect
+local blur
 
 -- Animations
 local function slideIn()
+    -- Create and apply a BlurEffect (if not already created)
+    if not blur then
+        blur = Instance.new("BlurEffect")
+        blur.Parent = game:GetService("Lighting")
+        blur.Size = 0
+
+        -- Tween the blur's intensity
+        game:GetService("TweenService"):Create(blur, TweenInfo.new(0.8), { Size = 24 }):Play()
+    end
+
     Frame.Position = UDim2.new(1.5, 0, 0, 20)
     Frame:TweenPosition(
         UDim2.new(0.5, 0, 0, 20),
@@ -135,6 +148,16 @@ local function slideIn()
 end
 
 local function slideOut()
+    -- Tween the blur to reduce intensity and remove it
+    if blur then
+        local tween = game:GetService("TweenService"):Create(blur, TweenInfo.new(0.8), { Size = 0 })
+        tween:Play()
+        tween.Completed:Connect(function()
+            blur:Destroy()
+            blur = nil
+        end)
+    end
+
     Frame:TweenPosition(
         UDim2.new(-0.5, 0, 0, 20),
         Enum.EasingDirection.In,
