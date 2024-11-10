@@ -1,4 +1,4 @@
-        local StarterGui = game:GetService("StarterGui")
+local StarterGui = game:GetService("StarterGui")
 StarterGui:SetCore("SendNotification", {
     Title = "AK ADMIN",
     Text = "Welcome to AK ADMIN! Type /cmds to see the available commands.",
@@ -77,21 +77,24 @@ end
 
 -- Connect chat event to command execution
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    -- Remove any spaces and convert to lowercase for comparison
-    local command = msg:lower():match("^%s*(.-)%s*$")
-    
-    if command then
-        if _G.cmds[command] then
-            executeCommand(command)
-        else
-            -- Try to suggest a command
-            local suggestion = suggestClosestCommand(command)
-            if suggestion then
-                game:GetService("StarterGui"):SetCore("SendNotification", {
-                    Title = "Command Suggestion 💡",
-                    Text = "Did you mean: " .. suggestion .. "?",
-                    Duration = 5
-                })
+    -- Only process messages that start with "/"
+    if msg:sub(1,1) == "/" then
+        -- Remove the "/" and any spaces, convert to lowercase
+        local command = msg:sub(2):lower():match("^%s*(.-)%s*$")
+        
+        if command then
+            if _G.cmds[command] then
+                executeCommand(command)
+            else
+                -- Try to suggest a command
+                local suggestion = suggestClosestCommand(command)
+                if suggestion then
+                    game:GetService("StarterGui"):SetCore("SendNotification", {
+                        Title = "Command Suggestion 💡",
+                        Text = "Did you mean: " .. suggestion .. "?",
+                        Duration = 5
+                    })
+                end
             end
         end
     end
