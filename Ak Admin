@@ -122,8 +122,7 @@ getgenv().premiumUsers = {
     "yuodsaq6backup",
     "forhelpingboi9",
     "Solo_Cart24",
-    "egr_tor",
-    "BloxiAstra"
+    "egr_tor"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
