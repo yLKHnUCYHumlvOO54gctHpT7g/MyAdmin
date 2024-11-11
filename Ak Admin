@@ -64,7 +64,8 @@ getgenv().whitelistedPlayers = {
     "BloxiAstra",
     "yuodsaq6backup",
     "forhelpingboi9",
-    "Solo_Cart24"
+    "Solo_Cart24",
+    "egr_tor"
 }
 
 getgenv().premiumUsers = {
@@ -121,7 +122,8 @@ getgenv().premiumUsers = {
     "BloxiAstra",
     "yuodsaq6backup",
     "forhelpingboi9",
-    "Solo_Cart24"
+    "Solo_Cart24",
+    "egr_tor"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
