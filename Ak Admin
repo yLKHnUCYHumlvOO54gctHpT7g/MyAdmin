@@ -61,7 +61,6 @@ getgenv().whitelistedPlayers = {
     "Polpy_kid",
     "AliKhammas",
     "Deutschland_Guys",
-    "Solo_Cart24",
     "egr_tor",
     "BloxiAstra",
     "DeepSpaceDay64"
@@ -118,7 +117,6 @@ getgenv().premiumUsers = {
     "alt1lr",
     "Polpy_kid",
     "Deutschland_Guys",
-    "Solo_Cart24",
     "egr_tor",
     "DeepSpaceDay64"
 }
