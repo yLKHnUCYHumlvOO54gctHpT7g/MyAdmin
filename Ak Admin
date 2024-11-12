@@ -61,7 +61,8 @@ getgenv().whitelistedPlayers = {
     "Polpy_kid",
     "AliKhammas",
     "Deutschland_Guys",
-    "DeepSpaceDay64"
+    "DeepSpaceDay64",
+    "BloxiAstra"
 }
 
 getgenv().premiumUsers = {
