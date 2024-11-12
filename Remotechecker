@@ -1,0 +1,234 @@
+-- Services
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Create GUI Elements
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.Name = "RemoteEventGui"
+
+-- Main Frame to hold the entire GUI
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0, 260, 0, 360) -- Smaller size
+mainFrame.Position = UDim2.new(0.5, -130, 0.5, -180) -- Centered on screen
+mainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+mainFrame.BackgroundTransparency = 0.2 -- Slight transparency for a modern look
+mainFrame.BorderSizePixel = 0
+mainFrame.Visible = true
+mainFrame.Parent = screenGui
+
+-- Add rounded corners and shadow to mainFrame
+local mainUICorner = Instance.new("UICorner")
+mainUICorner.CornerRadius = UDim.new(0, 8)
+mainUICorner.Parent = mainFrame
+
+local mainShadow = Instance.new("ImageLabel")
+mainShadow.Size = UDim2.new(1, 20, 1, 20)
+mainShadow.Position = UDim2.new(0, -10, 0, -10)
+mainShadow.BackgroundTransparency = 1
+mainShadow.Image = "rbxassetid://1316045217"
+mainShadow.ImageTransparency = 0.8
+mainShadow.ScaleType = Enum.ScaleType.Slice
+mainShadow.SliceCenter = Rect.new(10, 10, 118, 118)
+mainShadow.Parent = mainFrame
+mainShadow.ZIndex = -1
+
+-- Title at the top of the GUI
+local title = Instance.new("TextLabel")
+title.Text = "AKs Remote Checker"
+title.Size = UDim2.new(1, 0, 0, 40) -- Smaller height
+title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+title.BackgroundTransparency = 0.3 -- Slight transparency
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 18
+title.Font = Enum.Font.SourceSansBold
+title.TextStrokeTransparency = 0.5
+title.TextXAlignment = Enum.TextXAlignment.Center
+title.Parent = mainFrame
+
+-- Add rounded corners to title
+local titleUICorner = Instance.new("UICorner")
+titleUICorner.CornerRadius = UDim.new(0, 8)
+titleUICorner.Parent = title
+
+-- Close Button
+local closeButton = Instance.new("TextButton")
+closeButton.Text = "X"
+closeButton.Size = UDim2.new(0, 25, 0, 25) -- Smaller button
+closeButton.Position = UDim2.new(1, -35, 0, 7)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.TextSize = 14
+closeButton.Font = Enum.Font.SourceSansBold
+closeButton.Parent = title
+
+-- Add rounded corners to closeButton
+local closeUICorner = Instance.new("UICorner")
+closeUICorner.CornerRadius = UDim.new(0, 5)
+closeUICorner.Parent = closeButton
+
+-- Separator line
+local separator = Instance.new("Frame")
+separator.Size = UDim2.new(1, -20, 0, 2)
+separator.Position = UDim2.new(0, 10, 0, 38)
+separator.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
+separator.Parent = mainFrame
+
+-- Scrolling Frame to hold the RemoteEvent list
+local scrollFrame = Instance.new("ScrollingFrame")
+scrollFrame.Size = UDim2.new(1, -20, 1, -60) -- Adjusted height
+scrollFrame.Position = UDim2.new(0, 10, 0, 50)
+scrollFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+scrollFrame.BackgroundTransparency = 0.2
+scrollFrame.BorderSizePixel = 0
+scrollFrame.ScrollBarThickness = 8
+scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0) -- Initial canvas size (will be adjusted dynamically)
+scrollFrame.Parent = mainFrame
+
+-- Add rounded corners to scrollFrame
+local scrollUICorner = Instance.new("UICorner")
+scrollUICorner.CornerRadius = UDim.new(0, 8)
+scrollUICorner.Parent = scrollFrame
+
+-- UIListLayout for arranging buttons vertically
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.FillDirection = Enum.FillDirection.Vertical
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 4) -- Smaller padding
+UIListLayout.Parent = scrollFrame
+
+-- Padding for the Scrolling Frame
+local uiPadding = Instance.new("UIPadding")
+uiPadding.PaddingTop = UDim.new(0, 8)
+uiPadding.PaddingBottom = UDim.new(0, 8)
+uiPadding.PaddingLeft = UDim.new(0, 8)
+uiPadding.PaddingRight = UDim.new(0, 8)
+uiPadding.Parent = scrollFrame
+
+-- Draggable functionality for mainFrame
+local dragging, dragInput, dragStart, startPos
+local function update(input)
+    local delta = input.Position - dragStart
+    mainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+title.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = mainFrame.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+title.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+-- Close button functionality
+closeButton.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+-- Function to create a button for each RemoteEvent
+local function createRemoteEventButton(eventName)
+    local eventFrame = Instance.new("Frame")
+    eventFrame.Size = UDim2.new(1, 0, 0, 32) -- Smaller button
+    eventFrame.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    eventFrame.Parent = scrollFrame
+
+    -- Add rounded corners to eventFrame
+    local eventFrameUICorner = Instance.new("UICorner")
+    eventFrameUICorner.CornerRadius = UDim.new(0, 6)
+    eventFrameUICorner.Parent = eventFrame
+
+    -- RemoteEvent Name Label
+    local eventLabel = Instance.new("TextLabel")
+    eventLabel.Text = eventName
+    eventLabel.Size = UDim2.new(0.7, 0, 1, 0)
+    eventLabel.BackgroundTransparency = 1
+    eventLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    eventLabel.TextSize = 12 -- Smaller text size
+    eventLabel.Font = Enum.Font.SourceSans
+    eventLabel.TextXAlignment = Enum.TextXAlignment.Left
+    eventLabel.Parent = eventFrame
+
+    -- Fire Button
+    local fireButton = Instance.new("TextButton")
+    fireButton.Text = "Fire"
+    fireButton.Size = UDim2.new(0.3, -4, 0.8, 0) -- Smaller button
+    fireButton.Position = UDim2.new(0.7, 4, 0.1, 0)
+    fireButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+    fireButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    fireButton.TextSize = 12 -- Smaller text size
+    fireButton.Font = Enum.Font.SourceSansBold
+    fireButton.Parent = eventFrame
+
+    -- Add rounded corners to fireButton
+    local fireButtonUICorner = Instance.new("UICorner")
+    fireButtonUICorner.CornerRadius = UDim.new(0, 4)
+    fireButtonUICorner.Parent = fireButton
+
+    -- Add hover effect to fireButton
+    fireButton.MouseEnter:Connect(function()
+        fireButton.BackgroundColor3 = Color3.fromRGB(120, 120, 255)
+    end)
+    fireButton.MouseLeave:Connect(function()
+        fireButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+    end)
+
+    -- When clicked, fire the RemoteEvent
+    fireButton.MouseButton1Click:Connect(function()
+        local remoteEvent = ReplicatedStorage:FindFirstChild(eventName)
+        if remoteEvent and remoteEvent:IsA("RemoteEvent") then
+            -- Ensure correct firing of events
+            pcall(function()
+                remoteEvent:FireServer()
+                print("Successfully fired: " .. eventName)
+            end)
+        else
+            print("Event not found or not a RemoteEvent: " .. eventName)
+        end
+    end)
+end
+
+-- Adjust canvas size based on content size
+local function adjustScrollFrameCanvasSize()
+    local contentSize = UIListLayout.AbsoluteContentSize
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, contentSize.Y + 20)
+end
+
+-- Detect and List All RemoteEvents in ReplicatedStorage
+local function loadRemoteEvents()
+    for _, object in pairs(ReplicatedStorage:GetDescendants()) do
+        if object:IsA("RemoteEvent") then
+            createRemoteEventButton(object.Name)
+        end
+    end
+    adjustScrollFrameCanvasSize()
+end
+
+-- Detect new RemoteEvents added to ReplicatedStorage
+ReplicatedStorage.DescendantAdded:Connect(function(child)
+    if child:IsA("RemoteEvent") then
+        createRemoteEventButton(child.Name)
+        adjustScrollFrameCanvasSize()
+    end
+end)
+
+-- Load RemoteEvents when the GUI is opened
+loadRemoteEvents()
