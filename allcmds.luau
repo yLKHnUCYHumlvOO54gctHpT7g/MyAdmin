@@ -66,5 +66,6 @@ _G.cmds = {
     ["/demonmic"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/DemonMic",
     ["/rainbowmic"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Rainbowmic",
     ["/rainbowdonut"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Rainbowdonut",
+    ["/remotechecker"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Remotechecker",
     ["/hkill"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
