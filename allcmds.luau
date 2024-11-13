@@ -58,6 +58,7 @@ _G.cmds = {
     ["/rejoin"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin",
     ["/walkonvoid"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid",
     ["/antiheadsit"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Anti%20Headsit",
+    ["/sneak"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Sneak",
     ["/dropkick"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Dropkick",
     ["/antivoid"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Antivoid",
     ["/walkonair"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Walkonair",
