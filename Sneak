@@ -1,0 +1,152 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Create a large second baseplate (invisible)
+local secondBaseplatePosition = Vector3.new(108.033035, -6, -24.9428463)
+local secondBaseplate = Instance.new("Part")
+secondBaseplate.Size = Vector3.new(1024, 1, 1024)
+secondBaseplate.Position = secondBaseplatePosition
+secondBaseplate.Anchored = true
+secondBaseplate.Name = "SecondBaseplate"
+secondBaseplate.BrickColor = BrickColor.new("Medium green")
+secondBaseplate.Material = Enum.Material.Grass
+secondBaseplate.CanCollide = true
+secondBaseplate.Transparency = 1
+secondBaseplate.Parent = game.Workspace
+
+-- Smooth surface for the baseplate
+secondBaseplate.TopSurface = Enum.SurfaceType.Smooth
+secondBaseplate.BottomSurface = Enum.SurfaceType.Smooth
+
+-- Create GUI
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "BaseplateToggleGUI"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+-- Create the toggle button
+local toggleButton = Instance.new("TextButton")
+toggleButton.Size = UDim2.new(0, 100, 0, 40)
+toggleButton.Position = UDim2.new(0.1, 0, 0.9, 0)
+toggleButton.Text = "Toggle Float"
+toggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+toggleButton.TextSize = 14
+toggleButton.Font = Enum.Font.SourceSans
+toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+toggleButton.Parent = screenGui
+
+-- Styling for curved corners
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 8)
+corner.Parent = toggleButton
+
+-- Make the button draggable
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local function updateDrag(input)
+    local delta = input.Position - dragStart
+    toggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+toggleButton.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = toggleButton.Position
+
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+toggleButton.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        updateDrag(input)
+    end
+end)
+
+-- Clear any existing forces
+local function clearForces()
+    for _, child in pairs(humanoidRootPart:GetChildren()) do
+        if child:IsA("BodyVelocity") or child:IsA("BodyGyro") or child:IsA("BodyPosition") then
+            child:Destroy()
+        end
+    end
+end
+
+-- Noclip functionality (disable collision for character parts)
+local function noclipUpdate()
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = false
+        end
+    end
+end
+
+-- Float the player downwards
+local function floatDown()
+    clearForces()
+    noclipUpdate() -- Ensure noclip is active before floating
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.Velocity = Vector3.new(0, -2, 0)
+    bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+    bodyVelocity.Parent = humanoidRootPart
+    game:GetService("Debris"):AddItem(bodyVelocity, 2)
+end
+
+-- Float the player upwards
+local function floatUp()
+    clearForces()
+    noclipUpdate() -- Ensure noclip remains active
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.Velocity = Vector3.new(0, 2, 0)
+    bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+    bodyVelocity.Parent = humanoidRootPart
+    game:GetService("Debris"):AddItem(bodyVelocity, 2)
+end
+
+-- Toggle baseplate visibility and handle floating
+local isFloatingDown = true -- Start by floating down on execution
+
+toggleButton.MouseButton1Click:Connect(function()
+    isFloatingDown = not isFloatingDown
+    if isFloatingDown then
+        floatDown()
+    else
+        floatUp()
+    end
+end)
+
+-- Continuously ensure the player can noclip through everything
+game:GetService("RunService").Stepped:Connect(function()
+    noclipUpdate()
+end)
+
+-- Handle respawn and reapply changes
+local function onCharacterAdded(newCharacter)
+    character = newCharacter
+    humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    humanoid = character:WaitForChild("Humanoid")
+    clearForces()
+    noclipUpdate()
+end
+
+-- Connect respawn event
+player.CharacterAdded:Connect(onCharacterAdded)
+
+-- Start by floating the player down
+floatDown()
