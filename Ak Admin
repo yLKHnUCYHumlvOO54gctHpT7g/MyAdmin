@@ -66,7 +66,7 @@ getgenv().whitelistedPlayers = {
     "skibidicapybara92",
     "sweettooth1",
     "Robloxian74630436",
-    "bloxDxan_PlS"
+    "Dxan_PlayS"
 }
 
 getgenv().premiumUsers = {
@@ -124,7 +124,7 @@ getgenv().premiumUsers = {
     "skibidicapybara92",
     "sweettooth1",
     "Robloxian74630436",
-    "bloxDxan_PlS"
+    "Dxan_PlayS"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
