@@ -65,7 +65,8 @@ getgenv().whitelistedPlayers = {
     "BloxiAstra",
     "sweettooth1",
     "Dxan_PlayS",
-    "dave212196"
+    "dave212196",
+    "dyunaser7"
 }
 
 getgenv().premiumUsers = {
@@ -122,7 +123,8 @@ getgenv().premiumUsers = {
     "DeepSpaceDay64",
     "sweettooth1",
     "Dxan_PlayS",
-    "dave212196"
+    "dave212196",
+    "dyunaser7"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
