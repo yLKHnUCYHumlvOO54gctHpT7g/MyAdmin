@@ -1,12 +1,12 @@
 local player = game.Players.LocalPlayer
 
-local Advertisers = {"Vlafz195", "6736_45", "goekaycool", "goekayhack", "goekayball", "goekayball2"}
+local Advertisers = {"Vlafz195", "6736_45", "goekaycool", "goekayball", "goekayball2"}
 
 local FreeTrial = {}
 
 local Scripters = {"GYATT_DAMN1", "328ml", "BloxiAstra"}
 
-local Owners = {"IIIlIIIllIlIllIII", "AliKhammas1234", "AliKhammas", "dgthgcnfhhbsd", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2"}
+local Owners = {"Xeni_he07", "AliKhammas1234", "AliKhammas", "dgthgcnfhhbsd", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2"}
 
 local GMS = {"victorwielki"}
 
