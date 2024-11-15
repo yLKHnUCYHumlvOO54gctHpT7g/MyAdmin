@@ -65,12 +65,10 @@ getgenv().whitelistedPlayers = {
     "sweettooth1",
     "Lil_Twizzy7",
     "Username123458990567",
-    "adroklop",
     "Dxan_PlayS",
     "Deutschland_Guys",
     "Caseoh_12335",
-    "Robloxian74630436",
-    "Xeni_he07"
+    "Robloxian74630436"
 }
 
 getgenv().premiumUsers = {
@@ -127,7 +125,6 @@ getgenv().premiumUsers = {
     "sweettooth1",
     "Lil_Twizzy7",
     "Username123458990567",
-    "adroklop",
     "Dxan_PlayS",
     "Deutschland_Guys",
     "Caseoh_12335",
