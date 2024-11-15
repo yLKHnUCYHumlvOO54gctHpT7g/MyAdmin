@@ -24,6 +24,9 @@ end
 RemoveAtmosphereAndSetFog()
 
 local success, result = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Verfiedbadge.luau"))()
+end)
+local success, result = pcall(function()
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton"))()
 end)
 local success, result = pcall(function()
