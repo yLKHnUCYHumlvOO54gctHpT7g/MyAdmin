@@ -129,8 +129,7 @@ getgenv().premiumUsers = {
     "Dxan_PlayS",
     "Deutschland_Guys",
     "Caseoh_12335",
-    "Robloxian74630436",
-    "Xeni_he07"
+    "Robloxian74630436"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
