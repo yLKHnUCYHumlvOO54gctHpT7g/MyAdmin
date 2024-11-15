@@ -94,27 +94,27 @@ local function applyPlayerTag(player)
 
 if table.find(Owners, player.Name) then
 
-createTag(player, "AK OWNER")
+createTag(player, "AK OWNER ")
 
 elseif table.find(Scripters, player.Name) then
 
-createTag(player, "AK SCRIPTER")
+createTag(player, "AK SCRIPTER ")
 
 elseif table.find(GMS, player.Name) then
 
-createTag(player, "AK GM")
+createTag(player, "AK GM ")
 
 elseif table.find(AKStaff, player.Name) then
 
-createTag(player, "AK STAFF")
+createTag(player, "AK STAFF ")
 
 elseif table.find(Advertisers, player.Name) then
 
-createTag(player, "AK ADVERTISER")
+createTag(player, "AK ADVERTISER ")
 
 elseif table.find(FreeTrial, player.Name) then
 
-createTag(player, "AK TRIAL")
+createTag(player, "AK TRIAL ")
 
 elseif table.find(getgenv().premiumUsers, player.Name) then
 
