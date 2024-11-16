@@ -1,10 +1,5 @@
-local function nameMatches(player, partialName)
-    local nameLower = player.Name:lower()
-    local displayNameLower = player.DisplayName:lower()
-    partialName = partialName:lower()
-    return nameLower:find(partialName) or displayNameLower:find(partialName)
-end
-
+local DataStoreService = game:GetService("DataStoreService")
+local adminDataStore = DataStoreService:GetDataStore("AdminDataStore")
 local adminCmd = {
     "AK_ADMEN1", "Xeni_he07", "AK_ADMEN2", "goekaycool", "GYATT_DAMN1", 
     "BloxiAstra", "IIIlIIIllIlIllIII", "AliKhammas1234", 
@@ -31,96 +26,46 @@ local function Chat(msg)
     })
 end
 
-local function createCommandGui(player)
-    local gui = Instance.new("ScreenGui", player.PlayerGui)
-    gui.Name = "CommandGui"
-
-    local frame = Instance.new("Frame", gui)
-    frame.Size = UDim2.new(0.3, 0, 0.4, 0) -- Smaller GUI
-    frame.Position = UDim2.new(0.35, 0, 0.3, 0)
-    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    frame.BackgroundTransparency = 0.1
-    frame.BorderSizePixel = 2
-    frame.BorderColor3 = Color3.fromRGB(255, 255, 255)
-
-    local titleLabel = Instance.new("TextLabel", frame)
-    titleLabel.Size = UDim2.new(1, 0, 0.1, 0)
-    titleLabel.Position = UDim2.new(0, 0, 0, 0)
-    titleLabel.Text = "Owner Commands"
-    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    titleLabel.BackgroundTransparency = 1
-    titleLabel.Font = Enum.Font.SourceSansBold
-    titleLabel.TextSize = 24
-
-    local scrollFrame = Instance.new("ScrollingFrame", frame)
-    scrollFrame.Size = UDim2.new(1, 0, 0.8, 0)
-    scrollFrame.Position = UDim2.new(0, 0, 0.1, 0)
-    scrollFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    scrollFrame.ScrollBarThickness = 8
-    scrollFrame.CanvasSize = UDim2.new(0, 0, 5, 0) -- Adjust for commands
-
-    local layout = Instance.new("UIListLayout", scrollFrame)
-    layout.Padding = UDim.new(0, 5)
-
-    for _, command in ipairs(commandsList) do
-        local commandLabel = Instance.new("TextLabel", scrollFrame)
-        commandLabel.Size = UDim2.new(1, 0, 0, 30)
-        commandLabel.Text = command
-        commandLabel.TextColor3 = Color3.new(1, 1, 1)
-        commandLabel.BackgroundTransparency = 1
-        commandLabel.Font = Enum.Font.SourceSans
-        commandLabel.TextSize = 20
-    end
-
-    local closeButton = Instance.new("TextButton", frame)
-    closeButton.Size = UDim2.new(0.3, 0, 0.1, 0)
-    closeButton.Position = UDim2.new(0.35, 0, 0.9, 0)
-    closeButton.Text = "Close"
-    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-    closeButton.TextColor3 = Color3.new(1, 1, 1)
-    closeButton.Font = Enum.Font.SourceSans
-    closeButton.TextSize = 18
-
-    closeButton.MouseButton1Click:Connect(function()
-        gui:Destroy()
-    end)
-
-    -- Make the frame draggable
-    local dragging, dragInput, dragStart, startPos
-    local UIS = game:GetService("UserInputService")
-
-    local function update(input)
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-
-    frame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-            dragging = true
-            dragStart = input.Position
-            startPos = frame.Position
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
-            end)
-        end
-    end)
-
-    frame.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-            dragInput = input
-        end
-    end)
-
-    UIS.InputChanged:Connect(function(input)
-        if input == dragInput and dragging then
-            update(input)
-        end
-    end)
+local function nameMatches(player, partialName)
+    local nameLower = player.Name:lower()
+    local displayNameLower = player.DisplayName:lower()
+    partialName = partialName:lower()
+    return nameLower:find(partialName) or displayNameLower:find(partialName)
 end
 
--- Ensure commands target others only
+local function createCommandGui(admin)
+    -- Create a ScreenGui for the admin with a list of commands
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "AdminCommandGUI"
+    screenGui.Parent = admin.PlayerGui
+
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(0, 300, 0, 400)
+    frame.Position = UDim2.new(0, 10, 0, 10)
+    frame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    frame.Parent = screenGui
+
+    local uiListLayout = Instance.new("UIListLayout")
+    uiListLayout.Parent = frame
+    uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    uiListLayout.Padding = UDim.new(0, 10)
+
+    for _, cmd in ipairs(commandsList) do
+        local button = Instance.new("TextButton")
+        button.Size = UDim2.new(1, 0, 0, 30)
+        button.Text = cmd
+        button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.Font = Enum.Font.SourceSans
+        button.FontSize = Enum.FontSize.Size18
+        button.Parent = frame
+
+        button.MouseButton1Click:Connect(function()
+            admin:Chatted(cmd)
+        end)
+    end
+end
+
 local function executeCommand(admin, target, command)
     if admin.Name == target.Name then
         return -- Prevent executing on the admin themselves
@@ -133,9 +78,6 @@ local function executeCommand(admin, target, command)
     end
 end
 
--- Apply commands for adm
-
--- Apply commands for admins
 local function setupAdminCommands(admin)
     admin.Chatted:Connect(function(msg)
         msg = msg:lower()
@@ -303,16 +245,42 @@ local function setupAdminCommands(admin)
     end)
 end
 
-
--- Admin command listeners
-for _, player in ipairs(game.Players:GetPlayers()) do
-    if table.find(adminCmd, player.Name) then
-        setupAdminCommands(player)
+-- Function to add player to admin list
+local function addAdminToDataStore(player)
+    local success, errorMessage = pcall(function()
+        adminDataStore:SetAsync(player.UserId, true)
+    end)
+    if not success then
+        Chat("Failed to save admin data for " .. player.Name .. ": " .. errorMessage)
     end
 end
 
-game.Players.PlayerAdded:Connect(function(player)
-    if table.find(adminCmd, player.Name) then
-        setupAdminCommands(player)
+-- Load the admin list from data store
+local function loadAdmins()
+    for _, player in ipairs(game.Players:GetPlayers()) do
+        local success, isAdmin = pcall(function()
+            return adminDataStore:GetAsync(player.UserId)
+        end)
+        if success and isAdmin then
+            table.insert(adminCmd, player.Name)
+        end
     end
+end
+
+-- Apply commands for admins
+game.Players.PlayerAdded:Connect(function(player)
+    -- Check if the player is already an admin
+    local success, isAdmin = pcall(function()
+        return adminDataStore:GetAsync(player.UserId)
+    end)
+    
+    if success and isAdmin then
+        table.insert(adminCmd, player.Name)
+        setupAdminCommands(player)
+        addAdminToDataStore(player)
+    end
+end)
+
+game.Players.PlayerAdded:Connect(function(player)
+    loadAdmins()
 end)
