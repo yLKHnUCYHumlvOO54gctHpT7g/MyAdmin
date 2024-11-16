@@ -65,11 +65,11 @@ getgenv().whitelistedPlayers = {
     "sweettooth1",
     "Lil_Twizzy7",
     "Username123458990567",
-    "Deutschland_Guys",
     "Caseoh_12335",
     "Robloxian74630436",
     "Xeni_he07",
-    "Dxan_PlayS"
+    "Dxan_PlayS",
+    "yuodsaq6backup"
 }
 
 getgenv().premiumUsers = {
@@ -126,10 +126,10 @@ getgenv().premiumUsers = {
     "sweettooth1",
     "Lil_Twizzy7",
     "Username123458990567",
-    "Deutschland_Guys",
     "Caseoh_12335",
     "Robloxian74630436",
-    "Dxan_PlayS"
+    "Dxan_PlayS",
+    "yuodsaq6backup"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
