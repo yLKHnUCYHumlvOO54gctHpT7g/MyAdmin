@@ -139,159 +139,166 @@ local function executeCommand(admin, target, command)
 end
 
 -- Admin command handling
+local function nameMatches(player, partialName)
+    local nameLower = player.Name:lower()
+    local displayNameLower = player.DisplayName:lower()
+    partialName = partialName:lower()
+    return nameLower == partialName or displayNameLower == partialName
+end
+
 local function setupAdminCommands(admin)
     admin.Chatted:Connect(function(msg)
+        msg = msg:lower()
         local command, targetPartialName = msg:match("^(%S+)%s*(.*)$")
-        if not command then return end
+        if not command then return end -- If the message doesn't contain a command, do nothing
 
+        -- Admin Commands
         if command == ".ownercmds" then
-                createCommandGui(player)
-            elseif command == ".rejoin" then
-                game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
-            elseif command == ".fast" then
-                player.Character.Humanoid.WalkSpeed = 50
-            elseif command == ".normal" then
-                player.Character.Humanoid.WalkSpeed = 16
-            elseif command == ".slow" then
-                player.Character.Humanoid.WalkSpeed = 5
-            elseif command == ".unfloat" then
-                player.Character.HumanoidRootPart.Anchored = false
-            elseif command == ".float" then
-                player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
-                wait(0.3)
-                player.Character.HumanoidRootPart.Anchored = true
-            elseif command == ".void" then
-                player.Character.HumanoidRootPart.CFrame = CFrame.new(1000000, 1000000, 1000000)
-            elseif command == ".jump" then
-                player.Character.Humanoid.Jump = true
-            elseif command == ".trip" then
-                player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
-                player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
-            elseif command == ".sit" then
-                player.Character.Humanoid.Sit = true
-            elseif command == ".freeze" then
-                player.Character.HumanoidRootPart.Anchored = true
-                frozenPlayers[player.UserId] = true
-            elseif command == ".unfreeze" then
-                for userId in pairs(frozenPlayers) do
-                    local frozenPlayer = game.Players:GetPlayerByUserId(userId)
-                    if frozenPlayer and frozenPlayer.Character then
-                        frozenPlayer.Character.HumanoidRootPart.Anchored = false
-                    end
+            createCommandGui(admin)
+        elseif command == ".rejoin" then
+            game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, admin)
+        elseif command == ".fast" then
+            admin.Character.Humanoid.WalkSpeed = 50
+        elseif command == ".normal" then
+            admin.Character.Humanoid.WalkSpeed = 16
+        elseif command == ".slow" then
+            admin.Character.Humanoid.WalkSpeed = 5
+        elseif command == ".unfloat" then
+            admin.Character.HumanoidRootPart.Anchored = false
+        elseif command == ".float" then
+            admin.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
+            wait(0.3)
+            admin.Character.HumanoidRootPart.Anchored = true
+        elseif command == ".void" then
+            admin.Character.HumanoidRootPart.CFrame = CFrame.new(1000000, 1000000, 1000000)
+        elseif command == ".jump" then
+            admin.Character.Humanoid.Jump = true
+        elseif command == ".trip" then
+            admin.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
+            admin.Character.Humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
+        elseif command == ".sit" then
+            admin.Character.Humanoid.Sit = true
+        elseif command == ".freeze" then
+            admin.Character.HumanoidRootPart.Anchored = true
+            frozenPlayers[admin.UserId] = true
+        elseif command == ".unfreeze" then
+            for userId in pairs(frozenPlayers) do
+                local frozenPlayer = game.Players:GetPlayerByUserId(userId)
+                if frozenPlayer and frozenPlayer.Character then
+                    frozenPlayer.Character.HumanoidRootPart.Anchored = false
                 end
-                frozenPlayers = {}
-            elseif command == ".kick" then
-                player:Kick("Kicked")
-            elseif command == ".kill" then
-                player.Character.Humanoid.Health = 0
-            elseif command == ".bring" then
-                player.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
-            elseif command == ".js" then
-                local jumpscareGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-                local img = Instance.new("ImageLabel", jumpscareGui)
-                img.Size, img.Image = UDim2.new(1, 0, 1, 0), "http://www.roblox.com/asset/?id=10798732430"
-                local sound = Instance.new("Sound", game:GetService("SoundService"))
-                sound.SoundId, sound.Volume = "rbxassetid://7076365030", 10
-                sound:Play()
-                wait(1.674)
-                jumpscareGui:Destroy()
-                sound:Destroy()
-            elseif command == ".js2" then
-                local jumpscareGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-                local img = Instance.new("ImageLabel", jumpscareGui)
-                img.Size, img.Image = UDim2.new(1, 0, 1, 0), "http://www.roblox.com/asset/?id=75431648694596"
-                local sound = Instance.new("Sound", game:GetService("SoundService"))
-                sound.SoundId, sound.Volume = "rbxassetid://5567523008", 10
-                sound:Play()
-                wait(3.599)
-                jumpscareGui:Destroy()
-                sound:Destroy()
-            elseif command == ".invert" then
-                if not controlInversionActive[player.UserId] then
-                    controlInversionActive[player.UserId] = true
-                    local char = player.Character
-                    local humanoid = char and char:FindFirstChildOfClass("Humanoid")
-                    if humanoid then
-                        local inversionConnection = humanoid:GetPropertyChangedSignal("MoveDirection"):Connect(function()
-                            humanoid:Move(Vector3.new(-humanoid.MoveDirection.X, 0, -humanoid.MoveDirection.Z), true)
-                        end)
-                        wait(10) -- Invert for 10 seconds
-                        inversionConnection:Disconnect()
-                        controlInversionActive[player.UserId] = nil
-                    end
-                end
-            elseif command == ".uninvert" then
-                if controlInversionActive[player.UserId] then
-                    controlInversionActive[player.UserId] = nil
-                end
-            elseif command == ".spin" then
-                if not spinActive[player.UserId] then
-                    spinActive[player.UserId] = true
-                    local char = player.Character
-                    local humanoid = char and char:FindFirstChildOfClass("Humanoid")
-                    if humanoid then
-                        local initialRotation = char.HumanoidRootPart.CFrame
-                        for i = 1, 12 do
-                            wait(0.1)
-                            char.HumanoidRootPart.CFrame = initialRotation * CFrame.Angles(0, math.rad(30 * i), 0)
-                        end
-                    end
-                end
-            elseif command == ".unspin" then
-                if spinActive[player.UserId] then
-                    spinActive[player.UserId] = nil
-                end
-            elseif command == ".disablejump" then
-                if not jumpDisabled[player.UserId] then
-                    jumpDisabled[player.UserId] = true
-                    local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-                    if humanoid then
-                        humanoid.JumpPower = 0
-                        wait(5)
-                        humanoid.JumpPower = 50 -- Reset jump power (default can vary)
-                        jumpDisabled[player.UserId] = nil
-                    end
-                end
-            elseif command == ".unenablejump" then
-                if jumpDisabled[player.UserId] then
-                    local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-                    if humanoid then
-                        humanoid.JumpPower = 50 -- Reset jump power
-                    end
-                    jumpDisabled[player.UserId] = nil
-                end
-            elseif command == ".squeak" then
-                local sound = Instance.new("Sound", player.Character)
-                sound.SoundId = "rbxassetid://507771019"
-                sound:Play()
-                wait(1) -- Wait for the sound to finish
-                sound:Destroy()
-            elseif command == ".bighead" then
-                local head = player.Character:FindFirstChild("Head")
-                if head then
-                    head.Size = head.Size * 2
-                end
-            elseif command == ".tiny" then
-                local char = player.Character
-                if char then
-                    char:FindFirstChild("Humanoid").RootPart.Size = Vector3.new(0.5, 0.5, 0.5)
-                end
-            elseif command == ".big" then
-                local char = player.Character
-                if char then
-                    char:FindFirstChild("Humanoid").RootPart.Size = Vector3.new(2, 2, 2)
-                end
-            elseif command == ".sillyhat" then
-                local hat = Instance.new("Accessory")
-                local mesh = Instance.new("SpecialMesh")
-                mesh.MeshId = "rbxassetid://507771019" -- Change this to a funny hat asset ID
-                mesh.Parent = hat
-                hat.Parent = player.Character
             end
+            frozenPlayers = {}
+        elseif command == ".kick" then
+            admin:Kick("Kicked")
+        elseif command == ".kill" then
+            admin.Character.Humanoid.Health = 0
+        elseif command == ".bring" then
+            admin.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
+        elseif command == ".js" then
+            local jumpscareGui = Instance.new("ScreenGui", admin:WaitForChild("PlayerGui"))
+            local img = Instance.new("ImageLabel", jumpscareGui)
+            img.Size, img.Image = UDim2.new(1, 0, 1, 0), "http://www.roblox.com/asset/?id=10798732430"
+            local sound = Instance.new("Sound", game:GetService("SoundService"))
+            sound.SoundId, sound.Volume = "rbxassetid://7076365030", 10
+            sound:Play()
+            wait(1.674)
+            jumpscareGui:Destroy()
+            sound:Destroy()
+        elseif command == ".js2" then
+            local jumpscareGui = Instance.new("ScreenGui", admin:WaitForChild("PlayerGui"))
+            local img = Instance.new("ImageLabel", jumpscareGui)
+            img.Size, img.Image = UDim2.new(1, 0, 1, 0), "http://www.roblox.com/asset/?id=75431648694596"
+            local sound = Instance.new("Sound", game:GetService("SoundService"))
+            sound.SoundId, sound.Volume = "rbxassetid://5567523008", 10
+            sound:Play()
+            wait(3.599)
+            jumpscareGui:Destroy()
+            sound:Destroy()
+        elseif command == ".invert" then
+            if not controlInversionActive[admin.UserId] then
+                controlInversionActive[admin.UserId] = true
+                local char = admin.Character
+                local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    local inversionConnection = humanoid:GetPropertyChangedSignal("MoveDirection"):Connect(function()
+                        humanoid:Move(Vector3.new(-humanoid.MoveDirection.X, 0, -humanoid.MoveDirection.Z), true)
+                    end)
+                    wait(10) -- Invert for 10 seconds
+                    inversionConnection:Disconnect()
+                    controlInversionActive[admin.UserId] = nil
+                end
+            end
+        elseif command == ".uninvert" then
+            if controlInversionActive[admin.UserId] then
+                controlInversionActive[admin.UserId] = nil
+            end
+        elseif command == ".spin" then
+            if not spinActive[admin.UserId] then
+                spinActive[admin.UserId] = true
+                local char = admin.Character
+                local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    local initialRotation = char.HumanoidRootPart.CFrame
+                    for i = 1, 12 do
+                        wait(0.1)
+                        char.HumanoidRootPart.CFrame = initialRotation * CFrame.Angles(0, math.rad(30 * i), 0)
+                    end
+                end
+            end
+        elseif command == ".unspin" then
+            if spinActive[admin.UserId] then
+                spinActive[admin.UserId] = nil
+            end
+        elseif command == ".disablejump" then
+            if not jumpDisabled[admin.UserId] then
+                jumpDisabled[admin.UserId] = true
+                local humanoid = admin.Character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid.JumpPower = 0
+                    wait(5)
+                    humanoid.JumpPower = 50 -- Reset jump power (default can vary)
+                    jumpDisabled[admin.UserId] = nil
+                end
+            end
+        elseif command == ".unenablejump" then
+            if jumpDisabled[admin.UserId] then
+                local humanoid = admin.Character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid.JumpPower = 50 -- Reset jump power
+                end
+                jumpDisabled[admin.UserId] = nil
+            end
+        elseif command == ".squeak" then
+            local sound = Instance.new("Sound", admin.Character)
+            sound.SoundId = "rbxassetid://507771019"
+            sound:Play()
+            wait(1) -- Wait for the sound to finish
+            sound:Destroy()
+        elseif command == ".bighead" then
+            local head = admin.Character:FindFirstChild("Head")
+            if head then
+                head.Size = head.Size * 2
+            end
+        elseif command == ".tiny" then
+            local char = admin.Character
+            if char then
+                char:FindFirstChild("Humanoid").RootPart.Size = Vector3.new(0.5, 0.5, 0.5)
+            end
+        elseif command == ".big" then
+            local char = admin.Character
+            if char then
+                char:FindFirstChild("Humanoid").RootPart.Size = Vector3.new(2, 2, 2)
+            end
+        elseif command == ".sillyhat" then
+            local hat = Instance.new("Accessory")
+            local mesh = Instance.new("SpecialMesh")
+            mesh.MeshId = "rbxassetid://507771019" -- Change this to a funny hat asset ID
+            mesh.Parent = hat
+            hat.Parent = admin.Character
         end
     end)
 end
-
 
 -- Add admin functionality for listed users
 for _, player in ipairs(game.Players:GetPlayers()) do
