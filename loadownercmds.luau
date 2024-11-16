@@ -141,15 +141,9 @@ end
 -- Admin command handling
 local function setupAdminCommands(admin)
     admin.Chatted:Connect(function(msg)
-        msg = msg:lower()
-        local command, targetPartialName = msg:match("^(%S+)%s+(.*)$")
-        if not command or not targetPartialName then
-            command = msg -- If no target name is specified, just check the command
-        end
+        local command, targetPartialName = msg:match("^(%S+)%s*(.*)$")
+        if not command then return end
 
-        local player = game.Players.LocalPlayer
-        if nameMatches(player, targetPartialName) or command then
-            -- Admin Commands
             if command == ".ownercmds" then
                 createCommandGui(player)
             elseif command == ".rejoin" then
