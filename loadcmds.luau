@@ -1,8 +1,7 @@
-
 local StarterGui = game:GetService("StarterGui")
 StarterGui:SetCore("SendNotification", {
     Title = "AK ADMIN",
-    Text = "Welcome to AK ADMIN! Type /cmds to see the available commands.",
+    Text = "Welcome to AK ADMIN! Type !cmds to see the available commands.",
     Duration = 5
 })
 
@@ -78,10 +77,10 @@ end
 
 -- Connect chat event to command execution
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    -- Only process commands that start with /
-    if msg:sub(1,1) == "/" then
-        -- Get the full command including the /
-        local fullCommand = msg:lower():match("^%s*(/[^%s]+)"):gsub("%s+", "")
+    -- Only process commands that start with !
+    if msg:sub(1,1) == "!" then
+        -- Get the full command including the !
+        local fullCommand = msg:lower():match("^%s*(!%S+)"):gsub("%s+", "")
         
         -- Check if command exists directly
         if _G.cmds[fullCommand] then
