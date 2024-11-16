@@ -1,8 +1,10 @@
 local commands = {
-    "+ Added cmd: /lookat (display name), /unlookat",
-    "+ Added cmd: /stopglide",
-    "+ Added cmd: /tptoplayer",
-    "+ REVAMPED TAG SYSTEM",
+    "+ Added cmd: /superfly",
+    "+ Added cmd: /remotechecker",
+    "+ Added cmd: /copynearest",
+    "+ Added cmd: /animhub",
+    "+ Added cmd: /sneak",
+
 }
 
 local gui = Instance.new("ScreenGui")
