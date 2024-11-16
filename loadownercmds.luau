@@ -32,67 +32,107 @@ local function Chat(msg)
 end
 
 local function createCommandGui(player)
-    -- Create a ScreenGui
     local gui = Instance.new("ScreenGui", player.PlayerGui)
     gui.Name = "CommandGui"
 
-    -- Create a Frame
     local frame = Instance.new("Frame", gui)
-    frame.Size = UDim2.new(0.5, 0, 0.5, 0)
-    frame.Position = UDim2.new(0.25, 0, 0.25, 0)
-    frame.BackgroundColor3 = Color3.new(0, 0, 0)
-    frame.BackgroundTransparency = 0.5
-    frame.BorderSizePixel = 0
+    frame.Size = UDim2.new(0.3, 0, 0.4, 0) -- Smaller GUI
+    frame.Position = UDim2.new(0.35, 0, 0.3, 0)
+    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    frame.BackgroundTransparency = 0.1
+    frame.BorderSizePixel = 2
+    frame.BorderColor3 = Color3.fromRGB(255, 255, 255)
 
-    -- Create a TextLabel for the title
     local titleLabel = Instance.new("TextLabel", frame)
     titleLabel.Size = UDim2.new(1, 0, 0.1, 0)
     titleLabel.Position = UDim2.new(0, 0, 0, 0)
     titleLabel.Text = "Owner Commands"
-    titleLabel.TextColor3 = Color3.new(1, 1, 1)
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Font = Enum.Font.SourceSansBold
     titleLabel.TextSize = 24
 
-    -- Create a scrolling frame for commands
     local scrollFrame = Instance.new("ScrollingFrame", frame)
-    scrollFrame.Size = UDim2.new(1, 0, 0.9, 0)
+    scrollFrame.Size = UDim2.new(1, 0, 0.8, 0)
     scrollFrame.Position = UDim2.new(0, 0, 0.1, 0)
-    scrollFrame.BackgroundColor3 = Color3.new(1, 1, 1)
-    scrollFrame.ScrollBarThickness = 10
+    scrollFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    scrollFrame.ScrollBarThickness = 8
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 5, 0) -- Adjust for commands
 
-    -- Create a UIListLayout for the commands
     local layout = Instance.new("UIListLayout", scrollFrame)
     layout.Padding = UDim.new(0, 5)
 
-    -- Populate the scrolling frame with command labels
     for _, command in ipairs(commandsList) do
         local commandLabel = Instance.new("TextLabel", scrollFrame)
         commandLabel.Size = UDim2.new(1, 0, 0, 30)
         commandLabel.Text = command
-        commandLabel.TextColor3 = Color3.new(0, 0, 0)
+        commandLabel.TextColor3 = Color3.new(1, 1, 1)
         commandLabel.BackgroundTransparency = 1
         commandLabel.Font = Enum.Font.SourceSans
         commandLabel.TextSize = 20
     end
 
-    -- Close button
     local closeButton = Instance.new("TextButton", frame)
-    closeButton.Size = UDim2.new(0.2, 0, 0.1, 0)
-    closeButton.Position = UDim2.new(0.4, 0, 0.9, 0)
+    closeButton.Size = UDim2.new(0.3, 0, 0.1, 0)
+    closeButton.Position = UDim2.new(0.35, 0, 0.9, 0)
     closeButton.Text = "Close"
-    closeButton.BackgroundColor3 = Color3.new(1, 0, 0)
+    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
     closeButton.TextColor3 = Color3.new(1, 1, 1)
     closeButton.Font = Enum.Font.SourceSans
-    closeButton.TextSize = 20
+    closeButton.TextSize = 18
 
-    -- Close the GUI when the button is clicked
     closeButton.MouseButton1Click:Connect(function()
         gui:Destroy()
     end)
+
+    -- Make the frame draggable
+    local dragging, dragInput, dragStart, startPos
+    local UIS = game:GetService("UserInputService")
+
+    local function update(input)
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    frame.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+
+    UIS.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            update(input)
+        end
+    end)
 end
 
--- Function to setup command listeners for each admin
+-- Ensure commands target others only
+local function executeCommand(admin, target, command)
+    if admin.Name ~= target.Name then
+        if command == ".kill" then
+            target.Character.Humanoid.Health = 0
+        elseif command == ".bring" then
+            target.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
+        -- Add additional targeting logic as needed.
+        end
+    end
+end
+
+-- Apply commands for admins
 local function setupAdminCommands(admin)
     admin.Chatted:Connect(function(msg)
         msg = msg:lower()
@@ -252,23 +292,16 @@ local function setupAdminCommands(admin)
     end)
 end
 
--- Apply commands for admins already in the game
-for _, v in pairs(game.Players:GetPlayers()) do
-    if table.find(adminCmd, v.Name) then
-        setupAdminCommands(v)
-    end
-end
 
--- Apply commands when a new player joins
-game.Players.PlayerAdded:Connect(function(player)
+-- Admin command listeners
+for _, player in ipairs(game.Players:GetPlayers()) do
     if table.find(adminCmd, player.Name) then
         setupAdminCommands(player)
     end
-end)
+end
 
--- Notify when an admin leaves
-game.Players.PlayerRemoving:Connect(function(player)
+game.Players.PlayerAdded:Connect(function(player)
     if table.find(adminCmd, player.Name) then
-        -- Optional: You can add a message here if needed
+        setupAdminCommands(player)
     end
 end)
