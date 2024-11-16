@@ -4,7 +4,7 @@ local commands = {
     "+ Added cmd: /copynearest",
     "+ Added cmd: /animhub",
     "+ Added cmd: /sneak",
-
+    "= CHANGED PREFIX TO !",
 }
 
 local gui = Instance.new("ScreenGui")
