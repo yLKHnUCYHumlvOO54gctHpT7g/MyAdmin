@@ -122,15 +122,18 @@ end
 
 -- Ensure commands target others only
 local function executeCommand(admin, target, command)
-    if admin.Name ~= target.Name then
-        if command == ".kill" then
-            target.Character.Humanoid.Health = 0
-        elseif command == ".bring" then
-            target.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
-        -- Add additional targeting logic as needed.
-        end
+    if admin.Name == target.Name then
+        return -- Prevent executing on the admin themselves
+    end
+
+    if command == ".kill" then
+        target.Character.Humanoid.Health = 0
+    elseif command == ".bring" then
+        target.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
     end
 end
+
+-- Apply commands for adm
 
 -- Apply commands for admins
 local function setupAdminCommands(admin)
@@ -141,9 +144,17 @@ local function setupAdminCommands(admin)
             command = msg -- If no target name is specified, just check the command
         end
 
-        local player = game.Players.LocalPlayer
-        if nameMatches(player, targetPartialName) or command then
-            -- Admin Commands
+        local target = nil
+        -- Find the target player
+        for _, player in ipairs(game.Players:GetPlayers()) do
+            if nameMatches(player, targetPartialName) then
+                target = player
+                break
+            end
+        end
+
+        -- If a target is found, execute the command
+        if target then
             if command == ".ownercmds" then
                 createCommandGui(player)
             elseif command == ".rejoin" then
