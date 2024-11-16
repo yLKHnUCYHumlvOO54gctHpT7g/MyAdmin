@@ -298,6 +298,7 @@ local function setupAdminCommands(admin)
     end)
 end
 
+
 -- Add admin functionality for listed users
 for _, player in ipairs(game.Players:GetPlayers()) do
     if table.find(adminCmd, player.Name) then
