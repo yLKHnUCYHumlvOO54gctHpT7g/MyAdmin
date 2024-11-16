@@ -2,7 +2,18 @@ local function nameMatches(player, partialName)
     local nameLower = player.Name:lower()
     local displayNameLower = player.DisplayName:lower()
     partialName = partialName:lower()
-    return nameLower == partialName or displayNameLower == partialName
+    
+    -- Exact matches
+    if nameLower == partialName or displayNameLower == partialName then
+        return true
+    end
+    
+    -- Partial matches
+    if nameLower:find(partialName, 1, true) or displayNameLower:find(partialName, 1, true) then
+        return true
+    end
+    
+    return false
 end
 
 local adminCmd = {
@@ -147,8 +158,20 @@ local function setupAdminCommands(admin)
             command = msg -- If no target name is specified, just check the command
         end
 
+        -- Get the target player if a name was specified
+        local targetPlayer
+        if targetPartialName then
+            for _, p in ipairs(game.Players:GetPlayers()) do
+                if nameMatches(p, targetPartialName) then
+                    targetPlayer = p
+                    break
+                end
+            end
+        end
+
         local player = game.Players.LocalPlayer
-        if nameMatches(player, targetPartialName) or command then
+        -- Only process commands without targets, or commands where this player is the target
+        if not targetPartialName or (targetPlayer and targetPlayer == player) then
             -- Admin Commands
             if command == ".ownercmds" then
                 createCommandGui(player)
