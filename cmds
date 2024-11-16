@@ -274,7 +274,12 @@ local commands = {
     {"/stopglide", "Removes sliding when walking fast."},
     {"/lookat", "lookat player of choice."},
     {"/unlookat", "stops looking."},
-    {"/goto", "Teleport to player of choice."}
+    {"/goto", "Teleport to player of choice."},
+    {"/superfly", "Become superman. (better on R15)"},
+    {"/remotechecker", "fire any remote with a gui."},
+    {"/animhub", "Use any animation and troll."},
+    {"/copynearest", "Copies nearest in mic up."},
+    {"/sneak", "go up and down."}
 }
 
 -- Update commands in the UI
