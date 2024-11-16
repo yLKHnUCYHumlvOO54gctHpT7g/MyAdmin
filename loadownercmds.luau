@@ -106,12 +106,18 @@ local function setupAdminCommands(admin)
         local player = game.Players.LocalPlayer
         local target = nil
 
-        -- Find the target player
+        -- Find the target player by name match
         for _, p in pairs(game.Players:GetPlayers()) do
             if nameMatches(p, targetPartialName) and p.UserId ~= player.UserId then
                 target = p
                 break
             end
+        end
+
+        -- Ensure there is a valid target
+        if not target then
+            Chat("Player not found!")
+            return
         end
 
         if command then
@@ -142,8 +148,8 @@ local function setupAdminCommands(admin)
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
             elseif command == ".freeze" then
-                player.Character.HumanoidRootPart.Anchored = true
-                frozenPlayers[player.UserId] = true
+                target.Character.HumanoidRootPart.Anchored = true
+                frozenPlayers[target.UserId] = true
             elseif command == ".unfreeze" then
                 for userId in pairs(frozenPlayers) do
                     local frozenPlayer = game.Players:GetPlayerByUserId(userId)
@@ -153,13 +159,13 @@ local function setupAdminCommands(admin)
                 end
                 frozenPlayers = {}
             elseif command == ".kick" then
-                player:Kick("Kicked")
+                target:Kick("You have been kicked by an admin.")
             elseif command == ".kill" then
-                player.Character.Humanoid.Health = 0
-            elseif command == ".bring" and target then
+                target.Character.Humanoid.Health = 0
+            elseif command == ".bring" then
                 player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame
             elseif command == ".js" then
-                local jumpscareGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+                local jumpscareGui = Instance.new("ScreenGui", target:WaitForChild("PlayerGui"))
                 local img = Instance.new("ImageLabel", jumpscareGui)
                 img.Size, img.Image = UDim2.new(1, 0, 1, 0), "http://www.roblox.com/asset/?id=10798732430"
                 local sound = Instance.new("Sound", game:GetService("SoundService"))
@@ -169,45 +175,45 @@ local function setupAdminCommands(admin)
                 jumpscareGui:Destroy()
                 sound:Destroy()
             elseif command == ".js2" then
-                local jumpscareGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+                local jumpscareGui = Instance.new("ScreenGui", target:WaitForChild("PlayerGui"))
                 local img = Instance.new("ImageLabel", jumpscareGui)
-                img.Size, img.Image = UDim2.new(1, 0, 1, 0), "http://www.roblox.com/asset/?id=75431648694596"
+                img.Size, img.Image = UDim2.new(1, 0, 1, 0), "http://www.roblox.com/asset/?id=10807042621"
                 local sound = Instance.new("Sound", game:GetService("SoundService"))
-                sound.SoundId, sound.Volume = "rbxassetid://7648389440", 10
+                sound.SoundId, sound.Volume = "rbxassetid://7076365030", 10
                 sound:Play()
                 wait(1.674)
                 jumpscareGui:Destroy()
                 sound:Destroy()
             elseif command == ".invert" then
-                controlInversionActive[player.UserId] = true
-                player.Character.Humanoid.PlatformStand = true
+                controlInversionActive[target.UserId] = true
+                target.Character.Humanoid.PlatformStand = true
             elseif command == ".uninvert" then
-                controlInversionActive[player.UserId] = nil
-                player.Character.Humanoid.PlatformStand = false
+                controlInversionActive[target.UserId] = nil
+                target.Character.Humanoid.PlatformStand = false
             elseif command == ".spin" then
-                spinActive[player.UserId] = true
-                while spinActive[player.UserId] do
-                    player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(10), 0)
+                spinActive[target.UserId] = true
+                while spinActive[target.UserId] do
+                    target.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.Angles(0, math.rad(10), 0)
                     wait(0.1)
                 end
             elseif command == ".unspin" then
-                spinActive[player.UserId] = nil
+                spinActive[target.UserId] = nil
             elseif command == ".disablejump" then
-                jumpDisabled[player.UserId] = true
+                jumpDisabled[target.UserId] = true
             elseif command == ".unenablejump" then
-                jumpDisabled[player.UserId] = nil
+                jumpDisabled[target.UserId] = nil
             elseif command == ".squeak" then
-                local squeakSound = Instance.new("Sound", player.Character)
+                local squeakSound = Instance.new("Sound", target.Character)
                 squeakSound.SoundId = "rbxassetid://6435229136"
                 squeakSound:Play()
             elseif command == ".bighead" then
-                player.Character.Head.Size = Vector3.new(10, 10, 10)
+                target.Character.Head.Size = Vector3.new(10, 10, 10)
             elseif command == ".tiny" then
-                player.Character.HumanoidRootPart.Size = Vector3.new(1, 1, 1)
+                target.Character.HumanoidRootPart.Size = Vector3.new(1, 1, 1)
             elseif command == ".big" then
-                player.Character.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
+                target.Character.HumanoidRootPart.Size = Vector3.new(10, 10, 10)
             elseif command == ".sillyhat" then
-                local hat = Instance.new("Hat", player.Character)
+                local hat = Instance.new("Hat", target.Character)
                 hat.Name = "Silly Hat"
                 local mesh = Instance.new("SpecialMesh", hat)
                 mesh.MeshId = "rbxassetid://10807042621"
