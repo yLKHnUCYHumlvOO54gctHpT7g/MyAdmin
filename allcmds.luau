@@ -11,6 +11,7 @@ _G.cmds = {
     ["/stealbooth"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Stealbooth",
     ["/chaoshub"]="https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
     ["/warn all"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Warnall",
+    ["/animhub"]="https://raw.githubusercontent.com/Eazvy/public-scripts/main/Universal_Animations_Emotes.lua",
     ["/aimbot"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/aimbot",
     ["/warnpower"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Warns",
     ["/protonadmin"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/protonadmin",
