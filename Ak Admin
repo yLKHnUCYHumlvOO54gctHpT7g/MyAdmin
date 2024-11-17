@@ -135,8 +135,7 @@ getgenv().premiumUsers = {
     "radiantgameplayer32",
     "easyberr",
     "levinator521",
-    "coolplayer11010",
-    "ImOn_ValveIndex"
+    "coolplayer11010"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
