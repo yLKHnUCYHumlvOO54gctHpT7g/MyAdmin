@@ -70,7 +70,8 @@ getgenv().whitelistedPlayers = {
     "Dxan_PlayS",
     "Lil_Twizzy7",
     "radiantgameplayer32",
-    "easyberr"
+    "easyberr",
+    "levinator521"
 }
 
 getgenv().premiumUsers = {
@@ -130,7 +131,8 @@ getgenv().premiumUsers = {
     "Dxan_PlayS",
     "Lil_Twizzy7",
     "radiantgameplayer32",
-    "easyberr"
+    "easyberr",
+    "levinator521"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
