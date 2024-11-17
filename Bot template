@@ -95,8 +95,9 @@ for _, whitelistedUser in ipairs(getgenv().whitelistedPlayers) do
 end
 if not isWhitelisted then
 	local function kickPlayer()
-		game.Players.LocalPlayer:Kick("You are not whitelisted. Buy the script.");
+		game.Players.LocalPlayer:Kick("You are not whitelisted. discord copied to clipboard, get points or buy lifetime.");
 	end
+    setclipboard("https://discord.gg/akadmin")
 	kickPlayer();
 	print("You are not whitelisted. Execute non-whitelisted logic here.");
 else
@@ -107,6 +108,12 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/r
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadcmds.luau"))()
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadplayertags.luau"))()
+local queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+
+
+if queueonteleport then
+queueonteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Admin'))()")
+end
 -- Define commands with URLs
 -- Create a GUI for the command bar
       
