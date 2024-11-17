@@ -67,6 +67,7 @@ _G.cmds = {
     ["!usercreationcracked"]="https://cracklua.github.io/cracks/UserCreation",
     ["!freecam"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Freecam",
     ["!demonmic"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/DemonMic",
+    ["!antiall"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Antiall.luau",
     ["!rainbowmic"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Rainbowmic",
     ["!rainbowdonut"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Rainbowdonut",
     ["!remotechecker"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Remotechecker",
