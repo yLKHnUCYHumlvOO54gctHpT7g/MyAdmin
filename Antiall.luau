@@ -1,11 +1,14 @@
 -- Made by AnthonyIsntHere
--- Small, draggable, professional circular button GUI positioned on the right.
+-- Acts like the original script with a GUI button to teleport to the void and back.
 
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local Character, Humanoid, RootPart
 local Camera = workspace.CurrentCamera
 local IsVoiding = false
+
+-- Prevent objects from being destroyed by the void
+workspace.FallenPartsDestroyHeight = math.huge * -1 -- Removes the void destruction limit
 
 -- Create GUI Elements
 local ScreenGui = Instance.new("ScreenGui")
@@ -76,7 +79,7 @@ game:GetService("UserInputService").InputChanged:Connect(function(input)
 end)
 
 -- Voiding Function
-local function VoidNearestPlayer()
+local function VoidAndReturn()
     Character = Player.Character
     Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid")
     RootPart = Humanoid and Humanoid.RootPart
@@ -84,13 +87,13 @@ local function VoidNearestPlayer()
     if RootPart and Humanoid and not IsVoiding then
         IsVoiding = true
 
-        -- Store current position
+        -- Save current position
         local CurrentPosition = RootPart.Velocity.Magnitude < 50 and RootPart.CFrame or Camera.Focus
         local Timer = tick()
 
-        -- Teleport to void
+        -- Teleport to a slightly lower void (Y = -5000)
         repeat
-            RootPart.CFrame = CFrame.new(0, -499, 0) * CFrame.Angles(math.rad(90), 0, 0)
+            RootPart.CFrame = CFrame.new(0, -5000, 0) * CFrame.Angles(math.rad(90), 0, 0)
             RootPart.AssemblyLinearVelocity = Vector3.new()
             task.wait()
         until tick() > Timer + 1
@@ -107,7 +110,4 @@ local function VoidNearestPlayer()
 end
 
 -- Connect Button Click to Void Function
-Button.MouseButton1Click:Connect(VoidNearestPlayer)
-
--- Prevent objects from being destroyed by void
-workspace.FallenPartsDestroyHeight = 0 / 0
+Button.MouseButton1Click:Connect(VoidAndReturn)
