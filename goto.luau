@@ -1,5 +1,5 @@
 local prefix = "."
-local chatcmd = "goto"
+local chatcmd = "to"
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
 	local lowerCmd = msg:lower()
 	if lowerCmd:sub(1, #prefix + #chatcmd) == prefix .. chatcmd then
