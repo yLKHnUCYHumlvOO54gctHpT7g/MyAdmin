@@ -1,4 +1,4 @@
-local prefix = "/"
+local prefix = "."
 local chatcmd = "goto"
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
 	local lowerCmd = msg:lower()
