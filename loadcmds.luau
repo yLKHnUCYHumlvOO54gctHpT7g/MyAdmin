@@ -44,13 +44,13 @@ local function executeCommand(command)
         end)
 
         if success then
-            game:GetService("StarterGui"):SetCore("SendNotification", {
+            StarterGui:SetCore("SendNotification", {
                 Title = "Command Executed ✅",
                 Text = "Executed: " .. command,
                 Duration = 3
             })
         else
-            game:GetService("StarterGui"):SetCore("SendNotification", {
+            StarterGui:SetCore("SendNotification", {
                 Title = "Execution Error ❌",
                 Text = "Error executing command",
                 Duration = 5
@@ -60,13 +60,13 @@ local function executeCommand(command)
         -- Try to find a similar command
         local suggestion = suggestClosestCommand(command)
         if suggestion then
-            game:GetService("StarterGui"):SetCore("SendNotification", {
+            StarterGui:SetCore("SendNotification", {
                 Title = "Command Suggestion 💡",
                 Text = "Did you mean: " .. suggestion .. "?",
                 Duration = 5
             })
         else
-            game:GetService("StarterGui"):SetCore("SendNotification", {
+            StarterGui:SetCore("SendNotification", {
                 Title = "Unknown Command ❌",
                 Text = "Command not found",
                 Duration = 3
@@ -75,7 +75,7 @@ local function executeCommand(command)
     end
 end
 
--- Connect chat event to command execution
+-- Connect chat event to command execution for the local player
 game.Players.LocalPlayer.Chatted:Connect(function(msg)
     -- Only process commands that start with !
     if msg:sub(1, 1) == "!" then
@@ -101,7 +101,7 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
                         end
                     end
 
-                    game:GetService("StarterGui"):SetCore("SendNotification", {
+                    StarterGui:SetCore("SendNotification", {
                         Title = "Command Suggestion 💡",
                         Text = "Did you mean: " .. suggestion .. "?",
                         Duration = 10,
@@ -111,7 +111,7 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
                     })
                 end
             else
-                game:GetService("StarterGui"):SetCore("SendNotification", {
+                StarterGui:SetCore("SendNotification", {
                     Title = "Unknown Command ❌",
                     Text = "Command not found",
                     Duration = 3
