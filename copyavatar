@@ -3,9 +3,9 @@ local isCopyingNearest = false
 local originalAvatar = nil -- To store the original avatar state
 
 game.Players.LocalPlayer.Chatted:Connect(function(message)
-    -- Check if the message starts with "/copy "
-    if message:sub(1, 6) == "/copy " then
-        -- Extract the command after "/copy "
+    -- Check if the message starts with "!copy "
+    if message:sub(1, 6) == "!copy " then
+        -- Extract the command after "!copy "
         local command = message:sub(7)
 
         -- Command to copy all player usernames
@@ -23,7 +23,7 @@ game.Players.LocalPlayer.Chatted:Connect(function(message)
                     wait(0.05) -- Reduced wait time for faster copying (lowered to 0.05 seconds)
                 end
             else
-                warn("Already copying all usernames. Use '/uncopy' to stop.")
+                warn("Already copying all usernames. Use '!uncopy' to stop.")
             end
 
         else
@@ -38,56 +38,24 @@ game.Players.LocalPlayer.Chatted:Connect(function(message)
             end
 
             if not found then
-                warn("No player found with that name. Use '/copy all' to copy all usernames.")
+                warn("No player found with that name. Use '!copy all' to copy all usernames.")
             end
         end
 
-    -- Command to stop all copying activities and copy the local player's avatar
-    elseif message == "/uncopy" then
-        -- Stop all ongoing copying activities
-        if isCopying then
-            isCopying = false
-            print("Stopped copying all usernames.")
-        elseif isCopyingNearest then
-            isCopyingNearest = false
-            print("Stopped copying the nearest player's avatar.")
+    -- Command to stop all copying activities
+    elseif message == "!uncopy" then
+        -- Stop all ongoing copying activities immediately
+        isCopying = false
+        isCopyingNearest = false
+
+        if isCopying or isCopyingNearest then
+            print("Stopped all copying activities.")
         else
             warn("Not currently copying usernames or avatars.")
         end
 
-        -- Store the original avatar before copying if not already stored
-        local player = game.Players.LocalPlayer
-        if not originalAvatar then
-            originalAvatar = player.CharacterAppearance
-        end
-
-        -- Copy the local player's avatar instantly
-        game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(player.Name)
-        print("Copied the local player's avatar.")  -- Ensure it triggers copying of the local player's avatar
-
-        -- Wait until the local player has their original avatar restored
-        local attempts = 0
-        local maxAttempts = 10 -- Maximum number of attempts before giving up
-
-        while attempts < maxAttempts do
-            -- Check if the local player has the original avatar
-            if player.CharacterAppearance == originalAvatar then
-                print("Successfully restored the local player's avatar.")
-                break
-            else
-                attempts = attempts + 1
-                print("Avatar not yet restored. Retrying... Attempt #" .. attempts)
-                game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(player.Name) -- Try again
-                wait(1) -- Wait before retrying
-            end
-        end
-
-        if attempts >= maxAttempts then
-            warn("Failed to restore the local player's avatar after multiple attempts.")
-        end
-
     -- Command to start copying the nearest player's avatar
-    elseif message == "/copynearest" then
+    elseif message == "!copynearest" then
         if not isCopyingNearest then
             isCopyingNearest = true
             print("Started copying the nearest player's avatar.")
@@ -121,7 +89,7 @@ game.Players.LocalPlayer.Chatted:Connect(function(message)
                 wait(0.05) -- Reduced wait time for faster checking (lowered to 0.05 seconds)
             end
         else
-            warn("Already copying the nearest player's avatar. Use '/uncopy' to stop.")
+            warn("Already copying the nearest player's avatar. Use '!uncopy' to stop.")
         end
     end
 end)
