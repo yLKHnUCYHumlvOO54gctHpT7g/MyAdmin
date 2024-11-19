@@ -4,6 +4,7 @@ _G.cmds = {
     ["!annoy"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Annoy",
     ["!clearchat"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/clearcmd.luau", 
     ["!mobilesuperfly"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/supermanfly.luau", 
+    ["!superfly"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/supermanflyjj.lua",
     ["!tptoplr"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/TPtoplayer",
     ["!stopglide"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stopglide.lua",
     ["!antilag"]="https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
