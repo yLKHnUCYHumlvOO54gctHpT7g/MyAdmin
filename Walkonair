@@ -1,135 +1,113 @@
--- Place this LocalScript in StarterPlayerScripts or StarterCharacterScripts
-
+-- Services and variables
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local PlayerGui = player:WaitForChild("PlayerGui")
 
--- Create a large invisible part to serve as the new baseplate
+-- Create the main invisible baseplate
 local baseplate = Instance.new("Part")
 baseplate.Name = "InvisibleBaseplate"
-baseplate.Size = Vector3.new(2048, 1, 2048) -- Set the size of the baseplate
-baseplate.Position = Vector3.new(0, 0, 0) -- Position it at the same height as the original baseplate
-baseplate.Transparency = 1 -- Make it invisible
-baseplate.Anchored = true -- Keep it in place
-baseplate.CanCollide = true -- Allow players to stand on it
-baseplate.Parent = workspace -- Add it to the workspace
+baseplate.Size = Vector3.new(2048, 1, 2048)
+baseplate.Position = Vector3.new(0, 0, 0)
+baseplate.Transparency = 1
+baseplate.Anchored = true
+baseplate.CanCollide = true
+baseplate.Parent = workspace
 
--- Create ScreenGui for the button
+-- Create a ScreenGui
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "ToggleButtonGui"
+screenGui.Name = "AirwalkGui"
 screenGui.Parent = PlayerGui
 
--- Create a button to toggle airwalking
-local toggleButton = Instance.new("TextButton")
-toggleButton.Size = UDim2.new(0, 80, 0, 30) -- Smaller size of the button
-toggleButton.Position = UDim2.new(0.5, -40, 0.1, 0) -- Center the button at the top
-toggleButton.Text = "Airwalk"
-toggleButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50) -- Dark gray background color
-toggleButton.TextColor3 = Color3.fromRGB(255, 255, 255) -- White text color
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.TextSize = 16
-toggleButton.BorderSizePixel = 0 -- Remove border for a cleaner look
-toggleButton.BackgroundTransparency = 0.3 -- Slightly transparent background
-toggleButton.AutoButtonColor = false -- Prevent default button color change on hover
-toggleButton.Parent = screenGui
+-- Function to create buttons
+local function createButton(parent, text, position, size, shape, initialColor, textColor)
+    local button = Instance.new("TextButton")
+    button.Size = size
+    button.Position = position
+    button.Text = text
+    button.BackgroundColor3 = initialColor
+    button.TextColor3 = textColor
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 18
+    button.BorderSizePixel = 0
+    button.Parent = parent
 
--- Add a shadow effect for a more professional look
-local shadow = Instance.new("Frame")
-shadow.Size = UDim2.new(1, 0, 1, 0)
-shadow.Position = UDim2.new(0, 0, 0, 0)
-shadow.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-shadow.BackgroundTransparency = 0.5
-shadow.Parent = toggleButton
-shadow.ZIndex = -1 -- Ensure the shadow is behind the button
+    -- Rounded corners or circular shape
+    local corner = Instance.new("UICorner")
+    if shape == "circle" then
+        corner.CornerRadius = UDim.new(1, 0) -- Full circle
+    else
+        corner.CornerRadius = UDim.new(0, 12) -- Rounded corners
+    end
+    corner.Parent = button
 
-local airwalking = false -- Track the airwalking state
+    return button
+end
 
--- Function to maintain player's height
+-- Create buttons
+local toggleButton = createButton(screenGui, "On", UDim2.new(1, -65, 0.08, 0), UDim2.new(0, 40, 0, 40), "circle", Color3.fromRGB(0, 255, 0), Color3.fromRGB(255, 255, 255))
+local upButton = createButton(screenGui, "▲", UDim2.new(1, -90, 0.15, 0), UDim2.new(0, 40, 0, 40), "circle", Color3.fromRGB(100, 100, 100), Color3.fromRGB(255, 255, 255))
+local downButton = createButton(screenGui, "▼", UDim2.new(1, -40, 0.15, 0), UDim2.new(0, 40, 0, 40), "circle", Color3.fromRGB(100, 100, 100), Color3.fromRGB(255, 255, 255))
+
+local airwalking = true -- Start with airwalking on
+
+-- Function to maintain player height
 local function maintainPlayerHeight()
     local character = player.Character or player.CharacterAdded:Wait()
     local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
     while true do
-        wait(0.1) -- Check every 0.1 seconds
-
-        if humanoidRootPart then
+        wait(0.1)
+        if humanoidRootPart and airwalking then
             local playerPosition = humanoidRootPart.Position
-
-            -- Calculate the corners of the baseplate
-            local baseplateSize = baseplate.Size
-            local baseplatePosition = baseplate.Position
-
-            -- Determine the boundaries of the baseplate
-            local minX = baseplatePosition.X - baseplateSize.X / 2
-            local maxX = baseplatePosition.X + baseplateSize.X / 2
-            local minZ = baseplatePosition.Z - baseplateSize.Z / 2
-            local maxZ = baseplatePosition.Z + baseplateSize.Z / 2
-
-            -- Check if the player is outside the baseplate boundaries
+            local minX = baseplate.Position.X - baseplate.Size.X / 2
+            local maxX = baseplate.Position.X + baseplate.Size.X / 2
+            local minZ = baseplate.Position.Z - baseplate.Size.Z / 2
+            local maxZ = baseplate.Position.Z + baseplate.Size.Z / 2
             if playerPosition.X < minX or playerPosition.X > maxX or playerPosition.Z < minZ or playerPosition.Z > maxZ then
-                -- Player is outside the baseplate, keep their height the same
                 humanoidRootPart.Position = Vector3.new(playerPosition.X, playerPosition.Y, playerPosition.Z)
             end
         end
     end
 end
 
--- Function to toggle airwalking state and manage the baseplate
+-- Function to toggle airwalk state
 local function toggleAirwalk()
-    airwalking = not airwalking -- Toggle the state
-
     if airwalking then
-        -- Change the button text based on the airwalking state
-        toggleButton.Text = "Unairwalk"
+        toggleButton.Text = "Off"
+        toggleButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0) -- Red
+        baseplate:Destroy()
+        airwalking = false
     else
-        toggleButton.Text = "Airwalk"
-        baseplate:Destroy() -- Delete the invisible baseplate when airwalking is turned off
-        return -- Exit the function to prevent further execution
-    end
-
-    -- If we are turning airwalking on, we can recreate the baseplate (if needed)
-    if not baseplate:IsDescendantOf(workspace) then
-        baseplate = Instance.new("Part")
-        baseplate.Name = "InvisibleBaseplate"
-        baseplate.Size = Vector3.new(2048, 1, 2048)
-        baseplate.Position = Vector3.new(0, 0, 0)
-        baseplate.Transparency = 1
-        baseplate.Anchored = true
-        baseplate.CanCollide = true
-        baseplate.Parent = workspace
+        toggleButton.Text = "On"
+        toggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0) -- Green
+        if not baseplate:IsDescendantOf(workspace) then
+            baseplate = Instance.new("Part")
+            baseplate.Name = "InvisibleBaseplate"
+            baseplate.Size = Vector3.new(2048, 1, 2048)
+            baseplate.Position = Vector3.new(0, 0, 0)
+            baseplate.Transparency = 1
+            baseplate.Anchored = true
+            baseplate.CanCollide = true
+            baseplate.Parent = workspace
+        end
+        airwalking = true
     end
 end
 
--- Connect the button's click event to the toggle function
+-- Function to move the baseplate up
+local function moveBaseplateUp()
+    baseplate.Position = baseplate.Position + Vector3.new(0, 0.5, 0)
+end
+
+-- Function to move the baseplate down
+local function moveBaseplateDown()
+    baseplate.Position = baseplate.Position - Vector3.new(0, 0.5, 0)
+end
+
+-- Connect button click events
 toggleButton.MouseButton1Click:Connect(toggleAirwalk)
-
--- Draggable functionality for both PC and mobile
-local dragging = false
-local dragStart, startPos
-
-local function onInputBegan(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = toggleButton.Position
-
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end
-
-local function onInputChanged(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        local delta = input.Position - dragStart
-        toggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-end
-
-toggleButton.InputBegan:Connect(onInputBegan)
-toggleButton.InputChanged:Connect(onInputChanged)
+upButton.MouseButton1Click:Connect(moveBaseplateUp)
+downButton.MouseButton1Click:Connect(moveBaseplateDown)
 
 -- Start maintaining player height
 maintainPlayerHeight()
