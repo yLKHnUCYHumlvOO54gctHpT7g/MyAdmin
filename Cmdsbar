@@ -86,16 +86,12 @@ ImageLabel.MouseButton1Click:Connect(closeGui)
 TextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local command = TextBox.Text:lower() -- Get and lower case the command text
-        
-        -- Prepend a "/" to the command to check in _G.cmds
-        if _G.cmds["/" .. command] then
-            -- Load and run the command's script
-            loadstring(game:HttpGet(_G.cmds["/" .. command]))()
-            print("Command " .. command .. " has been run.")
-        else
-            print("Invalid command: " .. command)
-        end
-        
-        TextBox.Text = "" -- Clear the input box after command execution
+for cmdname,link in pairs(_G.cmds) do
+    if command == cmdname then
+            TextBox.Text = "" -- Clear the input box after command execution
+    loadstring(game:HttpGet(link))()
+
     end
+end
+            end
 end)
