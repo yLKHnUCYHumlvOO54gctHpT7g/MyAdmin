@@ -10,6 +10,7 @@ _G.cmds = {
     ["!antilag"]="https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
     ["!breakghost"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Breakghost",
     ["!antibang"]="https://pastebin.com/raw/5iSqpqf6",
+    ["!catchme"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/unmutable.luau",
     ["!stealbooth"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Stealbooth",
     ["!chaoshub"]="https://raw.githubusercontent.com/Vcsk/AstralHub/main/Loader.lua",
     ["!warn all"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Warnall",
