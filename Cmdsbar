@@ -90,8 +90,86 @@ for cmdname,link in pairs(_G.cmds) do
     if command == cmdname then
             TextBox.Text = "" -- Clear the input box after command execution
     loadstring(game:HttpGet(link))()
-
     end
-end
+    end
+    if command:sub(1,6) == "!copy " then
+        local isCopying = false
+local isCopyingNearest = false
+local originalAvatar = nil -- To store the original avatar state
+
+        local target = command:sub(7)
+
+        -- Command to copy all player usernames
+       
+            -- Check for specific player name matching
+            local found = false
+            for _, v in pairs(game.Players:GetChildren()) do
+                if v.Name:sub(1, #target):lower() == target:lower() or v.DisplayName:sub(1, #target):lower() == target:lower() then
+                    game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(v.Name)
+                    found = true
+                end
             end
-end)
+    end
+if command == "!copynearest" then
+if not isCopyingNearest then
+            isCopyingNearest = true
+            print("Started copying the nearest player's avatar.")
+
+
+            -- Continuously check for the nearest player, excluding the local player
+            while isCopyingNearest do
+                local closestPlayer = nil
+                local closestDistance = math.huge
+
+                -- Find the nearest player (excluding the local player)
+                for _, player in pairs(game.Players:GetPlayers()) do
+                    if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                        local distance = (player.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
+                        if distance < closestDistance then
+                            closestDistance = distance
+                            closestPlayer = player
+                        end
+                    end
+                end
+
+                -- If a closest player is found, send their username to the server
+                if closestPlayer then
+                    game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(closestPlayer.Name)
+                end
+
+                wait(0.05) -- Reduced wait time for faster checking (lowered to 0.05 seconds)
+            end
+        else
+            warn("Already copying the nearest player's avatar. Use '!uncopy' to stop.")
+        end
+
+end
+getgenv().isCopying = false
+if command == "!copy all" then
+if not getgenv().isCopying then
+                getgenv().isCopying = true
+                print("Started copying usernames of all players in the server.")
+
+                -- Continuously copy all player usernames in a loop without any significant delay
+                while getgenv().isCopying do
+                    for _, player in pairs(game.Players:GetPlayers()) do
+                        game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(player.Name)
+                    end
+
+                    wait(0.05) -- Reduced wait time for faster copying (lowered to 0.05 seconds)
+                end
+            else
+                warn("Already copying all usernames. Use '!uncopy' to stop.")
+            end
+
+end
+
+if command == "!uncopy" then
+  -- Stop all ongoing copying activities immediately
+        getgenv().isCopying = false
+        isCopyingNearest = false
+
+
+end
+end
+            end)
