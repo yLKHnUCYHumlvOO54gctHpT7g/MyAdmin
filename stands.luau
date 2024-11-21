@@ -158,7 +158,7 @@ workspace.Gravity=0
         end
     elseif cmd == prefix.."unstand" then
            STANDRUNNING = false
-         wait(0.05)
+         wait(0.25)
         stopStand()
         workspace.Gravity=192
     end
