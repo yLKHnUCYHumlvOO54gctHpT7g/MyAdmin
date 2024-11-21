@@ -9,6 +9,34 @@ end
 
 _G.AKAdminLoaded = true
 
+-- Command handler system
+local CommandSystem = {
+    prefix = "!",  -- Default prefix for commands
+    commands = {},
+}
+
+-- Register a new command
+function CommandSystem:RegisterCommand(name, callback, description)
+    self.commands[name:lower()] = {
+        callback = callback,
+        description = description
+    }
+end
+
+-- Handle command execution
+function CommandSystem:HandleCommand(message)
+    if not message:sub(1, 1) == self.prefix then return end
+    
+    local args = message:sub(2):split(" ")
+    local commandName = args[1]:lower()
+    table.remove(args, 1)
+    
+    local command = self.commands[commandName]
+    if command then
+        command.callback(args)
+    end
+end
+
 local function RemoveAtmosphereAndSetFog()
     local Lighting = game:GetService("Lighting")
     Lighting.FogEnd = 100000
@@ -23,60 +51,85 @@ end
 -- Call the function
 RemoveAtmosphereAndSetFog()
 
-local success, result = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Verfiedbadge.luau"))()
-end)
-pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton"))()
-end)
-pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/goto.luau"))()
-end)
-pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar"))()
-end)
-pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stands.luau"))()
-end)
+-- Load external scripts with better error handling
+local function loadExternalScript(url)
+    local success, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    
+    if not success then
+        warn("Failed to load script from " .. url .. ": " .. tostring(result))
+    else
+        print("Successfully loaded script from: " .. url)
+    end
+end
 
-if not success then
-    warn("Failed to load script: " .. tostring(result))
-else
-    print("Script loaded successfully!")
+-- URLs for external scripts
+local scriptUrls = {
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Verfiedbadge.luau",
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton",
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/goto.luau",
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar",
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stands.luau"
+}
+
+-- Load all external scripts
+for _, url in ipairs(scriptUrls) do
+    loadExternalScript(url)
 end
 
 local player = game.Players.LocalPlayer
-local replicatedStorage = game:GetService("ReplicatedStorage")
-local chatService = game:GetService("TextChatService")
-local defaultChannel = chatService.TextChannels.RBXGeneral or replicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+local oldChat = game.ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
 
 local function Chat(msg)
-    if defaultChannel then
-        defaultChannel.SayMessageRequest:FireServer(msg, "All")
+    if oldChat then
+        game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
     else
         game.TextChatService.TextChannels.RBXGeneral:SendAsync(msg)
     end
 end
 
--- Automatically listen for specific commands in chat
-player.Chatted:Connect(function(message)
-    local command = message:lower()
-    if command == "!removefog" then
-        RemoveAtmosphereAndSetFog()
-    elseif command == "!loadcmds" then
-        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadcmds.luau"))()
-    end
-end)
-
--- Load additional components
+-- Load additional scripts
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadownercmds.luau"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadhook.luau"))()
 
+-- Notification system
+local function showNotification(message, backgroundColor)
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "Notification"
+    gui.Parent = player.PlayerGui
+    
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 1, 0)
+    frame.BackgroundColor3 = backgroundColor
+    frame.Parent = gui
+    
+    local messageLabel = Instance.new("TextLabel")
+    messageLabel.Size = UDim2.new(1, 0, 1, 0)
+    messageLabel.Position = UDim2.new(0, 0, 0, 0)
+    messageLabel.Text = message
+    messageLabel.TextSize = 36
+    messageLabel.Parent = frame
+    
+    repeat
+        wait(1)
+        isWhitelisted = false
+        for _, whitelistedUser in ipairs(whitelistedPlayers) do
+            if (playerName:lower() == whitelistedUser:lower()) then
+                isWhitelisted = true
+                break
+            end
+        end
+    until isWhitelisted 
+    gui:Destroy()
+end
+
+-- Whitelist check
 local playerName = player.Name
 local isWhitelisted = false
 
 for _, whitelistedUser in ipairs(getgenv().whitelistedPlayers) do
-    if playerName:lower() == whitelistedUser:lower() then
+    if (playerName:lower() == whitelistedUser:lower()) then
         isWhitelisted = true
         break
     end
@@ -84,20 +137,43 @@ end
 
 if not isWhitelisted then
     local function kickPlayer()
-        game.Players.LocalPlayer:Kick("You are not whitelisted. Discord copied to clipboard. Get points or buy lifetime.")
+        setclipboard("https://discord.gg/akadmin")
+        game.Players.LocalPlayer:Kick("You are not whitelisted. discord copied to clipboard, get points or buy lifetime.")
     end
-    setclipboard("https://discord.gg/akadmin")
     kickPlayer()
     print("You are not whitelisted. Execute non-whitelisted logic here.")
 else
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/AK%20intro"))()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui"))()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadcmds.luau"))()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadplayertags.luau"))()
+    -- Load whitelisted player scripts
+    local whitelistedScripts = {
+        "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau",
+        "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/AK%20intro",
+        "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui",
+        "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadcmds.luau",
+        "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadplayertags.luau"
+    }
     
+    for _, url in ipairs(whitelistedScripts) do
+        loadExternalScript(url)
+    end
+    
+    -- Queue on teleport handling
     local queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+    
     if queueonteleport then
         queueonteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Admin'))()")
     end
 end
+
+-- Connect chat command handler
+game.Players.LocalPlayer.Chatted:Connect(function(message)
+    CommandSystem:HandleCommand(message)
+end)
+
+-- Example of registering a command
+CommandSystem:RegisterCommand("help", function(args)
+    local commandList = "Available Commands:\n"
+    for cmdName, cmdData in pairs(CommandSystem.commands) do
+        commandList = commandList .. CommandSystem.prefix .. cmdName .. " - " .. cmdData.description .. "\n"
+    end
+    print(commandList)
+end, "Shows list of available commands")
