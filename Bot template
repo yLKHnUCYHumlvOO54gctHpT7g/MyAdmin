@@ -12,7 +12,7 @@ _G.AKAdminLoaded = true
 local function RemoveAtmosphereAndSetFog()
     local Lighting = game:GetService("Lighting")
     Lighting.FogEnd = 100000
-    
+
     for _, v in pairs(Lighting:GetDescendants()) do
         if v:IsA("Atmosphere") then
             v:Destroy()
@@ -23,69 +23,54 @@ end
 -- Call the function
 RemoveAtmosphereAndSetFog()
 
-local urls = {
-    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Verfiedbadge.luau",
-    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton",
-    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/goto.luau",
-    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar",
-    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stands.luau"
-}
-
-for _, url in ipairs(urls) do
-    local success, result = pcall(function()
-        return loadstring(game:HttpGet(url))()
-    end)
-    if not success then
-        warn("Failed to load script: " .. tostring(result))
-    else
-        print("Script loaded successfully!")
-    end
+-- Load external scripts
+local success, result = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Verfiedbadge.luau"))()
+end)
+if not success then
+    warn("Failed to load Verfiedbadge.luau: " .. tostring(result))
 end
 
-local player = game.Players.LocalPlayer
-local oldChat = game.ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
-
-local function Chat(msg)
-    if oldChat then
-        game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
-    else
-        game.TextChatService.TextChannels.RBXGeneral:SendAsync(msg)
-    end
+success, result = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton"))()
+end)
+if not success then
+    warn("Failed to load firebutton: " .. tostring(result))
 end
 
+success, result = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/goto.luau"))()
+end)
+if not success then
+    warn("Failed to load goto.luau: " .. tostring(result))
+end
+
+success, result = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar"))()
+end)
+if not success then
+    warn("Failed to load copyavatar: " .. tostring(result))
+end
+
+success, result = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stands.luau"))()
+end)
+if not success then
+    warn("Failed to load stands.luau: " .. tostring(result))
+end
+
+print("Scripts loaded successfully!")
+
+-- Load owner commands and hooks
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadownercmds.luau"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadhook.luau"))()
 
+-- Whitelist check
+local player = game.Players.LocalPlayer
 local playerName = player.Name
-local function showNotification(message, backgroundColor)
-    local gui = Instance.new("ScreenGui")
-    gui.Name = "Notification"
-    gui.Parent = player.PlayerGui
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 1, 0)
-    frame.BackgroundColor3 = backgroundColor
-    frame.Parent = gui
-    local messageLabel = Instance.new("TextLabel")
-    messageLabel.Size = UDim2.new(1, 0, 1, 0)
-    messageLabel.Position = UDim2.new(0, 0, 0, 0)
-    messageLabel.Text = message
-    messageLabel.TextSize = 36
-    messageLabel.Parent = frame
-    repeat
-        wait(1)
-        isWhitelisted = false
-        for _, whitelistedUser in ipairs(whitelistedPlayers) do
-            if (playerName:lower() == whitelistedUser:lower()) then
-                isWhitelisted = true
-                break
-            end
-        end
-    until isWhitelisted 
-    gui:Destroy()
-end
-
 local isWhitelisted = false
-for _, whitelistedUser in ipairs(getgenv().whitelistedPlayers) do
+
+for _, whitelistedUser in ipairs(getgenv().whitelistedPlayers or {}) do
     if (playerName:lower() == whitelistedUser:lower()) then
         isWhitelisted = true
         break
@@ -93,14 +78,80 @@ for _, whitelistedUser in ipairs(getgenv().whitelistedPlayers) do
 end
 
 if not isWhitelisted then
-    local function kickPlayer()
-        game.Players.LocalPlayer:Kick("You are not whitelisted. discord copied to clipboard, get points or buy lifetime.")
-    end
     setclipboard("https://discord.gg/akadmin")
-    kickPlayer()
+    player:Kick("You are not whitelisted. Discord link copied to clipboard. Get points or buy lifetime access.")
     print("You are not whitelisted. Execute non-whitelisted logic here.")
 else
+    -- Load additional scripts
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/AK%20intro"))()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui"))()
-    loadstring(game:HttpGet("https://raw.githubusercontent
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadcmds.luau"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadplayertags.luau"))()
+
+    -- Queue the script on teleport
+    local queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+    if queueonteleport then
+        queueonteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Admin'))()")
+    end
+
+    -- Create a GUI for the command bar
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Name = "CommandBarGui"
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+    local CommandBarFrame = Instance.new("Frame")
+    CommandBarFrame.Name = "CommandBarFrame"
+    CommandBarFrame.Size = UDim2.new(1, 0, 0, 30)
+    CommandBarFrame.Position = UDim2.new(0, 0, 1, -30)
+    CommandBarFrame.BackgroundColor3 = Color3.new(0, 0, 0)
+    CommandBarFrame.BackgroundTransparency = 0.5
+    CommandBarFrame.Parent = ScreenGui
+
+    local CommandBar = Instance.new("TextBox")
+    CommandBar.Name = "CommandBar"
+    CommandBar.Size = UDim2.new(1, -10, 1, -10)
+    CommandBar.Position = UDim2.new(0, 5, 0, 5)
+    CommandBar.BackgroundColor3 = Color3.new(1, 1, 1)
+    CommandBar.BackgroundTransparency = 0.2
+    CommandBar.TextColor3 = Color3.new(0, 0, 0)
+    CommandBar.Font = Enum.Font.SourceSans
+    CommandBar.TextSize = 18
+    CommandBar.PlaceholderText = "Enter command here..."
+    CommandBar.Parent = CommandBarFrame
+
+    -- Function to execute commands
+    local function ExecuteCommand(commandText)
+        -- Process the command here
+        -- Example: If you have a command processing function, call it
+        -- processCommand(commandText)
+        -- For demonstration, we'll just print it
+        print("Executing command:", commandText)
+
+        -- You might have a global function or module that handles commands
+        if _G.ProcessCommand then
+            _G.ProcessCommand(commandText)
+        else
+            warn("Command processing function not found!")
+        end
+    end
+
+    -- Listen for when the player presses Enter
+    CommandBar.FocusLost:Connect(function(enterPressed)
+        if enterPressed then
+            local commandText = CommandBar.Text
+            CommandBar.Text = ""
+            ExecuteCommand(commandText)
+        end
+    end)
+
+    -- Optionally, show/hide the command bar with a keybind (e.g., pressing the "/" key)
+    local UIS = game:GetService("UserInputService")
+    UIS.InputBegan:Connect(function(input, gameProcessed)
+        if not gameProcessed then
+            if input.KeyCode == Enum.KeyCode.Slash then
+                CommandBar:CaptureFocus()
+            end
+        end
+    end)
+end
