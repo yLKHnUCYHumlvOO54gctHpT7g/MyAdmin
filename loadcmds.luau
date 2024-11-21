@@ -1,32 +1,49 @@
 local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+-- Welcome notification
 StarterGui:SetCore("SendNotification", {
     Title = "AK ADMIN",
     Text = "Welcome to AK ADMIN! Type !cmds to see the available commands.",
     Duration = 5
 })
 
--- Function to find the closest matching command
+-- Function to calculate Levenshtein distance
+local function levenshteinDistance(s1, s2)
+    local len1, len2 = #s1, #s2
+    local matrix = {}
+
+    for i = 0, len1 do
+        matrix[i] = {[0] = i}
+    end
+    for j = 0, len2 do
+        matrix[0][j] = j
+    end
+
+    for i = 1, len1 do
+        for j = 1, len2 do
+            local cost = (s1:sub(i, i) == s2:sub(j, j)) and 0 or 1
+            matrix[i][j] = math.min(
+                matrix[i - 1][j] + 1,     -- Deletion
+                matrix[i][j - 1] + 1,     -- Insertion
+                matrix[i - 1][j - 1] + cost -- Substitution
+            )
+        end
+    end
+
+    return matrix[len1][len2]
+end
+
+-- Function to suggest the closest command
 local function suggestClosestCommand(input)
     if not input then return nil end
 
     local closestCommand = nil
     local shortestDistance = math.huge
 
-    -- Simple distance calculation
     for cmd in pairs(_G.cmds) do
-        local distance = 0
-        local maxLen = math.max(#input, #cmd)
-
-        -- Compare characters
-        for i = 1, maxLen do
-            local c1 = input:sub(i, i):lower()
-            local c2 = cmd:sub(i, i):lower()
-            if c1 ~= c2 then
-                distance = distance + 1
-            end
-        end
-
-        -- Update closest command if this one is closer
+        local distance = levenshteinDistance(input:lower(), cmd:lower())
         if distance < shortestDistance and distance <= 3 then
             shortestDistance = distance
             closestCommand = cmd
@@ -52,18 +69,29 @@ local function executeCommand(command)
         else
             StarterGui:SetCore("SendNotification", {
                 Title = "Execution Error ❌",
-                Text = "Error executing command",
+                Text = errorMessage or "Error executing command",
                 Duration = 5
             })
         end
     else
-        -- Try to find a similar command
+        -- Try to find a suggestion
         local suggestion = suggestClosestCommand(command)
         if suggestion then
+            -- Create a BindableFunction for the suggestion buttons
+            local bindable = Instance.new("BindableFunction")
+            function bindable.OnInvoke(response)
+                if response == "Yes" then
+                    executeCommand(suggestion)
+                end
+            end
+
             StarterGui:SetCore("SendNotification", {
                 Title = "Command Suggestion 💡",
                 Text = "Did you mean: " .. suggestion .. "?",
-                Duration = 5
+                Duration = 10,
+                Button1 = "Yes",
+                Button2 = "No",
+                Callback = bindable
             })
         else
             StarterGui:SetCore("SendNotification", {
@@ -75,48 +103,11 @@ local function executeCommand(command)
     end
 end
 
--- Connect chat event to command execution for the local player
-game.Players.LocalPlayer.Chatted:Connect(function(msg)
-    -- Only process commands that start with !
+-- Chat command listener
+LocalPlayer.Chatted:Connect(function(msg)
+    -- Only process commands that start with '!'
     if msg:sub(1, 1) == "!" then
-        -- Trim and clean up command input
-        local fullCommand = msg:lower():gsub("^%s*", ""):gsub("%s*$", "")
-
-        -- Check if command exists directly
-        if _G.cmds[fullCommand] then
-            executeCommand(fullCommand)
-        else
-            -- Try to find a suggestion
-            local suggestion = suggestClosestCommand(fullCommand)
-            if suggestion then
-                if fullCommand == suggestion:lower() then
-                    executeCommand(suggestion)
-                else
-                    -- Create buttons for the suggestion
-                    local bindable = Instance.new("BindableFunction")
-
-                    function bindable.OnInvoke(response)
-                        if response == "Yes" then
-                            executeCommand(suggestion)
-                        end
-                    end
-
-                    StarterGui:SetCore("SendNotification", {
-                        Title = "Command Suggestion 💡",
-                        Text = "Did you mean: " .. suggestion .. "?",
-                        Duration = 10,
-                        Button1 = "Yes",
-                        Button2 = "No",
-                        Callback = bindable
-                    })
-                end
-            else
-                StarterGui:SetCore("SendNotification", {
-                    Title = "Unknown Command ❌",
-                    Text = "Command not found",
-                    Duration = 3
-                })
-            end
-        end
+        local command = msg:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "") -- Clean up the input
+        executeCommand(command)
     end
 end)
