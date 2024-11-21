@@ -23,101 +23,84 @@ end
 -- Call the function
 RemoveAtmosphereAndSetFog()
 
-local success, result = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Verfiedbadge.luau"))()
-end)
-local success, result = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton"))()
-end)
-local success, result = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/goto.luau"))()
-end)
-local success, result = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar"))()
-end)
-local success, result = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stands.luau"))()
-end)
+local urls = {
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Verfiedbadge.luau",
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton",
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/goto.luau",
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar",
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stands.luau"
+}
 
-if not success then
-    warn("Failed to load script: " .. tostring(result))
-else
-    print("Script loaded successfully!")
+for _, url in ipairs(urls) do
+    local success, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    if not success then
+        warn("Failed to load script: " .. tostring(result))
+    else
+        print("Script loaded successfully!")
+    end
 end
 
 local player = game.Players.LocalPlayer
 local oldChat = game.ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
 
 local function Chat(msg)
-	if oldChat then
-		game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
-	else
-		game.TextChatService.TextChannels.RBXGeneral:SendAsync(msg)
-	end
+    if oldChat then
+        game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
+    else
+        game.TextChatService.TextChannels.RBXGeneral:SendAsync(msg)
+    end
 end
 
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadownercmds.luau"))()
-
-
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadhook.luau"))()
 
-local player = game.Players.LocalPlayer;
-local playerName = player.Name;
+local playerName = player.Name
 local function showNotification(message, backgroundColor)
-	local gui = Instance.new("ScreenGui");
-	gui.Name = "Notification";
-	gui.Parent = player.PlayerGui;
-	local frame = Instance.new("Frame");
-	frame.Size = UDim2.new(1, 0, 1, 0);
-	frame.BackgroundColor3 = backgroundColor;
-	frame.Parent = gui;
-	local messageLabel = Instance.new("TextLabel");
-	messageLabel.Size = UDim2.new(1, 0, 1, 0);
-	messageLabel.Position = UDim2.new(0, 0, 0, 0);
-	messageLabel.Text = message;
-	messageLabel.TextSize = 36;
-	messageLabel.Parent = frame;
-	repeat
-		wait(1);
-		isWhitelisted = false;
-		for _, whitelistedUser in ipairs(whitelistedPlayers) do
-			if (playerName:lower() == whitelistedUser:lower()) then
-				isWhitelisted = true;
-				break;
-			end
-		end
-	until isWhitelisted 
-	gui:Destroy();
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "Notification"
+    gui.Parent = player.PlayerGui
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 1, 0)
+    frame.BackgroundColor3 = backgroundColor
+    frame.Parent = gui
+    local messageLabel = Instance.new("TextLabel")
+    messageLabel.Size = UDim2.new(1, 0, 1, 0)
+    messageLabel.Position = UDim2.new(0, 0, 0, 0)
+    messageLabel.Text = message
+    messageLabel.TextSize = 36
+    messageLabel.Parent = frame
+    repeat
+        wait(1)
+        isWhitelisted = false
+        for _, whitelistedUser in ipairs(whitelistedPlayers) do
+            if (playerName:lower() == whitelistedUser:lower()) then
+                isWhitelisted = true
+                break
+            end
+        end
+    until isWhitelisted 
+    gui:Destroy()
 end
-local isWhitelisted = false;
+
+local isWhitelisted = false
 for _, whitelistedUser in ipairs(getgenv().whitelistedPlayers) do
-	if (playerName:lower() == whitelistedUser:lower()) then
-		isWhitelisted = true;
-		break;
-	end
+    if (playerName:lower() == whitelistedUser:lower()) then
+        isWhitelisted = true
+        break
+    end
 end
+
 if not isWhitelisted then
-	local function kickPlayer()
-		game.Players.LocalPlayer:Kick("You are not whitelisted. discord copied to clipboard, get points or buy lifetime.");
-	end
+    local function kickPlayer()
+        game.Players.LocalPlayer:Kick("You are not whitelisted. discord copied to clipboard, get points or buy lifetime.")
+    end
     setclipboard("https://discord.gg/akadmin")
-	kickPlayer();
-	print("You are not whitelisted. Execute non-whitelisted logic here.");
+    kickPlayer()
+    print("You are not whitelisted. Execute non-whitelisted logic here.")
 else
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/AK%20intro"))();
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui"))();
-		-- Welcome notification
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadcmds.luau"))()
-
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadplayertags.luau"))()
-local queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
-
-
-if queueonteleport then
-queueonteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Admin'))()")
-end
--- Define commands with URLs
--- Create a GUI for the command bar
-      
-	end
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/AK%20intro"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent
