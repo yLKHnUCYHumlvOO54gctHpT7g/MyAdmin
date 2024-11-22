@@ -1,4 +1,7 @@
 local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
 StarterGui:SetCore("SendNotification", {
     Title = "AK ADMIN",
     Text = "Welcome to AK ADMIN! Type !cmds to see the available commands.",
@@ -75,8 +78,24 @@ local function executeCommand(command)
     end
 end
 
+-- Real-time typing detection to provide suggestions
+local function detectTyping(input)
+    if input:sub(1, 1) == "!" then
+        local fullCommand = input:lower():gsub("^%s*", ""):gsub("%s*$", "")
+
+        local suggestion = suggestClosestCommand(fullCommand)
+        if suggestion then
+            StarterGui:SetCore("SendNotification", {
+                Title = "Command Suggestion 💡",
+                Text = "Did you mean: " .. suggestion .. "?",
+                Duration = 5
+            })
+        end
+    end
+end
+
 -- Connect chat event to command execution for the local player
-game.Players.LocalPlayer.Chatted:Connect(function(msg)
+LocalPlayer.Chatted:Connect(function(msg)
     -- Only process commands that start with !
     if msg:sub(1, 1) == "!" then
         -- Trim and clean up command input
@@ -89,27 +108,23 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
             -- Try to find a suggestion
             local suggestion = suggestClosestCommand(fullCommand)
             if suggestion then
-                if fullCommand == suggestion:lower() then
-                    executeCommand(suggestion)
-                else
-                    -- Create buttons for the suggestion
-                    local bindable = Instance.new("BindableFunction")
+                -- Create buttons for the suggestion
+                local bindable = Instance.new("BindableFunction")
 
-                    function bindable.OnInvoke(response)
-                        if response == "Yes" then
-                            executeCommand(suggestion)
-                        end
+                function bindable.OnInvoke(response)
+                    if response == "Yes" then
+                        executeCommand(suggestion)
                     end
-
-                    StarterGui:SetCore("SendNotification", {
-                        Title = "Command Suggestion 💡",
-                        Text = "Did you mean: " .. suggestion .. "?",
-                        Duration = 10,
-                        Button1 = "Yes",
-                        Button2 = "No",
-                        Callback = bindable
-                    })
                 end
+
+                StarterGui:SetCore("SendNotification", {
+                    Title = "Command Suggestion 💡",
+                    Text = "Did you mean: " .. suggestion .. "?",
+                    Duration = 10,
+                    Button1 = "Yes",
+                    Button2 = "No",
+                    Callback = bindable
+                })
             else
                 StarterGui:SetCore("SendNotification", {
                     Title = "Unknown Command ❌",
@@ -119,4 +134,12 @@ game.Players.LocalPlayer.Chatted:Connect(function(msg)
             end
         end
     end
+end)
+
+-- Real-time input listener to detect typing
+LocalPlayer.CharacterAdded:Connect(function()
+    local inputBox = LocalPlayer.PlayerGui:WaitForChild("Chat").TextBox
+    inputBox:GetPropertyChangedSignal("Text"):Connect(function()
+        detectTyping(inputBox.Text)
+    end)
 end)
