@@ -6,34 +6,99 @@ local screenGui = Instance.new("ScreenGui")
 screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Haupt-Frame (Top-left position)
+-- Haupt-Frame
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0.3, 0, 0.5, 0) -- Reduced size (30% width, 50% height)
-frame.Position = UDim2.new(0, 0, 0, 0) -- Position in the top-left corner
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-frame.BackgroundTransparency = 0.2 -- 80% Transparenz
+frame.Size = UDim2.new(0.2, 0, 0.3, 0)  -- Reduzierte Größe
+frame.Position = UDim2.new(0.4, 0, 0.35, 0)  -- Zentriert
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.BackgroundTransparency = 0  -- Keine Transparenz
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
 
--- Rundungen für Frame
+-- Runde Ecken für Frame
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
+corner.CornerRadius = UDim.new(0, 15)
 corner.Parent = frame
 
--- Leichter Schatteneffekt
-local uiStroke = Instance.new("UIStroke")
-uiStroke.Color = Color3.fromRGB(50, 50, 50)
-uiStroke.Thickness = 1
-uiStroke.Parent = frame
+-- Schatteneffekt mit einem Frame (rund)
+local dropShadowHolder = Instance.new("Frame")
+dropShadowHolder.Name = "DropShadowHolder"
+dropShadowHolder.BackgroundTransparency = 1
+dropShadowHolder.BorderSizePixel = 0
+dropShadowHolder.Size = UDim2.new(1, 0, 1, 0)
+dropShadowHolder.ZIndex = 0
+dropShadowHolder.Parent = frame
 
--- Eingabefeld (Suchleiste) (Smaller size)
+local dropShadow = Instance.new("Frame")
+dropShadow.Name = "DropShadow"
+dropShadow.AnchorPoint = Vector2.new(0.5, 0.5)
+dropShadow.BackgroundColor3 = Color3.new(0, 0, 0) -- Schwarz für den Schatten
+dropShadow.BackgroundTransparency = 0.5
+dropShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
+dropShadow.Size = UDim2.new(1, 30, 1, 30)
+dropShadow.ZIndex = 0
+dropShadow.Parent = dropShadowHolder
+
+-- Runde Ecken für den Schatten
+local dropShadowCorner = Instance.new("UICorner")
+dropShadowCorner.CornerRadius = UDim.new(0, 15)  -- Passe den Wert je nach gewünschter Rundung an
+dropShadowCorner.Parent = dropShadow
+
+-- Titel des GUIs
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -40, 0, 30)
+titleLabel.Position = UDim2.new(0, 20, 0, 5)
+titleLabel.Text = "Command GUI"
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.TextSize = 20
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Parent = frame
+
+-- Schließen- und Minimieren-Button
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 25, 0, 25)
+closeButton.Position = UDim2.new(1, -30, 0, 5)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 14
+closeButton.BackgroundColor3 = Color3.fromRGB(220, 0, 0)
+closeButton.BorderSizePixel = 0
+
+-- Runde Ecken für Buttons
+local closeButtonCorner = Instance.new("UICorner")
+closeButtonCorner.CornerRadius = UDim.new(0, 5)
+closeButtonCorner.Parent = closeButton
+
+closeButton.Parent = frame
+
+local minimizeButton = Instance.new("TextButton")
+minimizeButton.Size = UDim2.new(0, 25, 0, 25)
+minimizeButton.Position = UDim2.new(1, -60, 0, 5)
+minimizeButton.Text = "_"
+minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeButton.Font = Enum.Font.GothamBold
+minimizeButton.TextSize = 14
+minimizeButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+minimizeButton.BorderSizePixel = 0
+
+local minimizeButtonCorner = Instance.new("UICorner")
+minimizeButtonCorner.CornerRadius = UDim.new(0, 5)
+minimizeButtonCorner.Parent = minimizeButton
+
+minimizeButton.Parent = frame
+
+-- Eingabefeld (Suchleiste)
 local searchBox = Instance.new("TextBox")
-searchBox.Size = UDim2.new(1, -10, 0, 25) -- Reduced height
-searchBox.Position = UDim2.new(0, 5, 0, 5)
-searchBox.PlaceholderText = "Search Commands..."
+searchBox.Size = UDim2.new(1, -20, 0, 30)
+searchBox.Position = UDim2.new(0, 10, 0, 40)
+searchBox.PlaceholderText = "Search command..."
 searchBox.Text = ""
+searchBox.Font = Enum.Font.Gotham
+searchBox.TextSize = 14
 searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-searchBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+searchBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 searchBox.BorderSizePixel = 0
 searchBox.ClearTextOnFocus = false
 searchBox.Parent = frame
@@ -43,28 +108,13 @@ local searchBoxCorner = Instance.new("UICorner")
 searchBoxCorner.CornerRadius = UDim.new(0, 5)
 searchBoxCorner.Parent = searchBox
 
--- Leichter leuchtender Rand bei Auswahl
-local searchBoxStroke = Instance.new("UIStroke")
-searchBoxStroke.Color = Color3.fromRGB(70, 130, 180) -- Stahlblau
-searchBoxStroke.Thickness = 0
-searchBoxStroke.Parent = searchBox
-
-searchBox.Focused:Connect(function()
-    searchBoxStroke.Thickness = 2
-end)
-
-searchBox.FocusLost:Connect(function()
-    searchBoxStroke.Thickness = 0
-end)
-
--- ScrollFrame für Befehle (Smaller size)
+-- ScrollFrame für Befehle
 local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(1, -10, 1, -70) -- Reduced height
-scrollFrame.Position = UDim2.new(0, 5, 0, 35)
-scrollFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-scrollFrame.BackgroundTransparency = 0.1
+scrollFrame.Size = UDim2.new(1, -20, 1, -130)
+scrollFrame.Position = UDim2.new(0, 10, 0, 80)
+scrollFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 scrollFrame.BorderSizePixel = 0
-scrollFrame.ScrollBarThickness = 8
+scrollFrame.ScrollBarThickness = 6
 scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0) -- Wird später angepasst
 scrollFrame.Parent = frame
 
@@ -79,13 +129,13 @@ uiListLayout.Parent = scrollFrame
 uiListLayout.Padding = UDim.new(0, 5)
 uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Beschreibungstextfeld unterhalb der Befehle (Smaller size)
+-- Beschreibungstextfeld unterhalb der Befehle
 local descriptionBox = Instance.new("TextLabel")
-descriptionBox.Size = UDim2.new(1, -10, 0, 25) -- Reduced height
-descriptionBox.Position = UDim2.new(0, 5, 1, -30)
-descriptionBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-descriptionBox.BackgroundTransparency = 0.2
+descriptionBox.Size = UDim2.new(1, -20, 0, 30)
+descriptionBox.Position = UDim2.new(0, 10, 1, -40)
+descriptionBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 descriptionBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+descriptionBox.Font = Enum.Font.Gotham
 descriptionBox.TextWrapped = true
 descriptionBox.TextSize = 14
 descriptionBox.Text = ""
@@ -98,213 +148,314 @@ local descriptionBoxCorner = Instance.new("UICorner")
 descriptionBoxCorner.CornerRadius = UDim.new(0, 5)
 descriptionBoxCorner.Parent = descriptionBox
 
--- Schließen- und Minimieren-Button (Smaller size)
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 20, 0, 20) -- Reduced size
-closeButton.Position = UDim2.new(1, -30, 0, 5)
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeButton.BackgroundColor3 = Color3.fromRGB(200, 0, 0)
-closeButton.BorderSizePixel = 0
-closeButton.Parent = frame
+-- Minimieren/Maximieren-Funktion mit Cooldown
+local minimized = false
+local animating = false  -- Variable zum Überprüfen, ob die Animation läuft
 
-local minimizeButton = Instance.new("TextButton")
-minimizeButton.Size = UDim2.new(0, 20, 0, 20) -- Reduced size
-minimizeButton.Position = UDim2.new(1, -60, 0, 5)
-minimizeButton.Text = "_"
-minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-minimizeButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-minimizeButton.BorderSizePixel = 0
-minimizeButton.Parent = frame
+minimizeButton.MouseButton1Click:Connect(function()
+    if animating then return end  -- Wenn Animation läuft, nichts tun
+    animating = true  -- Animation startet
 
--- OpenButton für das erneute Öffnen
-local openButton = Instance.new("TextButton")
-openButton.Size = UDim2.new(0, 80, 0, 25) -- Reduced size
-openButton.Position = UDim2.new(0.5, -40, 1, -40)
-openButton.Text = "Open CMDS"
-openButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-openButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-openButton.BorderSizePixel = 0
-openButton.Visible = false
-openButton.Parent = screenGui
+    minimized = not minimized
+    if minimized then
+        -- Slide-Out Animation
+        frame:TweenSize(UDim2.new(frame.Size.X.Scale, frame.Size.X.Offset, 0, 40), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
+        scrollFrame.Visible = false
+        descriptionBox.Visible = false
+        searchBox.Visible = false
+    else
+        -- Slide-In Animation
+        frame:TweenSize(UDim2.new(frame.Size.X.Scale, frame.Size.X.Offset, 0.3, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
+        wait(0.5)
+        scrollFrame.Visible = true
+        searchBox.Visible = true
+    end
 
--- Runde Ecken für openButton
-local openButtonCorner = Instance.new("UICorner")
-openButtonCorner.CornerRadius = UDim.new(0, 5)
-openButtonCorner.Parent = openButton
+    -- Sicherstellen, dass die Beschreibung nicht sichtbar ist, wenn minimiert
+    if minimized then
+        descriptionBox.Visible = false
+    end
 
--- Draggable functionality
+    animating = false  -- Animation beendet
+end)
+
+-- Schließen-Funktion
+closeButton.MouseButton1Click:Connect(function()
+    -- Fade-Out Animation
+    frame:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.In, Enum.EasingStyle.Quint, 0.5, true)
+    wait(0.5)
+    frame.Visible = false
+end)
+
+-- Funktion zum Filtern der Befehle
+local function filterCommands()
+    local searchText = searchBox.Text:lower()
+    for _, button in pairs(scrollFrame:GetChildren()) do
+        if button:IsA("TextButton") then
+            if searchText == "" then
+                button.Visible = true
+            else
+                button.Visible = button.Name:lower():find(searchText) ~= nil
+            end
+        end
+    end
+end
+
+searchBox:GetPropertyChangedSignal("Text"):Connect(filterCommands)
+
+-- Befehlsliste
+local commands = {}
+
+-- Funktion zum Aktualisieren der Befehle im ScrollFrame
+local function updateCommands()
+    -- Alte Buttons entfernen
+    for _, child in pairs(scrollFrame:GetChildren()) do
+        if child:IsA("TextButton") then
+            child:Destroy()
+        end
+    end
+
+    for _, cmd in pairs(commands) do
+        local button = Instance.new("TextButton")
+        button.Size = UDim2.new(1, -10, 0, 30)
+        button.Position = UDim2.new(0, 5, 0, 0)
+        button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        button.TextColor3 = Color3.fromRGB(255, 255, 255)
+        button.Font = Enum.Font.Gotham
+        button.TextSize = 14
+        button.Text = cmd.name
+        button.Name = cmd.name
+        button.BorderSizePixel = 0
+        button.Parent = scrollFrame
+
+        -- Runde Ecken für Button
+        local buttonCorner = Instance.new("UICorner")
+        buttonCorner.CornerRadius = UDim.new(0, 5)
+        buttonCorner.Parent = button
+
+        button.MouseButton1Click:Connect(function()
+            -- Zeige die Beschreibung an
+            descriptionBox.Text = cmd.description
+            descriptionBox.Visible = true
+        end)
+    end
+
+    -- CanvasSize anpassen
+    wait() -- Warten, bis die UIListLayout aktualisiert wurde
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y + 10)
+end
+
+-- Touch-Unterstützung für mobiles Draggen
 local dragging = false
-local dragInput, startPos, frameStartPos
+local dragInput, dragStart, startPos
 
--- Function to update frame position
-local function updateFramePosition(input)
-    local delta = input.Position - dragInput
-    frame.Position = UDim2.new(frameStartPos.X.Scale, frameStartPos.X.Offset + delta.X, frameStartPos.Y.Scale, frameStartPos.Y.Offset + delta.Y)
+local function update(input)
+    local delta = input.Position - dragStart
+    local newPosition = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    frame.Position = newPosition
 end
 
 frame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragInput = input.Position
-        frameStartPos = frame.Position
+        local guiPosition = frame.AbsolutePosition
+        if input.Position.Y >= guiPosition.Y and input.Position.Y <= guiPosition.Y + 40 then -- Nur oberer Bereich zum Ziehen
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
 
-        -- Connect to the InputChanged event to update the position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+game:GetService("UserInputService").InputChanged:Connect(function(input)
+    if dragging and input == dragInput then
+        update(input)
+    end
+end)
+
+-- Ausblenden der Beschreibung, wenn außerhalb geklickt wird
+local userInputService = game:GetService("UserInputService")
+
+userInputService.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        local guiElements = {frame, descriptionBox}
+        local clickedOnGUI = false
+
+        for _, guiElement in pairs(guiElements) do
+            if guiElement.AbsolutePosition and guiElement.AbsoluteSize then
+                local position = guiElement.AbsolutePosition
+                local size = guiElement.AbsoluteSize
+                local inputPosition = input.Position
+
+                if inputPosition.X >= position.X and inputPosition.X <= position.X + size.X and
+                   inputPosition.Y >= position.Y and inputPosition.Y <= position.Y + size.Y then
+                    clickedOnGUI = true
+                    break
+                end
+            end
+        end
+
+        if not clickedOnGUI then
+            descriptionBox.Visible = false
+        end
+    end
+end)
+
+-- Funktion zum Skalieren (Vertikale Größenänderung)
+local resizing = false
+local resizeInput, resizeStart, startHeight
+
+-- Resizer am unteren Rand
+local resizer = Instance.new("Frame")
+resizer.Size = UDim2.new(1, 0, 0, 10)
+resizer.Position = UDim2.new(0, 0, 1, -10)
+resizer.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+resizer.BorderSizePixel = 0
+resizer.Parent = frame
+
+-- Cursor ändern bei Hover über Resizer (nur auf PC)
+resizer.MouseEnter:Connect(function()
+    if game:GetService("UserInputService").MouseEnabled then
+        game:GetService("UserInputService").MouseIconEnabled = true
+        game:GetService("UserInputService").MouseIcon = "rbxasset://SystemCursors/SizeNS"
+    end
+end)
+
+resizer.MouseLeave:Connect(function()
+    if game:GetService("UserInputService").MouseEnabled then
+        game:GetService("UserInputService").MouseIconEnabled = true
+        game:GetService("UserInputService").MouseIcon = "rbxasset://SystemCursors/Arrow"
+    end
+end)
+
+local function resizeUpdate(input)
+    local delta = input.Position.Y - resizeStart.Y
+    local newHeight = math.clamp(startHeight + delta, 200, 600) -- Mindesthöhe 200, Maximalhöhe 600
+    frame.Size = UDim2.new(frame.Size.X.Scale, frame.Size.X.Offset, 0, newHeight)
+    -- Anpassung des ScrollFrames
+    scrollFrame.Size = UDim2.new(1, -20, 1, -130)
+end
+
+resizer.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        resizing = true
+        resizeStart = input.Position
+        startHeight = frame.AbsoluteSize.Y
+
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
+                resizing = false
             end
         end)
     end
 end)
 
+resizer.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        resizeInput = input
+    end
+end)
+
 game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        updateFramePosition(input)
+    if resizing and input == resizeInput then
+        resizeUpdate(input)
     end
 end)
 
--- Minimieren/Maximieren-Funktion
-local minimized = false
-
-minimizeButton.MouseButton1Click:Connect(function()
-    minimized = not minimized
-    if minimized then
-        -- Slide-Out Animation
-        frame:TweenSize(UDim2.new(frame.Size.X.Scale, frame.Size.X.Offset, 0, 30), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
-        scrollFrame.Visible = false
-        descriptionBox.Visible = false
-    else
-        -- Slide-In Animation
-        frame:TweenSize(UDim2.new(frame.Size.X.Scale, frame.Size.X.Offset, 0.5, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
-        wait(0.5)
-        scrollFrame.Visible = true
-        descriptionBox.Visible = true
-    end
-end)
-
--- Schließen/Öffnen-Funktion
-closeButton.MouseButton1Click:Connect(function()
-    -- Slide-Out Animation
-    frame:TweenPosition(UDim2.new(frame.Position.X.Scale, frame.Position.X.Offset, -1, 0), Enum.EasingDirection.In, Enum.EasingStyle.Quint, 0.5, true)
-    wait(0.5)
-    frame.Visible = false
-    openButton.Visible = true
-end)
-
-openButton.MouseButton1Click:Connect(function()
-    frame.Visible = true
-    -- Slide-In Animation
-    frame.Position = UDim2.new(0, 0, 0, 0) -- Ensure position is reset to top-left
-    frame:TweenPosition(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
-    openButton.Visible = false
-end)
-
--- Befehle definieren
-local commands = {
-{"!bring", "Executes a bring GUI that brings the players by floating under them."},
-{"!antilag", "Prevents lagging."},
-{"!antibang", "Prevents other exploiters from banging you."},
-{"!chaoshub", "Just a random hub."},
-{"!aimbot", "The command already explains."},
-{"!protonadmin", "Just another Admin script."},
-{"!triviabooth", "(Patched)"},
-{"!walkonwalls", "Rewrites gravity and lets you walk on any surface."},
-{"!unanchorfling", "Go near unanchored parts and fling the target with it."},
-{"!chatquiz", "Allows you to chat quizzes with other players."},
-{"!invis", "Invisibility toggle."},
-{"!f3x sun", "The same game as .f3x."},
-{"!f3x triangle", "The same game as .f3x."},
-{"!f3x house", "The same game as .f3x."},
-{"!f3x ufo", "The same game as .f3x."},
-{"!shiftlock", "Shiftlock for mobile."},
-{"!nofriends", "Automatically server hops if a friend joins."},
-{"!getoutmyinv", "Drops all your items at once."},
-{"!platespin", "Orange plates spin around you. Click on the plates for it to work."},
-{"!kronefling", "Loop flings everyone."},
-{"!gimmetools", "Picks up every tool dropped by a player in the server."},
-{"!givepower (display name)", "Gives the player you wish warning power."},
-{"!oof", "Respawns you and teleports you back to the same position."},
-{"!cmds", "The GUI for this script."},
-{"!antilog", "Prevents the game from logging your chat and screenshots."},
-{"!donttouchme", "Flings everyone that touches you."},
-{"!serverhop", "Hops servers."},
-{"!afk", "Prevents being kicked while AFK."},
-{"!ftao", "For the game (Fling Things and Others)."},
-{"!iy", "Infinite yield admin."},
-{"!emoji", "Enables chatting emojis like Discord (:skull)."},
-{"!f3x", "For (Sword Fights on the Heights Original). Controls orange plates."},
-{"!bypasser", "Bypasses the chat filter."},
-{"!bladeball", "A bladeball script."},
-{"!nonofling", "Prevents other players from flinging you."},
-{"!swordreach", "Explains itself."},
-{"!byebye all", "Flings everyone once."},
-{"!pltiger", "A script for Prison Life."},
-{"!fps", "Boosts FPS."},
-{"!rejoin", "Rejoin the game."},
-{"!warn all", "Warns all players in Mic Up."},
-{"!clearchat", "Clears the chat."},
-{"!cmdbar", "A command bar for executing commands without using chat."},
-{"!jobidjoiner", "Join a player by entering game ID and job ID."},
-{"!walkonvoid", "Prevents you from dying by falling into the void."},
-{"!hkill all", "Kills everyone with a sword that does damage."},
-{"!chainedpower", "Activates the commands for the game (Chained 2 players Obby)"},
-{"!nuke", "For the game (Chained 2 players Obby)."},
-{"!bunnyhop all", "For the game (Chained 2 players Obby)."},
-{"!no jumping", "For the game (Chained 2 players Obby)."},
-{"!jail all", "For the game (Chained 2 players Obby)."},
-{"!spawn fog", "For the game (Chained 2 players Obby)."},
-{"!low gravity", "For the game (Chained 2 players Obby)."},
-{"!spam on", "For the game (Chained 2 players Obby)."},
-{"!serverhopmost", "Server hops to the server with the most players."},
-{"!antiheadsit", "Self-explained."},
-{"!antivoid", "Deletes the void."},
-{"!dropkick", "Performs a dropkick on nearby players."},
-{"!usercreationcracked", "Cracked bypasser."},
-{"!serverhoplow", "Server hops to a low-populated server."},
-{"!walkonair", "Adds an invisible baseplate."},
-{"!copy (display name)", "Copy the avatar of the target (MIC UP)."},
-{"!copy all", "Spam changes to every avatar in the server (MIC UP)."},
-{"!uncopy", "Stops the spamming."},
-{"!chatbot", "Join Discord, claim points, and enter the key."},
-{"!rainbowmic", "Gets the rainbow mic from the vending machine."},
-{"!rainbowdonut", "Gets the rainbow donut from the vending machine."},
-{"!demonmic", "Gets the demon mic from the vending machine."},
-{"!tptoplr", "TP to player tool."},
-{"!stopglide", "Removes sliding when walking fast."},
-{"!lookat", "Look at player of choice."},
-{"!unlookat", "Stops looking."},
-{"!goto", "Teleport to player of choice."},
-{"!superfly", "Become Superman (better on R15)."},
-{"!remotechecker", "Fire any remote with a GUI."},
-{"!animhub", "Use any animation and troll."},
-{"!copynearest", "Copies nearest in Mic Up."},
-{"!sneak", "Go up and down."}
-}
-
--- Update commands in the UI
-local function updateCommands()
-    for _, cmd in ipairs(commands) do
-        local commandButton = Instance.new("TextButton")
-        commandButton.Size = UDim2.new(1, -10, 0, 30) -- Reduced height
-        commandButton.Name = cmd[1] -- Use the command as the name
-        commandButton.Text = cmd[1]
-        commandButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-        commandButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-        commandButton.BorderSizePixel = 0
-        commandButton.Parent = scrollFrame
-
-        local commandCorner = Instance.new("UICorner")
-        commandCorner.CornerRadius = UDim.new(0, 5)
-        commandCorner.Parent = commandButton
-
-        commandButton.MouseButton1Click:Connect(function()
-            descriptionBox.Text = cmd[2] -- Get the description
-            descriptionBox.Visible = true
-        end)
-    end
-    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, #commands * 35) -- Adjusts the canvas size based on the number of commands
+-- Beispiel: Hinzufügen einiger Befehle
+local function addCommand(name, description)
+    table.insert(commands, {name = name, description = description})
+    updateCommands()
 end
 
--- Initialize commands
+-- Hier fügst du die Befehle hinzu (auf Englisch)
+addCommand("!bring", "Executes a bring GUI that brings the players by floating under them.")
+addCommand("!antilag", "Prevents lagging.")
+addCommand("!antibang", "Prevents other exploiters from banging you.")
+addCommand("!chaoshub", "Just a random hub.")
+addCommand("!aimbot", "The command already explains.")
+addCommand("!protonadmin", "Just another Admin script.")
+addCommand("!walkonwalls", "Rewrites gravity and lets you walk on any surface.")
+addCommand("!unanchorfling", "Go near unanchored parts and fling the target with it.")
+addCommand("!chatquiz", "Allows you to chat quizzes with other players.")
+addCommand("!invis", "Invisibility toggle.")
+addCommand("!f3x sun", "The same game as .f3x.")
+addCommand("!f3x triangle", "The same game as .f3x.")
+addCommand("!f3x house", "The same game as .f3x.")
+addCommand("!f3x ufo", "The same game as .f3x.")
+addCommand("!shiftlock", "Shiftlock for mobile.")
+addCommand("!nofriends", "Automatically server hops if a friend joins.")
+addCommand("!getoutmyinv", "Drops all your items at once.")
+addCommand("!platespin", "Orange plates spin around you. Click on the plates for it to work.")
+addCommand("!kronefling", "Loop flings everyone.")
+addCommand("!gimmetools", "Picks up every tool dropped by a player in the server.")
+addCommand("!givepower (display name)", "Gives the player you wish warning power.")
+addCommand("!oof", "Respawns you and teleports you back to the same position.")
+addCommand("!cmds", "The GUI for this script.")
+addCommand("!antilog", "Prevents the game from logging your chat and screenshots.")
+addCommand("!donttouchme", "Flings everyone that touches you.")
+addCommand("!serverhop", "Hops servers.")
+addCommand("!afk", "Prevents being kicked while AFK.")
+addCommand("!ftao", "For the game (Fling Things and Others).")
+addCommand("!iy", "Infinite yield admin.")
+addCommand("!emoji", "Enables chatting emojis like Discord (:skull).")
+addCommand("!f3x", "For (Sword Fights on the Heights Original). Controls orange plates.")
+addCommand("!bypasser", "Bypasses the chat filter.")
+addCommand("!bladeball", "A bladeball script.")
+addCommand("!nonofling", "Prevents other players from flinging you.")
+addCommand("!swordreach", "Explains itself.")
+addCommand("!byebye all", "Flings everyone once.")
+addCommand("!pltiger", "A script for Prison Life.")
+addCommand("!fps", "Boosts FPS.")
+addCommand("!rejoin", "Rejoin the game.")
+addCommand("!warn all", "Warns all players in Mic Up.")
+addCommand("!clearchat", "Clears the chat.")
+addCommand("!cmdbar", "A command bar for executing commands without using chat.")
+addCommand("!jobidjoiner", "Join a player by entering game ID and job ID.")
+addCommand("!walkonvoid", "Prevents you from dying by falling into the void.")
+addCommand("!hkill all", "Kills everyone with a sword that does damage.")
+addCommand("!serverhopmost", "Server hops to the server with the most players.")
+addCommand("!antiheadsit", "Self-explained.")
+addCommand("!antivoid", "Deletes the void.")
+addCommand("!dropkick", "Performs a dropkick on nearby players.")
+addCommand("!usercreationcracked", "Cracked bypasser.")
+addCommand("!serverhoplow", "Server hops to a low-populated server.")
+addCommand("!walkonair", "Adds an invisible baseplate.")
+addCommand("!copy <target>", "Copy the avatar of the target (MIC UP).")
+addCommand("!copy all", "Spam changes to every avatar in the server (MIC UP).")
+addCommand("!uncopy", "Stops the spamming.")
+addCommand("!chatbot", "Join Discord, claim points, and enter the key.")
+addCommand("!rainbowmic", "Gets the rainbow mic from the vending machine.")
+addCommand("!rainbowdonut", "Gets the rainbow donut from the vending machine.")
+addCommand("!demonmic", "Gets the demon mic from the vending machine.")
+addCommand("!tptoplr", "TP to player tool.")
+addCommand("!stopglide", "Removes sliding when walking fast.")
+addCommand("!lookat", "Look at player of choice.")
+addCommand("!unlookat", "Stops looking.")
+addCommand("!goto", "Teleport to player of choice.")
+addCommand("!superfly", "Become Superman (better on R15).")
+addCommand("!remotechecker", "Fire any remote with a GUI.")
+addCommand("!animhub", "Use any animation and troll.")
+addCommand("!copynearest", "Copies nearest in Mic Up.")
+addCommand("!sneak", "Go up and down.")
+addCommand("!mobilesuperfly", "Superfly for mobile.")
+addCommand("!catchme", "Makes you unmutable.")
+addCommand("!stand <target>", "Makes you a JoJo stand.")
+addCommand("!stand2 <target>", "Makes you a JoJo stand for the target.")
+addCommand("!unstand", "Removes your JoJo stand.")
+addCommand("!antiall", "click on the button and kill the person who is banging you or anything else")
+
+-- Initiale Befehle aktualisieren
 updateCommands()
+filterCommands()
