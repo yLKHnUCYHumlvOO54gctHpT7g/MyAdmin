@@ -65,42 +65,52 @@ CloseButton.TextSize = 14
 
 UICorner_3.Parent = CloseButton
 UICorner_3.CornerRadius = UDim.new(0, 4)
+
+-- Variables
 getgenv().cantmutemehaha = false
 local plr = game.Players.LocalPlayer
-local char = plr.Character
-local hrp = char.HumanoidRootPart
+local char = plr.Character or plr.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
+local RunService = game:GetService("RunService")
+local connection
+
 -- Toggle functionality
 local enabled = false
 ToggleButton.MouseButton1Click:Connect(function()
     enabled = not enabled
     ToggleButton.Text = enabled and "ON" or "OFF"
     ToggleButton.BackgroundColor3 = enabled and Color3.fromRGB(59, 255, 59) or Color3.fromRGB(255, 59, 59)
-    
+
     if enabled then
-        getgenv().originpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+        getgenv().originpos = hrp.CFrame
         getgenv().cantmutemehaha = true
-        spawn(function()
-            while getgenv().cantmutemehaha do
-                task.wait()
-                if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                    local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
-                    hrp.CFrame = CFrame.new(
-                        math.random(getgenv().originpos.X - 7, getgenv().originpos.X + 7),
-                        getgenv().originpos.Y,
-                        math.random(getgenv().originpos.Z - 7, getgenv().originpos.Z + 7)
-                    )
-                end
+
+        -- Use Heartbeat for ultra-fast teleportation
+        connection = RunService.Heartbeat:Connect(function()
+            if game.Players.LocalPlayer.Character and hrp then
+                -- Randomize small offsets (near the character)
+                local offsetX = math.random(-10, 10)  -- Small horizontal shifts
+                local offsetY = math.random(-5, 5)    -- Small vertical shifts
+                local offsetZ = math.random(-10, 10)  -- Small depth shifts
+
+                -- Apply teleportation with small random changes
+                hrp.CFrame = CFrame.new(
+                    getgenv().originpos.X + offsetX,
+                    getgenv().originpos.Y + offsetY,
+                    getgenv().originpos.Z + offsetZ
+                )
             end
         end)
     else
         getgenv().cantmutemehaha = false
-        wait(0.03)
-        if game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = getgenv().originpos
+        if connection then connection:Disconnect() end
+        if hrp then
+            hrp.CFrame = getgenv().originpos
         end
     end
 end)
 
 CloseButton.MouseButton1Click:Connect(function()
+    if connection then connection:Disconnect() end
     ScreenGui:Destroy()
 end)
