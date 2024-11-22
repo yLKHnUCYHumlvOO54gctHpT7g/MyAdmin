@@ -175,5 +175,4 @@ CommandSystem:RegisterCommand("help", function(args)
     for cmdName, cmdData in pairs(CommandSystem.commands) do
         commandList = commandList .. CommandSystem.prefix .. cmdName .. " - " .. cmdData.description .. "\n"
     end
-    print(commandList)
 end, "Shows list of available commands")
