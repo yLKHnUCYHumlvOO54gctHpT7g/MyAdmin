@@ -68,7 +68,6 @@ getgenv().whitelistedPlayers = {
     "SebyIz",
     "levinator521",
     "ImOn_ValveIndex",
-    "xidirFFM",
     "theprogamer_ko",
     "Lil_Twizzy7"
 }
@@ -127,7 +126,6 @@ getgenv().premiumUsers = {
     "sweettooth1",
     "7Dyrox",
     "levinator521",
-    "xidirFFM",
     "theprogamer_ko",
     "Lil_Twizzy7"
 }
