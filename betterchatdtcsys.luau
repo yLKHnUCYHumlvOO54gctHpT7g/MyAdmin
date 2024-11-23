@@ -25,6 +25,7 @@ end
 ChatInputTextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local command = ChatInputTextBox.Text:lower()
+        local normalchatmsgs = ChatInputTextBox.Text
         ChatInputTextBox.Text = "" -- Clear the input box
 for cmdname,link in pairs(_G.cmds) do
     if command == cmdname then
@@ -32,7 +33,7 @@ for cmdname,link in pairs(_G.cmds) do
     loadstring(game:HttpGet(link))()
     end
     end
-    chat(command)
+    chat(normalchatmsgs)
         -- Handle specific commands
         if command:sub(1, 6) == "!copy " then
             local target = command:sub(7)
