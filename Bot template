@@ -36,7 +36,7 @@ end
 
 -- URLs for external scripts
 local scriptUrls = {
-    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Verfiedbadge.luau",
+
     "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton",
     "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/goto.luau",
     "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar",
@@ -117,10 +117,8 @@ if not isWhitelisted then
 else
     -- Load whitelisted player scripts
     local whitelistedScripts = {
-
         "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/AK%20intro",
         "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui",
-
         "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadplayertags.luau"
     }
     
