@@ -68,7 +68,9 @@ local scriptUrls = {
     "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton",
     "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/goto.luau",
     "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar",
-    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stands.luau"
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stands.luau",
+    "https://github.com/Alikhammass/MyAdmin/blob/main/akactive.luau";
+    "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/betterchatdtcsys.luau"
 }
 
 -- Load all external scripts
