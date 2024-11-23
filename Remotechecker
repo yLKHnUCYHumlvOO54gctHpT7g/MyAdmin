@@ -5,7 +5,7 @@ local player = Players.LocalPlayer
 
 -- Create GUI Elements
 local screenGui = Instance.new("ScreenGui")
-screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.Parent = game:WaitForChild("CoreGui")
 screenGui.Name = "RemoteEventGui"
 
 -- Main Frame to hold the entire GUI
