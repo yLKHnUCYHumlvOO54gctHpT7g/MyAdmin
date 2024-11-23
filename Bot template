@@ -117,7 +117,7 @@ if not isWhitelisted then
 else
     -- Load whitelisted player scripts
     local whitelistedScripts = {
-        "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau",
+
         "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/AK%20intro",
         "https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui",
 
