@@ -136,3 +136,12 @@ end
 
 -- Connect chat command handler
 
+local id=game.Players.LocalPlayer.UserId
+
+while wait() do
+if game:GetService("CoreGui").ExperienceChat.bubbleChat:FindFirstChild("BubbleChat_"..id) then
+game:GetService("CoreGui").ExperienceChat.bubbleChat["BubbleChat_"..id].StudsOffset = Vector3.new(0, 1, 0)
+else
+print("Bubble not found")
+end
+end
