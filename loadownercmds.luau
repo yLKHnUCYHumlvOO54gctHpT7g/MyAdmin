@@ -195,6 +195,21 @@ local function setupAdminCommands(admin)
                 player.Character.Humanoid.Jump = true
             elseif command == ".trip" then
                 player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 0, -5)
+
+local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+if humanoid then
+    -- Disable humanoid controls to simulate ragdoll
+    humanoid.PlatformStand = true
+
+    -- Wait briefly before allowing the ragdoll effect to take place
+    wait(0.1)
+
+    -- Apply physics to the humanoid to make it fall
+    humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+
+    -- Optionally, re-enable the PlatformStand after the fall
+    humanoid.PlatformStand = false
+end
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
             elseif command == ".freeze" then
