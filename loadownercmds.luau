@@ -194,8 +194,7 @@ local function setupAdminCommands(admin)
             elseif command == ".jump" then
                 player.Character.Humanoid.Jump = true
             elseif command == ".trip" then
-                player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
-                player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
+                player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 0, -5)
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
             elseif command == ".freeze" then
