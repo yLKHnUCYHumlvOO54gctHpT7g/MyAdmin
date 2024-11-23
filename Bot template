@@ -9,34 +9,6 @@ end
 
 _G.AKAdminLoaded = true
 
--- Command handler system
-local CommandSystem = {
-    prefix = "!",  -- Default prefix for commands
-    commands = {},
-}
-
--- Register a new command
-function CommandSystem:RegisterCommand(name, callback, description)
-    self.commands[name:lower()] = {
-        callback = callback,
-        description = description
-    }
-end
-
--- Handle command execution
-function CommandSystem:HandleCommand(message)
-    if not message:sub(1, 1) == self.prefix then return end
-    
-    local args = message:sub(2):split(" ")
-    local commandName = args[1]:lower()
-    table.remove(args, 1)
-    
-    local command = self.commands[commandName]
-    if command then
-        command.callback(args)
-    end
-end
-
 local function RemoveAtmosphereAndSetFog()
     local Lighting = game:GetService("Lighting")
     Lighting.FogEnd = 100000
@@ -165,15 +137,4 @@ else
 end
 
 -- Connect chat command handler
-game.Players.LocalPlayer.Chatted:Connect(function(message)
-    CommandSystem:HandleCommand(message)
-end)
-
--- Example of registering a command
-CommandSystem:RegisterCommand("help", function(args)
-    local commandList = "Available Commands:\n"
-    for cmdName, cmdData in pairs(CommandSystem.commands) do
-        commandList = commandList .. CommandSystem.prefix .. cmdName .. " - " .. cmdData.description .. "\n"
-    end
-end, "Shows list of available commands")
 
