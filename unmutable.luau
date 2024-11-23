@@ -10,7 +10,7 @@ local UICorner_3 = Instance.new("UICorner")
 
 -- Properties
 ScreenGui.Name = "UnmutableGUI"
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.Parent = game:WaitForChild("CoreGui")
 ScreenGui.ResetOnSpawn = false
 
 MainFrame.Name = "MainFrame"
