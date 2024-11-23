@@ -4,7 +4,7 @@ local player = game.Players.LocalPlayer
 -- ScreenGui erstellen
 local screenGui = Instance.new("ScreenGui")
 screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
+screenGui.Parent = game:WaitForChild("CoreGui")
 
 -- Haupt-Frame
 local frame = Instance.new("Frame")
