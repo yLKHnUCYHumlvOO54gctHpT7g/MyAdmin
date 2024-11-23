@@ -74,5 +74,6 @@ _G.cmds = {
     ["!rainbowmic"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Rainbowmic",
     ["!rainbowdonut"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Rainbowdonut",
     ["!remotechecker"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Remotechecker",
+    ["!emotes"]="https://raw.githubusercontent.com/Gi7331/scripts/main/Emote.lua",
     ["!hkill"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills"
 }
