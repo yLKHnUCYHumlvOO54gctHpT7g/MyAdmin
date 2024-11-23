@@ -1,7 +1,7 @@
 -- Create the ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "AdminActiveGUI"
-screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") -- Attach to the player's GUI
+screenGui.Parent = game:WaitForChild("CoreGui") -- Attach to the player's GUI
 
 -- Create the green dot (with fade and pulse animation)
 local dot = Instance.new("Frame")
