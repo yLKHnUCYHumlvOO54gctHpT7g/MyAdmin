@@ -136,10 +136,3 @@ LocalPlayer.Chatted:Connect(function(msg)
     end
 end)
 
--- Real-time input listener to detect typing
-LocalPlayer.CharacterAdded:Connect(function()
-    local inputBox = LocalPlayer.PlayerGui:WaitForChild("Chat").TextBox
-    inputBox:GetPropertyChangedSignal("Text"):Connect(function()
-        detectTyping(inputBox.Text)
-    end)
-end)
