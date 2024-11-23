@@ -43,7 +43,6 @@ end
 local function executeCommand(command)
     if _G.cmds[command] then
         local success, errorMessage = pcall(function()
-            loadstring(game:HttpGet(_G.cmds[command]))()
         end)
 
         if success then
