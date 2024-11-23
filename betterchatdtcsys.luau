@@ -11,7 +11,7 @@ local function closeGui()
     AkaScreenGui:Destroy()
 end
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
-
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadcmds.luau"))()
 -- Close GUI when the button is clicked
 local function chat(txt)
 if game:GetService("ReplicatedStorage"):FindFirstChild("DefaultChatSystemChatEvents") then
