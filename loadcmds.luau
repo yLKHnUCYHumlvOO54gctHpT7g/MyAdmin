@@ -112,7 +112,11 @@ LocalPlayer.Chatted:Connect(function(msg)
 
                 function bindable.OnInvoke(response)
                     if response == "Yes" then
-                        executeCommand(suggestion)
+                        for cmdname,link in pairs (_G.cmds) do
+                            if suggestion == cmdname then
+                                            loadstring(game:HttpGet(link))()
+                            end
+                        end
                     end
                 end
 
