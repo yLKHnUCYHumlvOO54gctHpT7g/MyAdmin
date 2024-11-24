@@ -5,7 +5,7 @@ local LocalPlayer = Players.LocalPlayer
 StarterGui:SetCore("SendNotification", {
     Title = "AK ADMIN",
     Text = "Welcome to AK ADMIN! Type !cmds to see the available commands.",
-    Duration = 5
+    Duration = 8
 })
 
 -- Function to find the closest matching command
