@@ -33,6 +33,24 @@ local function stopCloneIllusion(track)
     track:Stop()  -- Stop the animation
 end
 
+-- Function to add smooth spinning
+local function addSpinning(character, speed)
+    local torso = character:WaitForChild("Torso")
+    
+    -- Check if a spinner already exists, remove it
+    local existingSpinner = torso:FindFirstChild("BodyAngularVelocity")
+    if existingSpinner then
+        existingSpinner:Destroy()
+    end
+
+    -- Add a new BodyAngularVelocity to make the character spin
+    local spinner = Instance.new("BodyAngularVelocity")
+    spinner.AngularVelocity = Vector3.new(0, speed, 0)  -- Spin on the Y-axis
+    spinner.MaxTorque = Vector3.new(0, math.huge, 0)    -- Allow unlimited rotation torque on the Y-axis
+    spinner.P = 1250                                    -- Smooth out the rotation
+    spinner.Parent = torso
+end
+
 -- Initialize the script
 local function initialize()
     local character = player.Character or player.CharacterAdded:Wait()
@@ -46,8 +64,9 @@ local function initialize()
     local humanoid = character:WaitForChild("Humanoid")
     local track = humanoid:LoadAnimation(Anim)
     
-    -- Start the animation as soon as the script runs
+    -- Start the animation and spinning immediately when the script runs
     startCloneIllusion(track)
+    addSpinning(character, 100) -- Start spinning with speed 100
 
     -- Function to handle the chat command
     local function onChatted(message)
@@ -56,6 +75,14 @@ local function initialize()
             local command = message:lower()
             if command == "!unclone" then
                 stopCloneIllusion(track)
+                -- Stop spinning
+                local torso = character:FindFirstChild("Torso")
+                if torso then
+                    local spinner = torso:FindFirstChild("BodyAngularVelocity")
+                    if spinner then
+                        spinner:Destroy()
+                    end
+                end
             end
         end
     end
@@ -73,6 +100,7 @@ local function initialize()
         humanoid = char:WaitForChild("Humanoid")
         track = humanoid:LoadAnimation(Anim)
         startCloneIllusion(track)  -- Restart the animation upon character respawn
+        addSpinning(char, 100)    -- Restart spinning upon respawn
     end)
 end
 
