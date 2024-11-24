@@ -78,22 +78,6 @@ local function executeCommand(command)
     end
 end
 
--- Real-time typing detection to provide suggestions
-local function detectTyping(input)
-    if input:sub(1, 1) == "!" then
-        local fullCommand = input:lower():gsub("^%s*", ""):gsub("%s*$", "")
-
-        local suggestion = suggestClosestCommand(fullCommand)
-        if suggestion then
-            StarterGui:SetCore("SendNotification", {
-                Title = "Command Suggestion 💡",
-                Text = "Did you mean: " .. suggestion .. "?",
-                Duration = 5
-            })
-        end
-    end
-end
-
 -- Connect chat event to command execution for the local player
 LocalPlayer.Chatted:Connect(function(msg)
     if msg:sub(1, 1) == "!" then
@@ -131,4 +115,12 @@ LocalPlayer.Chatted:Connect(function(msg)
     end
 end)
 
-StarterGui:SetCore("SendNotification",
+-- Handles real-time typing detection
+StarterGui.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.Slash then
+        local textBox = game.Players.LocalPlayer.PlayerGui:WaitForChild("Chat"):WaitForChild("Frame"):WaitForChild("ChatBar"):WaitForChild("Frame"):WaitForChild("BoxFrame"):WaitForChild("ChatBar")
+        textBox:GetPropertyChangedSignal("Text"):Connect(function()
+            detectTyping(textBox.Text)
+        end)
+    end
+end)
