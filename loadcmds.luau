@@ -8,20 +8,6 @@ StarterGui:SetCore("SendNotification", {
     Duration = 8
 })
 
--- Function to calculate Levenshtein Distance for better suggestions
-local function levenshteinDistance(s, t)
-    local d = {}
-    local sLen, tLen = #s, #t
-    for i = 0, sLen do d[i] = {[0] = i} end
-    for j = 0, tLen do d[0][j] = j end
-    for i = 1, sLen do
-        for j = 1, tLen do
-            d[i][j] = math.min(d[i-1][j] + 1, d[i][j-1] + 1, d[i-1][j-1] + (s:byte(i) == t:byte(j) and 0 or 1))
-        end
-    end
-    return d[sLen][tLen]
-end
-
 -- Function to find the closest matching command
 local function suggestClosestCommand(input)
     if not input then return nil end
@@ -29,8 +15,21 @@ local function suggestClosestCommand(input)
     local closestCommand = nil
     local shortestDistance = math.huge
 
+    -- Simple distance calculation
     for cmd in pairs(_G.cmds) do
-        local distance = levenshteinDistance(input:lower(), cmd:lower())
+        local distance = 0
+        local maxLen = math.max(#input, #cmd)
+
+        -- Compare characters
+        for i = 1, maxLen do
+            local c1 = input:sub(i, i):lower()
+            local c2 = cmd:sub(i, i):lower()
+            if c1 ~= c2 then
+                distance = distance + 1
+            end
+        end
+
+        -- Update closest command if this one is closer
         if distance < shortestDistance and distance <= 3 then
             shortestDistance = distance
             closestCommand = cmd
@@ -44,7 +43,6 @@ end
 local function executeCommand(command)
     if _G.cmds[command] then
         local success, errorMessage = pcall(function()
-            loadstring(game:HttpGet(_G.cmds[command]))()
         end)
 
         if success then
@@ -56,11 +54,12 @@ local function executeCommand(command)
         else
             StarterGui:SetCore("SendNotification", {
                 Title = "Execution Error ❌",
-                Text = "Error executing command: " .. errorMessage,
+                Text = "Error executing command",
                 Duration = 5
             })
         end
     else
+        -- Try to find a similar command
         local suggestion = suggestClosestCommand(command)
         if suggestion then
             StarterGui:SetCore("SendNotification", {
@@ -78,21 +77,46 @@ local function executeCommand(command)
     end
 end
 
+-- Real-time typing detection to provide suggestions
+local function detectTyping(input)
+    if input:sub(1, 1) == "!" then
+        local fullCommand = input:lower():gsub("^%s*", ""):gsub("%s*$", "")
+
+        local suggestion = suggestClosestCommand(fullCommand)
+        if suggestion then
+            StarterGui:SetCore("SendNotification", {
+                Title = "Command Suggestion 💡",
+                Text = "Did you mean: " .. suggestion .. "?",
+                Duration = 5
+            })
+        end
+    end
+end
+
 -- Connect chat event to command execution for the local player
 LocalPlayer.Chatted:Connect(function(msg)
+    -- Only process commands that start with !
     if msg:sub(1, 1) == "!" then
+        -- Trim and clean up command input
         local fullCommand = msg:lower():gsub("^%s*", ""):gsub("%s*$", "")
 
+        -- Check if command exists directly
         if _G.cmds[fullCommand] then
             executeCommand(fullCommand)
         else
+            -- Try to find a suggestion
             local suggestion = suggestClosestCommand(fullCommand)
             if suggestion then
+                -- Create buttons for the suggestion
                 local bindable = Instance.new("BindableFunction")
 
                 function bindable.OnInvoke(response)
                     if response == "Yes" then
-                        executeCommand(suggestion)
+                        for cmdname,link in pairs (_G.cmds) do
+                            if suggestion == cmdname then
+                                            loadstring(game:HttpGet(link))()
+                            end
+                        end
                     end
                 end
 
@@ -112,15 +136,5 @@ LocalPlayer.Chatted:Connect(function(msg)
                 })
             end
         end
-    end
-end)
-
--- Handles real-time typing detection
-StarterGui.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.Slash then
-        local textBox = game.Players.LocalPlayer.PlayerGui:WaitForChild("Chat"):WaitForChild("Frame"):WaitForChild("ChatBar"):WaitForChild("Frame"):WaitForChild("BoxFrame"):WaitForChild("ChatBar")
-        textBox:GetPropertyChangedSignal("Text"):Connect(function()
-            detectTyping(textBox.Text)
-        end)
     end
 end)
