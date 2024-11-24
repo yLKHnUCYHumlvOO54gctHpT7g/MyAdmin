@@ -71,7 +71,8 @@ getgenv().whitelistedPlayers = {
     "xidirFFM",
     "alopilooo",
     "newAccount123Lols",
-    "Dxan_PlayS"
+    "Dxan_PlayS",
+    "noobers1231q"
 }
 
 getgenv().premiumUsers = {
@@ -131,7 +132,8 @@ getgenv().premiumUsers = {
     "xidirFFM",
     "alopilooo",
     "newAccount123Lols",
-    "Dxan_PlayS"
+    "Dxan_PlayS",
+    "noobers1231q"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
