@@ -69,7 +69,8 @@ getgenv().whitelistedPlayers = {
     "levinator521",
     "ImOn_ValveIndex",
     "newAccount123Lols",
-    "Dxan_PlayS"
+    "Dxan_PlayS",
+    "noobers1231q"
 }
 
 getgenv().premiumUsers = {
@@ -127,7 +128,8 @@ getgenv().premiumUsers = {
     "7Dyrox",
     "levinator521",
     "newAccount123Lols",
-    "Dxan_PlayS"
+    "Dxan_PlayS",
+    "noobers1231q"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
