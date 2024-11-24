@@ -9,32 +9,30 @@ local function closeGui()
     end
     AkaScreenGui:Destroy()
 end
-
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadcmds.luau"))()
 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadcmds.luau"))()
 -- Close GUI when the button is clicked
 local function chat(txt)
-    if game:GetService("ReplicatedStorage"):FindFirstChild("DefaultChatSystemChatEvents") then
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(txt, "All")
-    else
-        game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(txt)
-    end
+if game:GetService("ReplicatedStorage"):FindFirstChild("DefaultChatSystemChatEvents") then
+game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(txt,"All")
+else
+game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(txt)
 end
-
+end
 -- Command handler for the ExperienceChat TextBox
 ChatInputTextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
         local command = ChatInputTextBox.Text:lower()
         local normalchatmsgs = ChatInputTextBox.Text
         ChatInputTextBox.Text = "" -- Clear the input box
-        for cmdname, link in pairs(_G.cmds) do
-            if command == cmdname then
-                ChatInputTextBox.Text = "" -- Clear the input box after command execution
-                loadstring(game:HttpGet(link))()
-            end
-        end
-        chat(normalchatmsgs)
+for cmdname,link in pairs(_G.cmds) do
+    if command == cmdname then
+            ChatInputTextBox.Text = "" -- Clear the input box after command execution
+    loadstring(game:HttpGet(link))()
+    end
+    end
+    chat(normalchatmsgs)
         -- Handle specific commands
         if command:sub(1, 6) == "!copy " then
             local target = command:sub(7)
