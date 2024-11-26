@@ -193,23 +193,110 @@ local function setupAdminCommands(admin)
                 player.Character.HumanoidRootPart.CFrame = CFrame.new(1000000, 1000000, 1000000)
             elseif command == ".jump" then
                 player.Character.Humanoid.Jump = true
-            elseif command == ".trip" then
-                player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 0, -5)
+elseif command == ".trip" then
+local humanoid = player.Character.Humanoid
+local hrp = player.Character.HumanoidRootPart
 
-local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
-if humanoid then
-    -- Disable humanoid controls to simulate ragdoll
-    humanoid.PlatformStand = true
+-- Create banana MeshPart
+local banana = Instance.new("MeshPart")
+banana.MeshId = "rbxassetid://7076530645"
+banana.TextureID = "rbxassetid://7076530688"
+banana.Size = Vector3.new(0.7, 1, 0.8) -- Made banana bigger
+banana.Anchored = true
+banana.CanCollide = false
+banana.Parent = workspace
 
-    -- Wait briefly before allowing the ragdoll effect to take place
-    wait(0.1)
+-- Create slip sound
+local slipSound = Instance.new("Sound")
+slipSound.SoundId = "rbxassetid://8317474936"
+slipSound.Volume = 1
+slipSound.Parent = hrp
 
-    -- Apply physics to the humanoid to make it fall
-    humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+-- Use raycast to find floor position
+local rayOrigin = hrp.Position + Vector3.new(0, 0, -2)
+local rayDirection = Vector3.new(0, -10, 0)
 
-    -- Optionally, re-enable the PlatformStand after the fall
-    humanoid.PlatformStand = false
+local raycastResult = workspace:Raycast(rayOrigin, rayDirection)
+if raycastResult then
+    -- Place banana sideways with a 90-degree rotation on X axis
+    banana.CFrame = CFrame.new(raycastResult.Position) 
+        * CFrame.Angles(math.rad(90), math.rad(math.random(0, 360)), 0)
+else
+    banana.CFrame = hrp.CFrame * CFrame.new(0, -2.5, -2)
 end
+   -- Create and configure the forward movement tween
+    local tweenService = game:GetService("TweenService")
+    local forwardTweenInfo = TweenInfo.new(
+        0.3, -- Duration
+        Enum.EasingStyle.Linear,
+        Enum.EasingDirection.Out
+    )
+    
+    -- Move character forward
+    local forwardGoal = {CFrame = hrp.CFrame * CFrame.new(0, 0, -3)} -- Move 3 studs forward
+    local forwardTween = tweenService:Create(hrp, forwardTweenInfo, forwardGoal)
+    forwardTween:Play()
+ 
+    -- Wait for forward movement to complete
+    task.wait(0.3)
+    
+    -- Create and configure the arc falling tween
+    local fallTweenInfo = TweenInfo.new(
+        0.6, -- Longer duration for arc motion
+        Enum.EasingStyle.Quad,
+        Enum.EasingDirection.In -- Changed to In for better arc effect
+    )
+    
+    -- Tween the character's position and rotation in an arc
+    local fallGoal = {
+        CFrame = hrp.CFrame 
+        * CFrame.new(0, -0.5, -4) -- Move forward and down
+        * CFrame.Angles(math.rad(90), 0, 0) -- Rotate forward
+    }
+    local fallTween = tweenService:Create(hrp, fallTweenInfo, fallGoal)
+    fallTween:Play()
+humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
+
+task.wait(2)
+humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+task.wait(0.5)
+humanoid:ChangeState(Enum.HumanoidStateType.None)
+
+task.wait(1)
+banana:Destroy()
+slipSound:Destroy()
+
+elseif command == ".chat" then
+    -- Extract the target and message from the command
+    local _, targetAndMessage = msg:match("^(.chat)%s+(.+)$")
+    if targetAndMessage then
+        local target, message = targetAndMessage:match("^(%S+)%s+(.+)$")
+        if target and message then
+            -- Find the target player
+            local targetPlayer
+            for _, p in ipairs(game.Players:GetPlayers()) do
+                if nameMatches(p, target) then
+                    targetPlayer = p
+                    break
+                end
+            end
+            
+            if targetPlayer and targetPlayer == player then
+                -- Chat function
+                local function chat(txt)
+                    if game:GetService("ReplicatedStorage"):FindFirstChild("DefaultChatSystemChatEvents") then
+                        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(txt,"All")
+                    else
+                        game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(txt)
+                    end
+                end
+                
+                -- Send the chat message
+                chat(message)
+            end
+        end
+    end
+
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
             elseif command == ".freeze" then
