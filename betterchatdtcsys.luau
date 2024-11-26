@@ -1,5 +1,8 @@
-local ChatInputTextBox = game:GetService("CoreGui").ExperienceChat.appLayout.chatInputBar.Background.Container.TextContainer.TextBoxContainer.TextBox
-
+if game.TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+ChatInputTextBox = game:GetService("CoreGui").ExperienceChat.appLayout.chatInputBar.Background.Container.TextContainer.TextBoxContainer.TextBox
+else
+ChatInputTextBox = game:GetService("Players").LocalPlayer.PlayerGui.Chat.Frame.ChatBarParentFrame.Frame.BoxFrame.Frame.ChatBar
+end
 -- Function to close the GUI
 local function closeGui()
     local originalPosition = BarFrame.Position.Y.Scale
