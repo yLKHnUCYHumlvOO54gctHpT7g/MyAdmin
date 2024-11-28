@@ -29,7 +29,7 @@ local function LoadPositionFromFile()
             print("[ERROR] Invalid position data in file.")
         end
     else
-        print("[ERROR] Position file not found.")
+        print("[INFO] Position file not found.")
     end
     return nil
 end
@@ -54,13 +54,14 @@ local function TeleportToSavedPosition()
     if savedPosition then
         local character = player.Character
         if character and character:FindFirstChild("HumanoidRootPart") then
+            -- Teleport the player to the saved position
             local humanoidRootPart = character.HumanoidRootPart
             humanoidRootPart.CFrame = CFrame.new(savedPosition)
             print("[INFO] Teleported to saved position:", savedPosition)
 
-            -- Delete the file after teleporting
+            -- Delete the file only after successful teleport
             delfile(filename)
-            print("[INFO] Position file deleted.")
+            print("[INFO] Position file deleted after teleport.")
         else
             print("[ERROR] Character not found to teleport.")
         end
@@ -78,7 +79,7 @@ local function RejoinGame()
     TeleportService:TeleportToPlaceInstance(gameId, jobId, player)
 end
 
--- Check if the file exists to decide whether to teleport or save
+-- Check and handle file existence on execution or rejoin
 local function CheckAndExecute()
     if isfile(filename) then
         TeleportToSavedPosition()
@@ -91,7 +92,7 @@ end
 player.Chatted:Connect(function(message)
     if message:lower() == "!rejoin" then
         print("[INFO] Rejoin command received.")
-        CheckAndExecute()
+        CheckAndExecute() -- Handle teleporting or saving
         RejoinGame()
     end
 end)
