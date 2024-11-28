@@ -1,5 +1,100 @@
-local ts = game:GetService("TeleportService")
-local p = game:GetService("Players").LocalPlayer
+local Players = game:GetService("Players")
+local HttpService = game:GetService("HttpService")
+local TeleportService = game:GetService("TeleportService")
 
--- Teleport to the same place and instance
-ts:TeleportToPlaceInstance(game.PlaceId, game.JobId, p)
+-- Define the filename for saving position
+local filename = "saved_position.txt"
+
+-- Function to save the player's position to a file
+local function SavePositionToFile(player, position)
+    local positionData = HttpService:JSONEncode({
+        x = position.X,
+        y = position.Y,
+        z = position.Z
+    })
+
+    -- Write the position data to the file
+    writefile(filename, positionData)
+    print("[INFO] Position saved to file:", positionData)
+end
+
+-- Function to load the saved position from the file
+local function LoadPositionFromFile()
+    if isfile(filename) then
+        local positionData = readfile(filename)
+        local decodedData = HttpService:JSONDecode(positionData)
+        if decodedData.x and decodedData.y and decodedData.z then
+            return Vector3.new(decodedData.x, decodedData.y, decodedData.z)
+        else
+            print("[ERROR] Invalid position data in file.")
+        end
+    else
+        print("[ERROR] Position file not found.")
+    end
+    return nil
+end
+
+-- Get the local player
+local player = Players.LocalPlayer
+
+-- Function to save position on the first execution
+local function SavePositionOnExecution()
+    local character = player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        local position = character.HumanoidRootPart.Position
+        SavePositionToFile(player, position)
+    else
+        print("[ERROR] HumanoidRootPart not found.")
+    end
+end
+
+-- Teleport to the saved position if the file exists
+local function TeleportToSavedPosition()
+    local savedPosition = LoadPositionFromFile()
+    if savedPosition then
+        local character = player.Character
+        if character and character:FindFirstChild("HumanoidRootPart") then
+            local humanoidRootPart = character.HumanoidRootPart
+            humanoidRootPart.CFrame = CFrame.new(savedPosition)
+            print("[INFO] Teleported to saved position:", savedPosition)
+
+            -- Delete the file after teleporting
+            delfile(filename)
+            print("[INFO] Position file deleted.")
+        else
+            print("[ERROR] Character not found to teleport.")
+        end
+    else
+        print("[INFO] No saved position found, skipping teleport.")
+    end
+end
+
+-- Function to handle rejoin
+local function RejoinGame()
+    local gameId = game.PlaceId
+    local jobId = game.JobId
+
+    print("[INFO] Rejoining game...")
+    TeleportService:TeleportToPlaceInstance(gameId, jobId, player)
+end
+
+-- Check if the file exists to decide whether to teleport or save
+local function CheckAndExecute()
+    if isfile(filename) then
+        TeleportToSavedPosition()
+    else
+        SavePositionOnExecution()
+    end
+end
+
+-- Listen for the !rejoin command in the chat
+player.Chatted:Connect(function(message)
+    if message:lower() == "!rejoin" then
+        print("[INFO] Rejoin command received.")
+        CheckAndExecute()
+        RejoinGame()
+    end
+end)
+
+-- Initial execution
+CheckAndExecute()
