@@ -127,13 +127,12 @@ else
     end
     
     -- Queue on teleport handling
-    local queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
-    
-    if queueonteleport then
-        queueonteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Admin'))()")
-    end
-end
+    -- Queue on teleport handling
+getgenv().queueonteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
 
+if getgenv().queueonteleport then
+    getgenv().queueonteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Admin'))()")
+end
 -- Connect chat command handler
 
 local id=game.Players.LocalPlayer.UserId
