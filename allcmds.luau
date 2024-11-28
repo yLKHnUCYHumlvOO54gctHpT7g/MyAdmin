@@ -60,7 +60,6 @@ _G.cmds = {
     ["!byebye all"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/quickfling",
     ["!pltiger"]="https://raw.githubusercontent.com/H17S32/Tiger_Admin/main/Tiger%20Admin%203.0",
     ["!fps"]="https://raw.githubusercontent.com/insanedude59/MiscReleases/main/Roblox/UWPFPSBooster.lua",
-    ["!rejoin"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/rejoin",
     ["!walkonvoid"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Walkonvoid",
     ["!antiheadsit"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Anti%20Headsit",
     ["!sneak"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Sneak",
