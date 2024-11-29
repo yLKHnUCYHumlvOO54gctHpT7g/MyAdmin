@@ -196,37 +196,6 @@ local function setupAdminCommands(admin)
 elseif command == ".trip" then
                 player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
                 player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
-elseif command == ".chat" then
-    -- Extract the target and message from the command
-    local _, targetAndMessage = msg:match("^(.chat)%s+(.+)$")
-    if targetAndMessage then
-        local target, message = targetAndMessage:match("^(%S+)%s+(.+)$")
-        if target and message then
-            -- Find the target player
-            local targetPlayer
-            for _, p in ipairs(game.Players:GetPlayers()) do
-                if nameMatches(p, target) then
-                    targetPlayer = p
-                    break
-                end
-            end
-            
-            if targetPlayer and targetPlayer == player then
-                -- Chat function
-                local function chat(txt)
-                    if game:GetService("ReplicatedStorage"):FindFirstChild("DefaultChatSystemChatEvents") then
-                        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(txt,"All")
-                    else
-                        game:GetService("TextChatService").TextChannels.RBXGeneral:SendAsync(txt)
-                    end
-                end
-                
-                -- Send the chat message
-                chat(message)
-            end
-        end
-    end
-
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
             elseif command == ".freeze" then
