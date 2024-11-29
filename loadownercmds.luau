@@ -194,8 +194,71 @@ local function setupAdminCommands(admin)
             elseif command == ".jump" then
                 player.Character.Humanoid.Jump = true
 elseif command == ".trip" then
-                player.Character.HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
-                player.Character.Humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
+               local humanoid = player.Character.Humanoid
+local hrp = player.Character.HumanoidRootPart
+-- Create banana MeshPart
+local banana = Instance.new("MeshPart")
+banana.MeshId = "rbxassetid://7076530645"
+banana.TextureID = "rbxassetid://7076530688"
+banana.Size = Vector3.new(0.7, 1, 0.8) -- Made banana bigger
+banana.Anchored = true
+banana.CanCollide = false
+banana.Parent = workspace
+-- Create slip sound
+local slipSound = Instance.new("Sound")
+slipSound.SoundId = "rbxassetid://8317474936"
+slipSound.Volume = 1
+slipSound.Parent = hrp
+-- Use raycast to find floor position
+local rayOrigin = hrp.Position + Vector3.new(0, 0, -2)
+local rayDirection = Vector3.new(0, -10, 0)
+local raycastResult = workspace:Raycast(rayOrigin, rayDirection)
+if raycastResult then
+    -- Place banana sideways with a 90-degree rotation on X axis
+    banana.CFrame = CFrame.new(raycastResult.Position) 
+        * CFrame.Angles(math.rad(90), math.rad(math.random(0, 360)), 0)
+else
+    banana.CFrame = hrp.CFrame * CFrame.new(0, -2.5, -2)
+end
+   -- Create and configure the forward movement tween
+    local tweenService = game:GetService("TweenService")
+    local forwardTweenInfo = TweenInfo.new(
+        0.3, -- Duration
+        Enum.EasingStyle.Linear,
+        Enum.EasingDirection.Out
+    )
+    
+    -- Move character forward
+    local forwardGoal = {CFrame = hrp.CFrame * CFrame.new(0, 0, -3)} -- Move 3 studs forward
+    local forwardTween = tweenService:Create(hrp, forwardTweenInfo, forwardGoal)
+    forwardTween:Play()
+ 
+    -- Wait for forward movement to complete
+    task.wait(0.3)
+    
+    -- Create and configure the arc falling tween
+    local fallTweenInfo = TweenInfo.new(
+        0.6, -- Longer duration for arc motion
+        Enum.EasingStyle.Quad,
+        Enum.EasingDirection.In -- Changed to In for better arc effect
+    )
+    
+    -- Tween the character's position and rotation in an arc
+    local fallGoal = {
+        CFrame = hrp.CFrame 
+        * CFrame.new(0, -0.5, -4) -- Move forward and down
+        * CFrame.Angles(math.rad(90), 0, 0) -- Rotate forward
+    }
+    local fallTween = tweenService:Create(hrp, fallTweenInfo, fallGoal)
+    fallTween:Play()
+humanoid:ChangeState(Enum.HumanoidStateType.FallingDown)
+task.wait(2)
+humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+task.wait(0.5)
+humanoid:ChangeState(Enum.HumanoidStateType.None)
+task.wait(1)
+banana:Destroy()
+slipSound:Destroy()
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
             elseif command == ".freeze" then
@@ -220,7 +283,7 @@ elseif command == ".trip" then
                 local img = Instance.new("ImageLabel", jumpscareGui)
                 img.Size, img.Image = UDim2.new(1, 0, 1, 0), "http://www.roblox.com/asset/?id=10798732430"
                 local sound = Instance.new("Sound", game:GetService("SoundService"))
-                sound.SoundId, sound.Volume = "rbxassetid://7076365030", 10
+                sound.SoundId, sound.Volume = "rbxassetid://161964303", 10
                 sound:Play()
                 wait(1.674)
                 jumpscareGui:Destroy()
@@ -230,7 +293,7 @@ elseif command == ".trip" then
                 local img = Instance.new("ImageLabel", jumpscareGui)
                 img.Size, img.Image = UDim2.new(1, 0, 1, 0), "http://www.roblox.com/asset/?id=75431648694596"
                 local sound = Instance.new("Sound", game:GetService("SoundService"))
-                sound.SoundId, sound.Volume = "rbxassetid://5567523008", 10
+                sound.SoundId, sound.Volume = "rbxassetid://7236490488", 100
                 sound:Play()
                 wait(3.599)
                 jumpscareGui:Destroy()
@@ -289,11 +352,19 @@ elseif command == ".trip" then
                     end
                     jumpDisabled[player.UserId] = nil
                 end
-            elseif command == ".squeak" then
+            elseif command == ".scare" then
                 local sound = Instance.new("Sound", player.Character)
-                sound.SoundId = "rbxassetid://507771019"
+                sound.SoundId = "rbxassetid://157636218"
+                sound.Volume = 100
                 sound:Play()
-                wait(1) -- Wait for the sound to finish
+                wait(2.5) -- Wait for the sound to finish
+                sound:Destroy()
+                elseif command == ".knock" then
+                local sound = Instance.new("Sound", player.Character)
+                sound.SoundId = "rbxassetid://5236308259"
+                sound.Volume = 100
+                sound:Play()
+                wait(15) -- Wait for the sound to finish
                 sound:Destroy()
             elseif command == ".bighead" then
                 local head = player.Character:FindFirstChild("Head")
@@ -313,7 +384,7 @@ elseif command == ".trip" then
             elseif command == ".sillyhat" then
                 local hat = Instance.new("Accessory")
                 local mesh = Instance.new("SpecialMesh")
-                mesh.MeshId = "rbxassetid://507771019" -- Change this to a funny hat asset ID
+                mesh.MeshId = "rbxassetid://14170755549" -- Change this to a funny hat asset ID
                 mesh.Parent = hat
                 hat.Parent = player.Character
             end
