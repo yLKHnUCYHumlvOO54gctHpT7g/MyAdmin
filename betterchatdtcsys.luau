@@ -200,7 +200,7 @@ wait()
 start = start + 2
 if start >= nd then start = -134 end
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(start, 3, 264)
-wait(0.01)
+wait(0.07)
 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(start, 3, -120)
 
 end
