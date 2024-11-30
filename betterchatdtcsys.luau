@@ -173,12 +173,52 @@ end
                 game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(player.Name)
             end
 
+elseif command == "!scan map" then
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Reminder",
+        Text = "Make sure you own admin gamepass, use !unscan map to stop scanning map.",
+        Duration = 3
+    })
+    local args = {
+        [1] = "Wand"
+    }
+    
+    game:GetService("ReplicatedStorage"):WaitForChild("ToolEvent"):FireServer(unpack(args))
+    wait(2.5)
+    
+    for i, tool in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
+        tool.Parent = game.Players.LocalPlayer.Character
+    end
+getgenv().scanningmap = true
+local start = -134
+
+local nd = 265
+
+
+while getgenv().scanningmap do
+wait()
+start = start + 2
+if start >= nd then start = -134 end
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(start, 3, 264)
+wait(0.01)
+game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(start, 3, -120)
+
+end
+
+elseif command == "!unscan map" then
+getgenv().scanningmap = false
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Reminder",
+        Text = "Stopped Scanning map.",
+        Duration = 3
+    })
+
 getgenv().annoyingserver = false
   elseif command == "!annoyserver" then
     -- Create and show notification
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Reminder",
-        Text = "Make sure you own admin gamepass!",
+        Text = "Make sure you own admin gamepass, use !unannoy to stop scanning map.",
         Duration = 3
     })
     
@@ -539,6 +579,11 @@ wait(0.25)
 
   elseif command == "!unannoy" then
 getgenv().annoyingserver = false    
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "Reminder",
+        Text = "Stopped annoying server.",
+        Duration = 3
+    })
 
         elseif command == "!uncopy" then
             warn("Stopped copying.")
