@@ -64,7 +64,7 @@ frame.InputBegan:Connect(function(input)
         dragging = true
         mousePos = input.Position
         framePos = frame.Position
-        
+
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
                 dragging = false
@@ -160,18 +160,14 @@ end
 upButton.MouseButton1Click:Connect(moveBaseplateUp)
 downButton.MouseButton1Click:Connect(moveBaseplateDown)
 
--- Function to disable avatar animations
-local function disableAnimations()
-    for _, state in pairs(Enum.HumanoidStateType:GetEnumItems()) do
-        humanoid:SetStateEnabled(state, false)
-    end
+-- Function to disable jumping while floating down
+local function disableJump()
+    humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
 end
 
--- Function to enable avatar animations
-local function enableAnimations()
-    for _, state in pairs(Enum.HumanoidStateType:GetEnumItems()) do
-        humanoid:SetStateEnabled(state, true)
-    end
+-- Function to enable jumping while floating up
+local function enableJump()
+    humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
 end
 
 -- Float functionality
@@ -193,19 +189,11 @@ end
 
 local function float(up)
     noclipUpdate()
-    if up then
-        local bodyVelocity = Instance.new("BodyVelocity")
-        bodyVelocity.Velocity = Vector3.new(0, 2, 0)
-        bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
-        bodyVelocity.Parent = humanoidRootPart
-        game:GetService("Debris"):AddItem(bodyVelocity, 2)
-    else
-        local bodyVelocity = Instance.new("BodyVelocity")
-        bodyVelocity.Velocity = Vector3.new(0, -2, 0)
-        bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
-        bodyVelocity.Parent = humanoidRootPart
-        game:GetService("Debris"):AddItem(bodyVelocity, 2)
-    end
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.Velocity = Vector3.new(0, up and 2 or -2, 0)
+    bodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+    bodyVelocity.Parent = humanoidRootPart
+    game:GetService("Debris"):AddItem(bodyVelocity, 2)
 end
 
 local isFloatingUp = false  -- Start with "Sneak Up" (floating down initially)
@@ -215,7 +203,7 @@ toggleButton.MouseButton1Click:Connect(function()
     isFloatingUp = not isFloatingUp
     if isFloatingUp then
         toggleButton.Text = "Sneak Down"  -- Change the text to "Sneak Down" when floating up
-        disableAnimations()
+        enableJump()                      -- Enable jumping when floating up
         float(true)
         local existingBarrier = game.Workspace:FindFirstChild("InvisibleBarrier")
         if existingBarrier then
@@ -223,7 +211,7 @@ toggleButton.MouseButton1Click:Connect(function()
         end
     else
         toggleButton.Text = "Sneak Up"  -- Change text back to "Sneak Up" when floating down
-        enableAnimations()
+        disableJump()                   -- Disable jumping when floating down
         float(false)
         if not game.Workspace:FindFirstChild("InvisibleBarrier") then
             invisibleBarrier = Instance.new("Part")
@@ -246,17 +234,25 @@ game:GetService("RunService").Stepped:Connect(function()
     end
 end)
 
--- Handle respawn and reapply changes
+-- Handle respawn and reapply changes with updated float function
 local function onCharacterAdded(newCharacter)
     character = newCharacter
     humanoidRootPart = character:WaitForChild("HumanoidRootPart")
     humanoid = character:WaitForChild("Humanoid")
     clearForces()
     noclipUpdate()
+    if isFloatingUp then
+        enableJump()
+        float(true)
+    else
+        disableJump()
+        float(false)
+    end
 end
 
 -- Connect respawn event
 player.CharacterAdded:Connect(onCharacterAdded)
 
--- Start by floating the player down
+-- Start by floating the player down (disable jumping when floating down)
+disableJump()
 float(false)
