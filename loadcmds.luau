@@ -52,11 +52,7 @@ local function executeCommand(command)
                 Duration = 3
             })
         else
-            StarterGui:SetCore("SendNotification", {
-                Title = "Execution Error ❌",
-                Text = "Error executing command",
-                Duration = 5
-            })
+
         end
     else
         -- Try to find a similar command
@@ -68,11 +64,7 @@ local function executeCommand(command)
                 Duration = 5
             })
         else
-            StarterGui:SetCore("SendNotification", {
-                Title = "Unknown Command ❌",
-                Text = "Command not found",
-                Duration = 3
-            })
+
         end
     end
 end
@@ -129,11 +121,7 @@ LocalPlayer.Chatted:Connect(function(msg)
                     Callback = bindable
                 })
             else
-                StarterGui:SetCore("SendNotification", {
-                    Title = "Unknown Command ❌",
-                    Text = "Command not found",
-                    Duration = 3
-                })
+
             end
         end
     end
