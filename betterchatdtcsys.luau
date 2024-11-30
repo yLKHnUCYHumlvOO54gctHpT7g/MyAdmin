@@ -236,7 +236,7 @@ getgenv().annoyingserver = false
     
     while getgenv().annoyingserver do
         for i, plr in pairs(game.Players:GetChildren()) do
-            wait(0)
+            wait(0.01)
             pcall(function()
                 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame
             end)
