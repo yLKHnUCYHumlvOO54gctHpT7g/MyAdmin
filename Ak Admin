@@ -77,7 +77,8 @@ getgenv().whitelistedPlayers = {
     "chronicninjayt",
     "ricksstarr",
     "wasistdennsoschlimmd",
-    "wiki_swat"
+    "wiki_swat",
+    "I_LOVEYOU12210"
 }
 
 getgenv().premiumUsers = {
@@ -141,7 +142,8 @@ getgenv().premiumUsers = {
     "chronicninjayt",
     "ricksstarr",
     "wasistdennsoschlimmd",
-    "wiki_swat"
+    "wiki_swat",
+    "I_LOVEYOU12210"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
