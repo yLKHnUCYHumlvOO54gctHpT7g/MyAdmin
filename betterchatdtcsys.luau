@@ -251,7 +251,7 @@ if success then
 
    game.Players.LocalPlayer.Character.Humanoid.Health = 0
 		    local target = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-            wait(game.Players.RespawnTime + 0.2)
+            wait(game.Players.RespawnTime + 0.5)
             local p1 = game.Players.LocalPlayer.Character.HumanoidRootPart
 p1.CFrame = target
 end
@@ -273,7 +273,7 @@ if success then
 
    game.Players.LocalPlayer.Character.Humanoid.Health = 0
 		    local target = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-            wait(game.Players.RespawnTime + 0.2)
+            wait(game.Players.RespawnTime + 0.5)
             local p1 = game.Players.LocalPlayer.Character.HumanoidRootPart
 p1.CFrame = target
 end
@@ -296,7 +296,7 @@ if success then
 
    game.Players.LocalPlayer.Character.Humanoid.Health = 0
 		    local target = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
-            wait(game.Players.RespawnTime + 0.2)
+            wait(game.Players.RespawnTime + 0.5)
             local p1 = game.Players.LocalPlayer.Character.HumanoidRootPart
 p1.CFrame = target
 end
