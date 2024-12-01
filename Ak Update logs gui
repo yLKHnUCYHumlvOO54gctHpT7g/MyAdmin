@@ -1,10 +1,8 @@
 local commands = {
-    "+ Added cmd: /superfly",
-    "+ Added cmd: /remotechecker",
-    "+ Added cmd: /copynearest",
-    "+ Added cmd: /animhub",
-    "+ Added cmd: /sneak",
-    "= CHANGED PREFIX TO !",
+    "+ Added cmd: !annoyserver (MIC UP)",
+    "+ Added cmd: !unannoy (MIC UP)",
+    "+ Added cmd: !scan map (MIC UP)",
+    "+ Added cmd: !unscan map (MIC UP)",
 }
 
 local gui = Instance.new("ScreenGui")
