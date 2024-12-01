@@ -73,7 +73,8 @@ getgenv().whitelistedPlayers = {
     "I_LOVEYOU12210",
     "ryanmccall690",
     "Dxan_PlayS",
-    "RobloxSQLR"
+    "RobloxSQLR",
+    "chronicninjayt"
 }
 
 getgenv().premiumUsers = {
@@ -135,7 +136,8 @@ getgenv().premiumUsers = {
     "I_LOVEYOU12210",
     "ryanmccall690",
     "Dxan_PlayS",
-    "RobloxSQLR"
+    "RobloxSQLR",
+    "chronicninjayt"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
