@@ -72,13 +72,13 @@ getgenv().whitelistedPlayers = {
     "noobers1231q",
     "Deutschland_Guys",
     "ANDOME555",
-    "I_LOVEYOU12210",
     "ryanmccall690",
     "Dxan_PlayS",
     "RobloxSQLR",
     "chronicninjayt",
     "ricksstarr",
-    "wasistdennsoschlimmd"
+    "wasistdennsoschlimmd",
+    "wiki_swat"
 }
 
 getgenv().premiumUsers = {
@@ -137,13 +137,13 @@ getgenv().premiumUsers = {
     "noobers1231q",
     "Deutschland_Guys",
     "ANDOME555",
-    "I_LOVEYOU12210",
     "ryanmccall690",
     "Dxan_PlayS",
     "RobloxSQLR",
     "chronicninjayt",
     "ricksstarr",
-    "wasistdennsoschlimmd"
+    "wasistdennsoschlimmd",
+    "wiki_swat"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
