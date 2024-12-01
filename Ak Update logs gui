@@ -3,6 +3,10 @@ local commands = {
     "+ Added cmd: !unannoy (MIC UP)",
     "+ Added cmd: !scan map (MIC UP)",
     "+ Added cmd: !unscan map (MIC UP)",
+    "+ Added cmd: !r6",
+    "+ Added cmd: !r15",
+    "+ Added cmd: !steal username or display (note: need to own hats)",
+    "+ Added cmd: !autogrammar (note: cant use any commands after running maybe some but not all)"
 }
 
 local gui = Instance.new("ScreenGui")
