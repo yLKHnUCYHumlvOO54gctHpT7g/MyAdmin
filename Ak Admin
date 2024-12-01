@@ -1,4 +1,4 @@
-wait(1)
+wait(3)
 getgenv().whitelistedPlayers = {
     "coolroblox123rock",
     "Alikhammas1234",
