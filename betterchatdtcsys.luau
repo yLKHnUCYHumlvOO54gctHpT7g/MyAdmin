@@ -212,6 +212,96 @@ getgenv().scanningmap = false
         Text = "Stopped Scanning map.",
         Duration = 3
     })
+elseif command:sub(1,6) == "!steal" then
+local tplayer = command:sub(8)
+local function findPlayer(partialName)
+    partialName = partialName:lower()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player.Name:lower():find(partialName) or 
+           (player.DisplayName and player.DisplayName:lower():find(partialName)) then
+            return player.UserId
+        end
+    end
+    return nil
+end
+local function findPlayer2(partialName)
+    partialName = partialName:lower()
+    for _, player in pairs(game.Players:GetPlayers()) do
+        if player.Name:lower():find(partialName) or 
+           (player.DisplayName and player.DisplayName:lower():find(partialName)) then
+            return player
+        end
+    end
+    return nil
+end
+local realt = findPlayer(tplayer)
+local realb = findPlayer2(tplayer)
+local AES = game:GetService("AvatarEditorService")
+AES:PromptAllowInventoryReadAccess()
+local YOU = realt -- YOUR ID
+wait(0.5)
+local result = AES.PromptAllowInventoryReadAccessCompleted:Wait()
+if result == Enum.AvatarPromptResult.Success then
+	
+    local HumDescWithDoubleAccessories = game.Players:GetHumanoidDescriptionFromUserId(YOU) -- Using your ID for the test
+	    local success, errorMessage = pcall(function()
+    AES:PromptSaveAvatar(HumDescWithDoubleAccessories, realb.Character.Humanoid.RigType)
+end)
+if success then
+
+   game.Players.LocalPlayer.Character.Humanoid.Health = 0
+		    local target = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            wait(game.Players.RespawnTime + 0.2)
+            local p1 = game.Players.LocalPlayer.Character.HumanoidRootPart
+p1.CFrame = target
+end
+end
+
+elseif command:sub(1,4) == "!r15" then
+local AES = game:GetService("AvatarEditorService")
+AES:PromptAllowInventoryReadAccess()
+local YOU = game.Players.LocalPlayer.UserId -- YOUR ID
+wait(0.5)
+local result = AES.PromptAllowInventoryReadAccessCompleted:Wait()
+if result == Enum.AvatarPromptResult.Success then
+	
+    local HumDescWithDoubleAccessories = game.Players:GetHumanoidDescriptionFromUserId(YOU) -- Using your ID for the test
+	    local success, errorMessage = pcall(function()
+    AES:PromptSaveAvatar(HumDescWithDoubleAccessories, Enum.HumanoidRigType.R15)
+end)
+if success then
+
+   game.Players.LocalPlayer.Character.Humanoid.Health = 0
+		    local target = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            wait(game.Players.RespawnTime + 0.2)
+            local p1 = game.Players.LocalPlayer.Character.HumanoidRootPart
+p1.CFrame = target
+end
+end
+
+
+elseif command:sub(1,3) == "!r6" then
+local AES = game:GetService("AvatarEditorService")
+AES:PromptAllowInventoryReadAccess()
+local YOU = game.Players.LocalPlayer.UserId -- YOUR ID
+wait(0.5)
+local result = AES.PromptAllowInventoryReadAccessCompleted:Wait()
+if result == Enum.AvatarPromptResult.Success then
+	
+    local HumDescWithDoubleAccessories = game.Players:GetHumanoidDescriptionFromUserId(YOU) -- Using your ID for the test
+	    local success, errorMessage = pcall(function()
+    AES:PromptSaveAvatar(HumDescWithDoubleAccessories, Enum.HumanoidRigType.R6)
+end)
+if success then
+
+   game.Players.LocalPlayer.Character.Humanoid.Health = 0
+		    local target = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+            wait(game.Players.RespawnTime + 0.2)
+            local p1 = game.Players.LocalPlayer.Character.HumanoidRootPart
+p1.CFrame = target
+end
+end
+
 
 getgenv().annoyingserver = false
   elseif command == "!annoyserver" then
