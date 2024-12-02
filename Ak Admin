@@ -73,7 +73,6 @@ getgenv().whitelistedPlayers = {
     "Deutschland_Guys",
     "ANDOME555",
     "Dxan_PlayS",
-    "wiki_swat",
     "I_LOVEYOU12210",
     "PixelatedBaconMan"
 }
@@ -135,7 +134,6 @@ getgenv().premiumUsers = {
     "Deutschland_Guys",
     "ANDOME555",
     "Dxan_PlayS",
-    "wiki_swat",
     "I_LOVEYOU12210",
     "PixelatedBaconMan"
 }
