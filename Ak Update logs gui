@@ -1,8 +1,5 @@
 local commands = {
-    "+ Added cmd: !annoyserver (MIC UP)",
-    "+ Added cmd: !unannoy (MIC UP)",
-    "+ Added cmd: !scan map (MIC UP)",
-    "+ Added cmd: !unscan map (MIC UP)",
+    "+ Added cmd: !trail (MIC UP)",
     "+ Added cmd: !r6",
     "+ Added cmd: !r15",
     "+ Added cmd: !steal username or display (note: need to own hats)",
