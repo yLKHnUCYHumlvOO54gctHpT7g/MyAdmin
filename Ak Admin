@@ -73,7 +73,7 @@ getgenv().whitelistedPlayers = {
     "Deutschland_Guys",
     "ANDOME555",
     "Dxan_PlayS",
-    "tariqsimpson1"
+    "Tariqsimpson1"
 }
 
 getgenv().premiumUsers = {
@@ -133,7 +133,7 @@ getgenv().premiumUsers = {
     "Deutschland_Guys",
     "ANDOME555",
     "Dxan_PlayS",
-    "tariqsimpson1"
+    "Tariqsimpson1"
 }
 
 loadstring(game:HttpGet(("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")))()
