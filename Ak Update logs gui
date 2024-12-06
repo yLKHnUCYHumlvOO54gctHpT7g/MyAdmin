@@ -1,0 +1,160 @@
+local commands = {
+    "+ Added cmd: !trail (MIC UP)",
+    "+ Added cmd: !r6",
+    "+ Added cmd: !r15",
+    "+ Added cmd: !steal username or display (note: need to own hats)",
+    "+ Added cmd: !autogrammar (note: cant use any commands after running maybe some but not all)"
+}
+local gui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local TitleLabel = Instance.new("TextLabel")
+local commandListFrame = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
+local CloseButton = Instance.new("TextButton")
+-- Properties
+gui.Name = "UpdateLogGui"
+gui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Frame.Parent = gui
+Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+Frame.BackgroundTransparency = 0.15
+Frame.BorderSizePixel = 0
+Frame.AnchorPoint = Vector2.new(0.5, 0)
+Frame.Position = UDim2.new(0.5, 0, 0, 20)
+Frame.Size = UDim2.new(0, 460, 0, 160)
+UICorner.Parent = Frame
+UICorner.CornerRadius = UDim.new(0.04, 0)
+-- Gradient
+local gradient = Instance.new("UIGradient")
+gradient.Parent = Frame
+gradient.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, Color3.fromRGB(40, 40, 60)),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(25, 25, 40))
+})
+gradient.Rotation = 45
+-- Title
+TitleLabel.Parent = Frame
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Position = UDim2.new(0, 20, 0, 10)
+TitleLabel.Size = UDim2.new(1, -40, 0, 30)
+TitleLabel.Font = Enum.Font.GothamBold
+TitleLabel.Text = "Update Log"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.TextSize = 24
+-- Command List Frame
+commandListFrame.Parent = Frame
+commandListFrame.BackgroundTransparency = 1
+commandListFrame.Position = UDim2.new(0, 20, 0, 50)
+commandListFrame.Size = UDim2.new(1, -40, 1, -80)
+UIListLayout.Parent = commandListFrame
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 8)
+-- Close Button
+CloseButton.Parent = Frame
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 85, 85)
+CloseButton.BackgroundTransparency = 0.3
+CloseButton.Position = UDim2.new(1, -35, 0, 10)
+CloseButton.Size = UDim2.new(0, 20, 0, 20)
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.Text = "×"
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.TextSize = 20
+local closeButtonCorner = Instance.new("UICorner")
+closeButtonCorner.CornerRadius = UDim.new(0.5, 0)
+closeButtonCorner.Parent = CloseButton
+-- Add commands
+local function addCommands()
+    for _, command in ipairs(commands) do
+        local commandLabel = Instance.new("TextLabel")
+        commandLabel.Parent = commandListFrame
+        commandLabel.Size = UDim2.new(1, 0, 0, 24)
+        commandLabel.BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+        commandLabel.BackgroundTransparency = 0.8
+        commandLabel.Font = Enum.Font.GothamMedium
+        commandLabel.Text = "  " .. command
+        commandLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+        commandLabel.TextSize = 14
+        commandLabel.TextXAlignment = Enum.TextXAlignment.Left
+        commandLabel.TextWrapped = true
+        
+        local uiCorner = Instance.new("UICorner")
+        uiCorner.CornerRadius = UDim.new(0, 6)
+        uiCorner.Parent = commandLabel
+        
+        -- Hover effect
+        commandLabel.MouseEnter:Connect(function()
+            game:GetService("TweenService"):Create(commandLabel, 
+                TweenInfo.new(0.2), 
+                {
+                    BackgroundTransparency = 0.6,
+                    BackgroundColor3 = Color3.fromRGB(60, 60, 80)
+                }
+            ):Play()
+        end)
+        
+        commandLabel.MouseLeave:Connect(function()
+            game:GetService("TweenService"):Create(commandLabel, 
+                TweenInfo.new(0.2), 
+                {
+                    BackgroundTransparency = 0.8,
+                    BackgroundColor3 = Color3.fromRGB(40, 40, 60)
+                }
+            ):Play()
+        end)
+    end
+end
+-- Resize Frame based on content
+local function resizeFrame()
+    local commandCount = #commands
+    local frameHeight = math.clamp(commandCount * 25 + 90, 140, 420)
+    Frame.Size = UDim2.new(0, 460, 0, frameHeight)
+end
+-- Persistent BlurEffect
+local blur
+-- Animations
+local function slideIn()
+    -- Create and apply a BlurEffect (if not already created)
+    if not blur then
+        blur = Instance.new("BlurEffect")
+        blur.Parent = game:GetService("Lighting")
+        blur.Size = 0
+        -- Tween the blur's intensity
+        game:GetService("TweenService"):Create(blur, TweenInfo.new(0.8), { Size = 24 }):Play()
+    end
+    Frame.Position = UDim2.new(1.5, 0, 0, 20)
+    Frame:TweenPosition(
+        UDim2.new(0.5, 0, 0, 20),
+        Enum.EasingDirection.Out,
+        Enum.EasingStyle.Sine,
+        0.8,
+        true
+    )
+end
+local function slideOut()
+    -- Tween the blur to reduce intensity and remove it
+    if blur then
+        local tween = game:GetService("TweenService"):Create(blur, TweenInfo.new(0.8), { Size = 0 })
+        tween:Play()
+        tween.Completed:Connect(function()
+            blur:Destroy()
+            blur = nil
+        end)
+    end
+    Frame:TweenPosition(
+        UDim2.new(-0.5, 0, 0, 20),
+        Enum.EasingDirection.In,
+        Enum.EasingStyle.Sine,
+        0.8,
+        true,
+        function()
+            gui:Destroy()
+        end
+    )
+end
+-- Initialize
+addCommands()
+resizeFrame()
+slideIn()
+-- Connect close button
+CloseButton.MouseButton1Click:Connect(slideOut)
