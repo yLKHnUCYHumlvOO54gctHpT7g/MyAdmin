@@ -4,9 +4,9 @@ local Advertisers = {"Vlafz195", "6736_45", "goekaycool", "goekayball", "goekayb
 
 local FreeTrial = {}
 
-local Scripters = {"GYATT_DAMN1", "328ml", "BloxiAstra", "ImOn_ValveIndex"}
+local Scripters = {"GYATT_DAMN1", "328ml", "29Kyooo", "BloxiAstra", "ImOn_ValveIndex"}
 
-local Owners = {"Xeni_he07", "AliKhammas1234", "AliKhammas", "dgthgcnfhhbsd", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2"}
+local Owners = {"Xeni_he07", "AliKhammas1234", "AliKhammas", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2"}
 
 local GMS = {"victorwielki"}
 
