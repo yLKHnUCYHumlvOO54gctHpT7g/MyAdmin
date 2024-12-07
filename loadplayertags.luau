@@ -100,7 +100,7 @@ local function applyPlayerTag(player)
         createTag(player, "AK ADVERTISER ")
     elseif table.find(FreeTrial, player.Name) then
         createTag(player, "AK TRIAL ")
-    elseif table.find(getgenv().premiumUsers, player.Name) then
+    elseif table.find(getgenv().premium, player.Name) then
         createTag(player, "AK USER")
     end
 end
