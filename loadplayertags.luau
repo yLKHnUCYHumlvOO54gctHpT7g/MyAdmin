@@ -1,10 +1,20 @@
+local function isWhitelisted(player)
+    local success, result = pcall(function()
+        local response = game:HttpGet("https://raw.githubusercontent.com/AKadminlol/AK-ADMIN/refs/heads/main/AK%20ADMIN.json")
+        local HttpService = game:GetService("HttpService")
+        local data = HttpService:JSONDecode(response)
+        return table.find(data.whitelisted or {}, player.Name) ~= nil
+    end)
+    return success
+end
+
 local player = game.Players.LocalPlayer
 
 local Advertisers = {"Vlafz195", "6736_45", "goekaycool", "goekayball", "goekayball2"}
 
 local FreeTrial = {}
 
-local Scripters = {"GYATT_DAMN1", "328ml", "29Kyooo", "BloxiAstra", "ImOn_ValveIndex"}
+local Scripters = {"GYATT_DAMN1", "328ml", "29Kyooo", "", "ImOn_ValveIndex"}
 
 local Owners = {"Xeni_he07", "AliKhammas1234", "AliKhammas", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2"}
 
@@ -100,8 +110,8 @@ local function applyPlayerTag(player)
         createTag(player, "AK ADVERTISER ")
     elseif table.find(FreeTrial, player.Name) then
         createTag(player, "AK TRIAL ")
-    elseif table.find(getgenv().premium, player.Name) then
-        createTag(player, "AK USER")
+    elseif isWhitelisted(player) then
+        createTag(game.Players.LocalPlayer, "AK USER")
     end
 end
 
