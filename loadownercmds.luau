@@ -19,7 +19,7 @@ end
 local adminCmd = {
     "AK_ADMEN1", "Xeni_he07", "AK_ADMEN2", "goekaycool", "GYATT_DAMN1", 
     "ddddd", "IIIlIIIllIlIllIII", "AliKhammas1234", 
-    "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD", "BloxiAstra", "ImOn_ValveIndex"
+    "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD", "BloxiAstra", "29Kyooo", "ImOn_ValveIndex"
 }
 
 local commandsList = {
