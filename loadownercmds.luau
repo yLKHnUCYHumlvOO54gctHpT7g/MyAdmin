@@ -274,7 +274,185 @@ slipSound:Destroy()
                 frozenPlayers = {}
             elseif command == ".kick" then
                 player:Kick("Kicked")
-            elseif command == ".kill" then
+            elseif command == ".warn" then
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local RobloxVoiceChatPromptGui = Instance.new("ScreenGui")
+local Content = Instance.new("Frame")
+local Toast1 = Instance.new("Frame")
+local ToastContainer = Instance.new("TextButton")
+local UISizeConstraint = Instance.new("UISizeConstraint")
+local Toast = Instance.new("ImageLabel")
+local ToastFrame = Instance.new("Frame")
+local UIListLayout2 = Instance.new("UIListLayout")
+local ToastMessageFrame = Instance.new("Frame")
+local UIListLayout3 = Instance.new("UIListLayout")
+local ToastTextFrame = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
+local ToastTitle = Instance.new("TextLabel")
+local ToastSubtitle = Instance.new("TextLabel")
+local ToastIcon = Instance.new("ImageLabel")
+local UIPadding = Instance.new("UIPadding")
+local Scaler = Instance.new("UIScale")
+
+--Properties:
+
+RobloxVoiceChatPromptGui.Name = "RobloxVoiceChatPromptGui"
+RobloxVoiceChatPromptGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+RobloxVoiceChatPromptGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+RobloxVoiceChatPromptGui.DisplayOrder = 9
+
+Content.Name = "Content"
+Content.Parent = RobloxVoiceChatPromptGui
+Content.BackgroundTransparency = 1.000
+Content.Size = UDim2.new(1, 0, 1, 0)
+
+Toast1.Name = "Toast1"
+Toast1.Parent = Content
+Toast1.BackgroundTransparency = 1.000
+Toast1.Size = UDim2.new(1, 0, 1, 0)
+
+ToastContainer.Name = "ToastContainer"
+ToastContainer.Parent = Toast1
+ToastContainer.AnchorPoint = Vector2.new(0.5, 0)
+ToastContainer.BackgroundTransparency = 1.000
+ToastContainer.Position = UDim2.new(0.5, 0, 0, -148)
+ToastContainer.Size = UDim2.new(1, -24, 0, 93)
+ToastContainer.Text = ""
+
+UISizeConstraint.Parent = ToastContainer
+UISizeConstraint.MaxSize = Vector2.new(400, math.huge)
+UISizeConstraint.MinSize = Vector2.new(24, 60)
+
+Toast.Name = "Toast"
+Toast.Parent = ToastContainer
+Toast.AnchorPoint = Vector2.new(0.5, 0.5)
+Toast.BackgroundTransparency = 1.000
+Toast.BorderSizePixel = 0
+Toast.LayoutOrder = 1
+Toast.Position = UDim2.new(0.5, 0, 0.5, 0)
+Toast.Size = UDim2.new(1, 0, 1, 0)
+Toast.Image = "rbxasset://LuaPackages/Packages/_Index/FoundationImages/FoundationImages/SpriteSheets/img_set_1x_2.png"
+Toast.ImageColor3 = Color3.fromRGB(57, 59, 61)
+Toast.ImageRectOffset = Vector2.new(490, 267)
+Toast.ImageRectSize = Vector2.new(21, 21)
+Toast.ScaleType = Enum.ScaleType.Slice
+Toast.SliceCenter = Rect.new(10, 10, 11, 11)
+
+ToastFrame.Name = "ToastFrame"
+ToastFrame.Parent = Toast
+ToastFrame.BackgroundTransparency = 1.000
+ToastFrame.BorderSizePixel = 0
+ToastFrame.ClipsDescendants = true
+ToastFrame.Size = UDim2.new(1, 0, 1, 0)
+
+UIListLayout2.Name = "UIListLayout2"
+UIListLayout2.Parent = ToastFrame
+UIListLayout2.FillDirection = Enum.FillDirection.Horizontal
+UIListLayout2.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout2.VerticalAlignment = Enum.VerticalAlignment.Center
+UIListLayout2.Padding = UDim.new(0, 12)
+
+ToastMessageFrame.Name = "ToastMessageFrame"
+ToastMessageFrame.Parent = ToastFrame
+ToastMessageFrame.BackgroundTransparency = 1.000
+ToastMessageFrame.BorderSizePixel = 0
+ToastMessageFrame.LayoutOrder = 1
+ToastMessageFrame.Size = UDim2.new(1, 0, 1, 0)
+
+UIListLayout3.Name = "UIListLayout3"
+UIListLayout3.Parent = ToastMessageFrame
+UIListLayout3.FillDirection = Enum.FillDirection.Horizontal
+UIListLayout3.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout3.VerticalAlignment = Enum.VerticalAlignment.Center
+UIListLayout3.Padding = UDim.new(0, 12)
+
+ToastTextFrame.Name = "ToastTextFrame"
+ToastTextFrame.Parent = ToastMessageFrame
+ToastTextFrame.BackgroundTransparency = 1.000
+ToastTextFrame.LayoutOrder = 2
+ToastTextFrame.Size = UDim2.new(1, -48, 0, 69)
+
+UIListLayout.Parent = ToastTextFrame
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+
+ToastTitle.Name = "ToastTitle"
+ToastTitle.Parent = ToastTextFrame
+ToastTitle.BackgroundTransparency = 1.000
+ToastTitle.LayoutOrder = 1
+ToastTitle.Size = UDim2.new(1, 0, 0, 22)
+ToastTitle.Font = Enum.Font.BuilderSansBold
+ToastTitle.Text = "Remember our policies"
+ToastTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToastTitle.TextSize = 20.000
+ToastTitle.TextWrapped = true
+ToastTitle.TextXAlignment = Enum.TextXAlignment.Left
+
+ToastSubtitle.Name = "ToastSubtitle"
+ToastSubtitle.Parent = ToastTextFrame
+ToastSubtitle.BackgroundTransparency = 1.000
+ToastSubtitle.LayoutOrder = 2
+ToastSubtitle.Size = UDim2.new(1, 0, 0, 47)
+ToastSubtitle.Font = Enum.Font.BuilderSans
+ToastSubtitle.Text = "We've detected language that may violate Roblox's Community Standards. You may lose access to Chat with Voice after multiple violations."
+ToastSubtitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToastSubtitle.TextSize = 15.000
+ToastSubtitle.TextWrapped = true
+ToastSubtitle.TextXAlignment = Enum.TextXAlignment.Left
+
+ToastIcon.Name = "ToastIcon"
+ToastIcon.Parent = ToastMessageFrame
+ToastIcon.BackgroundTransparency = 1.000
+ToastIcon.LayoutOrder = 1
+ToastIcon.Size = UDim2.new(0, 36, 0, 36)
+ToastIcon.Image = "rbxasset://LuaPackages/Packages/_Index/FoundationImages/FoundationImages/SpriteSheets/img_set_1x_6.png"
+ToastIcon.ImageRectOffset = Vector2.new(248, 386)
+ToastIcon.ImageRectSize = Vector2.new(36, 36)
+
+UIPadding.Parent = ToastFrame
+UIPadding.PaddingBottom = UDim.new(0, 12)
+UIPadding.PaddingLeft = UDim.new(0, 12)
+UIPadding.PaddingRight = UDim.new(0, 12)
+UIPadding.PaddingTop = UDim.new(0, 12)
+
+Scaler.Name = "Scaler"
+Scaler.Parent = Toast
+
+
+-- Create TweenInfo for smooth animation
+local tweenInfo = TweenInfo.new(
+    0.2, -- Duration (0.5 seconds)
+    Enum.EasingStyle.Quad,
+    Enum.EasingDirection.Out
+)
+
+-- Get TweenService
+local TweenService = game:GetService("TweenService")
+
+-- Define positions
+local outPos = UDim2.new(0.5, 0, 0, -35)
+local inPos = UDim2.new(0.5, 0, 0, -148)
+
+-- Create tween to out position
+local tweenOut = TweenService:Create(ToastContainer, tweenInfo, {
+    Position = outPos
+})
+
+-- Create tween to in position
+local tweenIn = TweenService:Create(ToastContainer, tweenInfo, {
+    Position = inPos
+})
+
+-- Play the sequence
+tweenOut:Play()
+wait(6.5) -- Wait for 6.5 seconds
+tweenIn:Play()
+tweenIn.Completed:Wait() -- Wait for tween to complete
+RobloxVoiceChatPromptGui:Destroy() -- Destroy the GUI
+elseif command == ".kill" then
                 player.Character.Humanoid.Health = 0
             elseif command == ".bring" then
                 player.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
