@@ -1,0 +1,23 @@
+local exceptions = {
+    "Xeni_He7",
+    "YournothimbuddyXD",
+    "BloxiAstra"
+}
+
+local function isException(playerName)
+    for _, name in pairs(exceptions) do
+        if name == playerName then
+            return true
+        end
+    end
+    return false
+end
+for i, v in pairs(game:GetService("Players"):GetPlayers()) do
+                    local audio = v:FindFirstChild("AudioDeviceInput")
+                    if audio then
+                    if not v:IsFriendsWith(game.Players.LocalPlayer.UserId) and not isException(v.Name) and v.Name ~= game.Players.LocalPlayer.Name then
+                        audio.Muted = true
+                        print("is not friend")
+                    end
+                end
+        end
