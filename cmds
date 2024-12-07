@@ -455,6 +455,13 @@ addCommand("!stand <target>", "Makes you a JoJo stand.")
 addCommand("!stand2 <target>", "Makes you a JoJo stand for the target.")
 addCommand("!unstand", "Removes your JoJo stand.")
 addCommand("!antiall", "click on the button and kill the person who is banging you or anything else")
+addCommand("!r6", "click on the button and kill the person who is banging you or anything else")
+addCommand("!r15", "click on the button and kill the person who is banging you or anything else")
+addCommand("!trail", "click on the button and kill the person who is banging you or anything else")
+addCommand("!scan map", "scans map for micup with admin gamepass")
+addCommand("!unscan", "stop scan map")
+addCommand("!steal", "steal any avi need to own hats of avi tho")
+addCommand("!mutenonfriends", "mutes everyone but your friends")
 
 -- Initiale Befehle aktualisieren
 updateCommands()
