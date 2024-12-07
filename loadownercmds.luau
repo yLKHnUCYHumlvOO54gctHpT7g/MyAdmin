@@ -275,7 +275,6 @@ slipSound:Destroy()
             elseif command == ".kick" then
                 player:Kick("Kicked")
             elseif command == ".warn" then
-if not game.Players.LocalPlayer.PlayerGui:FindFirstChild("RobloxVoiceChatPromptGui") then
 -- Gui to Lua
 -- Version: 3.2
 
@@ -421,7 +420,7 @@ UIPadding.PaddingTop = UDim.new(0, 12)
 
 Scaler.Name = "Scaler"
 Scaler.Parent = Toast
-end
+
 
 -- Create TweenInfo for smooth animation
 local tweenInfo = TweenInfo.new(
