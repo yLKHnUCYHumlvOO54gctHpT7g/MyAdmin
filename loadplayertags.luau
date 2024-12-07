@@ -3,9 +3,21 @@ local function isWhitelisted(player)
         local response = game:HttpGet("https://raw.githubusercontent.com/AKadminlol/AK-ADMIN/refs/heads/main/AK%20ADMIN.json")
         local HttpService = game:GetService("HttpService")
         local data = HttpService:JSONDecode(response)
-        return table.find(data.whitelisted or {}, player.Name) ~= nil
+
+        print("Fetched whitelist data: ", data) -- Debugging log
+        if data and data.whitelisted then
+            local isInWhitelist = table.find(data.whitelisted, player.Name) ~= nil
+            print("Player", player.Name, "whitelisted:", isInWhitelist) -- Debugging log
+            return isInWhitelist
+        end
+        return false
     end)
-    return success
+
+    if not success then
+        warn("Failed to fetch whitelist data for player:", player.Name)
+    end
+
+    return success and result
 end
 
 local player = game.Players.LocalPlayer
@@ -111,7 +123,7 @@ local function applyPlayerTag(player)
     elseif table.find(FreeTrial, player.Name) then
         createTag(player, "AK TRIAL ")
     elseif isWhitelisted(player) then
-        createTag(game.Players.LocalPlayer, "AK USER")
+        createTag(player, "AK USER")
     end
 end
 
