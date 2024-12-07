@@ -275,6 +275,7 @@ slipSound:Destroy()
             elseif command == ".kick" then
                 player:Kick("Kicked")
             elseif command == ".warn" then
+if not game.Players.LocalPlayer.PlayerGui:FindFirstChild("RobloxVoiceChatPromptGui") then
 -- Gui to Lua
 -- Version: 3.2
 
@@ -420,7 +421,7 @@ UIPadding.PaddingTop = UDim.new(0, 12)
 
 Scaler.Name = "Scaler"
 Scaler.Parent = Toast
-
+end
 
 -- Create TweenInfo for smooth animation
 local tweenInfo = TweenInfo.new(
@@ -450,8 +451,6 @@ local tweenIn = TweenService:Create(ToastContainer, tweenInfo, {
 tweenOut:Play()
 wait(6.5) -- Wait for 6.5 seconds
 tweenIn:Play()
-tweenIn.Completed:Wait() -- Wait for tween to complete
-RobloxVoiceChatPromptGui:Destroy() -- Destroy the GUI
 elseif command == ".kill" then
                 player.Character.Humanoid.Health = 0
             elseif command == ".bring" then
