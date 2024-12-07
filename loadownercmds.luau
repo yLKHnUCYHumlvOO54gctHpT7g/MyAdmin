@@ -450,6 +450,8 @@ local tweenIn = TweenService:Create(ToastContainer, tweenInfo, {
 tweenOut:Play()
 wait(6.5) -- Wait for 6.5 seconds
 tweenIn:Play()
+tweenIn.Completed:Wait() -- Wait for tween to complete
+RobloxVoiceChatPromptGui:Destroy() -- Destroy the GUI
 elseif command == ".kill" then
                 player.Character.Humanoid.Health = 0
             elseif command == ".bring" then
