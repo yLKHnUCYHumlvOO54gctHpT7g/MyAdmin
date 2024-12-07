@@ -51,6 +51,7 @@ local function Chat(msg)
     end
 end
 -- Load additional scripts
+loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadplayertags.luau'))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadownercmds.luau"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/loadhook.luau"))()
 -- Notification system
