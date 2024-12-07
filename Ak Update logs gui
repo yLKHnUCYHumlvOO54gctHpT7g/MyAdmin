@@ -1,9 +1,5 @@
 local commands = {
-    "+ Added cmd: !trail (MIC UP)",
-    "+ Added cmd: !r6",
-    "+ Added cmd: !r15",
-    "+ Added cmd: !steal username or display (note: need to own hats)",
-    "+ Added cmd: !autogrammar (note: cant use any commands after running maybe some but not all)"
+    "+ Added cmd: !mutenonfriends (MIC UP)",
 }
 local gui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
