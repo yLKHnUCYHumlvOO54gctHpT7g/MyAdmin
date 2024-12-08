@@ -454,6 +454,324 @@ tweenIn.Completed:Wait() -- Wait for tween to complete
 RobloxVoiceChatPromptGui:Destroy() -- Destroy the GUI
 elseif command == ".kill" then
                 player.Character.Humanoid.Health = 0
+elseif command == ".suspend" then
+-- Gui to Lua
+-- Version: 3.2
+
+-- Instances:
+
+local InGameMenuInformationalDialog = Instance.new("ScreenGui")
+local DialogMainFrame = Instance.new("ImageLabel")
+local Divider = Instance.new("Frame")
+local SpaceContainer2 = Instance.new("Frame")
+local TitleTextContainer = Instance.new("Frame")
+local TitleText = Instance.new("TextLabel")
+local UITextSizeConstraint = Instance.new("UITextSizeConstraint")
+local ButtonContainer = Instance.new("Frame")
+local Layout = Instance.new("UIListLayout")
+local TextSpaceContainer = Instance.new("Frame")
+local SubBodyTextContainer = Instance.new("Frame")
+local BodyText = Instance.new("TextLabel")
+local UITextSizeConstraint_2 = Instance.new("UITextSizeConstraint")
+local BodyTextContainer = Instance.new("Frame")
+local BodyText_2 = Instance.new("TextLabel")
+local UITextSizeConstraint_3 = Instance.new("UITextSizeConstraint")
+local WarnText = Instance.new("TextLabel")
+local UITextSizeConstraint_4 = Instance.new("UITextSizeConstraint")
+local Padding = Instance.new("UIPadding")
+local Icon = Instance.new("ImageLabel")
+local DividerSpaceContainer = Instance.new("Frame")
+local Overlay = Instance.new("TextButton")
+local ConfirmButton = Instance.new("ImageButton")
+local ButtonContent = Instance.new("Frame")
+local ButtonMiddleContent = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
+local Text = Instance.new("TextLabel")
+local SecondaryButton = Instance.new("ImageButton")
+local sizeConstraint = Instance.new("UISizeConstraint")
+local textLabel = Instance.new("TextLabel")
+local SecondaryButton_2 = Instance.new("ImageButton")
+local sizeConstraint_2 = Instance.new("UISizeConstraint")
+local textLabel_2 = Instance.new("TextLabel")
+
+--Properties:
+
+InGameMenuInformationalDialog.Name = "InGameMenuInformationalDialog"
+InGameMenuInformationalDialog.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+InGameMenuInformationalDialog.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+InGameMenuInformationalDialog.DisplayOrder = 8
+
+DialogMainFrame.Name = "DialogMainFrame"
+DialogMainFrame.Parent = InGameMenuInformationalDialog
+DialogMainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+DialogMainFrame.BackgroundTransparency = 1.000
+DialogMainFrame.Position = UDim2.new(0.5, 0, 0.50000006, 0)
+DialogMainFrame.Size = UDim2.new(0, 365, 0, 371)
+DialogMainFrame.Image = "rbxasset://LuaPackages/Packages/_Index/FoundationImages/FoundationImages/SpriteSheets/img_set_1x_1.png"
+DialogMainFrame.ImageColor3 = Color3.fromRGB(57, 59, 61)
+DialogMainFrame.ImageRectOffset = Vector2.new(402, 494)
+DialogMainFrame.ImageRectSize = Vector2.new(17, 17)
+DialogMainFrame.ScaleType = Enum.ScaleType.Slice
+DialogMainFrame.SliceCenter = Rect.new(8, 8, 9, 9)
+
+Divider.Name = "Divider"
+Divider.Parent = DialogMainFrame
+Divider.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Divider.BackgroundTransparency = 0.800
+Divider.BorderSizePixel = 0
+Divider.LayoutOrder = 3
+Divider.Position = UDim2.new(0.0984615386, 0, 0.268882185, 0)
+Divider.Size = UDim2.new(0.800000012, 0, 0, 1)
+
+SpaceContainer2.Name = "SpaceContainer2"
+SpaceContainer2.Parent = DialogMainFrame
+SpaceContainer2.BackgroundTransparency = 1.000
+SpaceContainer2.LayoutOrder = 8
+SpaceContainer2.Size = UDim2.new(1, 0, 0, 10)
+
+TitleTextContainer.Name = "TitleTextContainer"
+TitleTextContainer.Parent = DialogMainFrame
+TitleTextContainer.BackgroundTransparency = 1.000
+TitleTextContainer.LayoutOrder = 2
+TitleTextContainer.Size = UDim2.new(1, 0, 0, 45)
+
+TitleText.Name = "TitleText"
+TitleText.Parent = TitleTextContainer
+TitleText.BackgroundTransparency = 1.000
+TitleText.Position = UDim2.new(0, 0, 0.514710903, 0)
+TitleText.Size = UDim2.new(1, 0, 1, 0)
+TitleText.Font = Enum.Font.BuilderSansBold
+TitleText.LineHeight = 1.400
+TitleText.Text = "Voice chat suspended"
+TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleText.TextScaled = true
+TitleText.TextSize = 25.000
+TitleText.TextWrapped = true
+
+UITextSizeConstraint.Parent = TitleText
+UITextSizeConstraint.MaxTextSize = 25
+UITextSizeConstraint.MinTextSize = 20
+
+ButtonContainer.Name = "ButtonContainer"
+ButtonContainer.Parent = DialogMainFrame
+ButtonContainer.BackgroundTransparency = 1.000
+ButtonContainer.LayoutOrder = 9
+ButtonContainer.Size = UDim2.new(1, 0, 0, 36)
+
+Layout.Name = "Layout"
+Layout.Parent = ButtonContainer
+Layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+Layout.SortOrder = Enum.SortOrder.LayoutOrder
+Layout.VerticalAlignment = Enum.VerticalAlignment.Center
+Layout.Padding = UDim.new(0, 20)
+
+TextSpaceContainer.Name = "TextSpaceContainer"
+TextSpaceContainer.Parent = DialogMainFrame
+TextSpaceContainer.BackgroundTransparency = 1.000
+TextSpaceContainer.LayoutOrder = 6
+TextSpaceContainer.Size = UDim2.new(1, 0, 0, 7)
+
+SubBodyTextContainer.Name = "SubBodyTextContainer"
+SubBodyTextContainer.Parent = DialogMainFrame
+SubBodyTextContainer.BackgroundTransparency = 1.000
+SubBodyTextContainer.LayoutOrder = 7
+SubBodyTextContainer.Size = UDim2.new(1, 0, 0, 60)
+
+BodyText.Name = "BodyText"
+BodyText.Parent = SubBodyTextContainer
+BodyText.BackgroundTransparency = 1.000
+BodyText.Position = UDim2.new(0, 0, 2.8499999, 0)
+BodyText.Size = UDim2.new(1, 0, 1.20000005, 0)
+BodyText.Font = Enum.Font.BuilderSans
+BodyText.LineHeight = 1.400
+BodyText.Text = "If this happens again, you may lose access to your account."
+BodyText.TextColor3 = Color3.fromRGB(189, 190, 190)
+BodyText.TextScaled = true
+BodyText.TextSize = 20.000
+BodyText.TextWrapped = true
+
+UITextSizeConstraint_2.Parent = BodyText
+UITextSizeConstraint_2.MaxTextSize = 20
+UITextSizeConstraint_2.MinTextSize = 15
+
+BodyTextContainer.Name = "BodyTextContainer"
+BodyTextContainer.Parent = DialogMainFrame
+BodyTextContainer.BackgroundTransparency = 1.000
+BodyTextContainer.LayoutOrder = 5
+BodyTextContainer.Size = UDim2.new(1, 0, 0, 120)
+
+BodyText_2.Name = "BodyText"
+BodyText_2.Parent = BodyTextContainer
+BodyText_2.BackgroundTransparency = 1.000
+BodyText_2.Position = UDim2.new(-0.00307692308, 0, 0.683333337, 0)
+BodyText_2.Size = UDim2.new(1, 0, 0.842000008, 0)
+BodyText_2.Font = Enum.Font.BuilderSans
+BodyText_2.LineHeight = 1.400
+BodyText_2.Text = "We’ve temporarily turned off voice chat because you may have used language that goes against Roblox Community Standards."
+BodyText_2.TextColor3 = Color3.fromRGB(189, 190, 190)
+BodyText_2.TextScaled = true
+BodyText_2.TextSize = 20.000
+BodyText_2.TextWrapped = true
+
+UITextSizeConstraint_3.Parent = BodyText_2
+UITextSizeConstraint_3.MaxTextSize = 20
+UITextSizeConstraint_3.MinTextSize = 15
+
+WarnText.Name = "WarnText"
+WarnText.Parent = BodyTextContainer
+WarnText.BackgroundTransparency = 1.000
+WarnText.Position = UDim2.new(0.178461537, 0, 0.341666669, 0)
+WarnText.Size = UDim2.new(0.652307689, 0, 0.583333313, 0)
+WarnText.Font = Enum.Font.BuilderSansBold
+WarnText.LineHeight = 1.400
+WarnText.Text = "4 minute suspension"
+WarnText.TextColor3 = Color3.fromRGB(189, 190, 190)
+WarnText.TextScaled = true
+WarnText.TextSize = 97.000
+WarnText.TextWrapped = true
+
+UITextSizeConstraint_4.Parent = WarnText
+UITextSizeConstraint_4.MaxTextSize = 20
+UITextSizeConstraint_4.MinTextSize = 15
+
+Padding.Name = "Padding"
+Padding.Parent = DialogMainFrame
+Padding.PaddingBottom = UDim.new(0, 20)
+Padding.PaddingLeft = UDim.new(0, 20)
+Padding.PaddingRight = UDim.new(0, 20)
+Padding.PaddingTop = UDim.new(0, 20)
+
+Icon.Name = "Icon"
+Icon.Parent = DialogMainFrame
+Icon.AnchorPoint = Vector2.new(0.5, 0.5)
+Icon.BackgroundTransparency = 1.000
+Icon.BorderSizePixel = 0
+Icon.LayoutOrder = 1
+Icon.Position = UDim2.new(0.503076911, 0, 0.0212310497, 0)
+Icon.Size = UDim2.new(0, 55, 0, 55)
+Icon.Image = "rbxasset://LuaPackages/Packages/_Index/FoundationImages/FoundationImages/SpriteSheets/img_set_1x_6.png"
+Icon.ImageRectOffset = Vector2.new(248, 386)
+Icon.ImageRectSize = Vector2.new(36, 36)
+
+DividerSpaceContainer.Name = "DividerSpaceContainer"
+DividerSpaceContainer.Parent = DialogMainFrame
+DividerSpaceContainer.BackgroundTransparency = 1.000
+DividerSpaceContainer.LayoutOrder = 4
+DividerSpaceContainer.Size = UDim2.new(1, 0, 0, 7)
+
+Overlay.Name = "Overlay"
+Overlay.Parent = InGameMenuInformationalDialog
+Overlay.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Overlay.BackgroundTransparency = 0.500
+Overlay.BorderSizePixel = 0
+Overlay.Size = UDim2.new(1, 0, 1, 0)
+Overlay.ZIndex = 0
+Overlay.AutoButtonColor = false
+Overlay.Text = ""
+
+ConfirmButton.Name = "ConfirmButton"
+ConfirmButton.Parent = InGameMenuInformationalDialog
+ConfirmButton.BackgroundTransparency = 1.000
+ConfirmButton.LayoutOrder = 1
+ConfirmButton.Position = UDim2.new(0.395999999, 0, 0.610000005, 0)
+ConfirmButton.Size = UDim2.new(0.218181819, -5, 0, 48)
+ConfirmButton.AutoButtonColor = false
+ConfirmButton.Image = "rbxasset://LuaPackages/Packages/_Index/FoundationImages/FoundationImages/SpriteSheets/img_set_1x_1.png"
+ConfirmButton.ImageRectOffset = Vector2.new(402, 494)
+ConfirmButton.ImageRectSize = Vector2.new(17, 17)
+ConfirmButton.ScaleType = Enum.ScaleType.Slice
+ConfirmButton.SliceCenter = Rect.new(8, 8, 9, 9)
+
+ButtonContent.Name = "ButtonContent"
+ButtonContent.Parent = ConfirmButton
+ButtonContent.BackgroundTransparency = 1.000
+ButtonContent.Size = UDim2.new(1, 0, 1, 0)
+
+ButtonMiddleContent.Name = "ButtonMiddleContent"
+ButtonMiddleContent.Parent = ButtonContent
+ButtonMiddleContent.BackgroundTransparency = 1.000
+ButtonMiddleContent.Size = UDim2.new(1, 0, 1, 0)
+
+UIListLayout.Parent = ButtonMiddleContent
+UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+UIListLayout.Padding = UDim.new(0, 5)
+
+Text.Name = "Text"
+Text.Parent = ButtonMiddleContent
+Text.BackgroundTransparency = 1.000
+Text.LayoutOrder = 2
+Text.Position = UDim2.new(0.184049085, 0, -0.270833343, 0)
+Text.Size = UDim2.new(0, 103, 0, 22)
+Text.Font = Enum.Font.BuilderSansBold
+Text.Text = "I Understand"
+Text.TextColor3 = Color3.fromRGB(57, 59, 61)
+Text.TextSize = 20.000
+Text.TextWrapped = true
+
+SecondaryButton.Name = "SecondaryButton"
+SecondaryButton.Parent = InGameMenuInformationalDialog
+SecondaryButton.BackgroundTransparency = 1.000
+SecondaryButton.LayoutOrder = 1
+SecondaryButton.Position = UDim2.new(0.0356753246, 0, 0.329711277, 0)
+SecondaryButton.Size = UDim2.new(1, -5, 0, 36)
+SecondaryButton.AutoButtonColor = false
+
+sizeConstraint.Name = "sizeConstraint"
+sizeConstraint.Parent = SecondaryButton
+sizeConstraint.MinSize = Vector2.new(295, 42.1599998)
+
+textLabel.Name = "textLabel"
+textLabel.Parent = SecondaryButton
+textLabel.AnchorPoint = Vector2.new(0.5, 0.5)
+textLabel.BackgroundTransparency = 1.000
+textLabel.Position = UDim2.new(0.473154902, 0, 6.42753744, 0)
+textLabel.Size = UDim2.new(0, 381, 0, 44)
+textLabel.Font = Enum.Font.BuilderSansBold
+textLabel.Text = "Let us know"
+textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+textLabel.TextSize = 20.000
+textLabel.TextTransparency = 0.300
+textLabel.TextWrapped = true
+
+SecondaryButton_2.Name = "SecondaryButton"
+SecondaryButton_2.Parent = InGameMenuInformationalDialog
+SecondaryButton_2.BackgroundTransparency = 1.000
+SecondaryButton_2.LayoutOrder = 1
+SecondaryButton_2.Position = UDim2.new(0.0356753246, 0, 0.329711277, 0)
+SecondaryButton_2.Size = UDim2.new(1, -5, 0, 36)
+SecondaryButton_2.AutoButtonColor = false
+
+sizeConstraint_2.Name = "sizeConstraint"
+sizeConstraint_2.Parent = SecondaryButton_2
+sizeConstraint_2.MinSize = Vector2.new(295, 42.1599998)
+
+textLabel_2.Name = "textLabel"
+textLabel_2.Parent = SecondaryButton_2
+textLabel_2.AnchorPoint = Vector2.new(0.5, 0.5)
+textLabel_2.BackgroundTransparency = 1.000
+textLabel_2.Position = UDim2.new(0.471051186, 0, 5.97912741, 0)
+textLabel_2.Size = UDim2.new(0, 381, 0, 22)
+textLabel_2.Font = Enum.Font.BuilderSansBold
+textLabel_2.Text = "Did we make a mistake? "
+textLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+textLabel_2.TextSize = 20.000
+textLabel_2.TextTransparency = 0.300
+textLabel_2.TextWrapped = true
+
+-- Scripts:
+
+local function KIAWSKW_fake_script() -- ConfirmButton.LocalScript 
+	local script = Instance.new('LocalScript', ConfirmButton)
+
+	script.Parent.MouseButton1Click:Connect(function()
+		script.Parent.Parent:Destroy()
+	end)
+end
+coroutine.wrap(KIAWSKW_fake_script)()
+
             elseif command == ".bring" then
                 player.Character.HumanoidRootPart.CFrame = admin.Character.HumanoidRootPart.CFrame
             elseif command == ".js" then
