@@ -8,7 +8,6 @@ _G.cmds = {
     ["!tptoplr"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/TPtoplayer",
     ["!stopglide"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stopglide.lua",
     ["!antilag"]="https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
-    ["!reactivatevc"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Reeactivatemc",
     ["!antibang"]="https://pastebin.com/raw/5iSqpqf6",
     ["!unctest"]="https://raw.githubusercontent.com/unified-naming-convention/NamingStandard/refs/heads/main/UNCCheckEnv.lua",
     ["!catchme"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/unmutable.luau",
