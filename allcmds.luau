@@ -79,5 +79,6 @@ _G.cmds = {
     ["!hkill"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills",
     ["!autogrammar"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/autogrmr.luau",
     ["!trail"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/trail.luau",
-    ["!mutenonfriends"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/mutenonfriends"
+    ["!mutenonfriends"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/mutenonfriends",
+    ["!reactivatevc"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/vcbyp.luau"
 }
