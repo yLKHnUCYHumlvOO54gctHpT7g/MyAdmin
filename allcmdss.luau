@@ -24,6 +24,7 @@ _G.cmds = {
     ["!walkonwalls"]="https://raw.githubusercontent.com/sinret/rbxscript.com-scripts-reuploads-/main/WalkOnWalls",
     ["!cmdbar"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Cmdsbar",
     ["!ad"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Ad",
+    ["!chatlogs"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Chatlogs.luau",
     ["!chatquiz"]="https://raw.githubusercontent.com/Damian-11/quizbot/master/quizbot.luau",
     ["!shiftlock"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Shiftlock",
     ["!nofriends"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Nofriends",
