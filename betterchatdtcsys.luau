@@ -173,6 +173,18 @@ end
                 game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(player.Name)
             end
 
+
+    elseif command:sub(1,3) == "!to" then
+    local targetPlayer = command:sub(5)
+		for i, v in pairs(game.Players:GetChildren()) do
+			local playerName = v.Name:lower()
+			local playerDisplayName = v.DisplayName:lower()
+			if playerName:find(targetPlayer) or playerDisplayName:find(targetPlayer) then
+				game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.Character.HumanoidRootPart.CFrame
+				break 
+			end
+		end
+
 elseif command == "!scan map" then
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "Reminder",
@@ -696,7 +708,15 @@ getgenv().annoyingserver = false
     })
 
         elseif command == "!uncopy" then
-            warn("Stopped copying.")
+        -- Stop all ongoing copying activities immediately
+        isCopying = false
+        isCopyingNearest = false
+
+        if isCopying or isCopyingNearest then
+            print("Stopped all copying activities.")
+        else
+            warn("Not currently copying usernames or avatars.")
+        end
         end
     end
 end)
