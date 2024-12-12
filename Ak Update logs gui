@@ -22,6 +22,7 @@ local commands = {
     "+ Added cmd: !mutenonfriends (MIC UP)",
     "+ Added cmd: !reactivatevc",
     "+ Added cmd: !jerk (only r6)",
+    "= Updated cmd: !cmdbar (keybind F)",
    
     -- Add more commands here
 }
