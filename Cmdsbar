@@ -1,175 +1,228 @@
--- Instances
+-- Services
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
 
-local AkaScreenGui = Instance.new("ScreenGui")
-local BarFrame = Instance.new("Frame")
-local TextBox = Instance.new("TextBox")
-local UICorner = Instance.new("UICorner")
-local UIScale = Instance.new("UIScale")
-local back = Instance.new("ImageLabel")
-local ImageLabel = Instance.new("ImageButton")
+-- Constants
+local TWEEN_INFO = TweenInfo.new(0.5, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
+local COLORS = {
+    BACKGROUND = Color3.fromRGB(20, 20, 22),
+    TEXT = Color3.fromRGB(240, 240, 240),
+    PLACEHOLDER = Color3.fromRGB(160, 160, 160),
+    ICON = Color3.fromRGB(240, 240, 240)
+}
 
--- Properties
+-- Variables
+local commandBarVisible = true -- Tracks the visibility of the command bar
 
-AkaScreenGui.Name = "AkaScreenGui"
-AkaScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-AkaScreenGui.ResetOnSpawn = false
-
-BarFrame.Name = "BarFrame"
-BarFrame.Parent = AkaScreenGui
-BarFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-BarFrame.BackgroundColor3 = Color3.new(0.117647, 0.117647, 0.117647)
-BarFrame.BorderColor3 = Color3.new(0, 0, 0)
-BarFrame.BorderSizePixel = 0
-BarFrame.Position = UDim2.new(0.5, 0, 0.846319556, 0)
-BarFrame.Size = UDim2.new(0, 269, 0, 41)
-
-TextBox.Parent = BarFrame
-TextBox.BackgroundColor3 = Color3.new(1, 1, 1)
-TextBox.BackgroundTransparency = 1
-TextBox.Position = UDim2.new(0.224340498, 0, 0, 0)
-TextBox.Size = UDim2.new(0.75549835, 0, 0.0256090853, 40)
-TextBox.ZIndex = 2
-TextBox.Font = Enum.Font.Gotham
-TextBox.PlaceholderColor3 = Color3.new(0.45098, 0.45098, 0.45098)
-TextBox.PlaceholderText = "Command Bar"
-TextBox.Text = ""
-TextBox.TextColor3 = Color3.new(0.686275, 0.686275, 0.686275)
-TextBox.TextSize = 14
-TextBox.TextStrokeColor3 = Color3.new(0.686275, 0.686275, 0.686275)
-TextBox.TextXAlignment = Enum.TextXAlignment.Left
-
-UICorner.Parent = BarFrame
-UICorner.CornerRadius = UDim.new(0, 4)
-
-UIScale.Parent = BarFrame
-
-back.Name = "back"
-back.Parent = BarFrame
-back.Active = true
-back.AnchorPoint = Vector2.new(0.5, 0.5)
-back.BackgroundColor3 = Color3.new(1, 1, 1)
-back.BackgroundTransparency = 1
-back.Position = UDim2.new(0.525431216, 0, 0.704668343, 0)
-back.Size = UDim2.new(1.12866259, 48, 1.68359303, 48)
-back.ZIndex = -2
-back.Image = "rbxassetid://6049668989"
-back.ImageColor3 = Color3.new(0, 0, 0)
-back.ScaleType = Enum.ScaleType.Slice
-back.SliceCenter = Rect.new(128, 128, 128, 128)
-
-ImageLabel.Parent = BarFrame
-ImageLabel.BackgroundColor3 = Color3.new(1, 1, 1)
-ImageLabel.BackgroundTransparency = 1
-ImageLabel.BorderColor3 = Color3.new(0, 0, 0)
-ImageLabel.BorderSizePixel = 0
-ImageLabel.Position = UDim2.new(0.0371747203, 0, 0.195121944, 0)
-ImageLabel.Size = UDim2.new(0, 36, 0, 25)
-ImageLabel.Image = "http://www.roblox.com/asset/?id=15145938849"
-
--- Load commands from the external script (ensure commands are defined without prefixes)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmdss.luau"))()
-
--- Function to close the GUI with a quicker slide down animation
-local function closeGui()
-    local originalPosition = BarFrame.Position.Y.Scale -- Store original Y position
-    for i = 0, 1, 0.05 do  -- Quicker by increasing increment
-        BarFrame.Position = UDim2.new(0.5, 0, originalPosition + (0.2 * i), 0)  -- Slide down
-        wait(0.01)  -- Quicker wait time for a faster animation
-    end
-    AkaScreenGui:Destroy()  -- Destroy after sliding
+-- String Utility Functions
+local function trim(str)
+    return str:match("^%s*(.-)%s*$")
 end
 
--- Close the GUI when the image button is clicked
-ImageLabel.MouseButton1Click:Connect(closeGui)
-
--- Handle command input from TextBox
-TextBox.FocusLost:Connect(function(enterPressed)
-    if enterPressed then
-        local command = TextBox.Text:lower() -- Get and lower case the command text
-for cmdname,link in pairs(_G.cmds) do
-    if command == cmdname then
-            TextBox.Text = "" -- Clear the input box after command execution
-    loadstring(game:HttpGet(link))()
+local function findPlayer(query)
+    query = query:lower()
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player.Name:lower():sub(1, #query) == query or 
+           player.DisplayName:lower():sub(1, #query) == query then
+            return player
+        end
     end
-    end
-    if command:sub(1,6) == "!copy " then
-        local isCopying = false
-local isCopyingNearest = false
-local originalAvatar = nil -- To store the original avatar state
+    return nil
+end
 
-        local target = command:sub(7)
+-- Create Command Bar UI
+local function createCommandBar()
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "CommandBarGui"
+    gui.ResetOnSpawn = false
+    gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-        -- Command to copy all player usernames
-       
-            -- Check for specific player name matching
-            local found = false
-            for _, v in pairs(game.Players:GetChildren()) do
-                if v.Name:sub(1, #target):lower() == target:lower() or v.DisplayName:sub(1, #target):lower() == target:lower() then
-                    game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(v.Name)
-                    found = true
+    local container = Instance.new("Frame")
+    container.Name = "Container"
+    container.Size = UDim2.new(0, 400, 0, 45)
+    container.Position = UDim2.new(0.5, 0, 1.1, 0)
+    container.AnchorPoint = Vector2.new(0.5, 1)
+    container.BackgroundTransparency = 1
+    container.Parent = gui
+
+    local bar = Instance.new("Frame")
+    bar.Name = "Bar"
+    bar.Size = UDim2.new(1, 0, 1, 0)
+    bar.BackgroundColor3 = COLORS.BACKGROUND
+    bar.BorderSizePixel = 0
+    bar.Parent = container
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = bar
+
+    local shadow = Instance.new("ImageLabel")
+    shadow.Name = "Shadow"
+    shadow.Image = "rbxassetid://6014261993"
+    shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+    shadow.ImageTransparency = 0.5
+    shadow.BackgroundTransparency = 1
+    shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
+    shadow.AnchorPoint = Vector2.new(0.5, 0.5)
+    shadow.Size = UDim2.new(1, 47, 1, 47)
+    shadow.ScaleType = Enum.ScaleType.Slice
+    shadow.SliceCenter = Rect.new(49, 49, 450, 450)
+    shadow.ZIndex = -1
+    shadow.Parent = bar
+
+    local textBox = Instance.new("TextBox")
+    textBox.Name = "Input"
+    textBox.Size = UDim2.new(0.85, -20, 1, 0)
+    textBox.Position = UDim2.new(0.15, 0, 0, 0)
+    textBox.BackgroundTransparency = 1
+    textBox.Text = ""
+    textBox.PlaceholderText = "Enter command..."
+    textBox.TextColor3 = COLORS.TEXT
+    textBox.PlaceholderColor3 = COLORS.PLACEHOLDER
+    textBox.TextXAlignment = Enum.TextXAlignment.Left
+    textBox.TextSize = 16
+    textBox.Font = Enum.Font.GothamMedium
+    textBox.ClearTextOnFocus = false
+    textBox.Parent = bar
+
+    local icon = Instance.new("ImageButton")
+    icon.Name = "Icon"
+    icon.Size = UDim2.new(0, 35, 0, 35) -- Adjusted logo size to look better
+    icon.Position = UDim2.new(0.02, 0, 0.5, -17.5)
+    icon.BackgroundTransparency = 1
+    icon.Image = "http://www.roblox.com/asset/?id=15145938849"
+    icon.ImageColor3 = COLORS.ICON
+    icon.Parent = bar
+
+    return gui, container, textBox, icon
+end
+
+-- Command Handler
+local function handleCommand(text)
+    if not text or text == "" then return end
+    
+    local cleanText = trim(text):lower()
+    
+    -- Handle built-in commands
+    if cleanText:sub(1, 6) == "!copy " then
+        local target = trim(cleanText:sub(7))
+        if target == "all" then
+            getgenv().isCopying = true
+            task.spawn(function()
+                while getgenv().isCopying do
+                    for _, player in ipairs(Players:GetPlayers()) do
+                        if player ~= Players.LocalPlayer then
+                            ReplicatedStorage.ModifyUserEvent:FireServer(player.Name)
+                        end
+                    end
+                    task.wait(0.05)
                 end
+            end)
+        else
+            local targetPlayer = findPlayer(target)
+            if targetPlayer then
+                ReplicatedStorage.ModifyUserEvent:FireServer(targetPlayer.Name)
             end
+        end
+        return
     end
-if command == "!copynearest" then
-if not isCopyingNearest then
-            isCopyingNearest = true
-            print("Started copying the nearest player's avatar.")
-
-
-            -- Continuously check for the nearest player, excluding the local player
-            while isCopyingNearest do
-                local closestPlayer = nil
-                local closestDistance = math.huge
-
-                -- Find the nearest player (excluding the local player)
-                for _, player in pairs(game.Players:GetPlayers()) do
-                    if player ~= game.Players.LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                        local distance = (player.Character.HumanoidRootPart.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude
-                        if distance < closestDistance then
-                            closestDistance = distance
-                            closestPlayer = player
+    
+    if cleanText == "!copynearest" then
+        getgenv().isCopyingNearest = true
+        task.spawn(function()
+            while getgenv().isCopyingNearest do
+                local nearestPlayer, shortestDistance = nil, math.huge
+                local localPlayer = Players.LocalPlayer
+                
+                for _, player in ipairs(Players:GetPlayers()) do
+                    if player ~= localPlayer and player.Character and localPlayer.Character then
+                        local distance = (player.Character:GetPivot().Position - 
+                                       localPlayer.Character:GetPivot().Position).Magnitude
+                        if distance < shortestDistance then
+                            shortestDistance = distance
+                            nearestPlayer = player
                         end
                     end
                 end
-
-                -- If a closest player is found, send their username to the server
-                if closestPlayer then
-                    game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(closestPlayer.Name)
+                
+                if nearestPlayer then
+                    ReplicatedStorage.ModifyUserEvent:FireServer(nearestPlayer.Name)
                 end
-
-                wait(0.05) -- Reduced wait time for faster checking (lowered to 0.05 seconds)
+                task.wait(0.05)
             end
-        else
-            warn("Already copying the nearest player's avatar. Use '!uncopy' to stop.")
-        end
-
-end
-getgenv().isCopying = false
-if command == "!copy all" then
-if not getgenv().isCopying then
-                getgenv().isCopying = true
-                print("Started copying usernames of all players in the server.")
-
-                -- Continuously copy all player usernames in a loop without any significant delay
-                while getgenv().isCopying do
-                    for _, player in pairs(game.Players:GetPlayers()) do
-                        game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(player.Name)
-                    end
-
-                    wait(0.05) -- Reduced wait time for faster copying (lowered to 0.05 seconds)
-                end
-            else
-                warn("Already copying all usernames. Use '!uncopy' to stop.")
-            end
-
-end
-
-if command == "!uncopy" then
-  -- Stop all ongoing copying activities immediately
+        end)
+        return
+    end
+    
+    if cleanText == "!uncopy" then
         getgenv().isCopying = false
-        isCopyingNearest = false
-
-
+        getgenv().isCopyingNearest = false
+        return
+    end
+    
+    -- Handle dynamic commands
+    if _G.cmds and _G.cmds[cleanText] then
+        local success, error = pcall(function()
+            loadstring(game:HttpGet(_G.cmds[cleanText]))()
+        end)
+        if not success then
+            warn("Failed to execute command:", error)
+        end
+    end
 end
+
+-- Initialize Command Bar
+local function initializeCommandBar()
+    local gui, container, textBox, icon = createCommandBar()
+    
+    -- Load commands safely
+    local success, error = pcall(function()
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmdss.luau"))()
+    end)
+    
+    if not success then
+        warn("Failed to load commands:", error)
+    end
+    
+    -- Animate opening
+    gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+    TweenService:Create(container, TWEEN_INFO, {
+        Position = UDim2.new(0.5, 0, 0.95, 0)
+    }):Play()
+    
+    -- Handle text input
+    textBox.FocusLost:Connect(function(enterPressed)
+        if enterPressed and textBox.Text ~= "" then
+            handleCommand(textBox.Text)
+            textBox.Text = ""
+        end
+    end)
+    
+    -- Handle toggle button (logo)
+    local function toggleBar()
+        commandBarVisible = not commandBarVisible
+        if commandBarVisible then
+            TweenService:Create(container, TWEEN_INFO, {
+                Position = UDim2.new(0.5, 0, 0.95, 0)
+            }):Play()
+        else
+            TweenService:Create(container, TWEEN_INFO, {
+                Position = UDim2.new(0.5, 0, 1.1, 0)
+            }):Play()
+        end
+    end
+    
+    icon.MouseButton1Click:Connect(toggleBar)
+
+    -- Handle keybind (F)
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if not gameProcessed and input.KeyCode == Enum.KeyCode.F then
+            toggleBar()
+        end
+    end)
 end
-            end)
+
+-- Start the command bar
+initializeCommandBar()
