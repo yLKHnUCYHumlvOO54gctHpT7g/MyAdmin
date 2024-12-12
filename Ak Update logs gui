@@ -20,6 +20,9 @@ local FONTS = {
 
 local commands = {
     "+ Added cmd: !mutenonfriends (MIC UP)",
+    "+ Added cmd: !reactivatevc",
+    "+ Added cmd: !jerk (only r6)",
+   
     -- Add more commands here
 }
 
