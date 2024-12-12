@@ -30,8 +30,6 @@ local function Chat(msg)
 end
 -- Load additional scripts
 loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/firebutton'))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/goto.luau"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/copyavatar"))()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/akactive.luau'))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/betterchatdtcsys.luau"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui"))()
