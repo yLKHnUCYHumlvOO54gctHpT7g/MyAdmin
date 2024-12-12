@@ -1,0 +1,320 @@
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local CoreGui = game:GetService("CoreGui")
+local HttpService = game:GetService("HttpService")
+local Lighting = game:GetService("Lighting")
+local StarterGui = game:GetService("StarterGui")
+
+-- Discord Link
+local DISCORD_LINK = "http://discord.gg/bgWY2zEV7z"
+
+-- Initialize blur effect
+local blurEffect = Instance.new("BlurEffect")
+blurEffect.Size = 0
+blurEffect.Parent = Lighting
+
+-- Enhanced tween function with promise-like behavior
+local function CreateTween(instance, properties, time, style, direction)
+    local tween = TweenService:Create(
+        instance,
+        TweenInfo.new(time or 0.5, style or Enum.EasingStyle.Cubic, direction or Enum.EasingDirection.Out),
+        properties
+    )
+    return {
+        Play = function()
+            tween:Play()
+            return tween
+        end,
+        Cancel = function()
+            tween:Cancel()
+        end
+    }
+end
+
+-- Copy Discord link and notify
+local function copyDiscordAndNotify()
+    setclipboard(DISCORD_LINK)
+    StarterGui:SetCore("SendNotification", {
+        Title = "Discord Link Copied!",
+        Text = "Join our Discord server for access!",
+        Duration = 5,
+        Icon = "rbxassetid://3944680095" -- You can change this to any icon ID
+    })
+end
+
+-- Enhanced destroy function with smooth transitions
+local function SafeDestroyWithFade(gui)
+    if not gui or not gui:IsA("ScreenGui") then return end
+    
+    local fadeTime = 0.8
+    
+    -- Smooth blur removal
+    CreateTween(blurEffect, {Size = 0}, fadeTime * 1.2):Play()
+    
+    -- Fade out all GUI elements with different timing for smoother effect
+    for _, obj in ipairs(gui:GetDescendants()) do
+        if obj:IsA("Frame") then
+            CreateTween(obj, {BackgroundTransparency = 1}, fadeTime * 0.8):Play()
+        elseif obj:IsA("TextLabel") then
+            CreateTween(obj, {TextTransparency = 1, TextStrokeTransparency = 1}, fadeTime * 0.9):Play()
+        elseif obj:IsA("UIStroke") then
+            CreateTween(obj, {Transparency = 1}, fadeTime * 0.7):Play()
+        elseif obj:IsA("ImageLabel") then
+            CreateTween(obj, {ImageTransparency = 1}, fadeTime * 0.8):Play()
+        end
+    end
+    
+    task.delay(fadeTime, function()
+        pcall(function() 
+            blurEffect:Destroy()
+            gui:Destroy() 
+        end)
+    end)
+end
+
+-- Clean up existing GUIs
+pcall(function()
+    for _, gui in ipairs(CoreGui:GetChildren()) do
+        if gui.Name == "PremiumAuthGui" then
+            SafeDestroyWithFade(gui)
+        end
+    end
+end)
+
+-- Create ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "PremiumAuthGui"
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.DisplayOrder = 999999
+ScreenGui.IgnoreGuiInset = true
+
+pcall(function() ScreenGui.Parent = CoreGui end)
+if not ScreenGui.Parent then
+    ScreenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+end
+
+-- Create background
+local Background = Instance.new("Frame")
+Background.Name = "Background"
+Background.Size = UDim2.new(1, 0, 1, 0)
+Background.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+Background.BackgroundTransparency = 1
+Background.Parent = ScreenGui
+
+-- Create main container
+local MainContainer = Instance.new("Frame")
+MainContainer.Name = "MainContainer"
+MainContainer.Size = UDim2.new(0, 500, 0, 300)
+MainContainer.Position = UDim2.new(0.5, -250, 0.5, -150)
+MainContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
+MainContainer.BackgroundTransparency = 1
+MainContainer.ZIndex = 2
+MainContainer.Parent = ScreenGui
+
+-- Add container styling
+local ContainerCorner = Instance.new("UICorner")
+ContainerCorner.CornerRadius = UDim.new(0, 12)
+ContainerCorner.Parent = MainContainer
+
+local ContainerStroke = Instance.new("UIStroke")
+ContainerStroke.Color = Color3.fromRGB(60, 60, 70)
+ContainerStroke.Thickness = 2
+ContainerStroke.Transparency = 1
+ContainerStroke.Parent = MainContainer
+
+-- Create logo container
+local LogoContainer = Instance.new("Frame")
+LogoContainer.Name = "LogoContainer"
+LogoContainer.Size = UDim2.new(0, 80, 0, 80)
+LogoContainer.Position = UDim2.new(0.5, -40, 0, 30)
+LogoContainer.BackgroundColor3 = Color3.fromRGB(35, 35, 40)
+LogoContainer.BackgroundTransparency = 1
+LogoContainer.ZIndex = 2
+LogoContainer.Parent = MainContainer
+
+-- Create logo image with player's profile picture
+local LogoImage = Instance.new("ImageLabel")
+LogoImage.Name = "LogoImage"
+LogoImage.Size = UDim2.new(1, 0, 1, 0)
+LogoImage.Position = UDim2.new(0, 0, 0, 0)
+LogoImage.BackgroundTransparency = 1
+LogoImage.ImageTransparency = 1
+LogoImage.ZIndex = 1
+local player = Players.LocalPlayer
+local userId = player.UserId
+local thumbType = Enum.ThumbnailType.HeadShot
+local thumbSize = Enum.ThumbnailSize.Size420x420
+local content = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+LogoImage.Image = content
+LogoImage.Parent = LogoContainer
+
+local LogoCorner = Instance.new("UICorner")
+LogoCorner.CornerRadius = UDim.new(1, 0)
+LogoCorner.Parent = LogoContainer
+
+local LogoStroke = Instance.new("UIStroke")
+LogoStroke.Color = Color3.fromRGB(80, 80, 90)
+LogoStroke.Thickness = 2
+LogoStroke.Transparency = 1
+LogoStroke.Parent = LogoContainer
+
+-- Create title text
+local TitleText = Instance.new("TextLabel")
+TitleText.Name = "TitleText"
+TitleText.Size = UDim2.new(1, 0, 0, 30)
+TitleText.Position = UDim2.new(0, 0, 0, 130)
+TitleText.BackgroundTransparency = 1
+TitleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleText.TextSize = 28
+TitleText.Font = Enum.Font.GothamBold
+TitleText.Text = "ACCESS AUTHORIZED"
+TitleText.TextTransparency = 1
+TitleText.ZIndex = 2
+TitleText.Parent = MainContainer
+
+-- Create status text
+local StatusText = Instance.new("TextLabel")
+StatusText.Name = "StatusText"
+StatusText.Size = UDim2.new(0, 400, 0, 30)
+StatusText.Position = UDim2.new(0.5, -200, 0, 170)
+StatusText.BackgroundTransparency = 1
+StatusText.TextColor3 = Color3.fromRGB(200, 200, 200)
+StatusText.TextSize = 18
+StatusText.Font = Enum.Font.GothamMedium
+StatusText.Text = "Verifying credentials..."
+StatusText.TextTransparency = 1
+StatusText.ZIndex = 2
+StatusText.Parent = MainContainer
+
+-- Create progress container
+local ProgressContainer = Instance.new("Frame")
+ProgressContainer.Name = "ProgressContainer"
+ProgressContainer.Size = UDim2.new(0, 400, 0, 4)
+ProgressContainer.Position = UDim2.new(0.5, -200, 0, 220)
+ProgressContainer.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+ProgressContainer.BackgroundTransparency = 1
+ProgressContainer.BorderSizePixel = 0
+ProgressContainer.ZIndex = 2
+ProgressContainer.Parent = MainContainer
+
+local ProgressCorner = Instance.new("UICorner")
+ProgressCorner.CornerRadius = UDim.new(1, 0)
+ProgressCorner.Parent = ProgressContainer
+
+-- Create progress bar
+local ProgressBar = Instance.new("Frame")
+ProgressBar.Name = "ProgressBar"
+ProgressBar.Size = UDim2.new(0, 0, 1, 0)
+ProgressBar.BackgroundColor3 = Color3.fromRGB(90, 160, 255)
+ProgressBar.BackgroundTransparency = 1
+ProgressBar.BorderSizePixel = 0
+ProgressBar.ZIndex = 2
+ProgressBar.Parent = ProgressContainer
+
+local ProgressBarCorner = Instance.new("UICorner")
+ProgressBarCorner.CornerRadius = UDim.new(1, 0)
+ProgressBarCorner.Parent = ProgressBar
+
+-- Create user text
+local UserText = Instance.new("TextLabel")
+UserText.Name = "UserText"
+UserText.Size = UDim2.new(0, 400, 0, 30)
+UserText.Position = UDim2.new(0.5, -200, 0, 240)
+UserText.BackgroundTransparency = 1
+UserText.TextColor3 = Color3.fromRGB(150, 150, 160)
+UserText.TextSize = 16
+UserText.Font = Enum.Font.GothamMedium
+UserText.Text = ""
+UserText.TextTransparency = 1
+UserText.ZIndex = 2
+UserText.Parent = MainContainer
+
+-- Load admin script function
+local function loadAdminScript()
+    pcall(function()
+        local script = game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template")
+        loadstring(script)()
+    end)
+end
+
+-- Check whitelist function
+local function isWhitelisted(player)
+    local success, result = pcall(function()
+        local response = game:HttpGet("https://raw.githubusercontent.com/AKadminlol/AK-ADMIN/refs/heads/main/AK%20ADMIN.json")
+        local data = HttpService:JSONDecode(response)
+        return table.find(data.whitelisted or {}, player.Name) ~= nil
+    end)
+    return success and result
+end
+
+-- Enhanced animation sequence
+local function playIntroAnimation()
+    CreateTween(blurEffect, {Size = 20}, 1):Play()
+    CreateTween(Background, {BackgroundTransparency = 1}, 0.8):Play()
+    
+    task.delay(0.2, function()
+        CreateTween(MainContainer, {BackgroundTransparency = 0}, 0.8, Enum.EasingStyle.Quint):Play()
+        CreateTween(ContainerStroke, {Transparency = 0}, 0.8, Enum.EasingStyle.Quint):Play()
+    end)
+    
+    task.delay(0.4, function()
+        CreateTween(LogoContainer, {BackgroundTransparency = 0}, 0.8, Enum.EasingStyle.Quint):Play()
+        CreateTween(LogoStroke, {Transparency = 0}, 0.8, Enum.EasingStyle.Quint):Play()
+        CreateTween(LogoImage, {ImageTransparency = 0}, 1, Enum.EasingStyle.Quint):Play()
+    end)
+    
+    task.delay(0.6, function()
+        CreateTween(TitleText, {TextTransparency = 0}, 0.8, Enum.EasingStyle.Quint):Play()
+    end)
+    
+    task.delay(0.8, function()
+        CreateTween(StatusText, {TextTransparency = 0}, 0.8, Enum.EasingStyle.Quint):Play()
+        CreateTween(UserText, {TextTransparency = 0}, 0.8, Enum.EasingStyle.Quint):Play()
+    end)
+    
+    task.delay(1, function()
+        CreateTween(ProgressContainer, {BackgroundTransparency = 0}, 0.8, Enum.EasingStyle.Quint):Play()
+        CreateTween(ProgressBar, {BackgroundTransparency = 0}, 0.8, Enum.EasingStyle.Quint):Play()
+    end)
+end
+
+-- Enhanced authorization process
+local function startAuthorization()
+    local player = Players.LocalPlayer
+    if not player then return end
+    
+    playIntroAnimation()
+    UserText.Text = player.DisplayName
+    
+    task.delay(1.2, function()
+        CreateTween(
+            ProgressBar,
+            {Size = UDim2.new(1, 0, 1, 0)},
+            1.8,
+            Enum.EasingStyle.Quint,
+            Enum.EasingDirection.InOut
+        ):Play()
+    end)
+    
+    task.delay(2, function()
+        local authorized = isWhitelisted(player)
+        
+        if authorized then
+            StatusText.Text = "Welcome, " .. player.DisplayName
+            CreateTween(StatusText, {TextColor3 = Color3.fromRGB(100, 255, 150)}, 0.5, Enum.EasingStyle.Quint):Play()
+            CreateTween(ProgressBar, {BackgroundColor3 = Color3.fromRGB(100, 255, 150)}, 0.5, Enum.EasingStyle.Quint):Play()
+            task.delay(0.5, loadAdminScript)
+        else
+            StatusText.Text = "Access Denied - Discord Link Copied!"
+            CreateTween(StatusText, {TextColor3 = Color3.fromRGB(255, 100, 100)}, 0.5, Enum.EasingStyle.Quint):Play()
+            CreateTween(ProgressBar, {BackgroundColor3 = Color3.fromRGB(255, 100, 100)}, 0.5, Enum.EasingStyle.Quint):Play()
+            copyDiscordAndNotify()
+        end
+        
+        task.delay(authorized and 2 or 1.5, function()
+            SafeDestroyWithFade(ScreenGui)
+        end)
+    end)
+end
+
+startAuthorization()
