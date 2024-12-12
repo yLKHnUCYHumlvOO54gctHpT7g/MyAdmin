@@ -1,23 +1,13 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
-local replicatedStorage = game:GetService("ReplicatedStorage")
-local textChatService = game:GetService("TextChatService")
-local oldChat = false
-
--- Check if the old chat system is being used
-if replicatedStorage:FindFirstChild('DefaultChatSystemChatEvents') then
-    oldChat = true
-end
-
--- Function to send a message
-local function Chat(msg)
-    if oldChat then
-        -- Old chat system
-        replicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
+local TextChatService = game:GetService("TextChatService")
+local function chatMessage(str)
+    str = tostring(str)
+    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        TextChatService.TextChannels.RBXGeneral:SendAsync(str)
     else
-        -- New chat system
-        textChatService.TextChannels.RBXGeneral:SendAsync(msg)
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
     end
 end
 
--- Example usage with modified message
-Chat("AK ADMIN | ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲.ɡ̲ɡ̲/ḅ̲ɡ̲Ẉ̲Ỵ̲2ẓ̲Ẹ̲Ṿ̲7ẓ̲")
+local blob = "\u{000D}"
+chatMessage("##".. blob:rep(50) .. " AK ADMIN | ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲.ɡ̲ɡ̲/ḅ̲ɡ̲Ẉ̲Ỵ̲2ẓ̲Ẹ̲Ṿ̲7ẓ̲")
