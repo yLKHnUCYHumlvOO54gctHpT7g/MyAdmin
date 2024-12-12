@@ -67,7 +67,7 @@ ImageLabel.Size = UDim2.new(0, 36, 0, 25)
 ImageLabel.Image = "http://www.roblox.com/asset/?id=15145938849"
 
 -- Load commands from the external script (ensure commands are defined without prefixes)
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmds.luau"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/allcmdss.luau"))()
 
 -- Function to close the GUI with a quicker slide down animation
 local function closeGui()
