@@ -12,7 +12,7 @@ end
 
 local blob = "\u{000D}"
 local underline = "\u{005F}" -- Unicode for underscore
-local message = "##".. blob:rep(50) .. " ║AK ADMIN | ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲.ɡ̲ɡ̲/bGWY2zEV7z ║"
+local message = "##".. blob:rep(50) .. " ║AK ADMIN | ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲.ɡ̲ɡ̲/bgWY2zEV7z ║"
 local maxLength = 200
 
 -- Calculate the remaining length for the top and bottom underscores
