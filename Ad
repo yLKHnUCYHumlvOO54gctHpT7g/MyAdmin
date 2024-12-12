@@ -10,4 +10,14 @@ local function chatMessage(str)
 end
 
 local blob = "\u{000D}"
-chatMessage("##".. blob:rep(50) .. " AK ADMIN | ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲.ɡ̲ɡ̲/ḅ̲ɡ̲Ẉ̲Ỵ̲2ẓ̲Ẹ̲Ṿ̲7ẓ̲")
+local underline = "\u{005F}" -- Unicode for underscore
+local message = "##".. blob:rep(50) .. " ║AK ADMIN | ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲.ɡ̲ɡ̲/bGWY2zEV7z ║"
+local maxLength = 200
+
+-- Calculate the remaining length for the top and bottom underscores
+local remainingLength = maxLength - #message - 2 -- Subtract 2 for the two newline characters
+local topUnderscores = blob:rep(1) .. underline:rep(math.floor(remainingLength / 2)) -- Add blob before the top underscores
+local bottomUnderscores = underline:rep(math.ceil(remainingLength / 2)) -- Underscores below the message
+
+-- Send the message with a blob and underscores above and below the "AK ADMIN"
+chatMessage(topUnderscores .. "\n" .. message .. "\n" .. bottomUnderscores)
