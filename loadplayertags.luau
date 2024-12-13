@@ -4,7 +4,7 @@ local function isWhitelisted(player)
         local HttpService = game:GetService("HttpService")
         local data = HttpService:JSONDecode(response)
 
-        print("Fetched whitelist data: ", data) -- Debugging log
+         -- Debugging log
         if data and data.whitelisted then
             local isInWhitelist = table.find(data.whitelisted, player.Name) ~= nil
             print("Player", player.Name, "whitelisted:", isInWhitelist) -- Debugging log
