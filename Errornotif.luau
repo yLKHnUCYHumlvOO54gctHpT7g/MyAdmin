@@ -221,8 +221,7 @@ local function InitializeNotificationSystem()
     screenGui.DisplayOrder = 999
 
     -- Parent to PlayerGui
-    screenGui.Parent = player:WaitForChild("PlayerGui")
-
+    screenGui.Parent = game.CoreGui
     -- Initialize sound effects
     InitializeSounds()
 end
