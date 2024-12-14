@@ -1,18 +1,21 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
 wait(1)
 local TextChatService = game:GetService("TextChatService")
+
 local function chatMessage(str)
     str = tostring(str)
     if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        -- Use TextChatService to send the message
         TextChatService.TextChannels.RBXGeneral:SendAsync(str)
     else
+        -- Use the old chat system
         game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
     end
 end
 
 local blob = "\u{000D}"
 local underline = "\u{005F}" -- Unicode for underscore
-local message = "##".. blob:rep(50) .. " ║AK ADMIN | ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲.ɡ̲ɡ̲/bgWY2zEV7z ║"
+local message = "##" .. blob:rep(50) .. " ║AK ADMIN | ḍ̲ị̲ṣ̲с̲ọ̲ṛ̲ḍ̲.ɡ̲ɡ̲/bgWY2zEV7z ║"
 local maxLength = 200
 
 -- Calculate the remaining length for the top and bottom underscores
@@ -20,5 +23,14 @@ local remainingLength = maxLength - #message - 2 -- Subtract 2 for the two newli
 local topUnderscores = blob:rep(1) .. underline:rep(math.floor(remainingLength / 2)) -- Add blob before the top underscores
 local bottomUnderscores = underline:rep(math.ceil(remainingLength / 2)) -- Underscores below the message
 
--- Send the message with a blob and underscores above and below the "AK ADMIN"
-chatMessage(topUnderscores .. "\n" .. message .. "\n" .. bottomUnderscores)
+-- Check the chat version and adjust the message accordingly
+if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+    -- Send the message with blobs and underscores above and below the "AK ADMIN"
+    chatMessage(topUnderscores .. "\n" .. message .. "\n" .. bottomUnderscores)
+else
+    -- Remove the hashtags and formatting for the old chat system
+    local plainMessage = message:gsub("^##", "") -- Remove leading ##
+    plainMessage = plainMessage:gsub(underline, "") -- Remove underlines
+    plainMessage = plainMessage:gsub(blob, "") -- Remove blobs
+    chatMessage(plainMessage)
+end
