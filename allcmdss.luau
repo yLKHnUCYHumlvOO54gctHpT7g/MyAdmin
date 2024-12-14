@@ -77,6 +77,7 @@ _G.cmds = {
     ["!emotes"]="https://raw.githubusercontent.com/Gi7331/scripts/main/Emote.lua",
     ["!clone"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Clone.luau",
     ["!shaders"]="https://pastefy.app/xXkUxA0P/raw",
+    ["!errornotify"]="https://pastefy.app/xXkUxA0P/raw",
     ["!hkill"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/main/Handle%20kills",
     ["!autogrammar"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/autogrmr.luau",
     ["!trail"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/trail.luau",
