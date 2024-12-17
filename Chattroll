@@ -1,0 +1,203 @@
+local TextChatService = game:GetService("TextChatService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/0x"))()
+local window = library:Window("Chat Interface")
+
+local INVISIBLE_CHAR = "\u{001E}"
+local NEWLINE = "\u{000D}"
+
+local function chatMessage(str)
+    str = tostring(str)
+    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        TextChatService.TextChannels.RBXGeneral:SendAsync(str)
+    else
+        ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
+    end
+end
+
+local drawingGui = nil
+
+local function createDrawingInterface()
+    if drawingGui then drawingGui:Destroy() end
+    
+    drawingGui = Instance.new("ScreenGui")
+    local mainFrame = Instance.new("Frame")
+    local gridFrame = Instance.new("Frame")
+    local buttonFrame = Instance.new("Frame")
+    
+    local GRID_SIZE = 7
+    local CELL_SIZE = 40
+    local grid = {}
+    
+    mainFrame.Size = UDim2.new(0, GRID_SIZE * CELL_SIZE + 20, 0, GRID_SIZE * CELL_SIZE + 70)
+    mainFrame.Position = UDim2.new(0.5, -((GRID_SIZE * CELL_SIZE + 20)/2), 0.5, -((GRID_SIZE * CELL_SIZE + 70)/2))
+    mainFrame.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+    mainFrame.Parent = drawingGui
+    
+    gridFrame.Size = UDim2.new(0, GRID_SIZE * CELL_SIZE, 0, GRID_SIZE * CELL_SIZE)
+    gridFrame.Position = UDim2.new(0, 10, 0, 10)
+    gridFrame.BackgroundTransparency = 1
+    gridFrame.Parent = mainFrame
+    
+    -- Create grid cells
+    for i = 1, GRID_SIZE do
+        grid[i] = {}
+        for j = 1, GRID_SIZE do
+            local cell = Instance.new("TextButton")
+            cell.Size = UDim2.new(0, CELL_SIZE, 0, CELL_SIZE)
+            cell.Position = UDim2.new(0, (j-1) * CELL_SIZE, 0, (i-1) * CELL_SIZE)
+            cell.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            cell.BorderSizePixel = 1
+            cell.BorderColor3 = Color3.fromRGB(100, 100, 100)
+            cell.Text = ""
+            cell.Parent = gridFrame
+            
+            grid[i][j] = false
+            
+            cell.MouseButton1Down:Connect(function()
+                grid[i][j] = not grid[i][j]
+                cell.BackgroundColor3 = grid[i][j] and Color3.fromRGB(0, 0, 0) or Color3.fromRGB(255, 255, 255)
+            end)
+        end
+    end
+    
+    buttonFrame.Size = UDim2.new(1, -20, 0, 40)
+    buttonFrame.Position = UDim2.new(0, 10, 1, -45)
+    buttonFrame.BackgroundTransparency = 1
+    buttonFrame.Parent = mainFrame
+    
+    -- Create buttons
+    local sendButton = Instance.new("TextButton")
+    sendButton.Text = "Send"
+    sendButton.Size = UDim2.new(0, 80, 0, 30)
+    sendButton.Position = UDim2.new(0, 0, 0, 0)
+    sendButton.Parent = buttonFrame
+    
+    local clearButton = Instance.new("TextButton")
+    clearButton.Text = "Clear"
+    clearButton.Size = UDim2.new(0, 80, 0, 30)
+    clearButton.Position = UDim2.new(0, 90, 0, 0)
+    clearButton.Parent = buttonFrame
+    
+    -- Button handlers
+    sendButton.MouseButton1Click:Connect(function()
+        local art = ""
+        for i = 1, GRID_SIZE do
+            for j = 1, GRID_SIZE do
+                art = art .. (grid[i][j] and "⬛" or "⬜")
+            end
+            if i < GRID_SIZE then
+                art = art .. NEWLINE
+            end
+        end
+        chatMessage(INVISIBLE_CHAR .. string.rep(NEWLINE, 1) .. art)
+        drawingGui.Enabled = false
+    end)
+    
+    clearButton.MouseButton1Click:Connect(function()
+        for i = 1, GRID_SIZE do
+            for j = 1, GRID_SIZE do
+                grid[i][j] = false
+                gridFrame:GetChildren()[(i-1)*GRID_SIZE + j].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            end
+        end
+    end)
+    
+    return drawingGui
+end
+
+-- Main interface buttons
+window:Button("ROBLOX Join", function()
+    chatMessage(INVISIBLE_CHAR .. string.rep(NEWLINE, 80) .. "[Server]: Roblox has joined the game.")
+end)
+
+window:Button("Server Chat Clear", function()
+    chatMessage(INVISIBLE_CHAR .. string.rep(NEWLINE, 100) .. "[Server]: Chat cleared.")
+end)
+
+window:Button("Custom Drawing", function()
+    if not drawingGui or not drawingGui.Parent then
+        drawingGui = createDrawingInterface()
+        drawingGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    end
+    drawingGui.Enabled = not drawingGui.Enabled
+end)
+window:Button("Swastika", function()
+    chatMessage(INVISIBLE_CHAR..string.rep(NEWLINE, 40).. "⬜⬜⬜⬜⬜⬜⬜"..NEWLINE.."⬜⬛⬜⬛⬛⬛⬜"..NEWLINE.."⬜⬛⬜⬛⬜⬜⬜"..NEWLINE.."⬜⬛⬛⬛⬛⬛⬜"..NEWLINE.."⬜⬜⬜⬛⬜⬛⬜"..NEWLINE.."⬜⬛⬛⬛⬜⬛⬜"..NEWLINE.."⬜⬜⬜⬜⬜⬜⬜")
+end)
+window:Button("Penis", function()
+    chatMessage(NEWLINE.. "⬜⬜⬜⬜⬜⬜⬜⬜"..NEWLINE.."⬜⬜⬜⬛⬛⬜⬜⬜"..NEWLINE.."⬜⬜⬜⬛⬛⬜⬜⬜"..NEWLINE.."⬜⬜⬜⬛⬛⬜⬜⬜"..NEWLINE.."⬜⬜⬜⬛⬛⬜⬜⬜"..NEWLINE.."⬜⬛⬛⬛⬛⬛⬛⬜"..NEWLINE.."⬜⬛⬛⬜⬜⬛⬛⬜"..NEWLINE.."⬜⬜⬜⬜⬜⬜⬜⬜")
+end)
+local upArrow = INVISIBLE_CHAR..NEWLINE..
+"⬜⬜⬜⬜⬜⬜" .. NEWLINE ..
+"⬜⬜⬛⬛⬜⬜" .. NEWLINE ..
+"⬜⬛⬛⬛⬛⬜" .. NEWLINE ..
+"⬛⬛⬛⬛⬛⬛" .. NEWLINE ..
+"⬜⬜⬛⬛⬜⬜" .. NEWLINE ..
+"⬜⬜⬛⬛⬜⬜" .. NEWLINE ..
+"⬜⬜⬛⬛⬜⬜" .. NEWLINE ..
+"⬜⬜⬜⬜⬜⬜"
+
+-- Down Arrow
+local downArrow = INVISIBLE_CHAR..NEWLINE..
+"⬜⬜⬜⬜⬜⬜" .. NEWLINE ..
+"⬜⬜⬛⬛⬜⬜" .. NEWLINE ..
+"⬜⬜⬛⬛⬜⬜" .. NEWLINE ..
+"⬜⬜⬛⬛⬜⬜" .. NEWLINE ..
+"⬛⬛⬛⬛⬛⬛" .. NEWLINE ..
+"⬜⬛⬛⬛⬛⬜" .. NEWLINE ..
+"⬜⬜⬛⬛⬜⬜" .. NEWLINE ..
+"⬜⬜⬜⬜⬜⬜"
+
+window:Button("Heart", function()
+    local heart = INVISIBLE_CHAR .. 
+      NEWLINE ..
+        "⬜⬛⬛⬜⬛⬛⬜" .. NEWLINE ..
+        "⬛⬛⬛⬛⬛⬛⬛" .. NEWLINE ..
+        "⬛⬛⬛⬛⬛⬛⬛" .. NEWLINE ..
+        "⬜⬛⬛⬛⬛⬛⬜" .. NEWLINE ..
+        "⬜⬜⬛⬛⬛⬜⬜" .. NEWLINE ..
+        "⬜⬜⬜⬛⬜⬜⬜"
+    chatMessage(heart)
+end)
+
+
+window:Button("Up Arrow", function()
+    chatMessage(upArrow)
+end)
+
+window:Button("Down Arrow", function()
+    chatMessage(downArrow)
+end)
+window:Button("Fake Error", function()
+    chatMessage(INVISIBLE_CHAR .. string.rep(NEWLINE, 50) .. "[Server]: ERROR - Connection Lost. Retrying...")
+end)
+
+window:Button("Player Banned", function()
+local rdmnumber = math.random(1,#game.Players:GetChildren())
+
+for i,player in pairs(game.Players:GetChildren()) do
+if rdmnumber == i then
+getgenv().player = player.DisplayName
+break
+end
+end
+    chatMessage(INVISIBLE_CHAR .. string.rep(NEWLINE, 60) .. "[Server]: Player '"..getgenv().player.."' has been permanently banned.")
+end)
+
+window:Button("GG", function()
+    chatMessage(INVISIBLE_CHAR .. string.rep(NEWLINE, 30) .. "[Server]: GG! Well played everyone.")
+end)
+
+window:Button("Victory", function()
+    chatMessage(INVISIBLE_CHAR .. string.rep(NEWLINE, 50) .. "[Server]: Congratulations! Your team has won the round.")
+end)
+
+-- Cleanup
+game.Players.LocalPlayer.CharacterAdded:Connect(function()
+    if drawingGui then
+        drawingGui.Enabled = false
+    end
+    end)
