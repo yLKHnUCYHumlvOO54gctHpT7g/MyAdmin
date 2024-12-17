@@ -17,7 +17,7 @@ local function nameMatches(player, partialName)
 end
 
 local adminCmd = {
-    "AK_ADMEN1", "Xeni_he07", "AK_ADMEN2", "goekaycool", "GYATT_DAMN1", 
+    "AK_ADMEN1", "I_LOVEYOU12210", "Xeni_he07", "AK_ADMEN2", "goekaycool", "GYATT_DAMN1", 
     "ddddd", "IIIlIIIllIlIllIII", "AliKhammas1234", 
     "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD", "BloxiAstra", "29Kyooo", "ImOn_ValveIndex"
 }
