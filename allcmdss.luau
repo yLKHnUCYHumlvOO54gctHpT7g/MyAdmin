@@ -9,6 +9,7 @@ _G.cmds = {
     ["!stopglide"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/stopglide.lua",
     ["!antilag"]="https://raw.githubusercontent.com/xSejker/AntilagFixedd/main/README.md",
     ["!antibang"]="https://pastebin.com/raw/5iSqpqf6",
+    ["!chattroll"]="https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/Chattroll",
     ["!unctest"]="https://raw.githubusercontent.com/unified-naming-convention/NamingStandard/refs/heads/main/UNCCheckEnv.lua",
     ["!catchme"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/unmutable.luau",
     ["!stealbooth"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Stealbooth",
