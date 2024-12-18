@@ -84,5 +84,6 @@ _G.cmds = {
     ["!autogrammar"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/autogrmr.luau",
     ["!trail"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/trail.luau",
     ["!mutenonfriends"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/mutenonfriends",
-    ["!reactivatevc"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/vcbyp.luau"
+    ["!reactivatevc"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/vcbyp.luau",
+    ["!shapeshifter"]="https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/ss"
 }
