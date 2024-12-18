@@ -56,7 +56,7 @@ local OldNamecall; OldNamecall = hookmetamethod(game, "__namecall", newcclosure(
 		if CanCastToSTDString(message) then
 			if getgenv().ED_AntiKick.SendNotifications then
 				SetCore(StarterGui, "SendNotification", {
-					Title = "Exunys Developer - Anti-Kick",
+					Title = "AK ADMIN - Anti-Kick",
 					Text = "Successfully intercepted an attempted kick.",
 					Icon = "rbxassetid://6238540373",
 					Duration = 2
