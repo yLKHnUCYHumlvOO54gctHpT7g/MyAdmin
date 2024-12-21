@@ -85,5 +85,6 @@ _G.cmds = {
     ["!trail"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/trail.luau",
     ["!mutenonfriends"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/mutenonfriends",
     ["!reactivatevc"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/vcbyp.luau",
+    ["!dex"]="https://cdn.wearedevs.net/scripts/Dex%20Explorer.txt",
     ["!shapeshifter"]="https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/ss"
 }
