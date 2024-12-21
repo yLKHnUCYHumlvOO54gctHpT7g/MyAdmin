@@ -35,7 +35,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctH
 loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui"))()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadplayertags.luau'))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadownercmds.luau"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadhook.luau"))()
+
 -- Notification system
 local function showNotification(message, backgroundColor)
     local gui = Instance.new("ScreenGui")
