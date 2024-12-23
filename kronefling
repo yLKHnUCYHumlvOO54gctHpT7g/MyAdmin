@@ -1,6 +1,3 @@
--- KRONE LEAKED BY bored777 on discord
--- Modified with GUI Toggle
-
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local HttpService = game:GetService("HttpService")
@@ -13,6 +10,7 @@ local BLSV, WLSV, MDSV, KRONE = false, false, false, false
 local Settings = {Distance = 18, Globals = {"Executions", "List"}}
 local Blacklist, kroneUserids = {}, {4710732523, 354902977}
 local scriptEnabled = false
+local SavedPosition = nil
 local CF = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
 
 -- GUI Creation
@@ -211,7 +209,7 @@ local function shhhlol(TargetPlayer)
             if game.PlaceId == 417267366 then
                 LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(5524, 36, -17126.50)
             else
-                LocalPlayer.Character.HumanoidRootPart.CFrame = CF
+                LocalPlayer.Character.HumanoidRootPart.CFrame = SavedPosition or CF
             end
         end
 
@@ -311,8 +309,12 @@ end)
 ToggleButton.MouseButton1Click:Connect(function()
     scriptEnabled = not scriptEnabled
     buttonEffect()
-    
+
     if scriptEnabled then
+        if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            SavedPosition = LocalPlayer.Character.HumanoidRootPart.CFrame
+        end
+        
         ToggleButton.Text = "Fling all OFF"
         UIGradient.Color = ColorSequence.new{
             ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 255, 0)),
@@ -320,26 +322,17 @@ ToggleButton.MouseButton1Click:Connect(function()
         }
         enableScript()
     else
+        wait(0.1) -- Small delay to ensure proper teleport
+        if SavedPosition and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+            LocalPlayer.Character.HumanoidRootPart.CFrame = SavedPosition
+        end
+        
         ToggleButton.Text = "Fling all ON"
         UIGradient.Color = ColorSequence.new{
             ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 0, 0)),
             ColorSequenceKeypoint.new(1, Color3.fromRGB(170, 0, 0))
         }
     end
-end)
-
-ToggleButton.MouseEnter:Connect(function()
-    TweenService:Create(ToggleButton, 
-        TweenInfo.new(0.3), 
-        {BackgroundColor3 = Color3.fromRGB(55, 55, 55)}
-    ):Play()
-end)
-
-ToggleButton.MouseLeave:Connect(function()
-    TweenService:Create(ToggleButton, 
-        TweenInfo.new(0.3), 
-        {BackgroundColor3 = Color3.fromRGB(45, 45, 45)}
-    ):Play()
 end)
 
 -- Initialize
