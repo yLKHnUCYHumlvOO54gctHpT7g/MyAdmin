@@ -1,0 +1,122 @@
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local function CreateMobileButton()
+    if not UserInputService.TouchEnabled then
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/saya420/Mic-Up/main/facefuck'))()
+        return
+    end
+
+    local screenGui = Instance.new("ScreenGui")
+    screenGui.Name = "MobileControls"
+    screenGui.ResetOnSpawn = false
+    
+    local buttonContainer = Instance.new("Frame")
+    buttonContainer.Name = "ButtonContainer"
+    buttonContainer.Size = UDim2.new(0, 50, 0, 50)
+    buttonContainer.Position = UDim2.new(0.92, 0, 0.08, 0)  -- Positioned near top-right
+    buttonContainer.BackgroundTransparency = 1
+    buttonContainer.Parent = screenGui
+    
+    for i = 1, 3 do
+        local shadowLayer = Instance.new("Frame")
+        shadowLayer.Name = "ShadowLayer" .. i
+        shadowLayer.AnchorPoint = Vector2.new(0.5, 0.5)
+        shadowLayer.Position = UDim2.new(0.5, 0, 0.5, i * 2)
+        shadowLayer.Size = UDim2.new(1, 0, 1, 0)
+        shadowLayer.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        shadowLayer.BackgroundTransparency = 0.8 + (i * 0.05)
+        shadowLayer.ZIndex = -i
+        
+        local cornerRadius = Instance.new("UICorner")
+        cornerRadius.CornerRadius = UDim.new(0.3, 0)
+        cornerRadius.Parent = shadowLayer
+        
+        shadowLayer.Parent = buttonContainer
+    end
+    
+    local button = Instance.new("TextButton")
+    button.Name = "ZKeyButton"
+    button.Size = UDim2.new(1, 0, 1, 0)
+    button.Position = UDim2.new(0, 0, 0, 0)
+    button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    button.Text = "Z"
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 24
+    button.AutoButtonColor = true
+    button.Parent = buttonContainer
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0.3, 0)
+    corner.Parent = button
+    
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(60, 60, 60)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(45, 45, 45))
+    })
+    gradient.Parent = button
+    
+    -- Enhanced dragging functionality for all devices
+    local dragging = false
+    local dragStart
+    local startPos
+
+    local function updateDrag(input)
+        if dragging then
+            local delta = input.Position - dragStart
+            buttonContainer.Position = UDim2.new(
+                startPos.X.Scale,
+                startPos.X.Offset + delta.X,
+                startPos.Y.Scale,
+                startPos.Y.Offset + delta.Y
+            )
+        end
+    end
+
+    -- Handle both mouse and touch input for dragging
+    buttonContainer.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
+            dragging = true
+            dragStart = input.Position
+            startPos = buttonContainer.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
+            updateDrag(input)
+        end
+    end)
+    
+    -- Button press functionality
+    button.MouseButton1Down:Connect(function()
+        buttonContainer.Size = UDim2.new(0, 48, 0, 48)
+        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Z, false, game)
+    end)
+    
+    button.MouseButton1Up:Connect(function()
+        buttonContainer.Size = UDim2.new(0, 50, 0, 50)
+        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Z, false, game)
+    end)
+    
+    -- Parent the GUI and execute loadstring
+    local success, err = pcall(function()
+        screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+        task.wait(0.1)
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/saya420/Mic-Up/main/facefuck'))()
+    end)
+    
+    if not success then
+        warn("Failed to setup GUI or execute script:", err)
+    end
+end
+
+CreateMobileButton()
