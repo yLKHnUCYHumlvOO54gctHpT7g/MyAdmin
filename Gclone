@@ -6,7 +6,7 @@ local Workspace = game:GetService("Workspace")
 local Terrain = Workspace.Terrain
 
 -- Clone settings
-getgenv().CloneSettings = {
+local CloneSettings = {
     Enabled = false,
     Bind = "G",       -- The keybind to toggle the clone functionality
     Value = 15,       -- The value for the clone offset
@@ -35,8 +35,8 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 
     -- Toggle CloneSettings.Enabled when the "G" key is pressed
-    if input.KeyCode == Enum.KeyCode[getgenv().CloneSettings.Bind] then
-        getgenv().CloneSettings.Enabled = not getgenv().CloneSettings.Enabled
+    if input.KeyCode == Enum.KeyCode[CloneSettings.Bind] then
+        CloneSettings.Enabled = not CloneSettings.Enabled
     end
 end)
 
@@ -44,17 +44,17 @@ end)
 local function handleCloneMovement()
     local cOld
     while true do
-        if getgenv().CloneSettings.Enabled then
+        if CloneSettings.Enabled then
             -- Store the current CFrame
             if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
                 cOld = Player.Character.HumanoidRootPart.CFrame
                 -- Clone movement logic
-                Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-getgenv().CloneSettings.Value, 0, 0)
-                task.wait(getgenv().CloneSettings.Delay)
+                Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-CloneSettings.Value, 0, 0)
+                task.wait(CloneSettings.Delay)
                 Player.Character.HumanoidRootPart.CFrame = cOld
-                task.wait(getgenv().CloneSettings.Delay)
-                Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(getgenv().CloneSettings.Value, 0, 0)
-                task.wait(getgenv().CloneSettings.Delay)
+                task.wait(CloneSettings.Delay)
+                Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(CloneSettings.Value, 0, 0)
+                task.wait(CloneSettings.Delay)
                 Player.Character.HumanoidRootPart.CFrame = cOld
             end
         end
