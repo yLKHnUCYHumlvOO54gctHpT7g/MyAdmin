@@ -1,66 +1,99 @@
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
-local Mouse = Player:GetMouse()
-local Workspace = game:GetService("Workspace")
-local Terrain = Workspace.Terrain
-
--- Clone settings
-local CloneSettings = {
-    Enabled = false,
-    Bind = "G",       -- The keybind to toggle the clone functionality
-    Value = 15,       -- The value for the clone offset
-    Delay = 0.05      -- The delay between clone actions
-}
-
--- Teleport function
-local function teleportToMouse()
-    local character = Player.Character
-    if character then
-        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+local function initializeTeleportClone()
+    local UserInputService = game:GetService("UserInputService")
+    local Players = game:GetService("Players")
+    local Player = Players.LocalPlayer
+    local Mouse = Player:GetMouse()
+    local Workspace = game:GetService("Workspace")
+    
+    -- Clone settings
+    local CloneSettings = {
+        Enabled = false,
+        Bind = "G",
+        Value = 15,
+        Delay = 0.05
+    }
+    
+    -- Error handling function
+    local function safeGetCharacter()
+        local character = Player.Character or Player.CharacterAdded:Wait()
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart", 5)
+        return character, humanoidRootPart
+    end
+    
+    -- Teleport function with error handling
+    local function teleportToMouse()
+        local character, humanoidRootPart = safeGetCharacter()
         if humanoidRootPart then
             local mousePosition = Mouse.Hit.Position
             humanoidRootPart.CFrame = CFrame.new(mousePosition + Vector3.new(0, 3, 0))
         end
     end
-end
-
--- Detect keypresses for teleport and clone
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if gameProcessed then return end
-
-    -- Teleport when "F" is pressed
-    if input.KeyCode == Enum.KeyCode.F then
-        teleportToMouse()
-    end
-
-    -- Toggle CloneSettings.Enabled when the "G" key is pressed
-    if input.KeyCode == Enum.KeyCode[CloneSettings.Bind] then
-        CloneSettings.Enabled = not CloneSettings.Enabled
-    end
-end)
-
--- Function for cloning behavior
-local function handleCloneMovement()
-    local cOld
-    while true do
-        if CloneSettings.Enabled then
-            -- Store the current CFrame
-            if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
-                cOld = Player.Character.HumanoidRootPart.CFrame
-                -- Clone movement logic
-                Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-CloneSettings.Value, 0, 0)
-                task.wait(CloneSettings.Delay)
-                Player.Character.HumanoidRootPart.CFrame = cOld
-                task.wait(CloneSettings.Delay)
-                Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(CloneSettings.Value, 0, 0)
-                task.wait(CloneSettings.Delay)
-                Player.Character.HumanoidRootPart.CFrame = cOld
+    
+    -- Input handling
+    local function setupInputHandler()
+        local connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+            if gameProcessed then return end
+            
+            if input.KeyCode == Enum.KeyCode.F then
+                teleportToMouse()
             end
+            
+            if input.KeyCode == Enum.KeyCode[CloneSettings.Bind] then
+                CloneSettings.Enabled = not CloneSettings.Enabled
+            end
+        end)
+        
+        return connection
+    end
+    
+    -- Clone movement handler
+    local function handleCloneMovement()
+        local cOld
+        
+        while true do
+            if CloneSettings.Enabled then
+                local character, humanoidRootPart = safeGetCharacter()
+                
+                if humanoidRootPart then
+                    cOld = humanoidRootPart.CFrame
+                    
+                    -- Left movement
+                    humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(-CloneSettings.Value, 0, 0)
+                    task.wait(CloneSettings.Delay)
+                    humanoidRootPart.CFrame = cOld
+                    task.wait(CloneSettings.Delay)
+                    
+                    -- Right movement
+                    humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(CloneSettings.Value, 0, 0)
+                    task.wait(CloneSettings.Delay)
+                    humanoidRootPart.CFrame = cOld
+                end
+            end
+            task.wait(0.1)
         end
-        task.wait(0.1)  -- Small delay to prevent freezing
+    end
+    
+    -- Setup and error handling
+    local success, errorMsg = pcall(function()
+        local inputConnection = setupInputHandler()
+        
+        -- Cleanup on script stop
+        local cleanupConnection
+        cleanupConnection = game:GetService("CoreGui").DescendantRemoving:Connect(function(instance)
+            if instance == script then
+                inputConnection:Disconnect()
+                cleanupConnection:Disconnect()
+            end
+        end)
+        
+        -- Start clone movement
+        coroutine.wrap(handleCloneMovement)()
+    end)
+    
+    if not success then
+        warn("Teleport Clone Script Error:", errorMsg)
     end
 end
 
--- Start cloning movement in a separate thread to avoid blocking
-spawn(handleCloneMovement)
+-- Initialize the script
+initializeTeleportClone()
