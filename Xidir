@@ -1,4 +1,5 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/Gclone"))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/saya420/Mic-Up/main/facefuck'))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/Gi7331/scripts/main/Emote.lua"))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/H20CalibreYT/SystemBroken/main/script"))()
