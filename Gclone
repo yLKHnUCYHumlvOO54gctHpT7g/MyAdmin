@@ -1,6 +1,8 @@
-local Workspace = game:GetService("Workspace")
+local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
+local Mouse = Player:GetMouse()
+local Workspace = game:GetService("Workspace")
 local Terrain = Workspace.Terrain
 
 -- Clone settings
@@ -11,17 +13,29 @@ getgenv().CloneSettings = {
     Delay = 0.05      -- The delay between clone actions
 }
 
--- Input service to detect keypress
-local InputService = game:GetService("UserInputService")
+-- Teleport function
+local function teleportToMouse()
+    local character = Player.Character
+    if character then
+        local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        if humanoidRootPart then
+            local mousePosition = Mouse.Hit.Position
+            humanoidRootPart.CFrame = CFrame.new(mousePosition + Vector3.new(0, 3, 0))
+        end
+    end
+end
 
--- Detect when a key is pressed
-InputService.InputBegan:Connect(function(Input, GetInput)
-    if GetInput then
-        return
+-- Detect keypresses for teleport and clone
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+
+    -- Teleport when "F" is pressed
+    if input.KeyCode == Enum.KeyCode.F then
+        teleportToMouse()
     end
 
     -- Toggle CloneSettings.Enabled when the "G" key is pressed
-    if Input.KeyCode == Enum.KeyCode[getgenv().CloneSettings.Bind] then
+    if input.KeyCode == Enum.KeyCode[getgenv().CloneSettings.Bind] then
         getgenv().CloneSettings.Enabled = not getgenv().CloneSettings.Enabled
     end
 end)
