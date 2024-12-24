@@ -1,0 +1,69 @@
+-- Initialize services and variables
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local Terrain = Workspace.Terrain
+
+-- Define baseplate size
+local baseplateSize = 2000  -- Each baseplate is 2000x2000 studs
+local baseplateSpacing = 0  -- No gap between baseplates
+
+-- Function to create a baseplate at a specific position
+local function addGrassBaseplate(position)
+    print("Creating baseplate at position: " .. tostring(position))  -- Debug line
+    local grassBaseplate = Instance.new("Part")
+    grassBaseplate.Size = Vector3.new(baseplateSize, 0.05, baseplateSize) -- Large size
+    grassBaseplate.Anchored = true
+    grassBaseplate.Material = Enum.Material.Grass
+    grassBaseplate.Color = Color3.fromRGB(50, 205, 50) -- Bright green grass color
+    
+    -- Position the grass baseplate at the correct position
+    grassBaseplate.Position = position
+    grassBaseplate.Parent = Workspace
+    
+    -- Make it invisible but keep collision enabled
+    grassBaseplate.Transparency = 1 -- Invisible
+    grassBaseplate.CanCollide = true -- Enable collision (so you can walk on it)
+end
+
+-- Function to create a grid of baseplates around the player
+local function createBaseplatesAroundPlayer()
+    local playerPosition = Player.Character.HumanoidRootPart.Position
+    local sizeMultiplier = baseplateSize + baseplateSpacing  -- To ensure proper placement
+    
+    -- Create baseplates in a 3x3 grid around the player
+    for x = -1, 1 do
+        for z = -1, 1 do
+            local position = Vector3.new(
+                math.floor(playerPosition.X / sizeMultiplier) * sizeMultiplier + (x * sizeMultiplier),
+                0,
+                math.floor(playerPosition.Z / sizeMultiplier) * sizeMultiplier + (z * sizeMultiplier)
+            )
+            addGrassBaseplate(position)
+        end
+    end
+end
+
+-- Continuously create baseplates around the player
+while task.wait(1) do
+    createBaseplatesAroundPlayer()
+end
+
+-- Ensure player stays on top of the baseplate after teleporting far away
+game:GetService("RunService").Heartbeat:Connect(function()
+    local character = Player.Character
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        local humanoidRootPart = character.HumanoidRootPart
+        local playerPosition = humanoidRootPart.Position
+        
+        -- Check if the player is above the baseplate and adjust if they are not
+        local sizeMultiplier = baseplateSize + baseplateSpacing
+        local currentBaseplateY = math.floor(playerPosition.X / sizeMultiplier) * sizeMultiplier
+        local distanceToBaseplate = math.abs(playerPosition.Y - 0.05)
+        
+        -- If player falls below the baseplate, move them back up
+        if distanceToBaseplate > 50 then
+            humanoidRootPart.CFrame = CFrame.new(playerPosition.X, 0.05, playerPosition.Z)
+        end
+    end
+end)
