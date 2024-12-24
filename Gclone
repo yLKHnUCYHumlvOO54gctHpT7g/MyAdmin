@@ -40,9 +40,9 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- Loop to handle the clone behavior when enabled
-while task.wait() do
-    pcall(function()
+-- Clone loop to handle the clone behavior when enabled
+local function handleCloneMovement()
+    while task.wait() do
         if getgenv().CloneSettings.Enabled then
             local cOld = Player.Character.HumanoidRootPart.CFrame
 
@@ -55,5 +55,8 @@ while task.wait() do
             task.wait(getgenv().CloneSettings.Delay)
             Player.Character.HumanoidRootPart.CFrame = cOld
         end
-    end)
+    end
 end
+
+-- Start the cloning behavior in a coroutine
+coroutine.wrap(handleCloneMovement)()
