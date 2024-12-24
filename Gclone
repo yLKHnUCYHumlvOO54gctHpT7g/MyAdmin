@@ -40,23 +40,27 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- Clone loop to handle the clone behavior when enabled
+-- Function for cloning behavior
 local function handleCloneMovement()
-    while task.wait() do
+    local cOld
+    while true do
         if getgenv().CloneSettings.Enabled then
-            local cOld = Player.Character.HumanoidRootPart.CFrame
-
-            -- Clone movement logic
-            Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-getgenv().CloneSettings.Value, 0, 0)
-            task.wait(getgenv().CloneSettings.Delay)
-            Player.Character.HumanoidRootPart.CFrame = cOld
-            task.wait(getgenv().CloneSettings.Delay)
-            Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(getgenv().CloneSettings.Value, 0, 0)
-            task.wait(getgenv().CloneSettings.Delay)
-            Player.Character.HumanoidRootPart.CFrame = cOld
+            -- Store the current CFrame
+            if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+                cOld = Player.Character.HumanoidRootPart.CFrame
+                -- Clone movement logic
+                Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-getgenv().CloneSettings.Value, 0, 0)
+                task.wait(getgenv().CloneSettings.Delay)
+                Player.Character.HumanoidRootPart.CFrame = cOld
+                task.wait(getgenv().CloneSettings.Delay)
+                Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(getgenv().CloneSettings.Value, 0, 0)
+                task.wait(getgenv().CloneSettings.Delay)
+                Player.Character.HumanoidRootPart.CFrame = cOld
+            end
         end
+        task.wait(0.1)  -- Small delay to prevent freezing
     end
 end
 
--- Start the cloning behavior in a coroutine
-coroutine.wrap(handleCloneMovement)()
+-- Start cloning movement in a separate thread to avoid blocking
+spawn(handleCloneMovement)
