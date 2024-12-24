@@ -1,0 +1,45 @@
+local Workspace = game:GetService("Workspace")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local Terrain = Workspace.Terrain
+
+-- Clone settings
+getgenv().CloneSettings = {
+    Enabled = false,
+    Bind = "G",       -- The keybind to toggle the clone functionality
+    Value = 15,       -- The value for the clone offset
+    Delay = 0.05      -- The delay between clone actions
+}
+
+-- Input service to detect keypress
+local InputService = game:GetService("UserInputService")
+
+-- Detect when a key is pressed
+InputService.InputBegan:Connect(function(Input, GetInput)
+    if GetInput then
+        return
+    end
+
+    -- Toggle CloneSettings.Enabled when the "G" key is pressed
+    if Input.KeyCode == Enum.KeyCode[getgenv().CloneSettings.Bind] then
+        getgenv().CloneSettings.Enabled = not getgenv().CloneSettings.Enabled
+    end
+end)
+
+-- Loop to handle the clone behavior when enabled
+while task.wait() do
+    pcall(function()
+        if getgenv().CloneSettings.Enabled then
+            local cOld = Player.Character.HumanoidRootPart.CFrame
+
+            -- Clone movement logic
+            Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(-getgenv().CloneSettings.Value, 0, 0)
+            task.wait(getgenv().CloneSettings.Delay)
+            Player.Character.HumanoidRootPart.CFrame = cOld
+            task.wait(getgenv().CloneSettings.Delay)
+            Player.Character.HumanoidRootPart.CFrame = Player.Character.HumanoidRootPart.CFrame * CFrame.new(getgenv().CloneSettings.Value, 0, 0)
+            task.wait(getgenv().CloneSettings.Delay)
+            Player.Character.HumanoidRootPart.CFrame = cOld
+        end
+    end)
+end
