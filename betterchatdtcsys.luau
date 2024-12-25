@@ -82,6 +82,9 @@ for cmdname,link in pairs(_G.cmds) do
     end
     chat(normalchatmsgs)
         -- Handle specific commands
+
+      
+
         if command:sub(1, 6) == "!copy " then
             local target = command:sub(7)
             for _, v in pairs(game.Players:GetChildren()) do
@@ -89,6 +92,48 @@ for cmdname,link in pairs(_G.cmds) do
                     game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(v.Name)
                 end
             end
+getgenv().blockingmap=false
+            elseif command == "!blockmap" then
+            getgenv().blockingmap=true
+local lupperleg = game.Players.LocalPlayer.Character.LeftUpperLeg
+local lupperlegpos = CFrame.new(-278, 23, 323)
+local rupperleg = game.Players.LocalPlayer.Character.RightUpperLeg
+local rupperlegpos = CFrame.new(326, 23, 373)
+local uppertorso = game.Players.LocalPlayer.Character.UpperTorso
+local uppertorsopos = CFrame.new(-16, 23, -2297)
+while getgenv().blockingmap do
+wait()
+game:GetService("ReplicatedStorage").RagdollEvent:FireServer()
+local function disableSeat(seat)
+    if seat:IsA("Seat") or seat:IsA("VehicleSeat") then
+        seat.Disabled = true
+        seat.CanCollide = false
+    end
+end
+for _, seat in game.Workspace:GetDescendants() do
+    disableSeat(seat)
+end
+lupperleg.CFrame = lupperlegpos
+rupperleg.CFrame = rupperlegpos
+uppertorso.CFrame = uppertorsopos
+game.Workspace.Gravity=0
+end
+
+elseif command == "!unblockmap" then
+getgenv().blockingmap=false
+game:GetService("ReplicatedStorage").UnragdollEvent:FireServer()
+wait(0.2)
+workspace.Gravity=192.2
+local function enableSeat(seat)
+    if seat:IsA("Seat") or seat:IsA("VehicleSeat") then
+        seat.Disabled = false
+        seat.CanCollide = true
+    end
+end
+for _, seat in game.Workspace:GetDescendants() do
+    enableSeat(seat)
+end
+
         elseif command == "!copynearest" then
             local closestPlayer
             local closestDistance = math.huge
