@@ -104,6 +104,8 @@ local uppertorso = game.Players.LocalPlayer.Character.UpperTorso
 local uppertorsopos = CFrame.new(-16, 13, -2297)
 while getgenv().blockingmap do
 wait()
+local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+hrp.CFrame=CFrame.new(hrp.CFrame.Position.X,3,hrp.CFrame.Position.Z)
 testval=testval+1
 game:GetService("ReplicatedStorage").RagdollEvent:FireServer()
 local function disableSeat(seat)
