@@ -471,6 +471,7 @@ addCommand("!jerk", "A command with unspecified functionality")
 addCommand("!shapshifter", "Only for R6!")
 addCommand("!dex", "Dex explorer")
 addCommand("!facebang", "Face Fuck")
+addCommand("!blockmap", "stretches your whole avatr to make it look like you are blocking the whole map. you need a specific bundle wich you can get from the AK Server")
 
 -- Initiale Befehle aktualisieren
 updateCommands()
