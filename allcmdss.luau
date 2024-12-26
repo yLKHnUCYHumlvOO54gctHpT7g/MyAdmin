@@ -87,5 +87,6 @@ _G.cmds = {
     ["!reactivatevc"]="https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/vcbyp.luau",
     ["!dex"]="https://cdn.wearedevs.net/scripts/Dex%20Explorer.txt",
     ["!facebang"]="https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/facefuck",
+    ["!blockmap"]="https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/Blockmap",
     ["!shapeshifter"]="https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/ss"
 }
