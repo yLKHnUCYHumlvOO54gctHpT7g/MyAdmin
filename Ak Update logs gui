@@ -20,6 +20,7 @@ local FONTS = {
 
 local commands = {
     "+ Added cmd: !shapeshifter (only r6)"
+    "+ Added cmd: !blockmap (look in the discord for the bundle)"
     -- Add more commands here
 }
 
