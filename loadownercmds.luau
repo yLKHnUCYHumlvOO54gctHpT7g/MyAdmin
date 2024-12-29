@@ -261,6 +261,9 @@ banana:Destroy()
 slipSound:Destroy()
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
+            elseif command == ".fling" then
+                game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity=Vector3.new(250,250,250)
+                game.Players.LocalPlayer.Character.Humanoid.Sit=true
             elseif command == ".freeze" then
                 player.Character.HumanoidRootPart.Anchored = true
                 frozenPlayers[player.UserId] = true
