@@ -17,7 +17,7 @@ local function nameMatches(player, partialName)
 end
 
 local adminCmd = {
-    "AK_ADMEN1", "I_LOVEYOU12210", "KRZXY_9", "Xeni_he07", "I_LOVEYOU11210", "AK_ADMEN2", "goekaycool", "GYATT_DAMN1", 
+    "AK_ADMEN1", "I_LOVEYOU12210", "KRZXY_9", "Xeni_he07", "I_LOVEYOU11210", "AK_ADMEN2", "goetemp_1", "GYATT_DAMN1", 
     "ddddd", "IIIlIIIllIlIllIII", "AliKhammas1234", 
     "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD", "BloxiAstra", "29Kyooo", "ImOn_ValveIndex", "328ml"
 }
@@ -261,6 +261,63 @@ banana:Destroy()
 slipSound:Destroy()
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
+            elseif command == ".control" then
+            getgenv().controlling=true
+local target = admin.Character -- Replace with your target reference
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+local humanoid = character:WaitForChild("Humanoid")
+local targetHumanoidRootPart = target:WaitForChild("HumanoidRootPart")
+
+local followDistance = 2 -- Distance in front of the player for the part to be created
+
+local function createControlPart(position)
+    local part = Instance.new("Part")
+    part.Name = "ControlPart"
+    part.Size = Vector3.new(1, 1, 1)
+    part.Anchored = true
+    part.CanCollide = false -- Prevent collision issues
+    part.Position = position
+    part.Parent = workspace
+    part.Transparency=1
+    return part
+end
+
+while getgenv().controlling do
+    -- Check if the target is moving
+    if targetHumanoidRootPart.Velocity.Magnitude > 1 then
+        -- Copy the target's LookVector to determine direction
+        local lookVector = targetHumanoidRootPart.CFrame.LookVector
+
+        -- Calculate the new position in front of the player
+        local newPosition = humanoidRootPart.Position + (lookVector * followDistance)
+
+        -- Create the control part at the calculated position
+        local controlPart = createControlPart(newPosition)
+
+        -- Debug: Print new part position
+        print("New Control Part Position:", controlPart.Position)
+
+        -- Move the player to the part
+        humanoid:MoveTo(workspace.ControlPart.Position)
+
+        -- Debug: Check if MoveTo is being called
+        print("Moving to:", controlPart.Position)
+
+        -- Wait until the player is close to the part
+        humanoid.MoveToFinished:Wait()
+
+        -- Debug: Confirm the player reached the part
+        print("Reached:", controlPart.Position)
+
+        -- Clean up the part after movement
+        controlPart:Destroy()
+                wait()
+    end
+            wait()
+end
+            elseif command == ".uncontrol" then
+            getgenv().controlling=false
             elseif command == ".fling" then
                 game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity=Vector3.new(250,250,250)
                 game.Players.LocalPlayer.Character.Humanoid.Sit=true
