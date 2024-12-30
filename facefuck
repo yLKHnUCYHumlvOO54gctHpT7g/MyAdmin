@@ -1,122 +1,263 @@
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
-local VirtualInputManager = game:GetService("VirtualInputManager")
+local TweenService = game:GetService("TweenService")
 
-local function CreateMobileButton()
-    if not UserInputService.TouchEnabled then
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/saya420/Mic-Up/main/facefuck'))()
-        return
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+local targetHead = nil
+
+-- Enhanced settings for smoother approach and slightly increased movement range
+local FOLLOW_DISTANCE = -0.7
+local HEIGHT_OFFSET = 0.8
+local TWEEN_SPEED = 0.1
+local TWEEN_STYLE = Enum.EasingStyle.Sine
+local TWEEN_DIRECTION = Enum.EasingDirection.InOut
+local APPROACH_TWEEN_SPEED = 0.2  -- Smoother approach speed
+local APPROACH_TWEEN_STYLE = Enum.EasingStyle.Quad  -- Smoother easing for approach
+
+getgenv().facefuckactive = false
+
+local function setupCharacterTracking()
+    LocalPlayer.CharacterAdded:Connect(function(newCharacter)
+        Character = newCharacter
+        HumanoidRootPart = newCharacter:WaitForChild("HumanoidRootPart")
+        
+        if getgenv().facefuckactive then
+            getgenv().facefuckactive = false
+            workspace.Gravity = 192.2
+        end
+    end)
+end
+
+local function findNearestPlayer()
+    local nearestPlayer = nil
+    local shortestDistance = math.huge
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("Humanoid") and player.Character.Humanoid.Health > 0 then
+            local head = player.Character:FindFirstChild("Head")
+            if head then
+                local distance = (HumanoidRootPart.Position - head.Position).Magnitude
+                if distance < shortestDistance then
+                    shortestDistance = distance
+                    nearestPlayer = head
+                end
+            end
+        end
+    end
+
+    return nearestPlayer
+end
+
+local function faceBang(head)
+    local function createTween(targetCFrame, isApproaching)
+        local tweenInfo = TweenInfo.new(
+            isApproaching and APPROACH_TWEEN_SPEED or TWEEN_SPEED,
+            isApproaching and APPROACH_TWEEN_STYLE or TWEEN_STYLE,
+            TWEEN_DIRECTION
+        )
+
+        local tween = TweenService:Create(HumanoidRootPart, tweenInfo, {
+            CFrame = targetCFrame
+        })
+        return tween
+    end
+
+    while getgenv().facefuckactive do
+        if not head or not head:IsDescendantOf(workspace) then
+            print("Target lost!")
+            break
+        end
+
+        LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+        LocalPlayer.Character.Humanoid.PlatformStand = true
+
+        -- Check if we're close enough to the target
+        local distanceToTarget = (head.Position - HumanoidRootPart.Position).Magnitude
+        local isApproaching = distanceToTarget > 3  -- Threshold for approach vs. at-target behavior
+
+        if isApproaching then
+            -- Smooth approach movement
+            local approachPos = head.CFrame * CFrame.new(0, HEIGHT_OFFSET, FOLLOW_DISTANCE) * CFrame.Angles(0, math.rad(180), 0)
+            local tween = createTween(approachPos, true)
+            tween:Play()
+            tween.Completed:Wait()
+        else
+            -- Original movement pattern with slightly increased range
+            local positions = {
+                head.CFrame * CFrame.new(0, HEIGHT_OFFSET, FOLLOW_DISTANCE) * CFrame.Angles(0, math.rad(180), 0),
+                head.CFrame * CFrame.new(0, HEIGHT_OFFSET, FOLLOW_DISTANCE - 0.25) * CFrame.Angles(0, math.rad(180), 0),
+                head.CFrame * CFrame.new(0, HEIGHT_OFFSET, FOLLOW_DISTANCE - 0.5) * CFrame.Angles(0, math.rad(180), 0)
+            }
+
+            for _, pos in ipairs(positions) do
+                if not getgenv().facefuckactive then break end
+                
+                local tween = createTween(pos, false)
+                tween:Play()
+                
+                local completed = false
+                tween.Completed:Connect(function()
+                    completed = true
+                end)
+                
+                local startTime = tick()
+                while not completed and tick() - startTime < 1 do
+                    task.wait()
+                end
+            end
+
+            task.wait(0.05)
+        end
+    end
+
+    LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+    LocalPlayer.Character.Humanoid.PlatformStand = false
+    workspace.Gravity = 192.2
+end
+
+-- Rest of the code remains exactly the same...
+local function toggleMovement()
+    if not getgenv().facefuckactive then
+        targetHead = findNearestPlayer()
+        if targetHead then
+            getgenv().facefuckactive = true
+            workspace.Gravity = 0
+            task.spawn(function()
+                faceBang(targetHead)
+            end)
+        else
+            print("No nearby player found!")
+        end
+    else
+        getgenv().facefuckactive = false
+        workspace.Gravity = 192.2
+    end
+end
+
+local function createMobileGUI()
+    if not UserInputService.TouchEnabled then return end
+    
+    if PlayerGui:FindFirstChild("FaceBangGui") then
+        PlayerGui.FaceBangGui:Destroy()
     end
 
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "MobileControls"
+    screenGui.Name = "FaceBangGui"
     screenGui.ResetOnSpawn = false
-    
-    local buttonContainer = Instance.new("Frame")
-    buttonContainer.Name = "ButtonContainer"
-    buttonContainer.Size = UDim2.new(0, 50, 0, 50)
-    buttonContainer.Position = UDim2.new(0.92, 0, 0.08, 0)  -- Positioned near top-right
-    buttonContainer.BackgroundTransparency = 1
-    buttonContainer.Parent = screenGui
-    
-    for i = 1, 3 do
-        local shadowLayer = Instance.new("Frame")
-        shadowLayer.Name = "ShadowLayer" .. i
-        shadowLayer.AnchorPoint = Vector2.new(0.5, 0.5)
-        shadowLayer.Position = UDim2.new(0.5, 0, 0.5, i * 2)
-        shadowLayer.Size = UDim2.new(1, 0, 1, 0)
-        shadowLayer.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-        shadowLayer.BackgroundTransparency = 0.8 + (i * 0.05)
-        shadowLayer.ZIndex = -i
-        
-        local cornerRadius = Instance.new("UICorner")
-        cornerRadius.CornerRadius = UDim.new(0.3, 0)
-        cornerRadius.Parent = shadowLayer
-        
-        shadowLayer.Parent = buttonContainer
-    end
-    
-    local button = Instance.new("TextButton")
-    button.Name = "ZKeyButton"
-    button.Size = UDim2.new(1, 0, 1, 0)
-    button.Position = UDim2.new(0, 0, 0, 0)
-    button.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
-    button.TextColor3 = Color3.fromRGB(255, 255, 255)
-    button.Text = "Z"
-    button.Font = Enum.Font.GothamBold
-    button.TextSize = 24
-    button.AutoButtonColor = true
-    button.Parent = buttonContainer
-    
+    screenGui.Parent = PlayerGui
+
+    local container = Instance.new("Frame")
+    container.Size = UDim2.new(0, 45, 0, 45)
+    container.Position = UDim2.new(0.95, -25, 0.1, 0)
+    container.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    container.BorderSizePixel = 0
+    container.Parent = screenGui
+
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0.3, 0)
-    corner.Parent = button
-    
+    corner.CornerRadius = UDim.new(0.2, 0)
+    corner.Parent = container
+
     local gradient = Instance.new("UIGradient")
     gradient.Color = ColorSequence.new({
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(60, 60, 60)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(45, 45, 45))
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(50, 50, 50)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(35, 35, 35))
     })
-    gradient.Parent = button
-    
-    -- Enhanced dragging functionality for all devices
-    local dragging = false
-    local dragStart
-    local startPos
+    gradient.Rotation = 45
+    gradient.Parent = container
 
-    local function updateDrag(input)
-        if dragging then
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.8, 0, 0.8, 0)
+    button.Position = UDim2.new(0.5, 0, 0.5, 0)
+    button.AnchorPoint = Vector2.new(0.5, 0.5)
+    button.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    button.TextColor3 = Color3.fromRGB(200, 200, 200)
+    button.Text = "F"
+    button.TextSize = 16
+    button.Font = Enum.Font.GothamBold
+    button.BorderSizePixel = 0
+    button.Parent = container
+
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0.2, 0)
+    buttonCorner.Parent = button
+
+    local status = Instance.new("Frame")
+    status.Size = UDim2.new(0, 6, 0, 6)
+    status.Position = UDim2.new(1, -4, 0, 4)
+    status.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+    status.BorderSizePixel = 0
+    status.Parent = container
+
+    local statusCorner = Instance.new("UICorner")
+    statusCorner.CornerRadius = UDim.new(1, 0)
+    statusCorner.Parent = status
+
+    button.MouseEnter:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.2), {
+            BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        }):Play()
+    end)
+
+    button.MouseLeave:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.2), {
+            BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        }):Play()
+    end)
+
+    button.MouseButton1Click:Connect(function()
+        toggleMovement()
+        status.BackgroundColor3 = getgenv().facefuckactive and 
+            Color3.fromRGB(50, 255, 50) or 
+            Color3.fromRGB(255, 50, 50)
+    end)
+
+    local dragToggle = nil
+    local dragInput = nil
+    local dragStart = nil
+    local startPos = nil
+
+    container.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            dragToggle = true
+            dragStart = input.Position
+            startPos = container.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragToggle = false
+                end
+            end)
+        end
+    end)
+
+    container.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input == dragInput and dragToggle then
             local delta = input.Position - dragStart
-            buttonContainer.Position = UDim2.new(
+            container.Position = UDim2.new(
                 startPos.X.Scale,
                 startPos.X.Offset + delta.X,
                 startPos.Y.Scale,
                 startPos.Y.Offset + delta.Y
             )
         end
-    end
-
-    -- Handle both mouse and touch input for dragging
-    buttonContainer.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragStart = input.Position
-            startPos = buttonContainer.Position
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
-            end)
-        end
     end)
-
-    UserInputService.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch or input.UserInputType == Enum.UserInputType.MouseMovement then
-            updateDrag(input)
-        end
-    end)
-    
-    -- Button press functionality
-    button.MouseButton1Down:Connect(function()
-        buttonContainer.Size = UDim2.new(0, 48, 0, 48)
-        VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.Z, false, game)
-    end)
-    
-    button.MouseButton1Up:Connect(function()
-        buttonContainer.Size = UDim2.new(0, 50, 0, 50)
-        VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.Z, false, game)
-    end)
-    
-    -- Parent the GUI and execute loadstring
-    local success, err = pcall(function()
-        screenGui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
-        task.wait(0.1)
-        loadstring(game:HttpGet('https://raw.githubusercontent.com/saya420/Mic-Up/main/facefuck'))()
-    end)
-    
-    if not success then
-        warn("Failed to setup GUI or execute script:", err)
-    end
 end
 
-CreateMobileButton()
+createMobileGUI()
+setupCharacterTracking()
+
+UserInputService.InputBegan:Connect(function(input, isProcessed)
+    if isProcessed then return end
+    if input.KeyCode == Enum.KeyCode.Z then
+        toggleMovement()
+    end
+end)
