@@ -8,31 +8,51 @@ local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 local targetHead = nil
+local targetPlayer = nil
 
 -- Enhanced settings for smoother approach and slightly increased movement range
 local FOLLOW_DISTANCE = -0.7
 local HEIGHT_OFFSET = 0.8
-local TWEEN_SPEED = 0.1
-local TWEEN_STYLE = Enum.EasingStyle.Sine
-local TWEEN_DIRECTION = Enum.EasingDirection.InOut
-local APPROACH_TWEEN_SPEED = 0.2  -- Smoother approach speed
-local APPROACH_TWEEN_STYLE = Enum.EasingStyle.Quad  -- Smoother easing for approach
+local TWEEN_SPEED = 0.08
+local TWEEN_STYLE = Enum.EasingStyle.Linear
+local TWEEN_DIRECTION = Enum.EasingDirection.Out
+local APPROACH_TWEEN_SPEED = 0.15
+local APPROACH_TWEEN_STYLE = Enum.EasingStyle.Quad
 
 getgenv().facefuckactive = false
 
+-- Function to track player respawn and handle retargeting
 local function setupCharacterTracking()
     LocalPlayer.CharacterAdded:Connect(function(newCharacter)
         Character = newCharacter
         HumanoidRootPart = newCharacter:WaitForChild("HumanoidRootPart")
         
         if getgenv().facefuckactive then
-            getgenv().facefuckactive = false
+            targetHead = findNearestPlayer()
+            if targetHead then
+                workspace.Gravity = 0
+                LocalPlayer.Character.Humanoid.PlatformStand = true
+                LocalPlayer.Character.Animate.Disabled = true
+                task.spawn(function()
+                    faceBang(targetHead)
+                end)
+            else
+                print("No nearby player found!")
+            end
+        else
             workspace.Gravity = 192.2
+            LocalPlayer.Character.Humanoid.PlatformStand = false
+            LocalPlayer.Character.Animate.Disabled = false
         end
     end)
 end
 
+-- Function to find the nearest player
 local function findNearestPlayer()
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("Head") then
+        return targetPlayer.Character.Head
+    end
+
     local nearestPlayer = nil
     local shortestDistance = math.huge
 
@@ -44,14 +64,26 @@ local function findNearestPlayer()
                 if distance < shortestDistance then
                     shortestDistance = distance
                     nearestPlayer = head
+                    targetPlayer = player
                 end
             end
         end
     end
 
+    if targetPlayer then
+        targetPlayer.CharacterAdded:Connect(function(newCharacter)
+            if getgenv().facefuckactive then
+                local head = newCharacter:WaitForChild("Head")
+                targetHead = head
+                faceBang(head)
+            end
+        end)
+    end
+
     return nearestPlayer
 end
 
+-- Function to move and follow the target
 local function faceBang(head)
     local function createTween(targetCFrame, isApproaching)
         local tweenInfo = TweenInfo.new(
@@ -68,25 +100,32 @@ local function faceBang(head)
 
     while getgenv().facefuckactive do
         if not head or not head:IsDescendantOf(workspace) then
-            print("Target lost!")
-            break
+            if targetPlayer and targetPlayer.Character then
+                head = targetPlayer.Character:WaitForChild("Head")
+                targetHead = head
+            else
+                print("Target lost! Retargeting...")
+                head = findNearestPlayer()
+                if not head then
+                    print("No nearby player found!")
+                    task.wait(1)
+                    continue
+                end
+            end
         end
 
         LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
         LocalPlayer.Character.Humanoid.PlatformStand = true
 
-        -- Check if we're close enough to the target
         local distanceToTarget = (head.Position - HumanoidRootPart.Position).Magnitude
-        local isApproaching = distanceToTarget > 3  -- Threshold for approach vs. at-target behavior
+        local isApproaching = distanceToTarget > 3
 
         if isApproaching then
-            -- Smooth approach movement
             local approachPos = head.CFrame * CFrame.new(0, HEIGHT_OFFSET, FOLLOW_DISTANCE) * CFrame.Angles(0, math.rad(180), 0)
             local tween = createTween(approachPos, true)
             tween:Play()
             tween.Completed:Wait()
         else
-            -- Original movement pattern with slightly increased range
             local positions = {
                 head.CFrame * CFrame.new(0, HEIGHT_OFFSET, FOLLOW_DISTANCE) * CFrame.Angles(0, math.rad(180), 0),
                 head.CFrame * CFrame.new(0, HEIGHT_OFFSET, FOLLOW_DISTANCE - 0.25) * CFrame.Angles(0, math.rad(180), 0),
@@ -117,15 +156,21 @@ local function faceBang(head)
     LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
     LocalPlayer.Character.Humanoid.PlatformStand = false
     workspace.Gravity = 192.2
+    LocalPlayer.Character.Animate.Disabled = false
 end
 
--- Rest of the code remains exactly the same...
+-- Function to toggle movement
 local function toggleMovement()
     if not getgenv().facefuckactive then
+        -- Reset the target and find a new player
+        targetPlayer = nil
         targetHead = findNearestPlayer()
+        
         if targetHead then
             getgenv().facefuckactive = true
             workspace.Gravity = 0
+            LocalPlayer.Character.Humanoid.PlatformStand = true
+            LocalPlayer.Character.Animate.Disabled = true
             task.spawn(function()
                 faceBang(targetHead)
             end)
@@ -133,11 +178,18 @@ local function toggleMovement()
             print("No nearby player found!")
         end
     else
+        -- Stop movement and reset the target
         getgenv().facefuckactive = false
+        targetPlayer = nil
+        targetHead = nil
+        
         workspace.Gravity = 192.2
+        LocalPlayer.Character.Humanoid.PlatformStand = false
+        LocalPlayer.Character.Animate.Disabled = false
     end
 end
 
+-- Function to create a mobile GUI button
 local function createMobileGUI()
     if not UserInputService.TouchEnabled then return end
     
@@ -210,54 +262,25 @@ local function createMobileGUI()
 
     button.MouseButton1Click:Connect(function()
         toggleMovement()
-        status.BackgroundColor3 = getgenv().facefuckactive and 
-            Color3.fromRGB(50, 255, 50) or 
-            Color3.fromRGB(255, 50, 50)
-    end)
-
-    local dragToggle = nil
-    local dragInput = nil
-    local dragStart = nil
-    local startPos = nil
-
-    container.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            dragToggle = true
-            dragStart = input.Position
-            startPos = container.Position
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragToggle = false
-                end
-            end)
-        end
-    end)
-
-    container.InputChanged:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.Touch then
-            dragInput = input
-        end
-    end)
-
-    UserInputService.InputChanged:Connect(function(input)
-        if input == dragInput and dragToggle then
-            local delta = input.Position - dragStart
-            container.Position = UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset + delta.X,
-                startPos.Y.Scale,
-                startPos.Y.Offset + delta.Y
-            )
-        end
+        status.BackgroundColor3 = getgenv().facefuckactive and Color3.fromRGB(50, 255, 50) or Color3.fromRGB(255, 50, 50)
     end)
 end
 
-createMobileGUI()
-setupCharacterTracking()
-
-UserInputService.InputBegan:Connect(function(input, isProcessed)
-    if isProcessed then return end
-    if input.KeyCode == Enum.KeyCode.Z then
+-- Add keybind for PC users
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.Z then
         toggleMovement()
+        -- Update mobile GUI status if it exists
+        local gui = PlayerGui:FindFirstChild("FaceBangGui")
+        if gui then
+            local status = gui.Frame:FindFirstChild("Frame")
+            if status then
+                status.BackgroundColor3 = getgenv().facefuckactive and Color3.fromRGB(50, 255, 50) or Color3.fromRGB(255, 50, 50)
+            end
+        end
     end
 end)
+
+-- Initialize character tracking
+setupCharacterTracking()
+createMobileGUI()
