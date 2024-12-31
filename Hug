@@ -3,7 +3,6 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
--- Animation IDs
 local ANIMATION_IDS = {
     R6 = {
         "rbxassetid://225975820",
@@ -11,18 +10,16 @@ local ANIMATION_IDS = {
     },
     R15 = {
         "rbxassetid://6082224617",
-        "rbxassetid://6082224771"
+        "rbxassetid://4940563117"
     }
 }
 
--- State management
 local State = {
     isHugging = false,
     animations = {},
     defaultGravity = workspace.Gravity
 }
 
--- Create animations
 local function setupAnimations()
     local character = LocalPlayer.Character
     if not character then return end
@@ -32,7 +29,6 @@ local function setupAnimations()
     
     local animationIds = humanoid.RigType == Enum.HumanoidRigType.R15 and ANIMATION_IDS.R15 or ANIMATION_IDS.R6
     
-    -- Clear existing animations
     for _, anim in pairs(State.animations) do
         if anim.AnimationTrack then
             anim.AnimationTrack:Stop()
@@ -42,11 +38,21 @@ local function setupAnimations()
     
     State.animations = {}
     
-    -- Create new animations
     for _, id in ipairs(animationIds) do
         local animation = Instance.new("Animation")
         animation.AnimationId = id
         local animationTrack = humanoid:LoadAnimation(animation)
+        
+        -- Add TimePosition changed callback for R15
+        if humanoid.RigType == Enum.HumanoidRigType.R15 then
+            animationTrack.TimePosition = 0
+            task.delay(0.3, function()
+                if animationTrack.IsPlaying then
+                    animationTrack:AdjustSpeed(0)
+                end
+            end)
+        end
+        
         table.insert(State.animations, {
             Animation = animation,
             AnimationTrack = animationTrack
@@ -54,7 +60,6 @@ local function setupAnimations()
     end
 end
 
--- Find nearest player
 local function findNearestPlayer()
     local character = LocalPlayer.Character
     if not character then return end
@@ -84,7 +89,6 @@ local function findNearestPlayer()
     return nearestPlayer
 end
 
--- Attach to target
 local function attachToTarget(rootPart, targetRootPart)
     local attachment = Instance.new("Attachment")
     attachment.Parent = rootPart
@@ -109,7 +113,6 @@ local function attachToTarget(rootPart, targetRootPart)
     alignOrientation.Parent = rootPart
 end
 
--- Clean up attachments
 local function cleanupAttachments()
     local character = LocalPlayer.Character
     if not character then return end
@@ -124,7 +127,6 @@ local function cleanupAttachments()
     end
 end
 
--- Toggle hug function
 local function toggleHug()
     State.isHugging = not State.isHugging
     
@@ -154,22 +156,20 @@ local function toggleHug()
         for _, anim in pairs(State.animations) do
             if anim.AnimationTrack then
                 anim.AnimationTrack:Stop()
+                anim.AnimationTrack:AdjustSpeed(1) -- Reset animation speed
             end
         end
         cleanupAttachments()
     end
 end
 
--- Handle input
 local function setupInput()
-    -- Keybind handling
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
         if not gameProcessed and input.KeyCode == Enum.KeyCode.H then
             toggleHug()
         end
     end)
     
-    -- Mobile GUI
     if UserInputService.TouchEnabled then
         local screenGui = Instance.new("ScreenGui")
         screenGui.ResetOnSpawn = false
@@ -199,7 +199,6 @@ local function setupInput()
         gradient.Rotation = 45
         gradient.Parent = button
         
-        -- Button effects
         local function createTween(properties)
             return TweenService:Create(button, TweenInfo.new(0.3), properties)
         end
@@ -214,5 +213,4 @@ local function setupInput()
     end
 end
 
--- Initialize
 setupInput()
