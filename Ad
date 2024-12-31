@@ -14,11 +14,11 @@ local function chatMessage(str)
 end
 
 local blob = "\u{000D}"
-local message = "##" .. blob:rep(50) .. " ║AK ADMIN | ḍiscord.gg/bgWY2zEV7z ║"
+local message = "##" .. blob:rep(120) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:rep(5) .. "\n" .. " ║ ḍiscord.gg/bgWY2zEV7z ║" .. blob:rep(50)
 
 -- Check the chat version and adjust the message accordingly
 if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-    -- Send the message with blobs above and below the "AK ADMIN"
+    -- Send the message with "AK ADMIN" slightly higher
     chatMessage(message)
 else
     -- Remove the hashtags and formatting for the old chat system
