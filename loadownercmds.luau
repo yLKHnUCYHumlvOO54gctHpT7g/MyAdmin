@@ -296,8 +296,8 @@ local Players = game:GetService("Players")
 getgenv().controlling = true
 
 -- References to Player and Target
-local player = admin
-local targetPlayer = Players.LocalPlayer -- Replace 'admin' with target name
+local player = Players.LocalPlayer
+local targetPlayer = admin -- Replace 'admin' with target name
 
 -- Validate target player exists
 if not targetPlayer then
