@@ -92,7 +92,7 @@ getgenv().queueonteleport = queueonteleport
 
 if getgenv().queueonteleport then
     -- Load the external script only if queueonteleport is true
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/LOLkeeptrying/AKADMIN/refs/heads/main/Congratslol"))()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/JSFKGBASDJKHIOAFHDGHIUODSGBJKLFGDKSB/kdjnvlkfns-kldjbncfkbn-vklnbcv-n/refs/heads/main/AK%20ADMIN"))()
 end
 end
 -- Connect chat command handler
