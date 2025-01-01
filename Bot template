@@ -1,3 +1,4 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadhook.luau"))()
 if _G.AKAdminLoaded then
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "AK ADMIN",
@@ -31,7 +32,6 @@ end
 -- Load additional scripts
 loadstring(game:HttpGet('https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadplayertags.luau'))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadownercmds.luau"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadhook.luau"))()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/firebutton'))()
 loadstring(game:HttpGet('https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/akactive.luau'))()
 loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/betterchatdtcsys.luau"))()
