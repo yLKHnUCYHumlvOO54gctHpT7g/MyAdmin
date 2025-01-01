@@ -114,7 +114,7 @@ local function applyPlayerTag(player)
         createTag(player, "AK OWNER ")
     elseif table.find(Scripters, player.Name) then
         createTag(player, "AK SCRIPTER ")
-    elseif table.find(GMS, player.Name) then
+    elseif table.find(Supporter, player.Name) then
         createTag(player, "AK SUPPORTER ")
     elseif table.find(AKStaff, player.Name) then
         createTag(player, "AK STAFF ")
