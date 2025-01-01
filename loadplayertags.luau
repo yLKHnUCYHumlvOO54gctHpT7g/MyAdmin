@@ -30,7 +30,7 @@ local Scripters = {"GYATT_DAMN1", "328ml", "29Kyooo", "BloxiAstra", "ImOn_ValveI
 
 local Owners = {"Xeni_he07", "AliKhammas1234", "AliKhammas", "I_LOVEYOU12210", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2"}
 
-local GMS = {"victorwielki"}
+local Supporter = {"victorwielki"}
 
 local AKStaff = {"goekaycool"}
 
@@ -115,7 +115,7 @@ local function applyPlayerTag(player)
     elseif table.find(Scripters, player.Name) then
         createTag(player, "AK SCRIPTER ")
     elseif table.find(GMS, player.Name) then
-        createTag(player, "AK GM ")
+        createTag(player, "AK SUPPORTER ")
     elseif table.find(AKStaff, player.Name) then
         createTag(player, "AK STAFF ")
     elseif table.find(Advertisers, player.Name) then
