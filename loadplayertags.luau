@@ -30,7 +30,7 @@ local Scripters = {"GYATT_DAMN1", "328ml", "29Kyooo", "BloxiAstra", "ImOn_ValveI
 
 local Owners = {"Xeni_he07", "AliKhammas1234", "AliKhammas", "I_LOVEYOU12210", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2"}
 
-local Supporter = {"victorwielki"}
+local Supporter = {"Robloxian74630436"}
 
 local AKStaff = {"goekaycool"}
 
