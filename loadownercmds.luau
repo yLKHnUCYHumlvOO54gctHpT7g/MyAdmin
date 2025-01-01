@@ -262,62 +262,156 @@ slipSound:Destroy()
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
             elseif command == ".control" then
-            getgenv().controlling=true
-local target = admin.Character -- Replace with your target reference
+            local function disableSeat(seat)
+    if seat:IsA("Seat") or seat:IsA("VehicleSeat") then
+        seat.Disabled = true
+        seat.CanCollide = false
+    end
+end
+
+for _, seat in game.Workspace:GetDescendants() do
+    disableSeat(seat)
+end
+
+game.Workspace.DescendantAdded:Connect(disableSeat)
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local PlayerModule = require(Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule"))
+
+-- Get the control module
+local Controls = PlayerModule:GetControls()
+
+-- Disable controls
+Controls:Disable()
+-- Ensure this script is a LocalScript
+local RunService = game:GetService("RunService")
+local Players = game:GetService("Players")
+
+-- Global Control Variable
+getgenv().controlling = true
+
+-- References to Player and Target
+local player = Players.LocalPlayer
+local targetPlayer = admin -- Replace 'admin' with target name
+
+-- Validate target player exists
+if not targetPlayer then
+    warn("Target player not found!")
+    return
+end
+
+-- Character References
 local character = player.Character or player.CharacterAdded:Wait()
+local targetCharacter = targetPlayer.Character or targetPlayer.CharacterAdded:Wait()
+
+-- Character Components
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
-local targetHumanoidRootPart = target:WaitForChild("HumanoidRootPart")
+local targetHumanoidRootPart = targetCharacter:WaitForChild("HumanoidRootPart")
+local targetHumanoid = targetCharacter:WaitForChild("Humanoid")
 
-local followDistance = 2 -- Distance in front of the player for the part to be created
+-- Configuration Parameters
+local sideOffset = 5            -- Distance to maintain to the side
+local smoothingFactor = 0.2     -- Interpolation smoothness (0-1)
+local maxSpeed = 50             -- Maximum movement speed
+local jumpEnabled = false       -- Disabled jumping to stay grounded
+local rayHeight = 2         -- Height of floor detection ray
+local floorOffset = 3        -- Distance to maintain above ground
 
-local function createControlPart(position)
-    local part = Instance.new("Part")
-    part.Name = "ControlPart"
-    part.Size = Vector3.new(1, 1, 1)
-    part.Anchored = true
-    part.CanCollide = false -- Prevent collision issues
-    part.Position = position
-    part.Parent = workspace
-    part.Transparency=1
-    return part
-end
+-- Initialize Movement Variables
+local targetPosition = targetHumanoidRootPart.Position
+local targetCFrame = targetHumanoidRootPart.CFrame
+local currentPos = humanoidRootPart.Position
+local velocity = Vector3.new(0, 0, 0)
 
-while getgenv().controlling do
-    -- Check if the target is moving
-    if targetHumanoidRootPart.Velocity.Magnitude > 1 then
-        -- Copy the target's LookVector to determine direction
-        local lookVector = targetHumanoidRootPart.CFrame.LookVector
-
-        -- Calculate the new position in front of the player
-        local newPosition = humanoidRootPart.Position + (lookVector * followDistance)
-
-        -- Create the control part at the calculated position
-        local controlPart = createControlPart(newPosition)
-
-        -- Debug: Print new part position
-        print("New Control Part Position:", controlPart.Position)
-
-        -- Move the player to the part
-        humanoid:MoveTo(workspace.ControlPart.Position)
-
-        -- Debug: Check if MoveTo is being called
-        print("Moving to:", controlPart.Position)
-
-        -- Wait until the player is close to the part
-        humanoid.MoveToFinished:Wait()
-
-        -- Debug: Confirm the player reached the part
-        print("Reached:", controlPart.Position)
-
-        -- Clean up the part after movement
-        controlPart:Destroy()
-                wait()
+-- Floor Detection Function
+local function getFloorHeight(position)
+    local rayStart = Vector3.new(position.X, position.Y + rayHeight, position.Z)
+    local rayEnd = Vector3.new(position.X, position.Y - rayHeight, position.Z)
+    
+    local raycastParams = RaycastParams.new()
+    raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+    raycastParams.FilterDescendantsInstances = {character, targetCharacter}
+    
+    local raycastResult = workspace:Raycast(rayStart, rayEnd - rayStart, raycastParams)
+    
+    if raycastResult then
+        return raycastResult.Position.Y + floorOffset
     end
-            wait()
+    return position.Y
 end
+
+-- Main Control Loop
+RunService.RenderStepped:Connect(function(deltaTime)
+    if not getgenv().controlling then return end
+    
+    -- Safety check for character existence
+    if not character.Parent or not targetCharacter.Parent then
+        return
+    end
+    
+    -- Update Target Position
+    targetPosition = targetHumanoidRootPart.Position
+    targetCFrame = targetHumanoidRootPart.CFrame
+    
+    -- Calculate Side Position
+    local rightDirection = (targetCFrame.RightVector).Unit
+    local desiredPosition = targetPosition + (rightDirection * sideOffset)
+    
+    -- Get Floor Height at Desired Position
+    local floorHeight = getFloorHeight(desiredPosition)
+    desiredPosition = Vector3.new(desiredPosition.X, floorHeight, desiredPosition.Z)
+    
+    -- Smooth Movement Calculation
+    currentPos = humanoidRootPart.Position
+    local newPos = currentPos:Lerp(desiredPosition, smoothingFactor)
+    
+    -- Velocity Calculation with Speed Limit
+    velocity = (newPos - currentPos) / deltaTime
+    if velocity.Magnitude > maxSpeed then
+        velocity = velocity.Unit * maxSpeed
+    end
+    
+    -- Apply Movement
+    humanoidRootPart.Velocity = velocity
+    
+    -- Synchronize Orientation
+    local targetOrientation = targetCFrame - targetCFrame.Position
+    humanoidRootPart.CFrame = CFrame.new(newPos) * targetOrientation
+    
+    -- Force Y Velocity to prevent floating
+    humanoidRootPart.Velocity = Vector3.new(
+        humanoidRootPart.Velocity.X,
+        math.min(humanoidRootPart.Velocity.Y, 0), -- Only allow downward vertical movement
+        humanoidRootPart.Velocity.Z
+    )
+end)
+
+-- Disable Jump
+humanoid.Jump = false
             elseif command == ".uncontrol" then
             getgenv().controlling=false
+            local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local PlayerModule = require(Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule"))
+
+-- Get the control module
+local Controls = PlayerModule:GetControls()
+
+-- Disable controls
+Controls:Enable()
+            local function enableSeat(seat)
+    if seat:IsA("Seat") or seat:IsA("VehicleSeat") then
+        seat.Disabled = false
+        seat.CanCollide = true
+    end
+end
+
+for _, seat in game.Workspace:GetDescendants() do
+    enableSeat(seat)
+end
+
+game.Workspace.DescendantAdded:Connect(enableSeat)
             elseif command == ".fling" then
                 game.Players.LocalPlayer.Character.HumanoidRootPart.Velocity=Vector3.new(250,250,250)
                 game.Players.LocalPlayer.Character.Humanoid.Sit=true
