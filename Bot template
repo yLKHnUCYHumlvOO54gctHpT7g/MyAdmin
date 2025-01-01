@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/deinemudda/refs/heads/main/loadhook.luau"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadhook.luau"))()
 if _G.AKAdminLoaded then
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "AK ADMIN",
