@@ -88,13 +88,12 @@ else
     
     -- Queue on teleport handling (now using getgenv for queueonteleport)
     -- Check if queueonteleport is true
-getgenv().queueonteleport = queueonteleport
+-- Check if queueonteleport is true
+getgenv().queueonteleport = true  -- Set to true for testing, or you can assign it based on your logic
 
 if getgenv().queueonteleport then
     -- Load the external script only if queueonteleport is true
     loadstring(game:HttpGet("https://raw.githubusercontent.com/LOLkeeptrying/AKADMIN/refs/heads/main/Congratslol"))()
-    
-    -- Additional actions related to queueonteleport can go here
 end
 -- Connect chat command handler
 local id = game.Players.LocalPlayer.UserId
