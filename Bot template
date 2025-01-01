@@ -87,8 +87,11 @@ else
 
     
     -- Queue on teleport handling (now using getgenv for queueonteleport)
-    -- Check if queueonteleport is true
--- Check if queueonteleport is true
+    getgenv().queueonteleport = queueonteleport
+    
+    if getgenv().queueonteleport then
+    end
+end
 -- Connect chat command handler
 local id = game.Players.LocalPlayer.UserId
 while wait() do
