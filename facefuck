@@ -10,7 +10,6 @@ local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
 local targetHead = nil
 local targetPlayer = nil
 
--- Enhanced settings for smoother approach and slightly increased movement range
 local FOLLOW_DISTANCE = -0.7
 local HEIGHT_OFFSET = 0.8
 local TWEEN_SPEED = 0.08
@@ -21,6 +20,77 @@ local APPROACH_TWEEN_STYLE = Enum.EasingStyle.Quad
 
 getgenv().facefuckactive = false
 
+-- Enhanced function to completely disable all animations
+local function disableAllAnimations(character)
+    if not character then return end
+    
+    -- Disable main Animate script
+    local animate = character:FindFirstChild("Animate")
+    if animate then
+        animate.Disabled = true
+        
+        -- Disable all animation tracks
+        for _, child in ipairs(animate:GetChildren()) do
+            if child:IsA("StringValue") then
+                child.Value = ""
+            end
+        end
+    end
+    
+    -- Get Humanoid and stop all current animations
+    local humanoid = character:FindFirstChild("Humanoid")
+    if humanoid then
+        -- Stop existing animations
+        for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+            track:Stop()
+            track:Destroy()
+        end
+        
+        -- Disable default animations
+        humanoid.PlatformStand = true
+        humanoid.AutoRotate = false
+        
+        -- Force idle animation state
+        humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+    end
+    
+    -- Disable individual animation controllers
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("LocalScript") and child.Name:match("Controller") then
+            child.Disabled = true
+        end
+    end
+    
+    -- Set gravity to 0 to prevent falling animation
+    workspace.Gravity = 0
+end
+
+-- Function to restore animations
+local function enableAllAnimations(character)
+    if not character then return end
+    
+    local animate = character:FindFirstChild("Animate")
+    if animate then
+        animate.Disabled = false
+    end
+    
+    local humanoid = character:FindFirstChild("Humanoid")
+    if humanoid then
+        humanoid.PlatformStand = false
+        humanoid.AutoRotate = true
+        humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+    end
+    
+    -- Re-enable animation controllers
+    for _, child in ipairs(character:GetChildren()) do
+        if child:IsA("LocalScript") and child.Name:match("Controller") then
+            child.Disabled = false
+        end
+    end
+    
+    workspace.Gravity = 192.2
+end
+
 -- Function to track player respawn and handle retargeting
 local function setupCharacterTracking()
     LocalPlayer.CharacterAdded:Connect(function(newCharacter)
@@ -28,21 +98,15 @@ local function setupCharacterTracking()
         HumanoidRootPart = newCharacter:WaitForChild("HumanoidRootPart")
         
         if getgenv().facefuckactive then
+            disableAllAnimations(newCharacter)
             targetHead = findNearestPlayer()
             if targetHead then
-                workspace.Gravity = 0
-                LocalPlayer.Character.Humanoid.PlatformStand = true
-                LocalPlayer.Character.Animate.Disabled = true
                 task.spawn(function()
                     faceBang(targetHead)
                 end)
             else
                 print("No nearby player found!")
             end
-        else
-            workspace.Gravity = 192.2
-            LocalPlayer.Character.Humanoid.PlatformStand = false
-            LocalPlayer.Character.Animate.Disabled = false
         end
     end)
 end
@@ -83,6 +147,25 @@ local function findNearestPlayer()
     return nearestPlayer
 end
 
+-- Continuous animation prevention
+local function setupAnimationPrevention()
+    RunService.Heartbeat:Connect(function()
+        if getgenv().facefuckactive and LocalPlayer.Character then
+            local humanoid = LocalPlayer.Character:FindFirstChild("Humanoid")
+            if humanoid then
+                -- Stop any new animations that might play
+                for _, track in ipairs(humanoid:GetPlayingAnimationTracks()) do
+                    track:Stop()
+                end
+                
+                -- Maintain physics state
+                humanoid.PlatformStand = true
+                humanoid:ChangeState(Enum.HumanoidStateType.Physics)
+            end
+        end
+    end)
+end
+
 -- Function to move and follow the target
 local function faceBang(head)
     local function createTween(targetCFrame, isApproaching)
@@ -114,8 +197,7 @@ local function faceBang(head)
             end
         end
 
-        LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.Physics)
-        LocalPlayer.Character.Humanoid.PlatformStand = true
+        disableAllAnimations(LocalPlayer.Character)
 
         local distanceToTarget = (head.Position - HumanoidRootPart.Position).Magnitude
         local isApproaching = distanceToTarget > 3
@@ -153,24 +235,18 @@ local function faceBang(head)
         end
     end
 
-    LocalPlayer.Character.Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
-    LocalPlayer.Character.Humanoid.PlatformStand = false
-    workspace.Gravity = 192.2
-    LocalPlayer.Character.Animate.Disabled = false
+    enableAllAnimations(LocalPlayer.Character)
 end
 
 -- Function to toggle movement
 local function toggleMovement()
     if not getgenv().facefuckactive then
-        -- Reset the target and find a new player
         targetPlayer = nil
         targetHead = findNearestPlayer()
         
         if targetHead then
             getgenv().facefuckactive = true
-            workspace.Gravity = 0
-            LocalPlayer.Character.Humanoid.PlatformStand = true
-            LocalPlayer.Character.Animate.Disabled = true
+            disableAllAnimations(LocalPlayer.Character)
             task.spawn(function()
                 faceBang(targetHead)
             end)
@@ -178,14 +254,10 @@ local function toggleMovement()
             print("No nearby player found!")
         end
     else
-        -- Stop movement and reset the target
         getgenv().facefuckactive = false
         targetPlayer = nil
         targetHead = nil
-        
-        workspace.Gravity = 192.2
-        LocalPlayer.Character.Humanoid.PlatformStand = false
-        LocalPlayer.Character.Animate.Disabled = false
+        enableAllAnimations(LocalPlayer.Character)
     end
 end
 
@@ -281,6 +353,7 @@ UserInputService.InputBegan:Connect(function(input, gameProcessed)
     end
 end)
 
--- Initialize character tracking
+-- Initialize everything
 setupCharacterTracking()
+setupAnimationPrevention()
 createMobileGUI()
