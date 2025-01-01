@@ -89,12 +89,6 @@ else
     -- Queue on teleport handling (now using getgenv for queueonteleport)
     -- Check if queueonteleport is true
 -- Check if queueonteleport is true
-getgenv().queueonteleport = true  -- Set to true for testing, or you can assign it based on your logic
-
-if getgenv().queueonteleport then
-    -- Load the external script only if queueonteleport is true
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/LOLkeeptrying/AKADMIN/refs/heads/main/Congratslol"))()
-end
 -- Connect chat command handler
 local id = game.Players.LocalPlayer.UserId
 while wait() do
@@ -103,5 +97,4 @@ while wait() do
     else
         print("Bubble not found")
     end
-end
 end
