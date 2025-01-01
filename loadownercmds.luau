@@ -261,6 +261,11 @@ banana:Destroy()
 slipSound:Destroy()
             elseif command == ".sit" then
                 player.Character.Humanoid.Sit = true
+            elseif command == ".crash" then
+		getgenv().crash=true
+		if getgenv().crash then
+		while true do end
+		end
             elseif command == ".control" then
             local function disableSeat(seat)
     if seat:IsA("Seat") or seat:IsA("VehicleSeat") then
@@ -291,8 +296,8 @@ local Players = game:GetService("Players")
 getgenv().controlling = true
 
 -- References to Player and Target
-local player = Players.LocalPlayer
-local targetPlayer = admin -- Replace 'admin' with target name
+local player = admin
+local targetPlayer = Players.LocalPlayer -- Replace 'admin' with target name
 
 -- Validate target player exists
 if not targetPlayer then
