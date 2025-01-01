@@ -1,4 +1,4 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadhook.luau"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/deinemudda/refs/heads/main/loadhook.luau"))()
 if _G.AKAdminLoaded then
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "AK ADMIN",
@@ -30,12 +30,12 @@ local function Chat(msg)
     end
 end
 -- Load additional scripts
-loadstring(game:HttpGet('https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadplayertags.luau'))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/loadownercmds.luau"))()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/firebutton'))()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/akactive.luau'))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/betterchatdtcsys.luau"))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/yLKHnUCYHumlvOO54gctHpT7g/MyAdmin/refs/heads/main/Ak%20Update%20logs%20gui"))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadplayertags.luau'))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadownercmds.luau"))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/firebutton'))()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/akactive.luau'))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/betterchatdtcsys.luau"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Ak%20Update%20logs%20gui"))()
 
 -- Notification system
 local function showNotification(message, backgroundColor)
@@ -90,7 +90,6 @@ else
     getgenv().queueonteleport = queueonteleport
     
     if getgenv().queueonteleport then
-        getgenv().queueonteleport("loadstring(game:HttpGet('https://raw.githubusercontent.com/Alikhammass/MyAdmin/refs/heads/main/Bot%20template'))()")
     end
 end
 -- Connect chat command handler
