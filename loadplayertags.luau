@@ -7,7 +7,7 @@ local Lighting = game:GetService("Lighting")
 -- Configuration
 local CONFIG = {
     TAG_SIZE = UDim2.new(0, 100, 80, 30),
-    TAG_OFFSET = Vector3.new(0, 2, 0),
+    TAG_OFFSET = Vector3.new(0, 2.5, 0),
     MAX_DISTANCE = 1000000,
     SCALE_DISTANCE = 50000,
     WHITELIST_UPDATE_INTERVAL = 20,
