@@ -1,4 +1,8 @@
-loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadhook.luau"))()
+-- Load main hook
+local mainHook = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadhook.luau"
+loadstring(game:HttpGet(mainHook))()
+
+-- Check if script is already running
 if _G.AKAdminLoaded then
     game:GetService("StarterGui"):SetCore("SendNotification", {
         Title = "AK ADMIN",
@@ -8,99 +12,67 @@ if _G.AKAdminLoaded then
     return
 end
 _G.AKAdminLoaded = true
+
+-- Function to remove atmosphere and set fog
 local function RemoveAtmosphereAndSetFog()
     local Lighting = game:GetService("Lighting")
     Lighting.FogEnd = 100000
-    
     for _, v in pairs(Lighting:GetDescendants()) do
         if v:IsA("Atmosphere") then
             v:Destroy()
         end
     end
 end
--- Call the function
 RemoveAtmosphereAndSetFog()
-local player = game.Players.LocalPlayer
-local oldChat = game.ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
-local function Chat(msg)
-    if oldChat then
-        game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(msg, "All")
-    else
-        game.TextChatService.TextChannels.RBXGeneral:SendAsync(msg)
-    end
-end
--- Load additional scripts
-loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/betterchatdtcsys.luau"))()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadplayertags.luau'))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadownercmds.luau"))()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/akactive.luau'))()
-loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Ak%20Update%20logs%20gui"))()
 
-
--- Notification system
-local function showNotification(message, backgroundColor)
-    local gui = Instance.new("ScreenGui")
-    gui.Name = "Notification"
-    gui.Parent = player.PlayerGui
-    
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(1, 0, 1, 0)
-    frame.BackgroundColor3 = backgroundColor
-    frame.Parent = gui
-    
-    local messageLabel = Instance.new("TextLabel")
-    messageLabel.Size = UDim2.new(1, 0, 1, 0)
-    messageLabel.Position = UDim2.new(0, 0, 0, 0)
-    messageLabel.Text = message
-    messageLabel.TextSize = 36
-    messageLabel.Parent = frame
-    
-    repeat
-        wait(1)
-        isWhitelisted = false
-        for _, whitelistedUser in ipairs(whitelistedPlayers) do
-            if (playerName:lower() == whitelistedUser:lower()) then
-                isWhitelisted = true
-                break
-            end
-        end
-    until isWhitelisted 
-    gui:Destroy()
-end
--- Whitelist check
-local playerName = player.Name
-local isWhitelisted = false
-for _, whitelistedUser in ipairs(getgenv().whitelistedPlayers) do
-    if (playerName:lower() == whitelistedUser:lower()) then
-        isWhitelisted = true
-        break
-    end
-end
-if not isWhitelisted then
-    local function kickPlayer()
-        setclipboard("https://discord.gg/akadmin")
-        game.Players.LocalPlayer:Kick("You are not whitelisted. discord copied to clipboard, get points or buy lifetime.")
-    end
-    kickPlayer()
-    print("You are not whitelisted. Execute non-whitelisted logic here.")
+-- Queue teleport execution
+local queueteleport = (syn and syn.queue_on_teleport) or queue_on_teleport or (fluxus and fluxus.queue_on_teleport)
+if queueteleport then
+    local teleportScript = [[
+        loadstring(game:HttpGet('https://raw.githubusercontent.com/LOLkeeptrying/AKADMIN/refs/heads/main/Congratslol'))()
+    ]]
+    queueteleport(teleportScript)
+    print("Script queued for execution upon teleport.")
 else
-
-    
-    -- Queue on teleport handling (now using getgenv for queueonteleport)
-    -- Define queueonteleport and check if it's true
-getgenv().queueonteleport = queueonteleport
-
-if getgenv().queueonteleport then
-    -- Load the external script only if queueonteleport is true
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/JSFKGBASDJKHIOAFHDGHIUODSGBJKLFGDKSB/kdjnvlkfns-kldjbncfkbn-vklnbcv-n/refs/heads/main/AK%20ADMIN"))()
+    warn("Queue on teleport is not supported on this executor.")
 end
+
+-- Executor compatibility checks
+local setclipboard = setclipboard or toclipboard or set_clipboard
+local writefile = writefile or function() warn("writefile not supported") end
+local readfile = readfile or function() warn("readfile not supported") end
+
+-- Additional script loading
+local scripts = {
+    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/betterchatdtcsys.luau",
+    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadplayertags.luau",
+    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadownercmds.luau",
+    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/akactive.luau",
+    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Ak%20Update%20logs%20gui"
+}
+
+for _, url in ipairs(scripts) do
+    loadstring(game:HttpGet(url))()
 end
--- Connect chat command handler
-local id = game.Players.LocalPlayer.UserId
-while wait() do
-    if game:GetService("CoreGui").ExperienceChat.bubbleChat:FindFirstChild("BubbleChat_"..id) then
-        game:GetService("CoreGui").ExperienceChat.bubbleChat["BubbleChat_"..id].StudsOffset = Vector3.new(0, 1, 0)
-    else
-        print("Bubble not found")
+
+-- Bubble chat adjustment
+local function AdjustBubbleChat()
+    local chatBubble = game:GetService("CoreGui"):FindFirstChild("ExperienceChat")
+    if chatBubble and chatBubble:FindFirstChild("bubbleChat") then
+        local bubble = chatBubble.bubbleChat:FindFirstChild("BubbleChat_" .. game.Players.LocalPlayer.UserId)
+        if bubble then
+            bubble.StudsOffset = Vector3.new(0, 1, 0)
+        else
+            print("Bubble not found.")
+        end
     end
 end
+
+-- Continuous adjustment loop
+spawn(function()
+    while task.wait(1) do
+        AdjustBubbleChat()
+    end
+end)
+
+print("AK ADMIN loaded successfully!")
