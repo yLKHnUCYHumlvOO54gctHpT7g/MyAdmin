@@ -238,7 +238,19 @@ local function attachTagToHead(character, player, rankText)
     container.BorderSizePixel = 0
     container.Text = ""
     container.Parent = tag
-    
+
+if rankText == "AK OWNER" then
+        local crown = Instance.new("TextLabel")
+        crown.Size = UDim2.new(1, 0, 0.5, 0)
+        crown.Position = UDim2.new(0, 0, -0.4, 0)
+        crown.BackgroundTransparency = 1
+        crown.Text = "👑"
+        crown.TextSize = 25
+        crown.TextColor3 = RankColors[rankText].accent
+        crown.Font = Enum.Font.GothamBold
+        crown.Parent = container
+    end
+
     container.MouseButton1Click:Connect(function()
         if player ~= Players.LocalPlayer then
             teleportToPlayer(player)
