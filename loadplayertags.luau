@@ -6,13 +6,15 @@ local Lighting = game:GetService("Lighting")
 
 -- Configuration
 local CONFIG = {
-    TAG_SIZE = UDim2.new(0, 100, 80, 30),
-    TAG_OFFSET = Vector3.new(0, 2.5, 0),
+    TAG_SIZE = UDim2.new(0, 120, 0, 40),
+    TAG_OFFSET = Vector3.new(0, 2.3, 0),
     MAX_DISTANCE = 1000000,
     SCALE_DISTANCE = 50000,
     WHITELIST_UPDATE_INTERVAL = 20,
     MAX_RETRY_ATTEMPTS = 10,
-    RETRY_DELAY = 3
+    RETRY_DELAY = 3,
+    TELEPORT_DISTANCE = 5,
+    TELEPORT_HEIGHT = 0.5
 }
 
 local RankColors = {
@@ -124,7 +126,6 @@ local function createNotificationUI()
     local yesButton = createButton("Yes", UDim2.new(0.1, 0, 0.7, 0), Color3.fromRGB(46, 204, 113))
     local noButton = createButton("No", UDim2.new(0.55, 0, 0.7, 0), Color3.fromRGB(231, 76, 60))
 
-    -- Initial transparency
     frame.BackgroundTransparency = 1
     title.TextTransparency = 1
     message.TextTransparency = 1
@@ -133,7 +134,6 @@ local function createNotificationUI()
     yesButton.TextTransparency = 1
     noButton.TextTransparency = 1
 
-    -- Fade in animation
     TweenService:Create(frame, TweenInfo.new(0.5), {BackgroundTransparency = 0.1}):Play()
     TweenService:Create(title, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
     TweenService:Create(message, TweenInfo.new(0.5), {TextTransparency = 0}):Play()
@@ -169,6 +169,54 @@ local function isWhitelisted(player)
     return whitelistData and whitelistData.whitelisted and table.find(whitelistData.whitelisted, player.Name) ~= nil
 end
 
+local function teleportToPlayer(targetPlayer)
+    local localPlayer = Players.LocalPlayer
+    local character = localPlayer.Character
+    local targetCharacter = targetPlayer.Character
+    
+    if not (character and targetCharacter) then return end
+    
+    local humanoid = character:FindFirstChild("Humanoid")
+    local hrp = character:FindFirstChild("HumanoidRootPart")
+    local targetHRP = targetCharacter:FindFirstChild("HumanoidRootPart")
+    
+    if not (humanoid and hrp and targetHRP) then return end
+    
+    local targetCFrame = targetHRP.CFrame
+    local teleportPosition = targetCFrame.Position - (targetCFrame.LookVector * CONFIG.TELEPORT_DISTANCE)
+    teleportPosition = teleportPosition + Vector3.new(0, CONFIG.TELEPORT_HEIGHT, 0)
+    
+    local effect = Instance.new("Part")
+    effect.Size = Vector3.new(1, 1, 1)
+    effect.CFrame = hrp.CFrame
+    effect.Anchored = true
+    effect.CanCollide = false
+    effect.Transparency = 0.5
+    effect.Shape = Enum.PartType.Ball
+    effect.Material = Enum.Material.Neon
+    effect.Color = Color3.fromRGB(255, 255, 255)
+    effect.Parent = workspace
+    
+    TweenService:Create(effect, TweenInfo.new(0.5), {
+        Size = Vector3.new(0, 0, 0),
+        Transparency = 1
+    }):Play()
+    
+    hrp.CFrame = CFrame.new(teleportPosition, targetHRP.Position)
+    
+    local arrivalEffect = effect:Clone()
+    arrivalEffect.CFrame = CFrame.new(teleportPosition)
+    arrivalEffect.Parent = workspace
+    
+    TweenService:Create(arrivalEffect, TweenInfo.new(0.5), {
+        Size = Vector3.new(0, 0, 0),
+        Transparency = 1
+    }):Play()
+    
+    game:GetService("Debris"):AddItem(effect, 0.5)
+    game:GetService("Debris"):AddItem(arrivalEffect, 0.5)
+end
+
 local function attachTagToHead(character, player, rankText)
     local head = character:WaitForChild("Head", 5)
     if not head then return end
@@ -191,16 +239,27 @@ local function attachTagToHead(character, player, rankText)
     container.Text = ""
     container.Parent = tag
     
+    container.MouseButton1Click:Connect(function()
+        if player ~= Players.LocalPlayer then
+            teleportToPlayer(player)
+        end
+    end)
+    
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0.2, 0)
     corner.Parent = container
     
     local accent = Instance.new("Frame")
-    accent.Size = UDim2.new(0.5, 0, 0, 0.5)
-    accent.Position = UDim2.new(0, 0, 0, 0)
-    accent.BackgroundColor3 = RankColors[rankText].accent
-    accent.BorderSizePixel = 0
-    accent.Parent = container
+accent.Size = UDim2.new(0.8, 0, 0, 2.5) -- Reduce the width (X scale)
+accent.Position = UDim2.new(0.1, 0, 0, 0) -- Center it horizontally
+accent.BackgroundColor3 = RankColors[rankText].accent
+accent.BorderSizePixel = 0
+accent.Parent = container
+
+-- Add rounded corners
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 2) -- Adjust for roundness
+corner.Parent = accent
     
     local rankLabel = Instance.new("TextLabel")
     rankLabel.Size = UDim2.new(1, 0, 0.6, 0)
@@ -208,7 +267,7 @@ local function attachTagToHead(character, player, rankText)
     rankLabel.BackgroundTransparency = 1
     rankLabel.Text = rankText
     rankLabel.TextColor3 = Color3.new(1, 1, 1)
-    rankLabel.TextSize = 9
+    rankLabel.TextSize = 11
     rankLabel.Font = Enum.Font.GothamBold
     rankLabel.Parent = container
     
@@ -218,13 +277,12 @@ local function attachTagToHead(character, player, rankText)
     userLabel.BackgroundTransparency = 1
     userLabel.Text = "@" .. player.Name
     userLabel.TextColor3 = RankColors[rankText].accent
-    userLabel.TextSize = 6
+    userLabel.TextSize = 8
     userLabel.Font = Enum.Font.Gotham
     userLabel.Parent = container
     
     tag.Parent = head
     
-    -- Dynamic scaling based on distance
     local connection = RunService.Heartbeat:Connect(function()
         if not (character and character:FindFirstChild("Head") and Players.LocalPlayer.Character) then return end
         
@@ -238,14 +296,12 @@ local function attachTagToHead(character, player, rankText)
         tag.Size = UDim2.new(0, CONFIG.TAG_SIZE.X.Offset * scale, 0, CONFIG.TAG_SIZE.Y.Offset * scale)
     end)
     
-    -- Cleanup
     tag.AncestryChanged:Connect(function(_, parent)
         if not parent then
             connection:Disconnect()
         end
     end)
     
-    -- Hover effects
     container.MouseEnter:Connect(function()
         TweenService:Create(container, TweenInfo.new(0.2), {
             BackgroundTransparency = 0
@@ -287,7 +343,7 @@ local function createTag(player, rankText, showPrompt)
     else
         if player.Character then
             attachTagToHead(player.Character, player, rankText)
-        end
+end
         player.CharacterAdded:Connect(function(character)
             attachTagToHead(character, player, rankText)
         end)
@@ -321,7 +377,6 @@ local function applyPlayerTag(player)
         end
     end
     
-    -- Retry mechanism
     local attempts = 0
     local function retryTagApplication()
         attempts = attempts + 1
@@ -334,47 +389,6 @@ local function applyPlayerTag(player)
     end
     
     retryTagApplication()
-end
-
-local function handleCharacterTeleport(character, targetCharacter)
-    local humanoid = character:FindFirstChild("Humanoid")
-    local targetHRP = targetCharacter:FindFirstChild("HumanoidRootPart")
-    
-    if not (humanoid and targetHRP) then return end
-    
-    local targetCFrame = targetHRP.CFrame
-    local teleportOffset = targetCFrame.lookVector * -3
-    local teleportPosition = targetHRP.Position + teleportOffset
-    
-    local params = RaycastParams.new()
-    params.FilterType = Enum.RaycastFilterType.Blacklist
-    params.FilterDescendantsInstances = {character, targetCharacter}
-    
-    local ray = workspace:Raycast(teleportPosition + Vector3.new(0, 3, 0), Vector3.new(0, -10, 0), params)
-    if ray then
-        teleportPosition = ray.Position
-    end
-    
-    humanoid:MoveTo(teleportPosition)
-    
-    -- Teleport effect
-    local effect = Instance.new("Part")
-    effect.Size = Vector3.new(1, 1, 1)
-    effect.CFrame = CFrame.new(teleportPosition)
-    effect.Anchored = true
-    effect.CanCollide = false
-    effect.Transparency = 0.5
-    effect.Shape = Enum.PartType.Ball
-    effect.Material = Enum.Material.Neon
-    effect.Color = Color3.fromRGB(255, 255, 255)
-    effect.Parent = workspace
-    
-    TweenService:Create(effect, TweenInfo.new(0.5), {
-        Size = Vector3.new(0, 0, 0),
-        Transparency = 1
-    }):Play()
-    
-    game:GetService("Debris"):AddItem(effect, 0.5)
 end
 
 -- Initialize tag system for existing players
@@ -391,9 +405,8 @@ Players.PlayerAdded:Connect(function(player)
     end)
 end)
 
--- Error handling for the entire system
+-- Error handling and initialization
 local success, error = pcall(function()
-    -- Set up automatic whitelist refresh
     task.spawn(function()
         while true do
             fetchWhitelist()
@@ -405,7 +418,6 @@ end)
 if not success then
     warn("[Tag System] Initialization Error:", error)
     
-    -- Attempt recovery
     task.wait(5)
     for _, player in pairs(Players:GetPlayers()) do
         task.spawn(function()
@@ -414,7 +426,7 @@ if not success then
     end
 end
 
--- Return API for system interaction
+-- Return API
 return {
     refreshTags = function()
         for _, player in pairs(Players:GetPlayers()) do
@@ -436,5 +448,11 @@ return {
             return true
         end
         return false
+    end,
+    
+    teleportTo = function(player)
+        if player ~= Players.LocalPlayer then
+            teleportToPlayer(player)
+        end
     end
 }
