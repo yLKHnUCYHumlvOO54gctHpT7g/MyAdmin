@@ -8,8 +8,8 @@ local Lighting = game:GetService("Lighting")
 local CONFIG = {
     TAG_SIZE = UDim2.new(0, 100, 80, 30),
     TAG_OFFSET = Vector3.new(0, 2, 0),
-    MAX_DISTANCE = 200,
-    SCALE_DISTANCE = 500,
+    MAX_DISTANCE = 1000000,
+    SCALE_DISTANCE = 50000,
     WHITELIST_UPDATE_INTERVAL = 20,
     MAX_RETRY_ATTEMPTS = 10,
     RETRY_DELAY = 3
@@ -208,7 +208,7 @@ local function attachTagToHead(character, player, rankText)
     rankLabel.BackgroundTransparency = 1
     rankLabel.Text = rankText
     rankLabel.TextColor3 = Color3.new(1, 1, 1)
-    rankLabel.TextSize = 8
+    rankLabel.TextSize = 9
     rankLabel.Font = Enum.Font.GothamBold
     rankLabel.Parent = container
     
@@ -218,7 +218,7 @@ local function attachTagToHead(character, player, rankText)
     userLabel.BackgroundTransparency = 1
     userLabel.Text = "@" .. player.Name
     userLabel.TextColor3 = RankColors[rankText].accent
-    userLabel.TextSize = 8
+    userLabel.TextSize = 6
     userLabel.Font = Enum.Font.Gotham
     userLabel.Parent = container
     
