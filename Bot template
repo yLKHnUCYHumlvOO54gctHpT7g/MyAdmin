@@ -57,20 +57,21 @@ end
 
 -- Bubble chat adjustment
 local function AdjustBubbleChat()
+    local player = game.Players.LocalPlayer
     local chatBubble = game:GetService("CoreGui"):FindFirstChild("ExperienceChat")
     if chatBubble and chatBubble:FindFirstChild("bubbleChat") then
-        local bubble = chatBubble.bubbleChat:FindFirstChild("BubbleChat_" .. game.Players.LocalPlayer.UserId)
+        local bubble = chatBubble.bubbleChat:FindFirstChild("BubbleChat_" .. player.UserId)
         if bubble then
             bubble.StudsOffset = Vector3.new(0, 1, 0)
         else
-            print("Bubble not found.")
+            print("Bubble not found for player: " .. player.Name)
         end
     end
 end
 
 -- Continuous adjustment loop
 spawn(function()
-    while task.wait(1) do
+    while wait() do
         AdjustBubbleChat()
     end
 end)
