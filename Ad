@@ -14,7 +14,7 @@ local function chatMessage(str)
 end
 
 local blob = "\u{000D}"
-local message = "##" .. blob:rep(120) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:rep(5) .. "\n" .. " ║ gg./bgWY2zEV7z ║" .. blob:rep(50)
+local message = "##" .. blob:rep(120) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:rep(5) .. "\n" .. " ║ ḍ̺̣̺ị̣̺ṣ̣̺c̣̺ọ̣̺ṛ̺ḍ̺.ɡ̣̺ɡ̣̺/ḅ̣̺g̣̺WY2̺ẓ̺Ẹ̺V7̺ẓ̺ ║" .. blob:rep(50)
 
 -- Check the chat version and adjust the message accordingly
 if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
