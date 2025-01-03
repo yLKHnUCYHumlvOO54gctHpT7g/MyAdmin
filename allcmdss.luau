@@ -92,5 +92,6 @@ _G.cmds = {
     ["!hug"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Hug",
     ["!antikick"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Antikick2",
     ["!bodyinvis"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Bodyinvis",
+    ["!vcbypass"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Vcbypass",
     ["!shapeshifter"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/ss"
 }
