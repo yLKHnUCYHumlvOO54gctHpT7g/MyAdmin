@@ -262,7 +262,7 @@ local function attachTagToHead(character, player, rankText)
     elseif rankText == "AK TRIAL" then
         emoji.Text = "🔰"  -- Japanese symbol for beginner
     elseif rankText == "AK USER" then
-        emoji.Text = "🌟"  -- Glowing star for user
+        emoji.Text = ""  -- Glowing star for user
     end
     
     emoji.Parent = container
