@@ -239,17 +239,33 @@ local function attachTagToHead(character, player, rankText)
     container.Text = ""
     container.Parent = tag
 
-if rankText == "AK OWNER" then
-        local crown = Instance.new("TextLabel")
-        crown.Size = UDim2.new(1, 0, 0.5, 0)
-        crown.Position = UDim2.new(0, 0, -0.4, 0)
-        crown.BackgroundTransparency = 1
-        crown.Text = "👑"
-        crown.TextSize = 25
-        crown.TextColor3 = RankColors[rankText].accent
-        crown.Font = Enum.Font.GothamBold
-        crown.Parent = container
+    -- Add rank-specific emojis
+    local emoji = Instance.new("TextLabel")
+    emoji.Size = UDim2.new(1, 0, 0.5, 0)
+    emoji.Position = UDim2.new(0, 0, -0.4, 0)
+    emoji.BackgroundTransparency = 1
+    emoji.TextSize = 25
+    emoji.TextColor3 = RankColors[rankText].accent
+    emoji.Font = Enum.Font.GothamBold
+    
+    -- Assign specific emojis for each rank
+    if rankText == "AK OWNER" then
+        emoji.Text = "👑"  -- Crown for owner
+    elseif rankText == "AK SCRIPTER" then
+        emoji.Text = "⚡"  -- Lightning bolt for scripter
+    elseif rankText == "AK SUPPORTER" then
+        emoji.Text = "💎"  -- Diamond for supporter
+    elseif rankText == "AK STAFF" then
+        emoji.Text = "⭐"  -- Star for staff
+    elseif rankText == "AK ADVERTISER" then
+        emoji.Text = "📢"  -- Megaphone for advertiser
+    elseif rankText == "AK TRIAL" then
+        emoji.Text = "🔰"  -- Japanese symbol for beginner
+    elseif rankText == "AK USER" then
+        emoji.Text = "🌟"  -- Glowing star for user
     end
+    
+    emoji.Parent = container
 
     container.MouseButton1Click:Connect(function()
         if player ~= Players.LocalPlayer then
@@ -260,113 +276,90 @@ if rankText == "AK OWNER" then
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0.2, 0)
     corner.Parent = container
-    
-    local TweenService = game:GetService("TweenService")
 
-local TweenService = game:GetService("TweenService")
+    local accent = Instance.new("Frame")
+    accent.Size = UDim2.new(0.7, 0, 0, 2.5)
+    accent.Position = UDim2.new(0.5, 0, 0, 0)
+    accent.BackgroundColor3 = RankColors[rankText].accent
+    accent.BorderSizePixel = 0
+    accent.Parent = container
 
-local TweenService = game:GetService("TweenService")
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 2)
+    corner.Parent = accent
 
-local accent = Instance.new("Frame")
-accent.Size = UDim2.new(0.7, 0, 0, 2.5) -- Initial size
-accent.Position = UDim2.new(0.5, 0, 0, 0) -- Position it in the center
-accent.BackgroundColor3 = RankColors[rankText].accent
-accent.BorderSizePixel = 0
-accent.Parent = container
+    accent.AnchorPoint = Vector2.new(0.5, 0.5)
+    accent.Position = UDim2.new(0.5, 0, 0, 0)
 
--- Add rounded corners
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 2)
-corner.Parent = accent
+    local tweenInfo = TweenInfo.new(
+        0.7,
+        Enum.EasingStyle.Sine,
+        Enum.EasingDirection.InOut,
+        -1,
+        true
+    )
 
--- Set the AnchorPoint to center so the tweening happens from the middle
-accent.AnchorPoint = Vector2.new(0.5, 0.5)
-accent.Position = UDim2.new(0.5, 0, 0, 0) -- Center the accent frame
-
--- Tween goal: smoothly change the width from the center to a very small size
-local tweenInfo = TweenInfo.new(
-    0.7, -- Duration of one cycle (seconds), faster than before
-    Enum.EasingStyle.Sine, -- Use sine easing for smoother, more natural transitions
-    Enum.EasingDirection.InOut, -- Smooth in and out
-    -1, -- Loop infinitely
-    true -- Reverse the tween direction (so it goes back and forth)
-)
-
-local tween = TweenService:Create(accent, tweenInfo, {Size = UDim2.new(0.1, 0, 0, 2.5)}) -- Reduced size further to 10% of the original
-
--- Start the tweening
-tween:Play()
+    local tween = TweenService:Create(accent, tweenInfo, {Size = UDim2.new(0.1, 0, 0, 2.5)})
+    tween:Play()
     
     local rankLabel = Instance.new("TextLabel")
-rankLabel.Size = UDim2.new(1, 0, 0.6, 0)
-rankLabel.Position = UDim2.new(0, 0, 0.1, 0)
-rankLabel.BackgroundTransparency = 1
-rankLabel.Text = rankText
-rankLabel.TextColor3 = Color3.new(1, 1, 1)
-rankLabel.TextSize = 17
-rankLabel.Font = Enum.Font.SourceSansBold
-rankLabel.Parent = container
+    rankLabel.Size = UDim2.new(1, 0, 0.6, 0)
+    rankLabel.Position = UDim2.new(0, 0, 0.1, 0)
+    rankLabel.BackgroundTransparency = 1
+    rankLabel.Text = rankText
+    rankLabel.TextColor3 = Color3.new(1, 1, 1)
+    rankLabel.TextSize = 17
+    rankLabel.Font = Enum.Font.SourceSansBold
+    rankLabel.Parent = container
 
--- Set the maximum distance (50 studs for scaling)
-local maxDistance = 50
-local minSize = 8  -- Minimum text size when far away
-local maxSize = 17  -- Maximum text size when close
+    local maxDistance = 50
+    local minSize = 8
+    local maxSize = 17
 
--- Continuously check distance between local player and label
-game:GetService("RunService").Heartbeat:Connect(function()
-    local localPlayer = game.Players.LocalPlayer
-    local localPlayerHead = localPlayer.Character and localPlayer.Character:WaitForChild("Head")
-    
-    if localPlayer and localPlayerHead and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-        local targetHumanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
-        if targetHumanoidRootPart then
-            -- Calculate the distance between the local player and the target player
-            local distance = (localPlayerHead.Position - targetHumanoidRootPart.Position).Magnitude
-            
-            -- Scale the text size based on distance, clamped between minSize and maxSize
-            local newSize = math.clamp(maxSize - ((distance / maxDistance) * (maxSize - minSize)), minSize, maxSize)
-            rankLabel.TextSize = newSize
+    RunService.Heartbeat:Connect(function()
+        local localPlayer = Players.LocalPlayer
+        local localPlayerHead = localPlayer.Character and localPlayer.Character:WaitForChild("Head")
+        
+        if localPlayer and localPlayerHead and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local targetHumanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+            if targetHumanoidRootPart then
+                local distance = (localPlayerHead.Position - targetHumanoidRootPart.Position).Magnitude
+                local newSize = math.clamp(maxSize - ((distance / maxDistance) * (maxSize - minSize)), minSize, maxSize)
+                rankLabel.TextSize = newSize
+            end
         end
-    end
-end)
+    end)
     
     local userLabel = Instance.new("TextLabel")
-userLabel.Size = UDim2.new(1, 0, 0.4, 0)
-userLabel.Position = UDim2.new(0, 0, 0.6, 0)
-userLabel.BackgroundTransparency = 1
-userLabel.Text = "@" .. player.Name
-userLabel.TextColor3 = RankColors[rankText].accent
-userLabel.TextSize = 8
-userLabel.Font = Enum.Font.GothamBold
-userLabel.Parent = container
+    userLabel.Size = UDim2.new(1, 0, 0.4, 0)
+    userLabel.Position = UDim2.new(0, 0, 0.6, 0)
+    userLabel.BackgroundTransparency = 1
+    userLabel.Text = "@" .. player.Name
+    userLabel.TextColor3 = RankColors[rankText].accent
+    userLabel.TextSize = 8
+    userLabel.Font = Enum.Font.GothamBold
+    userLabel.Parent = container
 
-tag.Parent = head
+    tag.Parent = head
 
--- Set the maximum distance (50 studs for visibility)
-local maxDistance = 50
+    local maxDistance = 50
+    local playerHead = player.Character:WaitForChild("Head")
+    local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
 
--- Make sure we reference the player's head properly
-local playerHead = player.Character:WaitForChild("Head")
-local humanoidRootPart = player.Character:WaitForChild("HumanoidRootPart")
-
--- Continuously check distance between local player and label
-game:GetService("RunService").Heartbeat:Connect(function()
-    local localPlayer = game.Players.LocalPlayer
-    local localPlayerHead = localPlayer.Character and localPlayer.Character:WaitForChild("Head")
-    
-    if localPlayer and localPlayerHead and player.Character and playerHead and humanoidRootPart then
-        -- Calculate the distance between the local player's Head and the target's Head
-        local distance = (localPlayerHead.Position - humanoidRootPart.Position).Magnitude
+    RunService.Heartbeat:Connect(function()
+        local localPlayer = Players.LocalPlayer
+        local localPlayerHead = localPlayer.Character and localPlayer.Character:WaitForChild("Head")
         
-        -- If the distance is greater than 50 studs, hide the label
-        if distance > maxDistance then
-            userLabel.Visible = false
-        else
-            -- If the local player is within 50 studs, show the label
-            userLabel.Visible = true
+        if localPlayer and localPlayerHead and player.Character and playerHead and humanoidRootPart then
+            local distance = (localPlayerHead.Position - humanoidRootPart.Position).Magnitude
+            
+            if distance > maxDistance then
+                userLabel.Visible = false
+            else
+                userLabel.Visible = true
+            end
         end
-    end
-end)
+    end)
     
     local connection = RunService.Heartbeat:Connect(function()
         if not (character and character:FindFirstChild("Head") and Players.LocalPlayer.Character) then return end
@@ -428,7 +421,7 @@ local function createTag(player, rankText, showPrompt)
     else
         if player.Character then
             attachTagToHead(player.Character, player, rankText)
-end
+        end
         player.CharacterAdded:Connect(function(character)
             attachTagToHead(character, player, rankText)
         end)
