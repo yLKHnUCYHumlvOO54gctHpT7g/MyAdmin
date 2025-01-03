@@ -257,7 +257,7 @@ if rankText == "AK USER" then
         crown.Position = UDim2.new(0, 0, -0.4, 0)
         crown.BackgroundTransparency = 1
         crown.Text = "👾"
-        crown.TextSize = 25
+        crown.TextSize = 20
         crown.TextColor3 = RankColors[rankText].accent
         crown.Font = Enum.Font.GothamBold
         crown.Parent = container
@@ -268,12 +268,25 @@ if rankText == "AK SCRIPTER" then
         crown.Size = UDim2.new(1, 0, 0.5, 0)
         crown.Position = UDim2.new(0, 0, -0.4, 0)
         crown.BackgroundTransparency = 1
-        crown.Text = ""
-        crown.TextSize = 25
+        crown.Text = "📜"
+        crown.TextSize = 20
         crown.TextColor3 = RankColors[rankText].accent
         crown.Font = Enum.Font.GothamBold
         crown.Parent = container
     end
+
+if rankText == "AK SUPPORTER" then
+        local crown = Instance.new("TextLabel")
+        crown.Size = UDim2.new(1, 0, 0.5, 0)
+        crown.Position = UDim2.new(0, 0, -0.4, 0)
+        crown.BackgroundTransparency = 1
+        crown.Text = "🤝🏻"
+        crown.TextSize = 20
+        crown.TextColor3 = RankColors[rankText].accent
+        crown.Font = Enum.Font.GothamBold
+        crown.Parent = container
+    end
+
 
     container.MouseButton1Click:Connect(function()
         if player ~= Players.LocalPlayer then
@@ -534,10 +547,10 @@ if not success then
         end)
     end
 end
-https://github.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/blob/main/loadplayertags.luau
+
 -- Return API
 return {
-    refreshTags = function()https://github.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/blob/main/loadplayertags.luau
+    refreshTags = function()
         for _, player in pairs(Players:GetPlayers()) do
             task.spawn(function()
                 applyPlayerTag(player)
