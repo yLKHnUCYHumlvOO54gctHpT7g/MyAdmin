@@ -22,6 +22,6 @@ if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
     chatMessage(message)
 else
     -- Create a compact version of the message without whitespaces for the old chat system
-    local compactMessage = "║🔥 AK ADMIN 🔥 ║ -  ḍiscord.gg/bgWY2zEV7z"
+    local compactMessage = "🔥 AK ADMIN 🔥 ḍiscord.gg/bgWY2zEV7z"
     chatMessage(compactMessage)
 end
