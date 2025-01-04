@@ -18,11 +18,10 @@ local message = "##" .. blob:rep(120) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:re
 
 -- Check the chat version and adjust the message accordingly
 if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-    -- Send the message with "AK ADMIN" slightly higher
+    -- Send the formatted message with TextChatService
     chatMessage(message)
 else
-    -- Remove the hashtags and formatting for the old chat system
-    local plainMessage = message:gsub("^##", "") -- Remove leading ##
-    plainMessage = plainMessage:gsub(blob, "") -- Remove blobs
-    chatMessage(plainMessage)
+    -- Create a compact version of the message without whitespaces for the old chat system
+    local compactMessage = "║🔥 AK ADMIN 🔥 ║ -  ḍiscord.gg/bgWY2zEV7z"
+    chatMessage(compactMessage)
 end
