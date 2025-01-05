@@ -32,7 +32,7 @@ local RankColors = {
     },
     ["AK STAFF"] = {
         primary = Color3.fromRGB(20, 20, 20),
-        accent = Color3.fromRGB(50, 205, 50)
+        accent = Color3.fromRGB(255, 252, 132) -- Light Yellow (#FFFC84)
     },
     ["AK ADVERTISER"] = {
         primary = Color3.fromRGB(20, 20, 20),
