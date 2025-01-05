@@ -252,11 +252,11 @@ local function attachTagToHead(character, player, rankText)
     if rankText == "AK OWNER" then
         emoji.Text = "👑"  -- Crown for owner
     elseif rankText == "AK SCRIPTER" then
-        emoji.Text = "⚡"  -- Lightning bolt for scripter
+        emoji.Text = "👾"  -- Lightning bolt for scripter
     elseif rankText == "AK SUPPORTER" then
         emoji.Text = "💎"  -- Diamond for supporter
     elseif rankText == "AK STAFF" then
-        emoji.Text = "⭐"  -- Star for staff
+        emoji.Text = "🔰"  -- Star for staff
     elseif rankText == "AK ADVERTISER" then
         emoji.Text = "📢"  -- Megaphone for advertiser
     elseif rankText == "AK TRIAL" then
