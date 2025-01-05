@@ -241,12 +241,12 @@ local function attachTagToHead(character, player, rankText)
 
     -- Add rank-specific emojis
     local emoji = Instance.new("TextLabel")
-    emoji.Size = UDim2.new(1, 0, 0.5, 0)
-    emoji.Position = UDim2.new(0, 0, -0.4, 0)
-    emoji.BackgroundTransparency = 1
-    emoji.TextSize = 25
-    emoji.TextColor3 = RankColors[rankText].accent
-    emoji.Font = Enum.Font.GothamBold
+emoji.Size = UDim2.new(1, 0, 0.5, 0)
+emoji.Position = UDim2.new(0, 0, -0.45, 0) -- Slightly higher by decreasing the Y position
+emoji.BackgroundTransparency = 1
+emoji.TextSize = 25
+emoji.TextColor3 = RankColors[rankText].accent
+emoji.Font = Enum.Font.SourceSans
     
     -- Assign specific emojis for each rank
     if rankText == "AK OWNER" then
