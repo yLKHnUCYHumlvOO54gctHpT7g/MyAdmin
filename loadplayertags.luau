@@ -432,7 +432,7 @@ local Advertisers = {"Vlafz195", "6736_45", "goekaycool", "goekayball", "goekayb
 local FreeTrial = {}
 local Scripters = {"GYATT_DAMN1", "328ml", "29Kyooo", "BloxiAstra", "ImOn_ValveIndex"}
 local Owners = {"Xeni_he07", "AliKhammas1234", "AliKhammas", "I_LOVEYOU12210", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2", "Akksosdmdokdkddmkd"}
-local Supporter = {"Robloxian74630436"}
+local Supporter = {"Robloxian74630436", "MyLittlePonySEDE"}
 local AKStaff = {"goekaycool", "goetemp_1"}
 
 local function applyPlayerTag(player)
