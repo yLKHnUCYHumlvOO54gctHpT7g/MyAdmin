@@ -74,7 +74,7 @@ Title.BackgroundTransparency = 1
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 14
 Title.Font = Enum.Font.GothamBold
-Title.Text = "Chat Interface"
+Title.Text = "AK CHAT BYPASSER"
 Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.Parent = TitleBar
 
