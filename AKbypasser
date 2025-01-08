@@ -1,3 +1,5 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
+
 -- Professional Compact Chat Interface
 -- Optimized for all devices with enhanced features
 
