@@ -297,6 +297,106 @@ slipSound:Destroy()
 		if getgenv().crash then
 		while true do end
 		end
+        elseif command == ".smartwalktome" then
+        local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local PlayerModule = require(Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule"))
+local Controls = PlayerModule:GetControls()
+local function setControlsEnabled(enabled)
+    if enabled then
+        Controls:Enable() -- Enable player controls
+    else
+        Controls:Disable() -- Disable player controls
+    end
+end
+local Target = admin.Character.HumanoidRootPart
+local Pathfind = game:GetService("PathfindingService")
+local Humanoid = game.Players.LocalPlayer.Character:WaitForChild("Humanoid")
+local Torso = game.Players.LocalPlayer.Character:WaitForChild("HumanoidRootPart")
+local Path = Pathfind:CreatePath()
+local GenPoint = nil
+local PointArray = {}
+local Folder = Instance.new("Folder")
+Folder.Name = "Waypoints"
+Folder.Parent = workspace
+setControlsEnabled(false)
+Path:ComputeAsync(Torso.Position, Target.Position)
+
+local Waypoints = Path:GetWaypoints()
+
+for i, v in ipairs(Waypoints) do
+
+    GenPoint = v
+
+    table.insert(PointArray, GenPoint)
+
+    local Point = Instance.new("Part")
+    Point.Anchored = true
+    Point.Shape = "Ball"
+    Point.Size = Vector3.one*0.5
+    Point.Position = v.Position + Vector3.new(0,2,0)
+    Point.CanCollide = false
+    Point.Parent = workspace.Waypoints
+    Point.Name = "Point"..tostring(i)
+end
+
+for i2, v2 in ipairs(PointArray) do
+
+    if v2.Action == Enum.PathWaypointAction.Jump then
+        Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+
+    Humanoid:MoveTo(v2.Position)
+    Humanoid.MoveToFinished:Wait()
+    workspace.Waypoints["Point"..tostring(i2)].BrickColor = BrickColor.new("Camo")
+    workspace.Waypoints["Point"..tostring(i2)].Material = "Neon"
+end
+setControlsEnabled(true)
+game.Workspace.Waypoints:Destroy()
+        elseif command == ".walktome" then
+        
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local PlayerModule = require(Player:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule"))
+local Controls = PlayerModule:GetControls()
+
+local targetPart = admin.Character:WaitForChild("HumanoidRootPart") -- Replace "sdfsf" with your part's name if needed
+local character = Player.Character or Player.CharacterAdded:Wait()
+
+-- Function to enable/disable controls
+local function setControlsEnabled(enabled)
+    if enabled then
+        Controls:Enable() -- Enable player controls
+    else
+        Controls:Disable() -- Disable player controls
+    end
+end
+
+-- Function to move character to a target part
+local function moveToPart(part)
+    if character and character:FindFirstChild("Humanoid") then
+        local humanoid = character.Humanoid
+
+        -- Disable controls
+        setControlsEnabled(false)
+
+        -- Move to the target part
+        humanoid:MoveTo(part.Position)
+
+        -- Wait until the character reaches the destination or time out after 10 seconds
+        local reached = humanoid.MoveToFinished:Wait()
+        if reached then
+        else
+        end
+
+        -- Re-enable controls
+        setControlsEnabled(true)
+    end
+end
+
+-- Example usage: Move the character to the part when the script runs
+moveToPart(targetPart)
+
             elseif command == ".control" then
             local function disableSeat(seat)
     if seat:IsA("Seat") or seat:IsA("VehicleSeat") then
