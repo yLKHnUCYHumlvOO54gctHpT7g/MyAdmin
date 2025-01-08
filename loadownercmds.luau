@@ -747,7 +747,52 @@ tweenIn:Play()
 tweenIn.Completed:Wait() -- Wait for tween to complete
 RobloxVoiceChatPromptGui:Destroy() -- Destroy the GUI
 elseif command == ".kill" then
-                player.Character.Humanoid.Health = 0
+                local player = game.Players.LocalPlayer
+local camera = workspace.CurrentCamera
+
+local function forceResetToVoid()
+    local character = player.Character
+    if not character or not character:FindFirstChild("HumanoidRootPart") then
+        character = player.CharacterAdded:Wait()
+    end
+    
+    -- Save current position
+    local savedPosition = character.HumanoidRootPart.CFrame
+    
+    -- Freeze camera
+    local cameraType = camera.CameraType
+    camera.CameraType = Enum.CameraType.Scriptable
+    
+    -- Teleport to void
+    character:SetPrimaryPartCFrame(CFrame.new(80, -428, -35) - Vector3.new(0, 50, 0))
+    
+    -- Set up respawn handler before the character dies
+    local connection
+    connection = player.CharacterAdded:Connect(function(newCharacter)
+        -- Disconnect immediately to prevent multiple connections
+        connection:Disconnect()
+        
+        -- Wait for the new character's HumanoidRootPart
+        local humanoidRootPart = newCharacter:WaitForChild("HumanoidRootPart")
+        
+        -- Small wait to ensure character is fully loaded
+        task.wait(0.1)
+        
+        -- Set spawn position to the saved position
+        -- This will allow the character to spawn at the exact position
+        newCharacter:SetPrimaryPartCFrame(savedPosition)
+        
+        -- Unfreeze camera
+        task.wait(0.1) -- Small buffer for teleport to complete
+        camera.CameraType = cameraType
+    end)
+    
+    -- Force the reset
+    task.wait(0.5)
+end
+
+-- Call the function
+forceResetToVoid()
 elseif command == ".suspend" then
 -- Gui to Lua
 -- Version: 3.2
