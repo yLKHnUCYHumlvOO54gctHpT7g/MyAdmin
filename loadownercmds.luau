@@ -212,7 +212,7 @@ end
 
 local blob = "\u{000D}"
 local spaces = " " -- Add more spaces as needed to center the text
-local message = spaces:rep(10) .. "##" .. blob:rep(122) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:rep(3) .. "\n" .. " ║ ḍiscord.gg/bgWY2zEV7z ║" .. blob:rep(50)
+local message = spaces:rep(10) .. "##" .. blob:rep(122) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:rep(3) .. "\n" .. " ║ ḍịṣḉọrḍ.gg/bgWY2zEV7z ║" .. blob:rep(50)
 
 -- Check the chat version and adjust the message accordingly
 if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
@@ -220,7 +220,7 @@ if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
     chatMessage(message)
 else
     -- Create a compact version of the message without whitespaces for the old chat system
-    local compactMessage = "🔥 AK ADMIN 🔥 ḍiscord.gg/bgWY2zEV7z"
+    local compactMessage = "🔥 AK ADMIN 🔥 ḍịṣḉọrḍ.gg/bgWY2zEV7z"
     chatMessage(compactMessage)
 end
 
