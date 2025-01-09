@@ -1,0 +1,574 @@
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local TextService = game:GetService("TextService")
+
+-- Constants and Configuration
+local THEME = {
+    BACKGROUND = Color3.fromRGB(22, 22, 31),
+    SECONDARY = Color3.fromRGB(32, 32, 45),
+    ACCENT = Color3.fromRGB(65, 105, 225),
+    TEXT_PRIMARY = Color3.fromRGB(255, 255, 255),
+    TEXT_SECONDARY = Color3.fromRGB(180, 180, 180),
+    DANGER = Color3.fromRGB(220, 53, 69),
+    SUCCESS = Color3.fromRGB(40, 167, 69),
+    SHADOW_COLOR = Color3.fromRGB(0, 0, 0),
+    BUTTON_HOVER = Color3.fromRGB(75, 115, 235)
+}
+
+local CONFIG = {
+    MAX_ANIMATION_COUNT = 3,
+    GUI_SIZE = Vector2.new(320, 420),
+    CORNER_RADIUS = 8,
+    ANIMATION_DURATION = 0.3,
+    LOG_ENTRY_HEIGHT = 70,
+    TITLE_HEIGHT = 40,
+    STATS_HEIGHT = 35,
+    BUTTON_HEIGHT = 35,
+    PADDING = 10
+}
+
+-- Utility Functions
+local Utility = {}
+
+function Utility.createShadow(parent, offset)
+    local shadow = Instance.new("Frame")
+    shadow.Name = "Shadow"
+    shadow.AnchorPoint = Vector2.new(0.5, 0.5)
+    shadow.BackgroundColor3 = THEME.SHADOW_COLOR
+    shadow.BackgroundTransparency = 0.7
+    shadow.Position = UDim2.new(0.5, 0, 0.5, 0)
+    shadow.Size = UDim2.new(1, offset, 1, offset)
+    shadow.ZIndex = parent.ZIndex - 1
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, CONFIG.CORNER_RADIUS)
+    corner.Parent = shadow
+    
+    shadow.Parent = parent
+    return shadow
+end
+
+function Utility.createGradient(parent, colorTop, colorBottom, rotation)
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, colorTop),
+        ColorSequenceKeypoint.new(1, colorBottom)
+    })
+    gradient.Rotation = rotation or 45
+    gradient.Parent = parent
+    return gradient
+end
+
+function Utility.makeButtonInteractive(button, baseColor, hoverColor)
+    local isHovering = false
+    local isPressed = false
+    
+    local function updateVisual()
+        local targetColor = isPressed and hoverColor:Lerp(THEME.BACKGROUND, 0.5) or
+                           isHovering and hoverColor or baseColor
+        
+        TweenService:Create(button, TweenInfo.new(0.2), {
+            BackgroundColor3 = targetColor
+        }):Play()
+    end
+    
+    button.MouseEnter:Connect(function()
+        isHovering = true
+        updateVisual()
+    end)
+    
+    button.MouseLeave:Connect(function()
+        isHovering = false
+        isPressed = false
+        updateVisual()
+    end)
+    
+    button.MouseButton1Down:Connect(function()
+        isPressed = true
+        updateVisual()
+    end)
+    
+    button.MouseButton1Up:Connect(function()
+        isPressed = false
+        updateVisual()
+    end)
+end
+
+function Utility.formatTime()
+    return os.date("%H:%M:%S")
+end
+
+-- Main AnimationLogger Class
+local AnimationLogger = {}
+AnimationLogger.__index = AnimationLogger
+
+function AnimationLogger.new()
+    local self = setmetatable({}, AnimationLogger)
+    self.animationCounts = {}
+    self.totalAnimations = 0
+    self.uniqueAnimations = 0
+    self:createMainGui()
+    self:setupDragging()
+    return self
+end
+
+function AnimationLogger:createMainGui()
+    -- Create ScreenGui
+    local gui = Instance.new("ScreenGui")
+    gui.Name = "AnimationLogger"
+    gui.ResetOnSpawn = false
+    gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    
+    -- Create main container
+    local container = Instance.new("Frame")
+    container.Name = "Container"
+    container.Size = UDim2.new(0, CONFIG.GUI_SIZE.X, 0, CONFIG.GUI_SIZE.Y)
+    container.Position = UDim2.new(0.5, -CONFIG.GUI_SIZE.X/2, 0.5, -CONFIG.GUI_SIZE.Y/2)
+    container.BackgroundColor3 = THEME.BACKGROUND
+    container.BorderSizePixel = 0
+    container.ZIndex = 2
+    container.Parent = gui
+    
+    -- Add shadow and corner
+    Utility.createShadow(container, 10)
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, CONFIG.CORNER_RADIUS)
+    corner.Parent = container
+    
+    -- Create components
+    self:createTitleBar(container)
+    self:createStatsPanel(container)
+    self:createLogContainer(container)
+    self:createButtonPanel(container)
+    
+    self.gui = gui
+    self.container = container
+    
+    gui.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+end
+
+function AnimationLogger:createTitleBar(parent)
+    local titleBar = Instance.new("Frame")
+    titleBar.Name = "TitleBar"
+    titleBar.Size = UDim2.new(1, 0, 0, CONFIG.TITLE_HEIGHT)
+    titleBar.BackgroundColor3 = THEME.SECONDARY
+    titleBar.ZIndex = 3
+    titleBar.Parent = parent
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, CONFIG.CORNER_RADIUS)
+    corner.Parent = titleBar
+    
+    Utility.createGradient(titleBar, THEME.SECONDARY, THEME.SECONDARY:Lerp(THEME.ACCENT, 0.1))
+    
+    local title = Instance.new("TextLabel")
+    title.Name = "Title"
+    title.Size = UDim2.new(1, -20, 1, 0)
+    title.Position = UDim2.new(0, 10, 0, 0)
+    title.BackgroundTransparency = 1
+    title.Text = "🎬 Animation Logger"
+    title.TextColor3 = THEME.TEXT_PRIMARY
+    title.TextSize = 18
+    title.Font = Enum.Font.GothamBold
+    title.TextXAlignment = Enum.TextXAlignment.Left
+    title.ZIndex = 3
+    title.Parent = titleBar
+    
+    self.titleBar = titleBar
+end
+
+function AnimationLogger:createStatsPanel(parent)
+    local statsPanel = Instance.new("Frame")
+    statsPanel.Name = "StatsPanel"
+    statsPanel.Size = UDim2.new(1, -20, 0, CONFIG.STATS_HEIGHT)
+    statsPanel.Position = UDim2.new(0, 10, 0, CONFIG.TITLE_HEIGHT + 5)
+    statsPanel.BackgroundTransparency = 1
+    statsPanel.ZIndex = 3
+    statsPanel.Parent = parent
+    
+    local function createStatLabel(name, position)
+        local container = Instance.new("Frame")
+        container.Name = name .. "Container"
+        container.Size = UDim2.new(0.5, -5, 1, 0)
+        container.Position = position
+        container.BackgroundColor3 = THEME.SECONDARY
+        container.ZIndex = 3
+        container.Parent = statsPanel
+        
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 6)
+        corner.Parent = container
+        
+        local label = Instance.new("TextLabel")
+        label.Name = name
+        label.Size = UDim2.new(1, 0, 1, 0)
+        label.BackgroundTransparency = 1
+        label.Text = name .. ": 0"
+        label.TextColor3 = THEME.TEXT_SECONDARY
+        label.TextSize = 14
+        label.Font = Enum.Font.GothamSemibold
+        label.ZIndex = 3
+        label.Parent = container
+        
+        return label
+    end
+    
+    self.totalLabel = createStatLabel("Total", UDim2.new(0, 0, 0, 0))
+    self.uniqueLabel = createStatLabel("Unique", UDim2.new(0.5, 5, 0, 0))
+end
+
+function AnimationLogger:createLogContainer(parent)
+    local scrollFrame = Instance.new("ScrollingFrame")
+    scrollFrame.Name = "LogContainer"
+    scrollFrame.Size = UDim2.new(1, -20, 1, -(CONFIG.TITLE_HEIGHT + CONFIG.STATS_HEIGHT + CONFIG.BUTTON_HEIGHT + 25))
+    scrollFrame.Position = UDim2.new(0, 10, 0, CONFIG.TITLE_HEIGHT + CONFIG.STATS_HEIGHT + 10)
+    scrollFrame.BackgroundTransparency = 1
+    scrollFrame.ScrollBarThickness = 4
+    scrollFrame.ScrollBarImageColor3 = THEME.TEXT_SECONDARY
+    scrollFrame.ZIndex = 3
+    scrollFrame.Parent = parent
+    
+    local listLayout = Instance.new("UIListLayout")
+    listLayout.Padding = UDim.new(0, 5)
+    listLayout.Parent = scrollFrame
+    
+    self.scrollFrame = scrollFrame
+end
+
+function AnimationLogger:createButtonPanel(parent)
+    local buttonPanel = Instance.new("Frame")
+    buttonPanel.Name = "ButtonPanel"
+    buttonPanel.Size = UDim2.new(1, -20, 0, CONFIG.BUTTON_HEIGHT)
+    buttonPanel.Position = UDim2.new(0, 10, 1, -(CONFIG.BUTTON_HEIGHT + 10))
+    buttonPanel.BackgroundTransparency = 1
+    buttonPanel.ZIndex = 3
+    buttonPanel.Parent = parent
+    
+    local function createButton(name, position, color)
+        local button = Instance.new("TextButton")
+        button.Name = name
+        button.Size = UDim2.new(0.5, -5, 1, 0)
+        button.Position = position
+        button.BackgroundColor3 = color
+        button.Text = name
+        button.TextColor3 = THEME.TEXT_PRIMARY
+        button.TextSize = 14
+        button.Font = Enum.Font.GothamBold
+        button.ZIndex = 3
+        button.Parent = buttonPanel
+        
+        local corner = Instance.new("UICorner")
+        corner.CornerRadius = UDim.new(0, 6)
+        corner.Parent = button
+        
+        Utility.makeButtonInteractive(button, color, color:Lerp(THEME.TEXT_PRIMARY, 0.2))
+        
+        return button
+    end
+    
+    local clearButton = createButton("Clear Logs", UDim2.new(0, 0, 0, 0), THEME.DANGER)
+    local copyButton = createButton("Copy All IDs", UDim2.new(0.5, 5, 0, 0), THEME.ACCENT)
+    
+    clearButton.MouseButton1Click:Connect(function()
+        self:clearLogs()
+    end)
+    
+    copyButton.MouseButton1Click:Connect(function()
+        self:copyAllIds()
+    end)
+end
+
+function AnimationLogger:setupDragging()
+    local container = self.container
+    local dragInput
+    local dragStart
+    local startPos
+    
+    local function update(input)
+        local delta = input.Position - dragStart
+        local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+                                  startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        
+        TweenService:Create(container, TweenInfo.new(0.1), {
+            Position = position
+        }):Play()
+    end
+    
+    container.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or
+           input.UserInputType == Enum.UserInputType.Touch then
+            dragStart = input.Position
+            startPos = container.Position
+            
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragStart = nil
+                    startPos = nil
+                end
+            end)
+        end
+    end)
+    
+    container.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or
+           input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+    
+    UserInputService.InputChanged:Connect(function(input)
+        if input == dragInput and dragStart then
+            update(input)
+        end
+    end)
+end
+
+function AnimationLogger:createLogEntry(animationId, animationName)
+    -- Check animation count
+    self.animationCounts[animationId] = (self.animationCounts[animationId] or 0) + 1
+    if self.animationCounts[animationId] > CONFIG.MAX_ANIMATION_COUNT then
+        return false
+    end
+    
+    local entryFrame = Instance.new("Frame")
+    entryFrame.Size = UDim2.new(1, 0, 0, CONFIG.LOG_ENTRY_HEIGHT)
+    entryFrame.BackgroundColor3 = THEME.SECONDARY
+    entryFrame.ZIndex = 3
+    
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = entryFrame
+    
+    Utility.createGradient(entryFrame, THEME.SECONDARY, THEME.SECONDARY:Lerp(THEME.ACCENT, 0.1))
+    
+    -- Count badge
+    local badge = Instance.new("Frame")
+    badge.Size = UDim2.new(0, 24, 0, 24)
+    badge.Position = UDim2.new(0, 8, 0.5, -12)
+    badge.BackgroundColor3 = THEME.ACCENT
+    badge.ZIndex = 4
+    badge.Parent = entryFrame
+    
+    local badgeCorner = Instance.new("UICorner")
+    badgeCorner.CornerRadius = UDim.new(0.5, 0)
+    badgeCorner.Parent = badge
+    
+    local countLabel = Instance.new("TextLabel")
+    countLabel.Size = UDim2.new(1, 0, 1, 0)
+    countLabel.BackgroundTransparency = 1
+    countLabel.Text = tostring(self.animationCounts[animationId])
+    countLabel.TextColor3 = THEME.TEXT_PRIMARY
+    countLabel.TextSize = 12
+    countLabel.Font = Enum.Font.GothamBold
+    countLabel.ZIndex = 4
+    countLabel.Parent = badge
+    
+    -- Animation ID
+-- Animation ID label
+    local idLabel = Instance.new("TextLabel")
+    idLabel.Name = "IdLabel"
+    idLabel.Size = UDim2.new(1, -130, 0, 25)
+    idLabel.Position = UDim2.new(0, 40, 0, 5)
+    idLabel.BackgroundTransparency = 1
+    idLabel.Text = animationId
+    idLabel.TextColor3 = THEME.TEXT_PRIMARY
+    idLabel.TextSize = 14
+    idLabel.Font = Enum.Font.Code
+    idLabel.TextXAlignment = Enum.TextXAlignment.Left
+    idLabel.ZIndex = 4
+    idLabel.Parent = entryFrame
+    
+    -- Animation name
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Size = UDim2.new(1, -130, 0, 20)
+    nameLabel.Position = UDim2.new(0, 40, 0, 30)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.Text = animationName or "Unknown Animation"
+    nameLabel.TextColor3 = THEME.TEXT_SECONDARY
+    nameLabel.TextSize = 12
+    nameLabel.Font = Enum.Font.Gotham
+    nameLabel.TextXAlignment = Enum.TextXAlignment.Left
+    nameLabel.ZIndex = 4
+    nameLabel.Parent = entryFrame
+    
+    -- Timestamp
+    local timeLabel = Instance.new("TextLabel")
+    timeLabel.Size = UDim2.new(0, 80, 0, 20)
+    timeLabel.Position = UDim2.new(1, -85, 0, 5)
+    timeLabel.BackgroundTransparency = 1
+    timeLabel.Text = Utility.formatTime()
+    timeLabel.TextColor3 = THEME.TEXT_SECONDARY
+    timeLabel.TextSize = 12
+    timeLabel.Font = Enum.Font.Code
+    timeLabel.ZIndex = 4
+    timeLabel.Parent = entryFrame
+    
+    -- Copy button
+    local copyButton = Instance.new("ImageButton")
+    copyButton.Size = UDim2.new(0, 30, 0, 30)
+    copyButton.Position = UDim2.new(1, -35, 0.5, -15)
+    copyButton.BackgroundTransparency = 1
+    copyButton.Image = "rbxassetid://6764432408"
+    copyButton.ImageColor3 = THEME.TEXT_SECONDARY
+    copyButton.ZIndex = 4
+    copyButton.Parent = entryFrame
+    
+    -- Copy button interactions
+    local function showCopyFeedback()
+        TweenService:Create(copyButton, TweenInfo.new(0.2), {
+            ImageColor3 = THEME.SUCCESS
+        }):Play()
+        
+        task.delay(0.8, function()
+            TweenService:Create(copyButton, TweenInfo.new(0.2), {
+                ImageColor3 = THEME.TEXT_SECONDARY
+            }):Play()
+        end)
+    end
+    
+    copyButton.MouseEnter:Connect(function()
+        TweenService:Create(copyButton, TweenInfo.new(0.2), {
+            ImageColor3 = THEME.TEXT_PRIMARY
+        }):Play()
+    end)
+    
+    copyButton.MouseLeave:Connect(function()
+        TweenService:Create(copyButton, TweenInfo.new(0.2), {
+            ImageColor3 = THEME.TEXT_SECONDARY
+        }):Play()
+    end)
+    
+    copyButton.MouseButton1Click:Connect(function()
+        if setclipboard then
+            setclipboard(animationId)
+            showCopyFeedback()
+        end
+    end)
+    
+    -- Update entry position
+    entryFrame.Parent = self.scrollFrame
+    self:updateStats()
+    self:updateScroll()
+    
+    return true
+end
+
+function AnimationLogger:updateStats()
+    local total = 0
+    local unique = 0
+    
+    for _, count in pairs(self.animationCounts) do
+        total = total + count
+        unique = unique + 1
+    end
+    
+    self.totalAnimations = total
+    self.uniqueAnimations = unique
+    
+    self.totalLabel.Text = "Total: " .. total
+    self.uniqueLabel.Text = "Unique: " .. unique
+end
+
+function AnimationLogger:updateScroll()
+    -- Calculate and update canvas size
+    local listLayout = self.scrollFrame:FindFirstChild("UIListLayout")
+    if listLayout then
+        self.scrollFrame.CanvasSize = UDim2.new(0, 0, 0, listLayout.AbsoluteContentSize.Y)
+    end
+    
+    -- Smooth scroll to bottom
+    TweenService:Create(self.scrollFrame, TweenInfo.new(0.3), {
+        CanvasPosition = Vector2.new(0, self.scrollFrame.CanvasSize.Y.Offset)
+    }):Play()
+end
+
+function AnimationLogger:clearLogs()
+    -- Clear all log entries with animation
+    for _, child in ipairs(self.scrollFrame:GetChildren()) do
+        if child:IsA("Frame") then
+            local transparency = TweenService:Create(child, TweenInfo.new(0.2), {
+                BackgroundTransparency = 1
+            })
+            
+            transparency.Completed:Connect(function()
+                child:Destroy()
+            end)
+            
+            transparency:Play()
+        end
+    end
+    
+    -- Reset counters
+    self.animationCounts = {}
+    self.totalAnimations = 0
+    self.uniqueAnimations = 0
+    
+    -- Update stats
+    self:updateStats()
+end
+
+function AnimationLogger:copyAllIds()
+    local ids = {}
+    
+    for _, child in ipairs(self.scrollFrame:GetChildren()) do
+        if child:IsA("Frame") then
+            local idLabel = child:FindFirstChild("IdLabel")
+            if idLabel then
+                table.insert(ids, idLabel.Text)
+            end
+        end
+    end
+    
+    if #ids > 0 and setclipboard then
+        setclipboard(table.concat(ids, "\n"))
+        
+        -- Show feedback on the copy button
+        local copyButton = self.container:FindFirstChild("ButtonPanel"):FindFirstChild("Copy All IDs")
+        if copyButton then
+            local originalText = copyButton.Text
+            copyButton.Text = "Copied!"
+            
+            task.delay(0.8, function()
+                copyButton.Text = originalText
+            end)
+        end
+    end
+end
+
+function AnimationLogger:start()
+    local player = Players.LocalPlayer
+    
+    local function setupCharacter(character)
+        local humanoid = character:WaitForChild("Humanoid")
+        local animator = humanoid:WaitForChild("Animator")
+        
+        animator.AnimationPlayed:Connect(function(animTrack)
+            local animationId = animTrack.Animation.AnimationId
+            self:createLogEntry(animationId, animTrack.Name)
+        end)
+    end
+    
+    if player.Character then
+        setupCharacter(player.Character)
+    end
+    
+    player.CharacterAdded:Connect(setupCharacter)
+end
+
+-- Error handling wrapper
+local function safeInit()
+    local success, logger = pcall(function()
+        return AnimationLogger.new()
+    end)
+    
+    if success then
+        logger:start()
+    else
+        warn("Failed to initialize AnimationLogger:", logger)
+    end
+end
+
+-- Initialize the logger
+safeInit()
