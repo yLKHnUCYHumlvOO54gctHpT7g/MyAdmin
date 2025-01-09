@@ -252,7 +252,7 @@ emoji.Font = Enum.Font.SourceSans
     if rankText == "AK OWNER" then
         emoji.Text = "👑"  -- Crown for owner
     elseif rankText == "AK SCRIPTER" then
-        emoji.Text = "👾"  -- Lightning bolt for scripter
+        emoji.Text = "⚡"  -- Lightning bolt for scripter
     elseif rankText == "AK SUPPORTER" then
         emoji.Text = "💎"  -- Diamond for supporter
     elseif rankText == "AK STAFF" then
@@ -430,7 +430,7 @@ end
 
 local Advertisers = {"Vlafz195", "6736_45", "goekaycool", "goekayball", "goekayball2"}
 local FreeTrial = {}
-local Scripters = {"GYATT_DAMN1", "328ml", "29Kyooo", "BloxiAstra", "ImOn_ValveIndex"}
+local Scripters = {"GYATT_DAMN1", "328ml", "29Kyooo", "BloxiAstra", "ImOn_ValveIndex","BasedLion25"}
 local Owners = {"Xeni_he07", "AliKhammas1234", "AliKhammas", "I_LOVEYOU12210", "AK_ADMEN1", "YournothimbuddyXD", "AK_ADMEN2", "Akksosdmdokdkddmkd"}
 local Supporter = {"Robloxian74630436", "MyLittlePonySEDE"}
 local AKStaff = {"goekaycool", "goetemp_1"}
