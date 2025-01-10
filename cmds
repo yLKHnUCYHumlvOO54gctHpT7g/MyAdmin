@@ -1,385 +1,358 @@
--- Lokaler Spieler
-local player = game.Players.LocalPlayer
+-- Services
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 
--- ScreenGui erstellen
+-- Player
+local localPlayer = Players.LocalPlayer
+local mouse = localPlayer:GetMouse()
+
+-- Constants and Colors
+local COLORS = {
+    main = Color3.fromRGB(35, 40, 55),
+    secondary = Color3.fromRGB(45, 50, 65),
+    accent = Color3.fromRGB(65, 70, 85),
+    hover = Color3.fromRGB(75, 80, 95),
+    text = Color3.fromRGB(240, 240, 255),
+    textDim = Color3.fromRGB(180, 190, 210)
+}
+
+local TWEEN_INFO = {
+    fast = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+    medium = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+    slow = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+}
+
+-- GUI Setup
 local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "CustomGui"
 screenGui.ResetOnSpawn = false
-screenGui.Parent = game:WaitForChild("CoreGui")
+screenGui.Parent = localPlayer:WaitForChild("PlayerGui")
 
--- Haupt-Frame
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0.2, 0, 0.3, 0)  -- Reduzierte Größe
-frame.Position = UDim2.new(0.4, 0, 0.35, 0)  -- Zentriert
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-frame.BackgroundTransparency = 0  -- Keine Transparenz
-frame.BorderSizePixel = 0
+frame.Size = UDim2.new(0, 300, 0, 400)
+frame.BackgroundColor3 = COLORS.main
+frame.Position = UDim2.new(0.3, 0, 0.3, 0)
 frame.Parent = screenGui
+frame.ClipsDescendants = true -- Add clipping for smooth animations
 
--- Runde Ecken für Frame
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 15)
-corner.Parent = frame
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 8)
+frameCorner.Parent = frame
 
--- Schatteneffekt mit einem Frame (rund)
-local dropShadowHolder = Instance.new("Frame")
-dropShadowHolder.Name = "DropShadowHolder"
-dropShadowHolder.BackgroundTransparency = 1
-dropShadowHolder.BorderSizePixel = 0
-dropShadowHolder.Size = UDim2.new(1, 0, 1, 0)
-dropShadowHolder.ZIndex = 0
-dropShadowHolder.Parent = frame
+-- Add smooth shadow
+local shadow = Instance.new("ImageLabel")
+shadow.Size = UDim2.new(1, 40, 1, 40)
+shadow.Position = UDim2.new(0, -20, 0, -20)
+shadow.BackgroundTransparency = 1
+shadow.Image = "rbxassetid://5554236805"
+shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+shadow.ImageTransparency = 0.6
+shadow.Parent = frame
 
-local dropShadow = Instance.new("Frame")
-dropShadow.Name = "DropShadow"
-dropShadow.AnchorPoint = Vector2.new(0.5, 0.5)
-dropShadow.BackgroundColor3 = Color3.new(0, 0, 0) -- Schwarz für den Schatten
-dropShadow.BackgroundTransparency = 0.5
-dropShadow.Position = UDim2.new(0.5, 0, 0.5, 0)
-dropShadow.Size = UDim2.new(1, 30, 1, 30)
-dropShadow.ZIndex = 0
-dropShadow.Parent = dropShadowHolder
+local header = Instance.new("Frame")
+header.Size = UDim2.new(1, 0, 0, 40)
+header.BackgroundColor3 = COLORS.secondary
+header.Parent = frame
 
--- Runde Ecken für den Schatten
-local dropShadowCorner = Instance.new("UICorner")
-dropShadowCorner.CornerRadius = UDim.new(0, 15)  -- Passe den Wert je nach gewünschter Rundung an
-dropShadowCorner.Parent = dropShadow
+local headerCorner = Instance.new("UICorner")
+headerCorner.CornerRadius = UDim.new(0, 8)
+headerCorner.Parent = header
 
--- Titel des GUIs
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, -40, 0, 30)
-titleLabel.Position = UDim2.new(0, 20, 0, 5)
-titleLabel.Text = "Command GUI"
-titleLabel.Font = Enum.Font.GothamBold
-titleLabel.TextSize = 20
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.BackgroundTransparency = 1
-titleLabel.Parent = frame
+local headerText = Instance.new("TextLabel")
+headerText.Size = UDim2.new(1, -100, 1, 0)
+headerText.Position = UDim2.new(0, 10, 0, 0)
+headerText.Text = "AK COMMANDS"
+headerText.Font = Enum.Font.GothamBold
+headerText.TextSize = 18
+headerText.TextColor3 = COLORS.text
+headerText.TextXAlignment = Enum.TextXAlignment.Left
+headerText.BackgroundTransparency = 1
+headerText.Parent = header
 
--- Schließen- und Minimieren-Button
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 25, 0, 25)
-closeButton.Position = UDim2.new(1, -30, 0, 5)
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeButton.Font = Enum.Font.GothamBold
-closeButton.TextSize = 14
-closeButton.BackgroundColor3 = Color3.fromRGB(220, 0, 0)
-closeButton.BorderSizePixel = 0
+-- Enhanced button styles
+local function createStyledButton(name, size, position, parent)
+    local button = Instance.new("TextButton")
+    button.Size = size
+    button.Position = position
+    button.BackgroundColor3 = COLORS.accent
+    button.BorderSizePixel = 0
+    button.Text = name
+    button.Font = Enum.Font.GothamBold
+    button.TextSize = 20
+    button.TextColor3 = COLORS.text
+    button.Parent = parent
+    button.AutoButtonColor = false
 
--- Runde Ecken für Buttons
-local closeButtonCorner = Instance.new("UICorner")
-closeButtonCorner.CornerRadius = UDim.new(0, 5)
-closeButtonCorner.Parent = closeButton
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 4)
+    corner.Parent = button
 
-closeButton.Parent = frame
+    -- Hover and click animations
+    button.MouseEnter:Connect(function()
+        TweenService:Create(button, TWEEN_INFO.fast, {
+            BackgroundColor3 = COLORS.hover
+        }):Play()
+    end)
+    
+    button.MouseLeave:Connect(function()
+        TweenService:Create(button, TWEEN_INFO.fast, {
+            BackgroundColor3 = COLORS.accent
+        }):Play()
+    end)
 
-local minimizeButton = Instance.new("TextButton")
-minimizeButton.Size = UDim2.new(0, 25, 0, 25)
-minimizeButton.Position = UDim2.new(1, -60, 0, 5)
-minimizeButton.Text = "_"
-minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-minimizeButton.Font = Enum.Font.GothamBold
-minimizeButton.TextSize = 14
-minimizeButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-minimizeButton.BorderSizePixel = 0
+    button.MouseButton1Down:Connect(function()
+        TweenService:Create(button, TWEEN_INFO.fast, {
+            Size = size - UDim2.new(0, 2, 0, 2),
+            Position = position + UDim2.new(0, 1, 0, 1)
+        }):Play()
+    end)
 
-local minimizeButtonCorner = Instance.new("UICorner")
-minimizeButtonCorner.CornerRadius = UDim.new(0, 5)
-minimizeButtonCorner.Parent = minimizeButton
+    button.MouseButton1Up:Connect(function()
+        TweenService:Create(button, TWEEN_INFO.fast, {
+            Size = size,
+            Position = position
+        }):Play()
+    end)
 
-minimizeButton.Parent = frame
+    return button
+end
 
--- Eingabefeld (Suchleiste)
+local minimizeButton = createStyledButton("-", UDim2.new(0, 30, 0, 30), UDim2.new(1, -70, 0, 5), header)
+local closeButton = createStyledButton("X", UDim2.new(0, 30, 0, 30), UDim2.new(1, -35, 0, 5), header)
+
+-- Enhanced search container
+local searchContainer = Instance.new("Frame")
+searchContainer.Size = UDim2.new(1, -20, 0, 30)
+searchContainer.Position = UDim2.new(0, 10, 0, 50)
+searchContainer.BackgroundColor3 = COLORS.secondary
+searchContainer.Parent = frame
+
+local searchCorner = Instance.new("UICorner")
+searchCorner.CornerRadius = UDim.new(0, 8)
+searchCorner.Parent = searchContainer
+
 local searchBox = Instance.new("TextBox")
-searchBox.Size = UDim2.new(1, -20, 0, 30)
-searchBox.Position = UDim2.new(0, 10, 0, 40)
-searchBox.PlaceholderText = "Search command..."
-searchBox.Text = ""
+searchBox.Size = UDim2.new(1, -20, 1, -10)
+searchBox.Position = UDim2.new(0, 10, 0, 5)
+searchBox.PlaceholderText = "Search Commands..."
 searchBox.Font = Enum.Font.Gotham
 searchBox.TextSize = 14
-searchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-searchBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+searchBox.TextColor3 = COLORS.text
+searchBox.PlaceholderColor3 = COLORS.textDim
+searchBox.BackgroundTransparency = 1
 searchBox.BorderSizePixel = 0
 searchBox.ClearTextOnFocus = false
-searchBox.Parent = frame
+searchBox.Text = ""
+searchBox.Parent = searchContainer
 
--- Runde Ecken für Suchleiste
-local searchBoxCorner = Instance.new("UICorner")
-searchBoxCorner.CornerRadius = UDim.new(0, 5)
-searchBoxCorner.Parent = searchBox
-
--- ScrollFrame für Befehle
+-- Enhanced scrolling frame
 local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(1, -20, 1, -130)
-scrollFrame.Position = UDim2.new(0, 10, 0, 80)
-scrollFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+scrollFrame.Size = UDim2.new(1, -20, 1, -100)
+scrollFrame.Position = UDim2.new(0, 10, 0, 90)
+scrollFrame.BackgroundColor3 = COLORS.secondary
+scrollFrame.ScrollBarThickness = 4
+scrollFrame.ScrollBarImageColor3 = COLORS.accent
 scrollFrame.BorderSizePixel = 0
-scrollFrame.ScrollBarThickness = 6
-scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0) -- Wird später angepasst
 scrollFrame.Parent = frame
 
--- Runde Ecken für ScrollFrame
-local scrollFrameCorner = Instance.new("UICorner")
-scrollFrameCorner.CornerRadius = UDim.new(0, 5)
-scrollFrameCorner.Parent = scrollFrame
+local scrollCorner = Instance.new("UICorner")
+scrollCorner.CornerRadius = UDim.new(0, 8)
+scrollCorner.Parent = scrollFrame
 
--- Layout für die Befehlsliste
 local uiListLayout = Instance.new("UIListLayout")
-uiListLayout.Parent = scrollFrame
-uiListLayout.Padding = UDim.new(0, 5)
 uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+uiListLayout.Padding = UDim.new(0, 5)
+uiListLayout.Parent = scrollFrame
 
--- Beschreibungstextfeld unterhalb der Befehle
-local descriptionBox = Instance.new("TextLabel")
-descriptionBox.Size = UDim2.new(1, -20, 0, 30)
-descriptionBox.Position = UDim2.new(0, 10, 1, -40)
-descriptionBox.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-descriptionBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-descriptionBox.Font = Enum.Font.Gotham
-descriptionBox.TextWrapped = true
-descriptionBox.TextSize = 14
-descriptionBox.Text = ""
-descriptionBox.Visible = false
-descriptionBox.BorderSizePixel = 0
-descriptionBox.Parent = frame
-
--- Runde Ecken für descriptionBox
-local descriptionBoxCorner = Instance.new("UICorner")
-descriptionBoxCorner.CornerRadius = UDim.new(0, 5)
-descriptionBoxCorner.Parent = descriptionBox
-
--- Minimieren/Maximieren-Funktion mit Cooldown
-local minimized = false
-local animating = false  -- Variable zum Überprüfen, ob die Animation läuft
-
-minimizeButton.MouseButton1Click:Connect(function()
-    if animating then return end  -- Wenn Animation läuft, nichts tun
-    animating = true  -- Animation startet
-
-    minimized = not minimized
-    if minimized then
-        -- Slide-Out Animation
-        frame:TweenSize(UDim2.new(frame.Size.X.Scale, frame.Size.X.Offset, 0, 40), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
-        scrollFrame.Visible = false
-        descriptionBox.Visible = false
-        searchBox.Visible = false
-    else
-        -- Slide-In Animation
-        frame:TweenSize(UDim2.new(frame.Size.X.Scale, frame.Size.X.Offset, 0.3, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quint, 0.5, true)
-        wait(0.5)
-        scrollFrame.Visible = true
-        searchBox.Visible = true
+-- Enhanced command button template
+local function createCommandButton(name, description)
+    local button = Instance.new("TextButton")
+    button.BackgroundColor3 = COLORS.secondary
+    button.BorderSizePixel = 0
+    button.Name = name
+    button.Text = ""
+    button.AutoButtonColor = false
+    
+    local buttonCorner = Instance.new("UICorner")
+    buttonCorner.CornerRadius = UDim.new(0, 8)
+    buttonCorner.Parent = button
+    
+    local cmdName = Instance.new("TextLabel")
+    cmdName.Size = UDim2.new(1, -20, 0, 20)
+    cmdName.Position = UDim2.new(0, 10, 0, 5)
+    cmdName.Text = name
+    cmdName.Font = Enum.Font.GothamBold
+    cmdName.TextSize = 14
+    cmdName.TextColor3 = COLORS.text
+    cmdName.TextXAlignment = Enum.TextXAlignment.Left
+    cmdName.BackgroundTransparency = 1
+    cmdName.Parent = button
+    
+    local cmdDesc = Instance.new("TextLabel")
+    cmdDesc.Font = Enum.Font.Gotham
+    cmdDesc.TextSize = 9
+    cmdDesc.TextColor3 = COLORS.textDim
+    cmdDesc.TextXAlignment = Enum.TextXAlignment.Left
+    cmdDesc.BackgroundTransparency = 1
+    cmdDesc.TextWrapped = true
+    cmdDesc.Parent = button
+    cmdDesc.Text = description
+    
+    -- Dynamic sizing based on text content
+    local function updateSize()
+        local textSize = game:GetService("TextService"):GetTextSize(
+            description,
+            cmdDesc.TextSize,
+            cmdDesc.Font,
+            Vector2.new(button.AbsoluteSize.X - 20, math.huge)
+        )
+        
+        cmdDesc.Size = UDim2.new(1, -20, 0, textSize.Y)
+        cmdDesc.Position = UDim2.new(0, 10, 0, 25)
+        button.Size = UDim2.new(1, -10, 0, textSize.Y + 40)
     end
-
-    -- Sicherstellen, dass die Beschreibung nicht sichtbar ist, wenn minimiert
-    if minimized then
-        descriptionBox.Visible = false
-    end
-
-    animating = false  -- Animation beendet
-end)
-
--- Schließen-Funktion
-closeButton.MouseButton1Click:Connect(function()
-    -- Fade-Out Animation
-    frame:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.In, Enum.EasingStyle.Quint, 0.5, true)
-    wait(0.5)
-    frame.Visible = false
-end)
-
--- Funktion zum Filtern der Befehle
-local function filterCommands()
-    local searchText = searchBox.Text:lower()
-    for _, button in pairs(scrollFrame:GetChildren()) do
-        if button:IsA("TextButton") then
-            if searchText == "" then
-                button.Visible = true
-            else
-                button.Visible = button.Name:lower():find(searchText) ~= nil
-            end
-        end
-    end
+    
+    button.Parent = scrollFrame
+    updateSize()
+    
+    -- Hover animations
+    button.MouseEnter:Connect(function()
+        TweenService:Create(button, TWEEN_INFO.fast, {
+            BackgroundColor3 = COLORS.accent
+        }):Play()
+    end)
+    
+    button.MouseLeave:Connect(function()
+        TweenService:Create(button, TWEEN_INFO.fast, {
+            BackgroundColor3 = COLORS.secondary
+        }):Play()
+    end)
+    
+    return button
 end
 
-searchBox:GetPropertyChangedSignal("Text"):Connect(filterCommands)
+-- Enhanced drag functionality
+local dragging, dragStart, startPos
+local dragInput
 
--- Befehlsliste
-local commands = {}
+local function updateDrag(input)
+    local delta = input.Position - dragStart
+    local position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X,
+                              startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    TweenService:Create(frame, TWEEN_INFO.fast, {Position = position}):Play()
+end
 
--- Funktion zum Aktualisieren der Befehle im ScrollFrame
-local function updateCommands()
-    -- Alte Buttons entfernen
-    for _, child in pairs(scrollFrame:GetChildren()) do
-        if child:IsA("TextButton") then
-            child:Destroy()
-        end
-    end
-
-    for _, cmd in pairs(commands) do
-        local button = Instance.new("TextButton")
-        button.Size = UDim2.new(1, -10, 0, 30)
-        button.Position = UDim2.new(0, 5, 0, 0)
-        button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        button.TextColor3 = Color3.fromRGB(255, 255, 255)
-        button.Font = Enum.Font.Gotham
-        button.TextSize = 14
-        button.Text = cmd.name
-        button.Name = cmd.name
-        button.BorderSizePixel = 0
-        button.Parent = scrollFrame
-
-        -- Runde Ecken für Button
-        local buttonCorner = Instance.new("UICorner")
-        buttonCorner.CornerRadius = UDim.new(0, 5)
-        buttonCorner.Parent = button
-
-        button.MouseButton1Click:Connect(function()
-            -- Zeige die Beschreibung an
-            descriptionBox.Text = cmd.description
-            descriptionBox.Visible = true
+header.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
         end)
     end
+end)
 
-    -- CanvasSize anpassen
-    wait() -- Warten, bis die UIListLayout aktualisiert wurde
-    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiListLayout.AbsoluteContentSize.Y + 10)
-end
-
--- Touch-Unterstützung für mobiles Draggen
-local dragging = false
-local dragInput, dragStart, startPos
-
-local function update(input)
-    local delta = input.Position - dragStart
-    local newPosition = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    frame.Position = newPosition
-end
-
-frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        local guiPosition = frame.AbsolutePosition
-        if input.Position.Y >= guiPosition.Y and input.Position.Y <= guiPosition.Y + 40 then -- Nur oberer Bereich zum Ziehen
-            dragging = true
-            dragStart = input.Position
-            startPos = frame.Position
-
-            input.Changed:Connect(function()
-                if input.UserInputState == Enum.UserInputState.End then
-                    dragging = false
-                end
-            end)
-        end
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        updateDrag(input)
     end
 end)
 
-frame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+header.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or
+       input.UserInputType == Enum.UserInputType.Touch then
         dragInput = input
     end
 end)
 
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if dragging and input == dragInput then
-        update(input)
-    end
-end)
-
--- Ausblenden der Beschreibung, wenn außerhalb geklickt wird
-local userInputService = game:GetService("UserInputService")
-
-userInputService.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        local guiElements = {frame, descriptionBox}
-        local clickedOnGUI = false
-
-        for _, guiElement in pairs(guiElements) do
-            if guiElement.AbsolutePosition and guiElement.AbsoluteSize then
-                local position = guiElement.AbsolutePosition
-                local size = guiElement.AbsoluteSize
-                local inputPosition = input.Position
-
-                if inputPosition.X >= position.X and inputPosition.X <= position.X + size.X and
-                   inputPosition.Y >= position.Y and inputPosition.Y <= position.Y + size.Y then
-                    clickedOnGUI = true
-                    break
-                end
-            end
-        end
-
-        if not clickedOnGUI then
-            descriptionBox.Visible = false
-        end
-    end
-end)
-
--- Funktion zum Skalieren (Vertikale Größenänderung)
-local resizing = false
-local resizeInput, resizeStart, startHeight
-
--- Resizer am unteren Rand
-local resizer = Instance.new("Frame")
-resizer.Size = UDim2.new(1, 0, 0, 10)
-resizer.Position = UDim2.new(0, 0, 1, -10)
-resizer.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-resizer.BorderSizePixel = 0
-resizer.Parent = frame
-
--- Cursor ändern bei Hover über Resizer (nur auf PC)
-resizer.MouseEnter:Connect(function()
-    if game:GetService("UserInputService").MouseEnabled then
-        game:GetService("UserInputService").MouseIconEnabled = true
-        game:GetService("UserInputService").MouseIcon = "rbxasset://SystemCursors/SizeNS"
-    end
-end)
-
-resizer.MouseLeave:Connect(function()
-    if game:GetService("UserInputService").MouseEnabled then
-        game:GetService("UserInputService").MouseIconEnabled = true
-        game:GetService("UserInputService").MouseIcon = "rbxasset://SystemCursors/Arrow"
-    end
-end)
-
-local function resizeUpdate(input)
-    local delta = input.Position.Y - resizeStart.Y
-    local newHeight = math.clamp(startHeight + delta, 200, 600) -- Mindesthöhe 200, Maximalhöhe 600
-    frame.Size = UDim2.new(frame.Size.X.Scale, frame.Size.X.Offset, 0, newHeight)
-    -- Anpassung des ScrollFrames
-    scrollFrame.Size = UDim2.new(1, -20, 1, -130)
-end
-
-resizer.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        resizing = true
-        resizeStart = input.Position
-        startHeight = frame.AbsoluteSize.Y
-
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                resizing = false
-            end
+-- Enhanced minimize/maximize animation
+local minimized = false
+minimizeButton.MouseButton1Click:Connect(function()
+    minimized = not minimized
+    local targetSize = minimized and UDim2.new(0, 300, 0, 40) or UDim2.new(0, 300, 0, 400)
+    
+    TweenService:Create(frame, TWEEN_INFO.medium, {
+        Size = targetSize
+    }):Play()
+    
+    -- Fade animations for content
+    local transparency = minimized and 1 or 0
+    local contentItems = {searchContainer, scrollFrame}
+    
+    for _, item in ipairs(contentItems) do
+        TweenService:Create(item, TWEEN_INFO.fast, {
+            BackgroundTransparency = transparency
+        }):Play()
+        
+        task.delay(minimized and 0 or 0.2, function()
+            item.Visible = not minimized
         end)
     end
 end)
 
-resizer.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        resizeInput = input
-    end
+-- Enhanced close animation
+closeButton.MouseButton1Click:Connect(function()
+    -- Fade out animation
+    local fadeOut = TweenService:Create(frame, TWEEN_INFO.medium, {
+        BackgroundTransparency = 1,
+        Size = UDim2.new(0, 0, 0, 0),
+        Position = UDim2.new(frame.Position.X.Scale, frame.Position.X.Offset + 150,
+                            frame.Position.Y.Scale, frame.Position.Y.Offset + 200)
+    })
+    
+    -- Fade out shadow
+    TweenService:Create(shadow, TWEEN_INFO.medium, {
+        ImageTransparency = 1
+    }):Play()
+    
+    fadeOut.Completed:Connect(function()
+        screenGui:Destroy()
+    end)
+    
+    fadeOut:Play()
 end)
 
-game:GetService("UserInputService").InputChanged:Connect(function(input)
-    if resizing and input == resizeInput then
-        resizeUpdate(input)
-    end
-end)
-
--- Beispiel: Hinzufügen einiger Befehle
+-- Add commands
 local function addCommand(name, description)
-    table.insert(commands, {name = name, description = description})
-    updateCommands()
+    createCommandButton(name, description)
 end
 
--- Hier fügst du die Befehle hinzu (auf Englisch)
+-- Update canvas size
+local function updateCanvasSize()
+    local contentHeight = uiListLayout.AbsoluteContentSize.Y
+    local padding = 10
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, contentHeight + padding)
+end
+
+scrollFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateCanvasSize)
+uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvasSize)
+
+-- Search functionality
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+    local searchText = searchBox.Text:lower()
+    for _, button in ipairs(scrollFrame:GetChildren()) do
+        if button:IsA("TextButton") then
+            local shouldShow = button.Name:lower():find(searchText, 1, true) ~= nil
+            
+            -- Smooth fade animation
+            TweenService:Create(button, TWEEN_INFO.fast, {
+                BackgroundTransparency = shouldShow and 0 or 1,
+                TextTransparency = shouldShow and 0 or 1
+            }):Play()
+            
+            task.delay(shouldShow and 0 or 0.2, function()
+                button.Visible = shouldShow
+            end)
+        end
+    end
+    updateCanvasSize()
+end)
+-- Add sample commands
 addCommand("!bring", "Executes a bring GUI that brings the players by floating under them.")
 addCommand("!antilag", "Prevents lagging.")
 addCommand("!antibang", "Prevents other exploiters from banging you.")
@@ -456,8 +429,8 @@ addCommand("!stand2 <target>", "Makes you a JoJo stand for the target.")
 addCommand("!unstand", "Removes your JoJo stand.")
 addCommand("!antiall", "click on the button and kill the person who is banging you or anything else")
 addCommand("!antiall2", "made for MIC UP!")
-addCommand("!r6", "click on the button and kill the person who is banging you or anything else")
-addCommand("!r15", "click on the button and kill the person who is banging you or anything else")
+addCommand("!r6", "")
+addCommand("!r15", "")
 addCommand("!trail", "click on the button and kill the person who is banging you or anything else")
 addCommand("!scan map", "scans map for micup with admin gamepass")
 addCommand("!unscan", "stop scan map")
@@ -483,6 +456,60 @@ addCommand("!akbypasser", "chat bypasser made by us!")
 addCommand("!animlogger", "gets the animation IDS you are playing!")
 addCommand("!blockmap", "only in MIC UP! (need 3D Clothing!)")
 
--- Initiale Befehle aktualisieren
-updateCommands()
-filterCommands()
+-- Initialize the GUI
+updateCanvasSize()
+
+-- Add smooth fade-in animation on startup
+frame.BackgroundTransparency = 1
+shadow.ImageTransparency = 1
+searchContainer.BackgroundTransparency = 1
+scrollFrame.BackgroundTransparency = 1
+
+-- Delay the animation slightly for a smoother appearance
+task.delay(0.1, function()
+    -- Fade in main frame
+    TweenService:Create(frame, TWEEN_INFO.medium, {
+        BackgroundTransparency = 0
+    }):Play()
+    
+    -- Fade in shadow
+    TweenService:Create(shadow, TWEEN_INFO.medium, {
+        ImageTransparency = 0.6
+    }):Play()
+    
+    -- Fade in containers
+    for _, container in ipairs({searchContainer, scrollFrame}) do
+        TweenService:Create(container, TWEEN_INFO.medium, {
+            BackgroundTransparency = 0
+        }):Play()
+    end
+    
+    -- Fade in command buttons sequentially
+    for i, button in ipairs(scrollFrame:GetChildren()) do
+        if button:IsA("TextButton") then
+            button.BackgroundTransparency = 1
+            for _, child in ipairs(button:GetChildren()) do
+                if child:IsA("TextLabel") then
+                    child.TextTransparency = 1
+                end
+            end
+            
+            -- Create sequential fade-in effect
+            task.delay(i * 0.05, function()
+                TweenService:Create(button, TWEEN_INFO.medium, {
+                    BackgroundTransparency = 0
+                }):Play()
+                
+                for _, child in ipairs(button:GetChildren()) do
+                    if child:IsA("TextLabel") then
+                        TweenService:Create(child, TWEEN_INFO.medium, {
+                            TextTransparency = 0
+                        }):Play()
+                    end
+                end
+            end)
+        end
+    end
+end)
+
+return screenGui
