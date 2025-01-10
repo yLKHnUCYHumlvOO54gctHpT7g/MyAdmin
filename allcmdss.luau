@@ -19,7 +19,6 @@ _G.cmds = {
     ["!protonadmin"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/main/protonadmin",
     ["!triviabooth"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/main/triviabooth",
     ["!chatbot"]="https://raw.githubusercontent.com/Guerric9018/chatbothub/main/ChatbotHub.lua",
-    ["!getpower"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/givepower",
     ["!walkonwalls"]="https://raw.githubusercontent.com/sinret/rbxscript.com-scripts-reuploads-/main/WalkOnWalls",
     ["!cmdbar"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Cmdsbar",
     ["!ad"]="https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/main/Ad",
