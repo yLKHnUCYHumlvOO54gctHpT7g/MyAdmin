@@ -34,13 +34,12 @@ frame.Size = UDim2.new(0, 300, 0, 400)
 frame.BackgroundColor3 = COLORS.main
 frame.Position = UDim2.new(0.3, 0, 0.3, 0)
 frame.Parent = screenGui
-frame.ClipsDescendants = true -- Add clipping for smooth animations
+frame.ClipsDescendants = true
 
 local frameCorner = Instance.new("UICorner")
 frameCorner.CornerRadius = UDim.new(0, 8)
 frameCorner.Parent = frame
 
--- Add smooth shadow
 local shadow = Instance.new("ImageLabel")
 shadow.Size = UDim2.new(1, 40, 1, 40)
 shadow.Position = UDim2.new(0, -20, 0, -20)
@@ -69,8 +68,6 @@ headerText.TextColor3 = COLORS.text
 headerText.TextXAlignment = Enum.TextXAlignment.Left
 headerText.BackgroundTransparency = 1
 headerText.Parent = header
-
--- Enhanced button styles
 local function createStyledButton(name, size, position, parent)
     local button = Instance.new("TextButton")
     button.Size = size
@@ -88,7 +85,6 @@ local function createStyledButton(name, size, position, parent)
     corner.CornerRadius = UDim.new(0, 4)
     corner.Parent = button
 
-    -- Hover and click animations
     button.MouseEnter:Connect(function()
         TweenService:Create(button, TWEEN_INFO.fast, {
             BackgroundColor3 = COLORS.hover
@@ -121,7 +117,6 @@ end
 local minimizeButton = createStyledButton("-", UDim2.new(0, 30, 0, 30), UDim2.new(1, -70, 0, 5), header)
 local closeButton = createStyledButton("X", UDim2.new(0, 30, 0, 30), UDim2.new(1, -35, 0, 5), header)
 
--- Enhanced search container
 local searchContainer = Instance.new("Frame")
 searchContainer.Size = UDim2.new(1, -20, 0, 30)
 searchContainer.Position = UDim2.new(0, 10, 0, 50)
@@ -146,7 +141,6 @@ searchBox.ClearTextOnFocus = false
 searchBox.Text = ""
 searchBox.Parent = searchContainer
 
--- Enhanced scrolling frame
 local scrollFrame = Instance.new("ScrollingFrame")
 scrollFrame.Size = UDim2.new(1, -20, 1, -100)
 scrollFrame.Position = UDim2.new(0, 10, 0, 90)
@@ -165,7 +159,6 @@ uiListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 uiListLayout.Padding = UDim.new(0, 5)
 uiListLayout.Parent = scrollFrame
 
--- Enhanced command button template
 local function createCommandButton(name, description)
     local button = Instance.new("TextButton")
     button.BackgroundColor3 = COLORS.secondary
@@ -181,7 +174,7 @@ local function createCommandButton(name, description)
     local cmdName = Instance.new("TextLabel")
     cmdName.Size = UDim2.new(1, -20, 0, 20)
     cmdName.Position = UDim2.new(0, 10, 0, 5)
-    cmdName.Text = name
+    cmdName.Text = name -- Now showing with "!"
     cmdName.Font = Enum.Font.GothamBold
     cmdName.TextSize = 14
     cmdName.TextColor3 = COLORS.text
@@ -191,15 +184,13 @@ local function createCommandButton(name, description)
     
     local cmdDesc = Instance.new("TextLabel")
     cmdDesc.Font = Enum.Font.Gotham
-    cmdDesc.TextSize = 9
+    cmdDesc.TextSize = 12
     cmdDesc.TextColor3 = COLORS.textDim
     cmdDesc.TextXAlignment = Enum.TextXAlignment.Left
     cmdDesc.BackgroundTransparency = 1
     cmdDesc.TextWrapped = true
     cmdDesc.Parent = button
     cmdDesc.Text = description
-    
-    -- Dynamic sizing based on text content
     local function updateSize()
         local textSize = game:GetService("TextService"):GetTextSize(
             description,
@@ -216,7 +207,6 @@ local function createCommandButton(name, description)
     button.Parent = scrollFrame
     updateSize()
     
-    -- Hover animations
     button.MouseEnter:Connect(function()
         TweenService:Create(button, TWEEN_INFO.fast, {
             BackgroundColor3 = COLORS.accent
@@ -232,7 +222,43 @@ local function createCommandButton(name, description)
     return button
 end
 
--- Enhanced drag functionality
+local function updateCanvasSize()
+    local contentHeight = uiListLayout.AbsoluteContentSize.Y
+    local padding = 10
+    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, contentHeight + padding)
+end
+
+scrollFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateCanvasSize)
+uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvasSize)
+
+-- Load commands from library
+local function loadCommands()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/main/allcmdss.luau"))()
+    
+    task.wait(0.1)
+    
+    if _G.cmds then
+        -- Convert commands table to array for reverse ordering
+        local cmdArray = {}
+        for cmd, url in pairs(_G.cmds) do
+            table.insert(cmdArray, {cmd = cmd, url = url})
+        end
+        
+        -- Sort array in reverse order
+        table.sort(cmdArray, function(a, b) return a.cmd > b.cmd end)
+        
+        -- Create buttons in reverse order
+        for _, cmdData in ipairs(cmdArray) do
+            local button = createCommandButton(cmdData.cmd, "Click to execute command")
+            
+            button.MouseButton1Click:Connect(function()
+                loadstring(game:HttpGet(cmdData.url))()
+            end)
+        end
+    end
+end
+
+-- Drag functionality
 local dragging, dragStart, startPos
 local dragInput
 
@@ -270,9 +296,29 @@ header.InputChanged:Connect(function(input)
     end
 end)
 
--- Enhanced minimize/maximize animation
+-- Search functionality
+searchBox:GetPropertyChangedSignal("Text"):Connect(function()
+    local searchText = searchBox.Text:lower()
+    for _, button in ipairs(scrollFrame:GetChildren()) do
+        if button:IsA("TextButton") then
+            local shouldShow = button.Name:lower():find(searchText, 1, true) ~= nil
+            
+            TweenService:Create(button, TWEEN_INFO.fast, {
+                BackgroundTransparency = shouldShow and 0 or 1,
+                TextTransparency = shouldShow and 0 or 1
+            }):Play()
+            
+            task.delay(shouldShow and 0 or 0.2, function()
+                button.Visible = shouldShow
+            end)
+        end
+    end
+    updateCanvasSize()
+end)
+
+-- Minimize/Maximize functionality
 local minimized = false
-minimizeButton.MouseButton1Click:Connect(function()
+minimizeButton.MouseButton1Click:Connect(function(nigga)
     minimized = not minimized
     local targetSize = minimized and UDim2.new(0, 300, 0, 40) or UDim2.new(0, 300, 0, 400)
     
@@ -280,7 +326,6 @@ minimizeButton.MouseButton1Click:Connect(function()
         Size = targetSize
     }):Play()
     
-    -- Fade animations for content
     local transparency = minimized and 1 or 0
     local contentItems = {searchContainer, scrollFrame}
     
@@ -295,9 +340,8 @@ minimizeButton.MouseButton1Click:Connect(function()
     end
 end)
 
--- Enhanced close animation
+-- Close functionality
 closeButton.MouseButton1Click:Connect(function()
-    -- Fade out animation
     local fadeOut = TweenService:Create(frame, TWEEN_INFO.medium, {
         BackgroundTransparency = 1,
         Size = UDim2.new(0, 0, 0, 0),
@@ -305,7 +349,6 @@ closeButton.MouseButton1Click:Connect(function()
                             frame.Position.Y.Scale, frame.Position.Y.Offset + 200)
     })
     
-    -- Fade out shadow
     TweenService:Create(shadow, TWEEN_INFO.medium, {
         ImageTransparency = 1
     }):Play()
@@ -317,193 +360,29 @@ closeButton.MouseButton1Click:Connect(function()
     fadeOut:Play()
 end)
 
--- Add commands
-local function addCommand(name, description)
-    createCommandButton(name, description)
-end
-
--- Update canvas size
-local function updateCanvasSize()
-    local contentHeight = uiListLayout.AbsoluteContentSize.Y
-    local padding = 10
-    scrollFrame.CanvasSize = UDim2.new(0, 0, 0, contentHeight + padding)
-end
-
-scrollFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateCanvasSize)
-uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvasSize)
-
--- Search functionality
-searchBox:GetPropertyChangedSignal("Text"):Connect(function()
-    local searchText = searchBox.Text:lower()
-    for _, button in ipairs(scrollFrame:GetChildren()) do
-        if button:IsA("TextButton") then
-            local shouldShow = button.Name:lower():find(searchText, 1, true) ~= nil
-            
-            -- Smooth fade animation
-            TweenService:Create(button, TWEEN_INFO.fast, {
-                BackgroundTransparency = shouldShow and 0 or 1,
-                TextTransparency = shouldShow and 0 or 1
-            }):Play()
-            
-            task.delay(shouldShow and 0 or 0.2, function()
-                button.Visible = shouldShow
-            end)
-        end
-    end
-    updateCanvasSize()
-end)
--- Add sample commands
-addCommand("!bring", "Executes a bring GUI that brings the players by floating under them.")
-addCommand("!antilag", "Prevents lagging.")
-addCommand("!antibang", "Prevents other exploiters from banging you.")
-addCommand("!chaoshub", "Just a random hub.")
-addCommand("!aimbot", "The command already explains.")
-addCommand("!protonadmin", "Just another Admin script.")
-addCommand("!walkonwalls", "Rewrites gravity and lets you walk on any surface.")
-addCommand("!unanchorfling", "Go near unanchored parts and fling the target with it.")
-addCommand("!chatquiz", "Allows you to chat quizzes with other players.")
-addCommand("!invis", "Invisibility toggle.")
-addCommand("!f3x sun", "The same game as .f3x.")
-addCommand("!f3x triangle", "The same game as .f3x.")
-addCommand("!f3x house", "The same game as .f3x.")
-addCommand("!f3x ufo", "The same game as .f3x.")
-addCommand("!shiftlock", "Shiftlock for mobile.")
-addCommand("!nofriends", "Automatically server hops if a friend joins.")
-addCommand("!getoutmyinv", "Drops all your items at once.")
-addCommand("!platespin", "Orange plates spin around you. Click on the plates for it to work.")
-addCommand("!fling all", "Loop flings everyone.")
-addCommand("!gimmetools", "Picks up every tool dropped by a player in the server.")
-addCommand("!givepower (display name)", "Gives the player you wish warning power.")
-addCommand("!oof", "Respawns you and teleports you back to the same position.")
-addCommand("!cmds", "The GUI for this script.")
-addCommand("!antilog", "Prevents the game from logging your chat and screenshots.")
-addCommand("!donttouchme", "Flings everyone that touches you.")
-addCommand("!serverhop", "Hops servers.")
-addCommand("!afk", "Prevents being kicked while AFK.")
-addCommand("!ftao", "For the game (Fling Things and Others).")
-addCommand("!iy", "Infinite yield admin.")
-addCommand("!emoji", "Enables chatting emojis like Discord (:skull).")
-addCommand("!f3x", "For (Sword Fights on the Heights Original). Controls orange plates.")
-addCommand("!bypasser", "Bypasses the chat filter.")
-addCommand("!bladeball", "A bladeball script.")
-addCommand("!nonofling", "Prevents other players from flinging you.")
-addCommand("!swordreach", "Explains itself.")
-addCommand("!byebye all", "Flings everyone once.")
-addCommand("!pltiger", "A script for Prison Life.")
-addCommand("!fps", "Boosts FPS.")
-addCommand("!rejoin", "Rejoin the game.")
-addCommand("!clearchat", "Clears the chat.")
-addCommand("!cmdbar", "A command bar for executing commands without using chat.")
-addCommand("!jobidjoiner", "Join a player by entering game ID and job ID.")
-addCommand("!walkonvoid", "Prevents you from dying by falling into the void.")
-addCommand("!hkill all", "Kills everyone with a sword that does damage.")
-addCommand("!serverhopmost", "Server hops to the server with the most players.")
-addCommand("!antiheadsit", "Self-explained.")
-addCommand("!antivoid", "Deletes the void.")
-addCommand("!dropkick", "Performs a dropkick on nearby players.")
-addCommand("!serverhoplow", "Server hops to a low-populated server.")
-addCommand("!walkonair", "Adds an invisible baseplate.")
-addCommand("!copy <target>", "Copy the avatar of the target (MIC UP).")
-addCommand("!chatbot", "Join Discord, claim points, and enter the key.")
-addCommand("!rainbowmic", "Gets the rainbow mic from the vending machine.")
-addCommand("!rainbowdonut", "Gets the rainbow donut from the vending machine.")
-addCommand("!demonmic", "Gets the demon mic from the vending machine.")
-addCommand("!tptoplr", "TP to player tool.")
-addCommand("!stopglide", "Removes sliding when walking fast.")
-addCommand("!lookat", "Look at player of choice.")
-addCommand("!unlookat", "Stops looking.")
-addCommand("!goto", "Teleport to player of choice.")
-addCommand("!superfly", "Become Superman (better on R15).")
-addCommand("!remotechecker", "Fire any remote with a GUI.")
-addCommand("!animhub", "Use any animation and troll.")
-addCommand("!copynearest", "Copies nearest in Mic Up.")
-addCommand("!sneak", "Go up and down.")
-addCommand("!mobilesuperfly", "Superfly for mobile.")
-addCommand("!catchme", "Makes you unmutable.")
-addCommand("!stand <target>", "Makes you a JoJo stand.")
-addCommand("!unstand", "Removes your JoJo stand.")
-addCommand("!antiall", "click on the button and kill the person who is banging you or anything else")
-addCommand("!antiall2", "antiall made for MIC UP!")
-addCommand("!r6", "")
-addCommand("!r15", "")
-addCommand("!trail", "click on the button and kill the person who is banging you or anything else")
-addCommand("!scan map", "scans map for micup with admin gamepass")
-addCommand("!unscan", "stop scan map")
-addCommand("!steal", "steal any avi need to own hats of avi tho")
-addCommand("!mutenonfriends", "mutes everyone but your friends")
-addCommand("!reactivatevc", "Use on an alt account if you don't care about being TERMINATED. To use this, get your voice suspended, then execute the command")
-addCommand("!chatlogs", "View chat logs")
-addCommand("!errornotify", "Notifies you every time you execute an error")
-addCommand("!akhub", "A very cool hub with lots of FE stuff")
-addCommand("!chattroll", "Troll with funny messages")
-addCommand("!jerk", "A command with unspecified functionality")
-addCommand("!shapshifter", "Only for R6!")
-addCommand("!dex", "Dex explorer")
-addCommand("!vcbypass", "not 100% be careful")
-addCommand("!bodyinvis", "only works on MIC UP")
-addCommand("!facebang", "keybind is Z (Y for European)")
-addCommand("!hug", "keybind is H")
-addCommand("!invistroll display name/username", "makes u invisible and follows the target. ONLY IN MIC UP!")
-addCommand("!antikick", "only works in good executors!")
-addCommand("!unctest", "UNC TEST")
-addCommand("!jumpingrope", "need 3D Pants! Only works in MIC UP!")
-addCommand("!akbypasser", "chat bypasser made by us!")
-addCommand("!animlogger", "gets the animation IDS you are playing!")
-addCommand("!blockmap", "only in MIC UP! (need 3D Clothing!)")
-
--- Initialize the GUI
+-- Initialize
+loadCommands()
 updateCanvasSize()
 
--- Add smooth fade-in animation on startup
+-- Initial fade-in animation
 frame.BackgroundTransparency = 1
 shadow.ImageTransparency = 1
 searchContainer.BackgroundTransparency = 1
 scrollFrame.BackgroundTransparency = 1
 
--- Delay the animation slightly for a smoother appearance
 task.delay(0.1, function()
-    -- Fade in main frame
     TweenService:Create(frame, TWEEN_INFO.medium, {
         BackgroundTransparency = 0
     }):Play()
     
-    -- Fade in shadow
     TweenService:Create(shadow, TWEEN_INFO.medium, {
         ImageTransparency = 0.6
     }):Play()
     
-    -- Fade in containers
     for _, container in ipairs({searchContainer, scrollFrame}) do
         TweenService:Create(container, TWEEN_INFO.medium, {
             BackgroundTransparency = 0
         }):Play()
-    end
-    
-    -- Fade in command buttons sequentially
-    for i, button in ipairs(scrollFrame:GetChildren()) do
-        if button:IsA("TextButton") then
-            button.BackgroundTransparency = 1
-            for _, child in ipairs(button:GetChildren()) do
-                if child:IsA("TextLabel") then
-                    child.TextTransparency = 1
-                end
-            end
-            
-            -- Create sequential fade-in effect
-            task.delay(i * 0.05, function()
-                TweenService:Create(button, TWEEN_INFO.medium, {
-                    BackgroundTransparency = 0
-                }):Play()
-                
-                for _, child in ipairs(button:GetChildren()) do
-                    if child:IsA("TextLabel") then
-                        TweenService:Create(child, TWEEN_INFO.medium, {
-                            TextTransparency = 0
-                        }):Play()
-                    end
-                end
-            end)
-        end
     end
 end)
 
