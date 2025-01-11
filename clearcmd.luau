@@ -21,5 +21,5 @@ local function chatMessage(str)
 end
 
 local blob = "\u{000D}"
-local clearMessage = "##"..string.rep(blob, 50).."[AK]: Chat Cleared!"
+local clearMessage = "##"..string.rep(blob, 197)..""
 chatMessage(clearMessage)
