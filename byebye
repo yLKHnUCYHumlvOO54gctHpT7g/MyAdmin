@@ -25,19 +25,26 @@ local goodbyeMessage = spaces:rep(10)
     .. " ║ ḍịṣcọrḍ.gg/gJgRuwC3MP ║" -- Obfuscated Discord link
     .. blob:rep(40)
 
--- Check the chat version and send the message accordingly
+-- Compact message for the old chat system
+local compactMessage = "👋 BYE BYE! 👋 ḍịṣcọrḍ.gg/gJgRuwC3MP"
+
+-- Check chat version and send appropriate message
 if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-    -- Loop to send the goodbye message 5 times
+    -- Send the goodbye message 5 times with a slight delay for the new chat system
     for i = 1, 5 do
         chatMessage(goodbyeMessage)
+        wait(0.1)  -- Small delay to ensure each message is sent smoothly
     end
 else
-    -- Fallback for the old chat system: compact message
-    local compactMessage = "👋 BYE BYE! 👋 ḍịṣcọrḍ.gg/gJgRuwC3MP"
+    -- Send the compact message 5 times with a slight delay for the old chat system
     for i = 1, 5 do
         chatMessage(compactMessage)
+        wait(0.1)  -- Small delay to ensure each message is sent smoothly
     end
 end
+
+-- Wait 0.5 seconds before leaving the game
+wait(0.5)
 
 -- Forcefully leave the game
 game:Shutdown()
