@@ -68,6 +68,7 @@ headerText.TextColor3 = COLORS.text
 headerText.TextXAlignment = Enum.TextXAlignment.Left
 headerText.BackgroundTransparency = 1
 headerText.Parent = header
+
 local function createStyledButton(name, size, position, parent)
     local button = Instance.new("TextButton")
     button.Size = size
@@ -174,7 +175,7 @@ local function createCommandButton(name, description)
     local cmdName = Instance.new("TextLabel")
     cmdName.Size = UDim2.new(1, -20, 0, 20)
     cmdName.Position = UDim2.new(0, 10, 0, 5)
-    cmdName.Text = name -- Now showing with "!"
+    cmdName.Text = name
     cmdName.Font = Enum.Font.GothamBold
     cmdName.TextSize = 14
     cmdName.TextColor3 = COLORS.text
@@ -191,6 +192,7 @@ local function createCommandButton(name, description)
     cmdDesc.TextWrapped = true
     cmdDesc.Parent = button
     cmdDesc.Text = description
+
     local function updateSize()
         local textSize = game:GetService("TextService"):GetTextSize(
             description,
@@ -231,30 +233,86 @@ end
 scrollFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateCanvasSize)
 uiListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvasSize)
 
--- Load commands from library
+-- Modified loadCommands function
 local function loadCommands()
+    -- Load existing commands
     loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/main/allcmdss.luau"))()
     
     task.wait(0.1)
     
+    -- Additional targeted commands
+    local targetedCommands = {
+        {"!copy <target>", "Copies the avatar of the specified target (MIC UP)."},
+        {"!to <target>", "Teleports to the specified player's display name."},
+        {"!stand <target>", "Makes you a JoJo stand for the specified target."},
+        {"!invistroll <target>", "Makes you invisible and follows the specified target (MIC UP)."},
+        {"!steal display name", "Steals the avatar of the specified display name."},
+        {"!r6", "changes your avatar to R6."},
+        {"!r15", "changes your avatar to R15."}
+    }
+    
+    -- Create array for all commands
+    local cmdArray = {}
+    
+    -- Add existing commands if available
     if _G.cmds then
-        -- Convert commands table to array for reverse ordering
-        local cmdArray = {}
         for cmd, url in pairs(_G.cmds) do
-            table.insert(cmdArray, {cmd = cmd, url = url})
+            table.insert(cmdArray, {cmd = cmd, url = url, isTargeted = false})
         end
+    end
+    
+    -- Add new targeted commands
+    for _, cmdData in ipairs(targetedCommands) do
+        table.insert(cmdArray, {
+            cmd = cmdData[1],
+            description = cmdData[2],
+            isTargeted = true
+        })
+    end
+    
+    -- Sort array in reverse order
+    table.sort(cmdArray, function(a, b) return a.cmd > b.cmd end)
+    
+    -- Create buttons for all commands
+    for _, cmdData in ipairs(cmdArray) do
+        local button = createCommandButton(
+            cmdData.cmd,
+            cmdData.isTargeted and cmdData.description or "Click to execute command"
+        )
         
-        -- Sort array in reverse order
-        table.sort(cmdArray, function(a, b) return a.cmd > b.cmd end)
-        
-        -- Create buttons in reverse order
-        for _, cmdData in ipairs(cmdArray) do
-            local button = createCommandButton(cmdData.cmd, "Click to execute command")
-            
-            button.MouseButton1Click:Connect(function()
+        button.MouseButton1Click:Connect(function()
+            if cmdData.isTargeted then
+                -- For targeted commands, show input dialog
+                local targetInput = Instance.new("TextBox")
+                targetInput.Size = UDim2.new(1, -20, 0, 30)
+                targetInput.Position = UDim2.new(0, 10, 0, -40)
+                targetInput.PlaceholderText = "Enter target player name..."
+                targetInput.Text = ""
+                targetInput.Font = Enum.Font.Gotham
+                targetInput.TextSize = 14
+                targetInput.TextColor3 = COLORS.text
+                targetInput.BackgroundColor3 = COLORS.secondary
+                targetInput.BorderSizePixel = 0
+                targetInput.Parent = button
+                
+                local corner = Instance.new("UICorner")
+                corner.CornerRadius = UDim.new(0, 4)
+                corner.Parent = targetInput
+                
+                targetInput.FocusLost:Connect(function(enterPressed)
+                    if enterPressed then
+                        local command = cmdData.cmd:gsub("<target>", targetInput.Text)
+                        game:GetService("ReplicatedStorage"):WaitForChild("DefaultChatSystemChatEvents").SayMessageRequest:FireServer(command, "All")
+                    end
+                    targetInput:Destroy()
+                end)
+                
+                targetInput:CaptureFocus()
+            else
+                -- For regular commands, use existing URL execution
                 loadstring(game:HttpGet(cmdData.url))()
-            end)
-        end
+            end
+        end)
     end
 end
 
@@ -318,7 +376,7 @@ end)
 
 -- Minimize/Maximize functionality
 local minimized = false
-minimizeButton.MouseButton1Click:Connect(function(nigga)
+minimizeButton.MouseButton1Click:Connect(function()
     minimized = not minimized
     local targetSize = minimized and UDim2.new(0, 300, 0, 40) or UDim2.new(0, 300, 0, 400)
     
