@@ -1,0 +1,43 @@
+local TextChatService = game:GetService("TextChatService")
+
+-- Function to send a chat message
+local function chatMessage(str)
+    str = tostring(str)
+    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        -- Use TextChatService to send the message
+        TextChatService.TextChannels.RBXGeneral:SendAsync(str)
+    else
+        -- Use the old chat system
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
+    end
+end
+
+-- Invisible characters and formatting
+local blob = "\u{000D}" -- Invisible character
+local spaces = " " -- Spaces for centering text
+
+-- Goodbye message with obfuscation to avoid filtering
+local goodbyeMessage = spaces:rep(10) 
+    .. "" .. blob:rep(80) 
+    .. " ║👋 BYE BYE! 👋 ║" 
+    .. blob:rep(5) 
+    .. "\n" 
+    .. " ║ ḍịṣcọrḍ.gg/gJgRuwC3MP ║" -- Obfuscated Discord link
+    .. blob:rep(40)
+
+-- Check the chat version and send the message accordingly
+if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+    -- Loop to send the goodbye message 5 times
+    for i = 1, 5 do
+        chatMessage(goodbyeMessage)
+    end
+else
+    -- Fallback for the old chat system: compact message
+    local compactMessage = "👋 BYE BYE! 👋 ḍịṣcọrḍ.gg/gJgRuwC3MP"
+    for i = 1, 5 do
+        chatMessage(compactMessage)
+    end
+end
+
+-- Forcefully leave the game
+game:Shutdown()
