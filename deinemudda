@@ -3,6 +3,15 @@ local mainHook = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfj
 loadstring(game:HttpGet(mainHook))()
 
 -- Check if script is already running
+if _G.AKAdminLoaded then
+    game:GetService("StarterGui"):SetCore("SendNotification", {
+        Title = "AK ADMIN",
+        Text = "Script is already running!",
+        Duration = 5
+    })
+    return
+end
+_G.AKAdminLoaded = true
 
 -- Function to remove atmosphere and set fog
 local function RemoveAtmosphereAndSetFog()
