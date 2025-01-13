@@ -302,7 +302,7 @@ local function executeCommand(command)
                 function(accepted)
                     if accepted then
                         if _G.cmds[suggestion] then
-                           --Execute command here (Not needed it only should notify about it)
+                           -- Execute command here (Notification only)
                            createNotification(
                             "Success",
                             "Executed command: " .. suggestion,
@@ -355,7 +355,7 @@ local function updateSuggestion(input)
                 function(accepted)
                   if accepted then
                         if _G.cmds[suggestion] then
-                            --Execute command here (Not needed it only should notify about it)
+                            -- Execute command here (Notification only)
                            createNotification(
                             "Success",
                             "Executed command: " .. suggestion,
