@@ -3,15 +3,6 @@ local mainHook = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfj
 loadstring(game:HttpGet(mainHook))()
 
 -- Check if script is already running
-if _G.AKAdminLoaded then
-    game:GetService("StarterGui"):SetCore("SendNotification", {
-        Title = "AK ADMIN",
-        Text = "Script is already running!",
-        Duration = 5
-    })
-    return
-end
-_G.AKAdminLoaded = true
 
 -- Function to remove atmosphere and set fog
 local function RemoveAtmosphereAndSetFog()
@@ -44,11 +35,10 @@ local readfile = readfile or function() warn("readfile not supported") end
 
 -- Additional script loading
 local scripts = {
-    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/betterchatdtcsyss.luau",
     "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadplayertagss.luau",
+    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/betterchatdtcsyss.luau",
     "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/loadownercmdss.luau",
-    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/akactivee.luau",
-    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Ak%20Update%20logs%20guii"
+    "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/akactivee.luau"
 }
 
 for _, url in ipairs(scripts) do
