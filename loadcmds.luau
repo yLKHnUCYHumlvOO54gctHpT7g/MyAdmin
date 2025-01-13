@@ -289,82 +289,41 @@ local function canExecuteCommand(command)
     return true
 end
 
-local function executeCommand(command)
-    if not canExecuteCommand(command) then
-        createNotification(
-            "Cooldown",
-            "Please wait before executing this command again.",
-            3,
-            false
-        )
-        return
-    end
 
-    if _G.cmds[command] then
-        _G.executionHistory[command] = tick()
-        local success, errorMessage = pcall(function()
-           local loaded = loadstring(game:HttpGet(_G.cmds[command]))
-           if loaded then
-                loaded()
-           else
-                error("Failed to load command from URL")
-           end
-        end)
-        
-        if success then
-            createNotification(
-                "Success",
-                "Executed command: " .. command,
-                3,
-                false
-            )
-			
-        else
-           createNotification(
-               "Error",
-               "Failed to execute command: " .. command .. (errorMessage and ("\nError: " .. errorMessage) or ""),
-               5,
-               false
-           )
-		   
-		   -- return early to prevent execution of the next command if one has failed
-           return
-        end
-    else
-        local suggestion = suggestClosestCommand(command)
-        if suggestion then
-             createNotification(
-                 "Command Suggestion",
-                 "Did you mean: " .. suggestion .. "?",
-                 10,
-                 true,
-                 function(accepted)
-                     if accepted and canExecuteCommand(suggestion) then
-                         if _G.cmds[suggestion] then
-                             _G.executionHistory[suggestion] = tick()
-                             local success, errorMessage = pcall(function()
-                                local loaded = loadstring(game:HttpGet(_G.cmds[suggestion]))
-								if loaded then
-									loaded()
-								else
-									error("Failed to load command from URL")
-								end
-                             end)
-                             if not success then
-                                 createNotification(
-                                     "Error",
-                                     "Failed to execute command: " .. suggestion .. (errorMessage and ("\nError: " .. errorMessage) or ""),
-                                     5,
-                                     false
-                                 )
-                             end
-                         end
-                     end
-                 end
-             )
-        end
-    end
+local function executeCommandNotification(command)
+	if _G.cmds[command] then
+		createNotification(
+			"Success",
+			"Executed command: " .. command,
+			3,
+			false
+		)
+		_G.executionHistory[command] = tick() -- Track execution for cooldown
+
+	else
+		local suggestion = suggestClosestCommand(command)
+		if suggestion then
+			createNotification(
+				 "Command Suggestion",
+				 "Did you mean: " .. suggestion .. "?",
+				 10,
+				 true,
+				 function(accepted)
+					 if accepted and canExecuteCommand(suggestion) then
+						createNotification(
+								"Success",
+								"Executed command: " .. suggestion,
+								3,
+								false
+							)
+							_G.executionHistory[suggestion] = tick() -- Track execution for cooldown
+					 end
+				 end
+			)
+		end
+	end
 end
+
 
 task.wait(1)
 createNotification(
@@ -374,16 +333,6 @@ createNotification(
     false
 )
 
-local lastInput = ""
-
-LocalPlayer.Chatted:Connect(function(msg)
-    if msg:sub(1, 1) == "!" then
-        local command = msg:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
-        executeCommand("!" .. command)
-        lastInput = command
-        return
-    end
-end)
 
 local function updateSuggestion(input)
     if input == "" then return end
@@ -401,27 +350,15 @@ local function updateSuggestion(input)
             10,
             true,
             function(accepted)
-                 if accepted and canExecuteCommand(suggestion) then
-                     if _G.cmds[suggestion] then
-                         _G.executionHistory[suggestion] = tick()
-                         local success, errorMessage = pcall(function()
-							local loaded = loadstring(game:HttpGet(_G.cmds[suggestion]))
-							if loaded then
-								loaded()
-							else
-								error("Failed to load command from URL")
-							end
-                         end)
-                         if not success then
-                             createNotification(
-                                 "Error",
-                                 "Failed to execute command: " .. suggestion .. (errorMessage and ("\nError: " .. errorMessage) or ""),
-                                 5,
-                                 false
-                             )
-                         end
-                     end
-                 end
+				if accepted and canExecuteCommand(suggestion) then
+						createNotification(
+								"Success",
+								"Executed command: " .. suggestion,
+								3,
+								false
+							)
+							_G.executionHistory[suggestion] = tick()
+					end
             end
         )
     end
@@ -464,3 +401,24 @@ local function hookChatService()
     end
 end
 hookChatService()
+
+-- Example command execution (replace with your actual execution logic)
+local function executeExampleCommand(command)
+	local commandWithoutExclamation = command:sub(2)
+    if commandWithoutExclamation == "test" then -- Example specific command to execute
+		executeCommandNotification(command)
+    elseif commandWithoutExclamation == "cmds" then
+		executeCommandNotification(command)
+	else
+		executeCommandNotification(command)
+    end
+end
+
+-- Example of executing your commands:
+task.delay(10, function() -- Replace this with your own logic or event
+	executeExampleCommand("!test")
+	task.wait(2)
+	executeExampleCommand("!cmds")
+	task.wait(2)
+	executeExampleCommand("!wrongcmd")
+end)
