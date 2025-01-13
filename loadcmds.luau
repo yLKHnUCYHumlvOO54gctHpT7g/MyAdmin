@@ -285,12 +285,13 @@ end
 
 local function executeCommand(command)
     if _G.cmds[command] then
-         createNotification(
-                "Success",
-                "Executed command: " .. command,
-                3,
-                false
-            )
+        createNotification(
+            "Success",
+            "Executed command: " .. command,
+            3,
+            false
+        )
+        -- No actual command execution here, only notification
     else
         local suggestion = suggestClosestCommand(command)
         if suggestion then
@@ -302,20 +303,32 @@ local function executeCommand(command)
                 function(accepted)
                     if accepted then
                         if _G.cmds[suggestion] then
-                           -- Execute command here (Notification only)
-                           createNotification(
-                            "Success",
-                            "Executed command: " .. suggestion,
-                            3,
-                            false
-                        )
+                            local success, errorMessage = pcall(function()
+                                loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                            end)
+                            if success then
+                                createNotification(
+                                    "Success",
+                                    "Executed command: " .. suggestion,
+                                    3,
+                                    false
+                                )
+                            else
+                                createNotification(
+                                    "Error",
+                                    "Failed to execute command: " .. suggestion,
+                                    5,
+                                    false
+                                )
+                            end
                         end
                     end
                 end
             )
-         end
+        end
     end
 end
+
 
 task.wait(1)
 createNotification(
@@ -354,14 +367,25 @@ local function updateSuggestion(input)
                 true,
                 function(accepted)
                   if accepted then
-                        if _G.cmds[suggestion] then
-                            -- Execute command here (Notification only)
-                           createNotification(
-                            "Success",
-                            "Executed command: " .. suggestion,
-                            3,
-                            false
-                        )
+                       if _G.cmds[suggestion] then
+                            local success, errorMessage = pcall(function()
+                                loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                            end)
+                            if success then
+                                createNotification(
+                                    "Success",
+                                    "Executed command: " .. suggestion,
+                                    3,
+                                    false
+                                )
+                            else
+                                createNotification(
+                                    "Error",
+                                    "Failed to execute command: " .. suggestion,
+                                    5,
+                                    false
+                                )
+                            end
                         end
                     end
                 end
