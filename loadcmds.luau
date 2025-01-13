@@ -324,30 +324,30 @@ local function executeCommand(command)
     else
         local suggestion = suggestClosestCommand(command)
         if suggestion then
-            createNotification(
-                "Command Suggestion",
-                "Did you mean: " .. suggestion .. "?",
-                10,
-                true,
-                function(accepted)
-                    if accepted and canExecuteCommand(suggestion) then
-                        if _G.cmds[suggestion] then
-                            _G.executionHistory[suggestion] = tick()
-                            local success, errorMessage = pcall(function()
-                                loadstring(game:HttpGet(_G.cmds[suggestion]))()
-                            end)
-                            if not success then
-                                createNotification(
-                                    "Error",
-                                    "Failed to execute command: " .. suggestion,
-                                    5,
-                                    false
-                                )
-                            end
-                        end
-                    end
-                end
-            )
+             createNotification(
+                 "Command Suggestion",
+                 "Did you mean: " .. suggestion .. "?",
+                 10,
+                 true,
+                 function(accepted)
+                     if accepted and canExecuteCommand(suggestion) then
+                         if _G.cmds[suggestion] then
+                             _G.executionHistory[suggestion] = tick()
+                             local success, errorMessage = pcall(function()
+                                 loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                             end)
+                             if not success then
+                                 createNotification(
+                                     "Error",
+                                     "Failed to execute command: " .. suggestion,
+                                     5,
+                                     false
+                                 )
+                             end
+                         end
+                     end
+                 end
+             )
         end
     end
 end
@@ -387,22 +387,22 @@ local function updateSuggestion(input)
             10,
             true,
             function(accepted)
-                if accepted and canExecuteCommand(suggestion) then
-                    if _G.cmds[suggestion] then
-                        _G.executionHistory[suggestion] = tick()
-                        local success, errorMessage = pcall(function()
-                            loadstring(game:HttpGet(_G.cmds[suggestion]))()
-                        end)
-                        if not success then
-                            createNotification(
-                                "Error",
-                                "Failed to execute command: " .. suggestion,
-                                5,
-                                false
-                            )
-                        end
-                    end
-                end
+                 if accepted and canExecuteCommand(suggestion) then
+                     if _G.cmds[suggestion] then
+                         _G.executionHistory[suggestion] = tick()
+                         local success, errorMessage = pcall(function()
+                             loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                         end)
+                         if not success then
+                             createNotification(
+                                 "Error",
+                                 "Failed to execute command: " .. suggestion,
+                                 5,
+                                 false
+                             )
+                         end
+                     end
+                 end
             end
         )
     end
