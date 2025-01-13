@@ -191,14 +191,19 @@ local function suggestClosestCommand(input)
     local closestCommand = nil
     local highestScore = -math.huge
     
+     -- Check for direct match first
+    if _G.cmds[input] then
+        return input
+    end
+    
     for cmd in pairs(_G.cmds) do
-        local score = 0
+         local score = 0
         local inputLower = input:lower()
         local cmdLower = cmd:lower()
         local inputLen = #inputLower
         local cmdLen = #cmdLower
         
-        -- 1. Exact Match Check
+         -- 1. Exact Match Check
         if inputLower == cmdLower then
             return cmd -- If they match perfectly, return it immediately
         end
@@ -337,9 +342,71 @@ createNotification(
     false
 )
 
+local lastInput = ""
+
 LocalPlayer.Chatted:Connect(function(msg)
-    if msg:sub(1, 1) == "!" then
-        local command = msg:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
-        executeCommand("!" .. command) -- Add the ! back before checking
+  if msg:sub(1, 1) == "!" then
+    local command = msg:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
+    executeCommand("!" .. command)
+      lastInput = command
+      return
+  end
+end)
+
+local function updateSuggestion(input)
+  if input == "" then return end
+    local suggestion = suggestClosestCommand("!" .. input)
+    if suggestion then
+      
+        for _, child in pairs(NotificationGui:GetChildren()) do
+          if child:IsA("Frame") and child.Name ~= "ProgressBar" then
+              child:Destroy()
+           end
+      end
+      
+        createNotification(
+                "Command Suggestion",
+                "Did you mean: " .. suggestion .. "?",
+                10,
+                true,
+                function(accepted)
+                  if accepted then
+                        if _G.cmds[suggestion] then
+                           local success, errorMessage = pcall(function()
+                            loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                           end)
+                           if not success then
+                                 createNotification(
+                                      "Error",
+                                    "Failed to execute command: " .. suggestion,
+                                     5,
+                                    false
+                                  )
+                           end
+                        end
+                    end
+                end
+            )
+   else
+        for _, child in pairs(NotificationGui:GetChildren()) do
+          if child:IsA("Frame") and child.Name ~= "ProgressBar" then
+              child:Destroy()
+           end
+      end
     end
+end
+LocalPlayer.CharacterAdded:Connect(function(character)
+  if not character then return end
+   local chatBox = LocalPlayer.PlayerGui:WaitForChild("Chat"):WaitForChild("Frame"):WaitForChild("ChatBar")
+   local textBox = chatBox:WaitForChild("Box")
+  textBox:GetPropertyChangedSignal("Text"):Connect(function()
+      local currentText = textBox.Text
+      if currentText:sub(1,1) == "!" then
+        local input = currentText:sub(2):lower()
+         if input ~= lastInput then
+          updateSuggestion(input)
+          lastInput = input
+        end
+      end
+    end)
 end)
