@@ -6,10 +6,6 @@ if not _G.cmds then
     _G.cmds = {}
 end
 
--- Add execution tracking
-_G.executionHistory = _G.executionHistory or {}
-local EXECUTION_COOLDOWN = 2 -- Cooldown in seconds
-
 local existingGui = LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("AKAdminNotifications")
 if existingGui then
     existingGui:Destroy()
@@ -29,7 +25,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
 
     local notification = Instance.new("Frame")
     notification.Size = UDim2.new(0, 300, 0, 110)
-    notification.Position = UDim2.new(1, 50, 0.80, 0)
+    notification.Position = UDim2.new(1, 50, 0.80, 0)  -- Moved higher up
     notification.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
     notification.BackgroundTransparency = 0
     notification.BorderSizePixel = 0
@@ -168,7 +164,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
 
     local slideTween = TweenService:Create(notification,
         TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-        {Position = UDim2.new(1, -320, 0.80, 0)}
+        {Position = UDim2.new(1, -320, 0.80, 0)}  -- Adjusted position
     )
     slideTween:Play()
 
@@ -181,7 +177,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
     task.delay(duration, function()
         local slideOutTween = TweenService:Create(notification,
             TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.In),
-            {Position = UDim2.new(1, 50, 0.80, 0)}
+            {Position = UDim2.new(1, 50, 0.80, 0)}  -- Adjusted position
         )
         slideOutTween:Play()
         
@@ -195,25 +191,29 @@ local function suggestClosestCommand(input)
     local closestCommand = nil
     local highestScore = -math.huge
     
+     -- Check for direct match first
     if _G.cmds[input] then
         return input
     end
     
     for cmd in pairs(_G.cmds) do
-        local score = 0
+         local score = 0
         local inputLower = input:lower()
         local cmdLower = cmd:lower()
         local inputLen = #inputLower
         local cmdLen = #cmdLower
         
+         -- 1. Exact Match Check
         if inputLower == cmdLower then
-            return cmd
+            return cmd -- If they match perfectly, return it immediately
         end
         
+        -- 2. Prefix Match (Boost)
         if cmdLower:sub(1, inputLen) == inputLower then
             score = score + 25
         end
 
+        -- 3. Levenshtein Distance (Typos)
         local function levenshteinDistance(s1, s2)
             local len1 = #s1
             local len2 = #s2
@@ -237,28 +237,32 @@ local function suggestClosestCommand(input)
         end
         
         local distance = levenshteinDistance(inputLower, cmdLower)
-        score = score - (distance * 5)
+        score = score - (distance * 5)  -- Reduce score based on distance
         
+        -- 4. Length Penalty (Less if lengths are closer)
         local lengthDiff = math.abs(inputLen - cmdLen)
-        score = score - (lengthDiff * 2)
+        score = score - (lengthDiff * 2) -- Penalize more for larger length difference
 
+        -- 5. Sequence Matching Score
         local lastFoundIndex = 0
         local consecutiveMatches = 0
         for i = 1, inputLen do
             local char = inputLower:sub(i,i)
             local found = cmdLower:find(char, lastFoundIndex+1)
             if found then
-                score = score + (2 - (found - i) * 0.5)
+                score = score + (2 - (found - i) * 0.5)  -- Prioritize closer matches
                 if found == lastFoundIndex + 1 then
-                    consecutiveMatches = consecutiveMatches + 1
-                    score = score + (consecutiveMatches * 2)
+                  consecutiveMatches = consecutiveMatches + 1
+                  score = score + (consecutiveMatches * 2)
                 else
-                    consecutiveMatches = 0
+                  consecutiveMatches = 0
                 end
                 lastFoundIndex = found
             end
         end
+        
 
+        -- Common Prefix Length
         local commonPrefix = 0
         for i = 1, math.min(inputLen, cmdLen) do
             if inputLower:sub(i, i) == cmdLower:sub(i,i) then
@@ -267,7 +271,8 @@ local function suggestClosestCommand(input)
                 break
             end
         end
-        score = score + (commonPrefix * 4)
+        score = score + (commonPrefix * 4) -- Increased weight for common prefix
+        
 
         if score > highestScore then
             highestScore = score
@@ -278,52 +283,56 @@ local function suggestClosestCommand(input)
     return highestScore > 10 and closestCommand or nil
 end
 
-local function canExecuteCommand(command)
-    local lastExecution = _G.executionHistory[command]
-    if lastExecution then
-        local timeSinceLastExecution = tick() - lastExecution
-        if timeSinceLastExecution < EXECUTION_COOLDOWN then
-            return false
+local function executeCommand(command)
+    if _G.cmds[command] then
+        local success, errorMessage = pcall(function()
+            loadstring(game:HttpGet(_G.cmds[command]))()
+        end)
+        
+        if success then
+            createNotification(
+                "Success",
+                "Executed command: " .. command,
+                3,
+                false
+            )
+        else
+            createNotification(
+                "Error",
+                "Failed to execute command: " .. command,
+                5,
+                false
+            )
         end
+    else
+        local suggestion = suggestClosestCommand(command)
+        if suggestion then
+            createNotification(
+                "Command Suggestion",
+                "Did you mean: " .. suggestion .. "?",
+                10,
+                true,
+                function(accepted)
+                    if accepted then
+                        if _G.cmds[suggestion] then
+                           local success, errorMessage = pcall(function()
+                            loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                           end)
+                           if not success then
+                                 createNotification(
+                                      "Error",
+                                    "Failed to execute command: " .. suggestion,
+                                     5,
+                                    false
+                                  )
+                           end
+                        end
+                    end
+                end
+            )
+         end
     end
-    return true
 end
-
-
-local function executeCommandNotification(command)
-	if _G.cmds[command] then
-		createNotification(
-			"Success",
-			"Executed command: " .. command,
-			3,
-			false
-		)
-		_G.executionHistory[command] = tick() -- Track execution for cooldown
-
-	else
-		local suggestion = suggestClosestCommand(command)
-		if suggestion then
-			createNotification(
-				 "Command Suggestion",
-				 "Did you mean: " .. suggestion .. "?",
-				 10,
-				 true,
-				 function(accepted)
-					 if accepted and canExecuteCommand(suggestion) then
-						createNotification(
-								"Success",
-								"Executed command: " .. suggestion,
-								3,
-								false
-							)
-							_G.executionHistory[suggestion] = tick() -- Track execution for cooldown
-					 end
-				 end
-			)
-		end
-	end
-end
-
 
 task.wait(1)
 createNotification(
@@ -333,92 +342,71 @@ createNotification(
     false
 )
 
+local lastInput = ""
+
+LocalPlayer.Chatted:Connect(function(msg)
+  if msg:sub(1, 1) == "!" then
+    local command = msg:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
+    executeCommand("!" .. command)
+      lastInput = command
+      return
+  end
+end)
 
 local function updateSuggestion(input)
-    if input == "" then return end
+  if input == "" then return end
     local suggestion = suggestClosestCommand("!" .. input)
     if suggestion then
+      
         for _, child in pairs(NotificationGui:GetChildren()) do
-            if child:IsA("Frame") and child.Name ~= "ProgressBar" then
-                child:Destroy()
-            end
-        end
-        
+          if child:IsA("Frame") and child.Name ~= "ProgressBar" then
+              child:Destroy()
+           end
+      end
+      
         createNotification(
-            "Command Suggestion",
-            "Did you mean: " .. suggestion .. "?",
-            10,
-            true,
-            function(accepted)
-				if accepted and canExecuteCommand(suggestion) then
-						createNotification(
-								"Success",
-								"Executed command: " .. suggestion,
-								3,
-								false
-							)
-							_G.executionHistory[suggestion] = tick()
-					end
-            end
-        )
+                "Command Suggestion",
+                "Did you mean: " .. suggestion .. "?",
+                10,
+                true,
+                function(accepted)
+                  if accepted then
+                        if _G.cmds[suggestion] then
+                           local success, errorMessage = pcall(function()
+                            loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                           end)
+                           if not success then
+                                 createNotification(
+                                      "Error",
+                                    "Failed to execute command: " .. suggestion,
+                                     5,
+                                    false
+                                  )
+                           end
+                        end
+                    end
+                end
+            )
+   else
+        for _, child in pairs(NotificationGui:GetChildren()) do
+          if child:IsA("Frame") and child.Name ~= "ProgressBar" then
+              child:Destroy()
+           end
+      end
     end
 end
-
--- Event to monitor chat input while typing, adding suggestion support
-local lastChatInput = ""
-local connection
-local function handleChatUpdate(chatbox)
-    if connection then
-        connection:Disconnect()
-        connection = nil
-    end
-
-    if chatbox then
-        connection = chatbox.TextBox.FocusLost:Connect(function(enterPressed)
-            if not enterPressed and lastChatInput ~= "" then
-                updateSuggestion(lastChatInput)
-            end
-            lastChatInput = ""
-        end)
-
-        chatbox.TextBox.Changed:Connect(function()
-            local currentText = chatbox.TextBox.Text
-            if currentText:sub(1,1) == "!" then
-                local input = currentText:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
-                lastChatInput = input
-            else
-                lastChatInput = ""
-            end
-        end)
-    end
-end
-
-local function hookChatService()
-    local chatService = game:GetService("Chat")
-    chatService.OnChatWindowLoaded:Connect(handleChatUpdate)
-    if chatService.ChatWindowLoaded then
-        handleChatUpdate(chatService.ChatWindow)
-    end
-end
-hookChatService()
-
--- Example command execution (replace with your actual execution logic)
-local function executeExampleCommand(command)
-	local commandWithoutExclamation = command:sub(2)
-    if commandWithoutExclamation == "test" then -- Example specific command to execute
-		executeCommandNotification(command)
-    elseif commandWithoutExclamation == "cmds" then
-		executeCommandNotification(command)
-	else
-		executeCommandNotification(command)
-    end
-end
-
--- Example of executing your commands:
-task.delay(10, function() -- Replace this with your own logic or event
-	executeExampleCommand("!test")
-	task.wait(2)
-	executeExampleCommand("!cmds")
-	task.wait(2)
-	executeExampleCommand("!wrongcmd")
+LocalPlayer.CharacterAdded:Connect(function(character)
+  if not character then return end
+   local chatBox = LocalPlayer.PlayerGui:WaitForChild("Chat"):WaitForChild("Frame"):WaitForChild("ChatBar")
+   local textBox = chatBox:WaitForChild("Box")
+  textBox:GetPropertyChangedSignal("Text"):Connect(function()
+      local currentText = textBox.Text
+      if currentText:sub(1,1) == "!" then
+        local input = currentText:sub(2):lower()
+         if input ~= lastInput then
+          updateSuggestion(input)
+          lastInput = input
+        end
+      end
+    end)
 end)
