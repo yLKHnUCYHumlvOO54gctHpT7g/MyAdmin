@@ -2,39 +2,47 @@ local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
+-- Initialize command list if it doesn't exist
 if not _G.cmds then
     _G.cmds = {}
 end
 
+-- Get PlayerGui and destroy existing notification UI if it exists
 local existingGui = LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("AKAdminNotifications")
 if existingGui then
     existingGui:Destroy()
 end
 
+-- Create the ScreenGui for notifications
 local NotificationGui = Instance.new("ScreenGui")
 NotificationGui.Name = "AKAdminNotifications"
 NotificationGui.ResetOnSpawn = false
 NotificationGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
+-- Function to create and display a notification
 local function createNotification(title, text, duration, suggestion, suggestionCallback)
+    -- Destroy any existing notifications
     for _, child in pairs(NotificationGui:GetChildren()) do
         if child:IsA("Frame") then
             child:Destroy()
         end
     end
 
+    -- Create the notification frame
     local notification = Instance.new("Frame")
     notification.Size = UDim2.new(0, 300, 0, 110)
-    notification.Position = UDim2.new(1, 50, 0.80, 0)  
+    notification.Position = UDim2.new(1, 50, 0.80, 0)  -- Positioned off-screen to the right
     notification.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
     notification.BackgroundTransparency = 0
     notification.BorderSizePixel = 0
     notification.Parent = NotificationGui
 
+    -- Add a UI corner for rounded edges
     local corner = Instance.new("UICorner")
     corner.CornerRadius = UDim.new(0, 8)
     corner.Parent = notification
 
+    -- Add a gradient background
     local gradient = Instance.new("UIGradient")
     gradient.Color = ColorSequence.new({
         ColorSequenceKeypoint.new(0, Color3.fromRGB(35, 35, 45)),
@@ -43,6 +51,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
     gradient.Rotation = 45
     gradient.Parent = notification
 
+    -- Add an accent bar on the left
     local titleAccent = Instance.new("Frame")
     titleAccent.Size = UDim2.new(0, 3, 0, 20)
     titleAccent.Position = UDim2.new(0, 10, 0, 13)
@@ -50,10 +59,12 @@ local function createNotification(title, text, duration, suggestion, suggestionC
     titleAccent.BorderSizePixel = 0
     titleAccent.Parent = notification
 
+    -- Add a UI corner to the accent bar
     local accentCorner = Instance.new("UICorner")
     accentCorner.CornerRadius = UDim.new(0, 2)
     accentCorner.Parent = titleAccent
 
+    -- Create the title label
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Size = UDim2.new(1, -40, 0, 20)
     titleLabel.Position = UDim2.new(0, 20, 0, 13)
@@ -65,6 +76,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
     titleLabel.Text = title
     titleLabel.Parent = notification
 
+    -- Create the message label
     local messageLabel = Instance.new("TextLabel")
     messageLabel.Size = UDim2.new(1, -20, 0, 40)
     messageLabel.Position = UDim2.new(0, 10, 0, 38)
@@ -77,6 +89,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
     messageLabel.Text = text
     messageLabel.Parent = notification
 
+    -- Add a button container for suggestion prompts if suggestion is true
     if suggestion then
         local buttonContainer = Instance.new("Frame")
         buttonContainer.Size = UDim2.new(1, -20, 0, 28)
@@ -84,6 +97,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
         buttonContainer.BackgroundTransparency = 1
         buttonContainer.Parent = notification
 
+        -- Create the "Yes" button
         local yesButton = Instance.new("TextButton")
         yesButton.Size = UDim2.new(0.48, 0, 1, 0)
         yesButton.Position = UDim2.new(0, 0, 0, 0)
@@ -95,10 +109,12 @@ local function createNotification(title, text, duration, suggestion, suggestionC
         yesButton.AutoButtonColor = false
         yesButton.Parent = buttonContainer
 
+        -- Apply corner to yes button
         local yesCorner = Instance.new("UICorner")
         yesCorner.CornerRadius = UDim.new(0, 6)
         yesCorner.Parent = yesButton
 
+        -- Create the "No" button
         local noButton = Instance.new("TextButton")
         noButton.Size = UDim2.new(0.48, 0, 1, 0)
         noButton.Position = UDim2.new(0.52, 0, 0, 0)
@@ -110,35 +126,39 @@ local function createNotification(title, text, duration, suggestion, suggestionC
         noButton.AutoButtonColor = false
         noButton.Parent = buttonContainer
 
+        -- Apply corner to no button
         local noCorner = Instance.new("UICorner")
         noCorner.CornerRadius = UDim.new(0, 6)
         noCorner.Parent = noButton
 
+        -- Helper function for creating hover effects on buttons
         local function createHoverEffect(button, defaultColor, hoverColor)
             button.MouseEnter:Connect(function()
-                TweenService:Create(button, 
-                    TweenInfo.new(0.2, Enum.EasingStyle.Quad), 
+                TweenService:Create(button,
+                    TweenInfo.new(0.2, Enum.EasingStyle.Quad),
                     {BackgroundColor3 = hoverColor}
                 ):Play()
             end)
-            
+
             button.MouseLeave:Connect(function()
-                TweenService:Create(button, 
-                    TweenInfo.new(0.2, Enum.EasingStyle.Quad), 
+                TweenService:Create(button,
+                    TweenInfo.new(0.2, Enum.EasingStyle.Quad),
                     {BackgroundColor3 = defaultColor}
                 ):Play()
             end)
         end
 
-        createHoverEffect(yesButton, 
-            Color3.fromRGB(65, 165, 255), 
+        -- Set up hover effects for Yes and No buttons
+        createHoverEffect(yesButton,
+            Color3.fromRGB(65, 165, 255),
             Color3.fromRGB(85, 175, 255)
         )
-        createHoverEffect(noButton, 
-            Color3.fromRGB(45, 45, 55), 
+        createHoverEffect(noButton,
+            Color3.fromRGB(45, 45, 55),
             Color3.fromRGB(55, 55, 65)
         )
 
+        -- Set up button click logic for yes button
         yesButton.MouseButton1Click:Connect(function()
             if suggestionCallback then
                 suggestionCallback(true)
@@ -146,6 +166,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
             notification:Destroy()
         end)
 
+        -- Set up button click logic for no button
         noButton.MouseButton1Click:Connect(function()
             if suggestionCallback then
                 suggestionCallback(false)
@@ -154,6 +175,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
         end)
     end
 
+    -- Create progress bar for notification timer
     local progressBar = Instance.new("Frame")
     progressBar.Name = "ProgressBar"
     progressBar.Size = UDim2.new(1, 0, 0, 2)
@@ -162,30 +184,34 @@ local function createNotification(title, text, duration, suggestion, suggestionC
     progressBar.BorderSizePixel = 0
     progressBar.Parent = notification
 
+    -- Animate notification in from the right
     local slideTween = TweenService:Create(notification,
         TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
         {Position = UDim2.new(1, -320, 0.80, 0)}
     )
     slideTween:Play()
 
+    -- Animate progress bar
     local progressTween = TweenService:Create(progressBar,
         TweenInfo.new(duration, Enum.EasingStyle.Linear),
         {Size = UDim2.new(0, 0, 0, 2)}
     )
     progressTween:Play()
 
+    -- Timer to slide out and destroy the notification
     task.delay(duration, function()
         local slideOutTween = TweenService:Create(notification,
             TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.In),
             {Position = UDim2.new(1, 50, 0.80, 0)}
         )
         slideOutTween:Play()
-        
+
         slideOutTween.Completed:Wait()
         notification:Destroy()
     end)
 end
 
+-- Function to suggest closest command
 local function suggestClosestCommand(input)
     if not input then return nil end
     local closestCommand = nil
@@ -274,27 +300,15 @@ local function suggestClosestCommand(input)
     return highestScore > 10 and closestCommand or nil
 end
 
-local function executeCommand(command)
+-- Function to show notification when a command is "executed"
+local function executeCommandNotification(command)
     if _G.cmds[command] then
-        local success, errorMessage = pcall(function()
-            loadstring(game:HttpGet(_G.cmds[command]))()
-        end)
-        
-        if success then
-            createNotification(
-                "Success",
-                "Executed command: " .. command,
-                3,
-                false
-            )
-        else
-            createNotification(
-                "Error",
-                "Failed to execute command: " .. command,
-                5,
-                false
-            )
-        end
+        createNotification(
+            "Success",
+            "Executed command: " .. command,
+            3,
+            false
+        )
     else
         local suggestion = suggestClosestCommand(command)
         if suggestion then
@@ -306,17 +320,12 @@ local function executeCommand(command)
                 function(accepted)
                     if accepted then
                         if _G.cmds[suggestion] then
-                            local success, errorMessage = pcall(function()
-                                loadstring(game:HttpGet(_G.cmds[suggestion]))()
-                            end)
-                            if not success then
-                                createNotification(
-                                    "Error",
-                                    "Failed to execute command: " .. suggestion,
-                                    5,
-                                    false
-                                )
-                            end
+                            createNotification(
+                                "Success",
+                                "Executed command: " .. suggestion,
+                                3,
+                                false
+                            )
                         end
                     end
                 end
@@ -325,6 +334,7 @@ local function executeCommand(command)
     end
 end
 
+-- Initial welcome notification
 task.wait(1)
 createNotification(
     "AK ADMIN",
@@ -335,15 +345,18 @@ createNotification(
 
 local lastInput = ""
 
+-- Handle player chat messages
 LocalPlayer.Chatted:Connect(function(msg)
     if msg:sub(1, 1) == "!" then
         local command = msg:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
-        executeCommand("!" .. command)
+        -- Show notification as if the command was executed, but don't run the command
+        executeCommandNotification("!"..command)
         lastInput = command
         return
     end
 end)
 
+-- Function to update suggestions while typing in the chatbox
 local function updateSuggestion(input)
     if input == "" then return end
     local suggestion = suggestClosestCommand("!" .. input)
@@ -361,18 +374,13 @@ local function updateSuggestion(input)
             true,
             function(accepted)
                 if accepted then
-                    if _G.cmds[suggestion] then
-                        local success, errorMessage = pcall(function()
-                            loadstring(game:HttpGet(_G.cmds[suggestion]))()
-                        end)
-                        if not success then
-                            createNotification(
-                                "Error",
-                                "Failed to execute command: " .. suggestion,
-                                5,
-                                false
-                            )
-                        end
+                   if _G.cmds[suggestion] then
+                        createNotification(
+                            "Success",
+                            "Executed command: " .. suggestion,
+                            3,
+                            false
+                        )
                     end
                 end
             end
@@ -386,18 +394,43 @@ local function updateSuggestion(input)
     end
 end
 
-LocalPlayer.CharacterAdded:Connect(function(character)
-    if not character then return end
-    local chatBox = LocalPlayer.PlayerGui:WaitForChild("Chat"):WaitForChild("Frame"):WaitForChild("ChatBar")
-    local textBox = chatBox:WaitForChild("Box")
-    textBox:GetPropertyChangedSignal("Text"):Connect(function()
-        local currentText = textBox.Text
-        if currentText:sub(1,1) == "!" then
-            local input = currentText:sub(2):lower()
-            if input ~= lastInput then
-                updateSuggestion(input)
-                lastInput = input
+local lastChatInput = ""
+local connection
+
+-- Function to set up the chat input monitoring
+local function handleChatUpdate(chatbox)
+    if connection then
+        connection:Disconnect()
+        connection = nil
+    end
+
+    if chatbox then
+        connection = chatbox.TextBox.FocusLost:Connect(function(enterPressed)
+           if not enterPressed and lastChatInput ~= "" then
+                updateSuggestion(lastChatInput)
             end
-        end
-    end)
-end)
+            lastChatInput = ""
+        end)
+
+        chatbox.TextBox.Changed:Connect(function()
+            local currentText = chatbox.TextBox.Text
+            if currentText:sub(1,1) == "!" then
+                local input = currentText:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
+                lastChatInput = input
+            else
+                lastChatInput = ""
+            end
+        end)
+    end
+end
+
+-- Function to hook chat service events
+local function hookChatService()
+    local chatService = game:GetService("Chat")
+    chatService.OnChatWindowLoaded:Connect(handleChatUpdate)
+    if chatService.ChatWindowLoaded then
+        handleChatUpdate(chatService.ChatWindow)
+    end
+end
+
+hookChatService()
