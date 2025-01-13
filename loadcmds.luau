@@ -303,7 +303,12 @@ local function executeCommand(command)
     if _G.cmds[command] then
         _G.executionHistory[command] = tick()
         local success, errorMessage = pcall(function()
-            loadstring(game:HttpGet(_G.cmds[command]))()
+           local loaded = loadstring(game:HttpGet(_G.cmds[command]))
+           if loaded then
+                loaded()
+           else
+                error("Failed to load command from URL")
+           end
         end)
         
         if success then
@@ -313,13 +318,17 @@ local function executeCommand(command)
                 3,
                 false
             )
+			
         else
-            createNotification(
-                "Error",
-                "Failed to execute command: " .. command,
-                5,
-                false
-            )
+           createNotification(
+               "Error",
+               "Failed to execute command: " .. command .. (errorMessage and ("\nError: " .. errorMessage) or ""),
+               5,
+               false
+           )
+		   
+		   -- return early to prevent execution of the next command if one has failed
+           return
         end
     else
         local suggestion = suggestClosestCommand(command)
@@ -334,12 +343,17 @@ local function executeCommand(command)
                          if _G.cmds[suggestion] then
                              _G.executionHistory[suggestion] = tick()
                              local success, errorMessage = pcall(function()
-                                 loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                                local loaded = loadstring(game:HttpGet(_G.cmds[suggestion]))
+								if loaded then
+									loaded()
+								else
+									error("Failed to load command from URL")
+								end
                              end)
                              if not success then
                                  createNotification(
                                      "Error",
-                                     "Failed to execute command: " .. suggestion,
+                                     "Failed to execute command: " .. suggestion .. (errorMessage and ("\nError: " .. errorMessage) or ""),
                                      5,
                                      false
                                  )
@@ -391,12 +405,17 @@ local function updateSuggestion(input)
                      if _G.cmds[suggestion] then
                          _G.executionHistory[suggestion] = tick()
                          local success, errorMessage = pcall(function()
-                             loadstring(game:HttpGet(_G.cmds[suggestion]))()
+							local loaded = loadstring(game:HttpGet(_G.cmds[suggestion]))
+							if loaded then
+								loaded()
+							else
+								error("Failed to load command from URL")
+							end
                          end)
                          if not success then
                              createNotification(
                                  "Error",
-                                 "Failed to execute command: " .. suggestion,
+                                 "Failed to execute command: " .. suggestion .. (errorMessage and ("\nError: " .. errorMessage) or ""),
                                  5,
                                  false
                              )
