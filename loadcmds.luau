@@ -1,128 +1,345 @@
-local StarterGui = game:GetService("StarterGui")
+local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
-StarterGui:SetCore("SendNotification", {
-    Title = "AK ADMIN",
-    Text = "Welcome to AK ADMIN! Type !cmds to see the available commands.",
-    Duration = 8
-})
+if not _G.cmds then
+    _G.cmds = {}
+end
 
--- Function to find the closest matching command
-local function suggestClosestCommand(input)
-    if not input then return nil end
+local existingGui = LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("AKAdminNotifications")
+if existingGui then
+    existingGui:Destroy()
+end
 
-    local closestCommand = nil
-    local shortestDistance = math.huge
+local NotificationGui = Instance.new("ScreenGui")
+NotificationGui.Name = "AKAdminNotifications"
+NotificationGui.ResetOnSpawn = false
+NotificationGui.Parent = LocalPlayer:WaitForChild("PlayerGui")
 
-    -- Simple distance calculation
-    for cmd in pairs(_G.cmds) do
-        local distance = 0
-        local maxLen = math.max(#input, #cmd)
+local function createNotification(title, text, duration, suggestion, suggestionCallback)
+    for _, child in pairs(NotificationGui:GetChildren()) do
+        if child:IsA("Frame") then
+            child:Destroy()
+        end
+    end
 
-        -- Compare characters
-        for i = 1, maxLen do
-            local c1 = input:sub(i, i):lower()
-            local c2 = cmd:sub(i, i):lower()
-            if c1 ~= c2 then
-                distance = distance + 1
-            end
+    local notification = Instance.new("Frame")
+    notification.Size = UDim2.new(0, 300, 0, 110)
+    notification.Position = UDim2.new(1, 50, 0.80, 0)  -- Moved higher up
+    notification.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    notification.BackgroundTransparency = 0
+    notification.BorderSizePixel = 0
+    notification.Parent = NotificationGui
+
+    local corner = Instance.new("UICorner")
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = notification
+
+    local gradient = Instance.new("UIGradient")
+    gradient.Color = ColorSequence.new({
+        ColorSequenceKeypoint.new(0, Color3.fromRGB(35, 35, 45)),
+        ColorSequenceKeypoint.new(1, Color3.fromRGB(25, 25, 35))
+    })
+    gradient.Rotation = 45
+    gradient.Parent = notification
+
+    local titleAccent = Instance.new("Frame")
+    titleAccent.Size = UDim2.new(0, 3, 0, 20)
+    titleAccent.Position = UDim2.new(0, 10, 0, 13)
+    titleAccent.BackgroundColor3 = Color3.fromRGB(65, 165, 255)
+    titleAccent.BorderSizePixel = 0
+    titleAccent.Parent = notification
+
+    local accentCorner = Instance.new("UICorner")
+    accentCorner.CornerRadius = UDim.new(0, 2)
+    accentCorner.Parent = titleAccent
+
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Size = UDim2.new(1, -40, 0, 20)
+    titleLabel.Position = UDim2.new(0, 20, 0, 13)
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Font = Enum.Font.GothamBold
+    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    titleLabel.TextSize = 14
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    titleLabel.Text = title
+    titleLabel.Parent = notification
+
+    local messageLabel = Instance.new("TextLabel")
+    messageLabel.Size = UDim2.new(1, -20, 0, 40)
+    messageLabel.Position = UDim2.new(0, 10, 0, 38)
+    messageLabel.BackgroundTransparency = 1
+    messageLabel.Font = Enum.Font.Gotham
+    messageLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    messageLabel.TextSize = 13
+    messageLabel.TextWrapped = true
+    messageLabel.TextXAlignment = Enum.TextXAlignment.Left
+    messageLabel.Text = text
+    messageLabel.Parent = notification
+
+    if suggestion then
+        local buttonContainer = Instance.new("Frame")
+        buttonContainer.Size = UDim2.new(1, -20, 0, 28)
+        buttonContainer.Position = UDim2.new(0, 10, 1, -38)
+        buttonContainer.BackgroundTransparency = 1
+        buttonContainer.Parent = notification
+
+        local yesButton = Instance.new("TextButton")
+        yesButton.Size = UDim2.new(0.48, 0, 1, 0)
+        yesButton.Position = UDim2.new(0, 0, 0, 0)
+        yesButton.BackgroundColor3 = Color3.fromRGB(65, 165, 255)
+        yesButton.Text = "Yes"
+        yesButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        yesButton.Font = Enum.Font.GothamBold
+        yesButton.TextSize = 13
+        yesButton.AutoButtonColor = false
+        yesButton.Parent = buttonContainer
+
+        local yesCorner = Instance.new("UICorner")
+        yesCorner.CornerRadius = UDim.new(0, 6)
+        yesCorner.Parent = yesButton
+
+        local noButton = Instance.new("TextButton")
+        noButton.Size = UDim2.new(0.48, 0, 1, 0)
+        noButton.Position = UDim2.new(0.52, 0, 0, 0)
+        noButton.BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+        noButton.Text = "No"
+        noButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+        noButton.Font = Enum.Font.GothamBold
+        noButton.TextSize = 13
+        noButton.AutoButtonColor = false
+        noButton.Parent = buttonContainer
+
+        local noCorner = Instance.new("UICorner")
+        noCorner.CornerRadius = UDim.new(0, 6)
+        noCorner.Parent = noButton
+
+        local function createHoverEffect(button, defaultColor, hoverColor)
+            button.MouseEnter:Connect(function()
+                TweenService:Create(button, 
+                    TweenInfo.new(0.2, Enum.EasingStyle.Quad), 
+                    {BackgroundColor3 = hoverColor}
+                ):Play()
+            end)
+            
+            button.MouseLeave:Connect(function()
+                TweenService:Create(button, 
+                    TweenInfo.new(0.2, Enum.EasingStyle.Quad), 
+                    {BackgroundColor3 = defaultColor}
+                ):Play()
+            end)
         end
 
-        -- Update closest command if this one is closer
-        if distance < shortestDistance and distance <= 3 then
-            shortestDistance = distance
+        createHoverEffect(yesButton, 
+            Color3.fromRGB(65, 165, 255), 
+            Color3.fromRGB(85, 175, 255)
+        )
+        createHoverEffect(noButton, 
+            Color3.fromRGB(45, 45, 55), 
+            Color3.fromRGB(55, 55, 65)
+        )
+
+        yesButton.MouseButton1Click:Connect(function()
+            if suggestionCallback then
+                suggestionCallback(true)
+            end
+            notification:Destroy()
+        end)
+
+        noButton.MouseButton1Click:Connect(function()
+            if suggestionCallback then
+                suggestionCallback(false)
+            end
+            notification:Destroy()
+        end)
+    end
+
+    local progressBar = Instance.new("Frame")
+    progressBar.Name = "ProgressBar"
+    progressBar.Size = UDim2.new(1, 0, 0, 2)
+    progressBar.Position = UDim2.new(0, 0, 1, -2)
+    progressBar.BackgroundColor3 = Color3.fromRGB(65, 165, 255)
+    progressBar.BorderSizePixel = 0
+    progressBar.Parent = notification
+
+    local slideTween = TweenService:Create(notification,
+        TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
+        {Position = UDim2.new(1, -320, 0.80, 0)}  -- Adjusted position
+    )
+    slideTween:Play()
+
+    local progressTween = TweenService:Create(progressBar,
+        TweenInfo.new(duration, Enum.EasingStyle.Linear),
+        {Size = UDim2.new(0, 0, 0, 2)}
+    )
+    progressTween:Play()
+
+    task.delay(duration, function()
+        local slideOutTween = TweenService:Create(notification,
+            TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.In),
+            {Position = UDim2.new(1, 50, 0.80, 0)}  -- Adjusted position
+        )
+        slideOutTween:Play()
+        
+        slideOutTween.Completed:Wait()
+        notification:Destroy()
+    end)
+end
+
+local function suggestClosestCommand(input)
+    if not input then return nil end
+    local closestCommand = nil
+    local highestScore = -math.huge
+    
+    for cmd in pairs(_G.cmds) do
+        local score = 0
+        local inputLower = input:lower()
+        local cmdLower = cmd:lower()
+        local inputLen = #inputLower
+        local cmdLen = #cmdLower
+        
+        -- 1. Exact Match Check
+        if inputLower == cmdLower then
+            return cmd -- If they match perfectly, return it immediately
+        end
+        
+        -- 2. Prefix Match (Boost)
+        if cmdLower:sub(1, inputLen) == inputLower then
+            score = score + 25
+        end
+
+        -- 3. Levenshtein Distance (Typos)
+        local function levenshteinDistance(s1, s2)
+            local len1 = #s1
+            local len2 = #s2
+            local d = {}
+            
+            for i = 0, len1 do d[i] = {[0] = i} end
+            for j = 0, len2 do d[0][j] = j end
+            
+            for j = 1, len2 do
+                for i = 1, len1 do
+                    local cost = (s1:sub(i,i) == s2:sub(j,j)) and 0 or 1
+                    d[i][j] = math.min(
+                        d[i-1][j] + 1,
+                        d[i][j-1] + 1,
+                        d[i-1][j-1] + cost
+                    )
+                end
+            end
+            
+            return d[len1][len2]
+        end
+        
+        local distance = levenshteinDistance(inputLower, cmdLower)
+        score = score - (distance * 5)  -- Reduce score based on distance
+        
+        -- 4. Length Penalty (Less if lengths are closer)
+        local lengthDiff = math.abs(inputLen - cmdLen)
+        score = score - (lengthDiff * 2) -- Penalize more for larger length difference
+
+        -- 5. Sequence Matching Score
+        local lastFoundIndex = 0
+        local consecutiveMatches = 0
+        for i = 1, inputLen do
+            local char = inputLower:sub(i,i)
+            local found = cmdLower:find(char, lastFoundIndex+1)
+            if found then
+                score = score + (2 - (found - i) * 0.5)  -- Prioritize closer matches
+                if found == lastFoundIndex + 1 then
+                  consecutiveMatches = consecutiveMatches + 1
+                  score = score + (consecutiveMatches * 2)
+                else
+                  consecutiveMatches = 0
+                end
+                lastFoundIndex = found
+            end
+        end
+        
+
+        -- Common Prefix Length
+        local commonPrefix = 0
+        for i = 1, math.min(inputLen, cmdLen) do
+            if inputLower:sub(i, i) == cmdLower:sub(i,i) then
+                commonPrefix = commonPrefix + 1
+            else
+                break
+            end
+        end
+        score = score + (commonPrefix * 4) -- Increased weight for common prefix
+        
+
+        if score > highestScore then
+            highestScore = score
             closestCommand = cmd
         end
     end
-
-    return closestCommand
+    
+    return highestScore > 10 and closestCommand or nil
 end
 
--- Function to execute a command
 local function executeCommand(command)
     if _G.cmds[command] then
         local success, errorMessage = pcall(function()
+            loadstring(game:HttpGet(_G.cmds[command]))()
         end)
-
+        
         if success then
-            StarterGui:SetCore("SendNotification", {
-                Title = "Command Executed ✅",
-                Text = "Executed: " .. command,
-                Duration = 3
-            })
+            createNotification(
+                "Success",
+                "Executed command: " .. command,
+                3,
+                false
+            )
         else
-
+            createNotification(
+                "Error",
+                "Failed to execute command: " .. command,
+                5,
+                false
+            )
         end
     else
-        -- Try to find a similar command
         local suggestion = suggestClosestCommand(command)
         if suggestion then
-            StarterGui:SetCore("SendNotification", {
-                Title = "Command Suggestion 💡",
-                Text = "Did you mean: " .. suggestion .. "?",
-                Duration = 5
-            })
-        else
-
-        end
-    end
-end
-
--- Real-time typing detection to provide suggestions
-local function detectTyping(input)
-    if input:sub(1, 1) == "!" then
-        local fullCommand = input:lower():gsub("^%s*", ""):gsub("%s*$", "")
-
-        local suggestion = suggestClosestCommand(fullCommand)
-        if suggestion then
-            StarterGui:SetCore("SendNotification", {
-                Title = "Command Suggestion 💡",
-                Text = "Did you mean: " .. suggestion .. "?",
-                Duration = 5
-            })
-        end
-    end
-end
-
--- Connect chat event to command execution for the local player
-LocalPlayer.Chatted:Connect(function(msg)
-    -- Only process commands that start with !
-    if msg:sub(1, 1) == "!" then
-        -- Trim and clean up command input
-        local fullCommand = msg:lower():gsub("^%s*", ""):gsub("%s*$", "")
-
-        -- Check if command exists directly
-        if _G.cmds[fullCommand] then
-            executeCommand(fullCommand)
-        else
-            -- Try to find a suggestion
-            local suggestion = suggestClosestCommand(fullCommand)
-            if suggestion then
-                -- Create buttons for the suggestion
-                local bindable = Instance.new("BindableFunction")
-
-                function bindable.OnInvoke(response)
-                    if response == "Yes" then
-                        for cmdname,link in pairs (_G.cmds) do
-                            if suggestion == cmdname then
-                                            loadstring(game:HttpGet(link))()
-                            end
+            createNotification(
+                "Command Suggestion",
+                "Did you mean: " .. suggestion .. "?",
+                10,
+                true,
+                function(accepted)
+                    if accepted then
+                        if _G.cmds[suggestion] then
+                           local success, errorMessage = pcall(function()
+                            loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                           end)
+                           if not success then
+                                 createNotification(
+                                      "Error",
+                                    "Failed to execute command: " .. suggestion,
+                                     5,
+                                    false
+                                  )
+                           end
                         end
                     end
                 end
+            )
+         end
+    end
+end
 
-                StarterGui:SetCore("SendNotification", {
-                    Title = "Command Suggestion 💡",
-                    Text = "Did you mean: " .. suggestion .. "?",
-                    Duration = 10,
-                    Button1 = "Yes",
-                    Button2 = "No",
-                    Callback = bindable
-                })
-            else
+task.wait(1)
+createNotification(
+    "AK ADMIN",
+    "Welcome to AK ADMIN! Type !cmds to see the available commands.",
+    8,
+    false
+)
 
-            end
-        end
+LocalPlayer.Chatted:Connect(function(msg)
+    if msg:sub(1, 1) == "!" then
+        local command = msg:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
+        executeCommand("!" .. command) -- Add the ! back before checking
     end
 end)
