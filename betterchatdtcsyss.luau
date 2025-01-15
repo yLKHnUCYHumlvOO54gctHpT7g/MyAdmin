@@ -111,7 +111,7 @@ for cmdname,link in pairs(_G.cmds) do
                 game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(closestPlayer.Name)
             end
 
-elseif command == "!rejoin" then
+elseif command == "!rj" then
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
 local TeleportService = game:GetService("TeleportService")
