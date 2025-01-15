@@ -13,7 +13,7 @@ local FOLLOW_DISTANCE = -0.7
 local HEIGHT_OFFSET = 0.8
 local MOVEMENT_SPEED = 0.25  -- Increased from 0.15
 local THRUST_SPEED = 0.2    -- Increased from 0.08
-local THRUST_DISTANCE = 1.0  -- Increased from 0.5
+local THRUST_DISTANCE = 1.5  -- Increased from 0.5
 
 getgenv().facefuckactive = false
 
