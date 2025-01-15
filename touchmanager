@@ -80,38 +80,6 @@ searchBox.TextSize = 14
 searchBox.Font = Enum.Font.Gotham
 searchBox.Parent = searchBar
 
--- Delete All Button
-local deleteAllButton = Instance.new("TextButton")
-deleteAllButton.Size = UDim2.new(1, -20, 0, 30)
-deleteAllButton.Position = UDim2.new(0, 10, 0, 90)
-deleteAllButton.BackgroundColor3 = Color3.fromRGB(220, 53, 69) -- Reddish color
-deleteAllButton.BorderSizePixel = 0
-deleteAllButton.Text = "Delete All TouchInterests"
-deleteAllButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-deleteAllButton.TextSize = 14
-deleteAllButton.Font = Enum.Font.GothamBold
-deleteAllButton.Parent = mainFrame
-
-local deleteAllUICorner = Instance.new("UICorner")
-deleteAllUICorner.CornerRadius = UDim.new(0, 6)
-deleteAllUICorner.Parent = deleteAllButton
-
--- Hover Effect
-local function updateDeleteButtonColor(isHovered)
-    local targetColor = isHovered and Color3.fromRGB(244, 67, 54) or Color3.fromRGB(220, 53, 69)
-    local tweenInfo = TweenInfo.new(0.2)
-    local tween = TweenService:Create(deleteAllButton, tweenInfo, {BackgroundColor3 = targetColor})
-    tween:Play()
-end
-
-deleteAllButton.MouseEnter:Connect(function()
-    updateDeleteButtonColor(true)
-end)
-
-deleteAllButton.MouseLeave:Connect(function()
-    updateDeleteButtonColor(false)
-end)
-
 
 -- Scroll Container
 local scrollFrame = Instance.new("ScrollingFrame")
@@ -272,70 +240,41 @@ scrollFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateCanvasSize)
 listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvasSize)
 
 
--- Variables for loop control
-local deletionLoopActive = false
-local function onDescendantAdded(object)
-    if deletionLoopActive then
-	    if object:IsA("BasePart") then
-		    local touchInterest = object:FindFirstChild("TouchInterest")
-		    if touchInterest then
-			    touchInterest:Destroy()
-                local objectNameLower = string.lower(object.Name)
-                if string.match(objectNameLower, "touch") or string.match(objectNameLower, "trigger") or string.match(objectNameLower, "area")
-                    or string.match(objectNameLower, "damage") or string.match(objectNameLower, "kill") or string.match(objectNameLower, "lava") or string.match(objectNameLower, "acid") then
-                   object:Destroy()
-                end
-		    end
-	    end
-         if object:IsA("Script") or object:IsA("LocalScript") then
-            object:Destroy()
-        elseif object:IsA("Fire") or object:IsA("Explosion") or object:IsA("Part") and object.Material == Enum.Material.ForceField then
-            object:Destroy()
-        end
+-- Delete All Button
+local deleteAllButton = Instance.new("TextButton")
+deleteAllButton.Size = UDim2.new(1, -20, 0, 30)
+deleteAllButton.Position = UDim2.new(0, 10, 0, 90)
+deleteAllButton.BackgroundColor3 = Color3.fromRGB(220, 53, 69) -- Reddish color
+deleteAllButton.BorderSizePixel = 0
+deleteAllButton.Text = "Delete All TouchInterests"
+deleteAllButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+deleteAllButton.TextSize = 14
+deleteAllButton.Font = Enum.Font.GothamBold
+deleteAllButton.Parent = mainFrame
 
-    end
-     if object:FindFirstChild("TouchInterest") then
-		wait() -- Wait for TouchInterest to be added
-		local button = createTouchButton(object.Name, object)
-		button.Parent = scrollFrame
-		updateCanvasSize()
-    end
+local deleteAllUICorner = Instance.new("UICorner")
+deleteAllUICorner.CornerRadius = UDim.new(0, 6)
+deleteAllUICorner.Parent = deleteAllButton
+
+local function updateDeleteButtonColor(isHovered)
+    local targetColor = isHovered and Color3.fromRGB(244, 67, 54) or Color3.fromRGB(220, 53, 69)
+    local tweenInfo = TweenInfo.new(0.2)
+    local tween = TweenService:Create(deleteAllButton, tweenInfo, {BackgroundColor3 = targetColor})
+    tween:Play()
 end
 
-local function onChildAdded(child)
-    if deletionLoopActive then
-	    if child:IsA("BasePart") then
-		    local touchInterest = child:FindFirstChild("TouchInterest")
-		    if touchInterest then
-			    touchInterest:Destroy()
-                local objectNameLower = string.lower(child.Name)
-                if string.match(objectNameLower, "touch") or string.match(objectNameLower, "trigger") or string.match(objectNameLower, "area")
-                    or string.match(objectNameLower, "damage") or string.match(objectNameLower, "kill") or string.match(objectNameLower, "lava") or string.match(objectNameLower, "acid") then
-                    child:Destroy()
-                end
-		    end
-	    end
-    end
-end
+deleteAllButton.MouseEnter:Connect(function()
+    updateDeleteButtonColor(true)
+end)
 
-
-
--- Connect both events
-workspace.DescendantAdded:Connect(onDescendantAdded)
-
-for _, obj in pairs(workspace:GetDescendants()) do
-	if obj:IsA("BasePart") then
-		obj.ChildAdded:Connect(onChildAdded)
-	end
-end
+deleteAllButton.MouseLeave:Connect(function()
+    updateDeleteButtonColor(false)
+end)
 
 
 -- Delete All Button Logic
 deleteAllButton.MouseButton1Click:Connect(function()
-    -- Set the loop to active and perform the initial removal:
-    deletionLoopActive = true
-
-    local allDescendants = workspace:GetDescendants()
+	local allDescendants = workspace:GetDescendants()
 	for i = 1, #allDescendants do
         local object = allDescendants[i]
         if object then
