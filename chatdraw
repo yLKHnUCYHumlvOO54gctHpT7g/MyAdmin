@@ -5,6 +5,7 @@ local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local ContextActionService = game:GetService("ContextActionService")
 local CoreGui = game:GetService("CoreGui")
+local HttpService = game:GetService("HttpService")
 
 local INVISIBLE_CHAR = "\u{001E}"
 local NEWLINE = "\u{000D}"
@@ -80,7 +81,7 @@ local drawing = false
 -- Function to save presets to a file
 local function savePresetsToFile()
 	local success, errorMessage = pcall(function()
-		local jsonString = game.HttpService:JSONEncode(presets)
+		local jsonString = HttpService:JSONEncode(presets)
 		writefile(PRESET_FILE_NAME, jsonString)
 	end)
     if not success then
@@ -90,22 +91,25 @@ end
 
 -- Function to load presets from a file
 local function loadPresetsFromFile()
-	local success, result = pcall(function()
-		return loadfile(PRESET_FILE_NAME)
-	end)
-    if success and result then
-		local success_decode, data = pcall(function()
-			return game.HttpService:JSONDecode(result())
-		end)
-		if success_decode and data then
-        	presets = data
-		else
-			warn("Error decoding presets:", data)
-		end
+    local success, fileContent = pcall(function()
+        return readfile(PRESET_FILE_NAME)
+    end)
+	
+    if success and fileContent then
+        local decodeSuccess, decodedData = pcall(function()
+            return HttpService:JSONDecode(fileContent)
+        end)
+        
+        if decodeSuccess and decodedData then
+            presets = decodedData
+        else
+            warn("Error decoding presets: ", decodedData)
+        end
     else
-        warn("Error loading presets:", result)
+        warn("Error loading or reading the file:", fileContent)
     end
 end
+
 
 local function createDrawingInterface()
     local gui = Instance.new("ScreenGui")
@@ -451,6 +455,10 @@ local function createDrawingInterface()
 			end
 		end
 	end)
+    
+    -- Call updatePresetList here after the presetList has been created so it will render the list
+    updatePresetList()
+    
     return gui
 end
 
