@@ -110,54 +110,77 @@ local function loadPresetsFromFile()
     end
 end
 
-
 local function createDrawingInterface()
     local gui = Instance.new("ScreenGui")
     gui.Name = "DrawingInterface"
 	gui.DisplayOrder = 2 -- Ensure it's on top
     gui.ResetOnSpawn = false -- Prevent reset on respawn
     gui.Parent = CoreGui
+
+    local isTouchEnabled = UserInputService.TouchEnabled
+
+    -- Determine scale based on platform
+    local mainFrameScale = isTouchEnabled and 0.7 or 1
+	
+	local baseWidth = 300
+	local baseHeight = 490
+	local baseX = -150
+	local baseY = -245
+
+	
+	local scaledWidth = baseWidth * mainFrameScale
+	local scaledHeight = baseHeight * mainFrameScale
+	local scaledX = baseX * mainFrameScale
+	local scaledY = baseY * mainFrameScale
+
+
     local mainFrame = Instance.new("Frame")
 
     -- Main frame (matches dark theme in image)
-    mainFrame.Size = UDim2.new(0, 300, 0, 490)  -- Increased height
-    mainFrame.Position = UDim2.new(0.5, -150, 0.5, -245)
+    mainFrame.Size = UDim2.new(0, scaledWidth, 0, scaledHeight)  -- Increased height
+    mainFrame.Position = UDim2.new(0.5, scaledX, 0.5, scaledY)
     mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     mainFrame.BorderSizePixel = 0
     mainFrame.Parent = gui
 
     -- Add rounded corners to main frame
     local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 10)
+    corner.CornerRadius = UDim.new(0, 10 * mainFrameScale)
     corner.Parent = mainFrame
 
     addShadow(mainFrame)
 
-    -- Title bar
+     -- Title bar
+    local titleBarHeight = 30 * mainFrameScale
     local titleBar = Instance.new("Frame")
-    titleBar.Size = UDim2.new(1, 0, 0, 30)
+    titleBar.Size = UDim2.new(1, 0, 0, titleBarHeight)
     titleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     titleBar.BorderSizePixel = 0
     titleBar.Parent = mainFrame
 
     -- Add rounded corners to title bar
     local titleCorner = Instance.new("UICorner")
-    titleCorner.CornerRadius = UDim.new(0, 10)
+    titleCorner.CornerRadius = UDim.new(0, 10 * mainFrameScale)
     titleCorner.Parent = titleBar
 
+
+     -- Title text
+    local titleTextOffset = 10 * mainFrameScale
     local titleText = Instance.new("TextLabel")
     titleText.Text = "Drawing Interface"
-    titleText.Size = UDim2.new(1, -40, 1, 0)
-    titleText.Position = UDim2.new(0, 10, 0, 0)
+    titleText.Size = UDim2.new(1, -40 * mainFrameScale, 1, 0)
+    titleText.Position = UDim2.new(0, titleTextOffset, 0, 0)
     titleText.BackgroundTransparency = 1
     titleText.Font = Enum.Font.Gotham
-    titleText.TextSize = 14
+    titleText.TextSize = 14 * mainFrameScale
     titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
     titleText.TextXAlignment = Enum.TextXAlignment.Left
     titleText.Parent = titleBar
 
     -- Close button (red X in corner)
-    local closeButton = createButton("X", titleBar, UDim2.new(0, 30, 0, 30), UDim2.new(1, -30, 0, 0), Color3.fromRGB(220, 50, 50))
+    local closeButtonSize = 30 * mainFrameScale
+    local closeButtonOffset = -30 * mainFrameScale
+    local closeButton = createButton("X", titleBar, UDim2.new(0, closeButtonSize, 0, closeButtonSize), UDim2.new(1, closeButtonOffset, 0, 0), Color3.fromRGB(220, 50, 50))
     closeButton.MouseButton1Click:Connect(function()
         gui.Enabled = false
         interfaceEnabled = false
@@ -165,13 +188,16 @@ local function createDrawingInterface()
 
     -- Grid setup
     local GRID_SIZE = 7
-    local CELL_SIZE = 35
+    local CELL_SIZE = 35 * mainFrameScale
     local grid = {}
     local cells = {}
+	
+	local gridOffsetX = -(GRID_SIZE * CELL_SIZE) / 2
+	local gridOffsetY = 40 * mainFrameScale
 
     local gridFrame = Instance.new("Frame")
     gridFrame.Size = UDim2.new(0, GRID_SIZE * CELL_SIZE, 0, GRID_SIZE * CELL_SIZE)
-    gridFrame.Position = UDim2.new(0.5, -(GRID_SIZE * CELL_SIZE)/2, 0, 40)  -- Positioned below title
+    gridFrame.Position = UDim2.new(0.5, gridOffsetX, 0, gridOffsetY)  -- Positioned below title
     gridFrame.BackgroundTransparency = 1
     gridFrame.Parent = mainFrame
 	
@@ -180,7 +206,7 @@ local function createDrawingInterface()
         cell.Text = selectedEmoji
         -- Add subtle animation
         local scaleUp = TweenService:Create(cell, TweenInfo.new(0.1), {Size = UDim2.new(0, CELL_SIZE, 0, CELL_SIZE)})
-        local scaleDown = TweenService:Create(cell, TweenInfo.new(0.1), {Size = UDim2.new(0, CELL_SIZE - 2, 0, CELL_SIZE - 2)})
+        local scaleDown = TweenService:Create(cell, TweenInfo.new(0.1), {Size = UDim2.new(0, CELL_SIZE - 2 * mainFrameScale, 0, CELL_SIZE - 2 * mainFrameScale)})
         scaleUp:Play()
         scaleUp.Completed:Connect(function()
             scaleDown:Play()
@@ -191,9 +217,11 @@ local function createDrawingInterface()
         grid[i] = {}
         cells[i] = {}
         for j = 1, GRID_SIZE do
-            local cell = createButton("", gridFrame, UDim2.new(0, CELL_SIZE - 2, 0, CELL_SIZE - 2), UDim2.new(0, (j-1) * CELL_SIZE + 1, 0, (i-1) * CELL_SIZE + 1), Color3.fromRGB(45, 45, 45))
+			local cellOffsetX = (j - 1) * CELL_SIZE + 1 * mainFrameScale
+			local cellOffsetY = (i - 1) * CELL_SIZE + 1 * mainFrameScale
+            local cell = createButton("", gridFrame, UDim2.new(0, CELL_SIZE - 2 * mainFrameScale, 0, CELL_SIZE - 2 * mainFrameScale), UDim2.new(0, cellOffsetX, 0, cellOffsetY), Color3.fromRGB(45, 45, 45))
             cell.Font = Enum.Font.Gotham
-            cell.TextSize = 20
+            cell.TextSize = 20 * mainFrameScale
             cell.Text = ""
 
             grid[i][j] = ""
@@ -219,45 +247,48 @@ local function createDrawingInterface()
 			end)
         end
     end
+	
 
-        -- Load saved grid
-	if #savedGrid > 0 then
-		for x = 1, GRID_SIZE do
-			for y = 1, GRID_SIZE do
-				grid[x][y] = savedGrid[x][y]
-				gridFrame:GetChildren()[(x - 1) * GRID_SIZE + y].Text = savedGrid[x][y]
-			end
-		end
-	end
-
+    -- Load saved grid
+    if #savedGrid > 0 then
+        for x = 1, GRID_SIZE do
+            for y = 1, GRID_SIZE do
+                grid[x][y] = savedGrid[x][y]
+                gridFrame:GetChildren()[(x - 1) * GRID_SIZE + y].Text = savedGrid[x][y]
+            end
+        end
+    end
 
     -- Emoji selector (with scrolling)
+	local emojiScrollFrameHeight = 40 * mainFrameScale
+	local emojiScrollFrameOffsetY = 295 * mainFrameScale
+
     local emojiScrollFrame = Instance.new("ScrollingFrame")
-    emojiScrollFrame.Size = UDim2.new(0.95, 0, 0, 40)
-    emojiScrollFrame.Position = UDim2.new(0.025, 0, 0, 295)  -- Positioned below grid
+    emojiScrollFrame.Size = UDim2.new(0.95, 0, 0, emojiScrollFrameHeight)
+    emojiScrollFrame.Position = UDim2.new(0.025, 0, 0, emojiScrollFrameOffsetY)  -- Positioned below grid
     emojiScrollFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     emojiScrollFrame.BorderSizePixel = 0
-    emojiScrollFrame.ScrollBarThickness = 4
+    emojiScrollFrame.ScrollBarThickness = 4 * mainFrameScale
     emojiScrollFrame.ScrollingDirection = Enum.ScrollingDirection.X
     emojiScrollFrame.Parent = mainFrame
 
     local emojiScrollFrameCorner = Instance.new("UICorner")
-    emojiScrollFrameCorner.CornerRadius = UDim.new(0, 4)
+    emojiScrollFrameCorner.CornerRadius = UDim.new(0, 4 * mainFrameScale)
     emojiScrollFrameCorner.Parent = emojiScrollFrame
-
-     local emojis = {"⬜", "⬛", "🔲", "🔳", "🏮", "🔴", "🔵", "💜", "🤎", "❤️", "💛", "💚", "💙", "💖", "🧡", "🌸", "🌺", "🌻", "🌼", "🌷", "🌹", "📕", "📙", "📒", "📗", "📘", "📔", "📚", "📖", "❓", "❗", "💯", "🔥", "⭐", "✨", "🌙", "🌞", "☁️", "🌈", "🍕", "🍔", "🍟", "🍦", "🍩", "🍪", "☕", "🍺", "🍷", "🍸", "⚽", "🏀", "🏈", "⚾", "🎾", "🎮", "🎧", "🎵", "🎸", "🎻", "🎺", "🎷", "🎤", "🎨", "📷", "💡", "💻", "📱", "⏰", "🔒", "🔑", "🎁", "🎈", "🎉", "🎀", "📌", "📍", "🗺️", "✂️", "✏️", "✒️", "📝", "📖", "🔒", "🔔", "📞", "🛒", "💰", "💳", "💎", "🔨", "🔧", "🧰", "🧱", "🧲", "🧪", "🔬", "🔭", "🚑", "🚒", "🚓", "🚕", "🚗", "🚌", "🚲", "🚂", "✈️", "🚢", "🚀", "🛸", "🗿", "🚧", "🚦", "🛑", "🚫", "✅", "❌", "❓", "❗", "💯", "🔥", "⭐", "✨", "🌙", "🌞", "☁️", "🌈", "🍕", "🍔", "🍟", "🍦", "🍩", "🍪", "☕", "🍺", "🍷", "🍸", "⚽", "🏀", "🏈", "⚾", "🎾", "🎮", "🎧", "🎵", "🎸", "🎻", "🎺", "🎷", "🎤", "🎨", "📷", "💡", "💻", "📱", "⏰", "🔒", "🔑", "🎁", "🎈", "🎉", "🎀", "📌", "📍", "🗺️", "✂️", "✏️", "✒️", "📝", "📖", "🔒", "🔔", "📞", "🛒", "💰", "💳", "💎", "🔨", "🔧", "🧰", "🧱", "🧲", "🧪", "🔬", "🔭", "🚑", "🚒", "🚓", "🚕", "🚗", "🚌", "🚲", "🚂", "✈️", "🚢", "🚀", "🛸", "🗿", "🚧", "🚦", "🛑", "🚫", "✅", "❌"}
+	
+    local emojis = {"⬜", "⬛", "🔲", "🔳", "🏮", "🔴", "🔵", "💜", "🤎", "❤️", "💛", "💚", "💙", "💖", "🧡", "🌸", "🌺", "🌻", "🌼", "🌷", "🌹", "📕", "📙", "📒", "📗", "📘", "📔", "📚", "📖", "❓", "❗", "💯", "🔥", "⭐", "✨", "🌙", "🌞", "☁️", "🌈", "🍕", "🍔", "🍟", "🍦", "🍩", "🍪", "☕", "🍺", "🍷", "🍸", "⚽", "🏀", "🏈", "⚾", "🎾", "🎮", "🎧", "🎵", "🎸", "🎻", "🎺", "🎷", "🎤", "🎨", "📷", "💡", "💻", "📱", "⏰", "🔒", "🔑", "🎁", "🎈", "🎉", "🎀", "📌", "📍", "🗺️", "✂️", "✏️", "✒️", "📝", "📖", "🔒", "🔔", "📞", "🛒", "💰", "💳", "💎", "🔨", "🔧", "🧰", "🧱", "🧲", "🧪", "🔬", "🔭", "🚑", "🚒", "🚓", "🚕", "🚗", "🚌", "🚲", "🚂", "✈️", "🚢", "🚀", "🛸", "🗿", "🚧", "🚦", "🛑", "🚫", "✅", "❌", "❓", "❗", "💯", "🔥", "⭐", "✨", "🌙", "🌞", "☁️", "🌈", "🍕", "🍔", "🍟", "🍦", "🍩", "🍪", "☕", "🍺", "🍷", "🍸", "⚽", "🏀", "🏈", "⚾", "🎾", "🎮", "🎧", "🎵", "🎸", "🎻", "🎺", "🎷", "🎤", "🎨", "📷", "💡", "💻", "📱", "⏰", "🔒", "🔑", "🎁", "🎈", "🎉", "🎀", "📌", "📍", "🗺️", "✂️", "✏️", "✒️", "📝", "📖", "🔒", "🔔", "📞", "🛒", "💰", "💳", "💎", "🔨", "🔧", "🧰", "🧱", "🧲", "🧪", "🔬", "🔭", "🚑", "🚒", "🚓", "🚕", "🚗", "🚌", "🚲", "🚂", "✈️", "🚢", "🚀", "🛸", "🗿", "🚧", "🚦", "🛑", "🚫", "✅", "❌"}
     local emojiButtons = {}
 
     -- Calculate total width needed for emoji buttons
-    local totalWidth = #emojis * 35  -- 30px button + 5px spacing
+    local totalWidth = #emojis * 35 * mainFrameScale
     emojiScrollFrame.CanvasSize = UDim2.new(0, totalWidth, 0, 0)
-
+	
     for i, emoji in ipairs(emojis) do
-        local emojiButton = createButton(emoji, emojiScrollFrame, UDim2.new(0, 30, 0, 30), UDim2.new(0, (i-1) * 35 + 5, 0, 5), Color3.fromRGB(60, 60, 60))
+		local emojiButtonOffsetX = (i - 1) * 35 * mainFrameScale + 5 * mainFrameScale
+        local emojiButton = createButton(emoji, emojiScrollFrame, UDim2.new(0, 30 * mainFrameScale, 0, 30 * mainFrameScale), UDim2.new(0, emojiButtonOffsetX, 0, 5 * mainFrameScale), Color3.fromRGB(60, 60, 60))
         emojiButton.Font = Enum.Font.Gotham
-        emojiButton.TextSize = 20
-
-
+        emojiButton.TextSize = 20 * mainFrameScale
+        
         table.insert(emojiButtons, emojiButton)
 
         emojiButton.MouseButton1Click:Connect(function()
@@ -270,49 +301,58 @@ local function createDrawingInterface()
     end
 
     -- Preset section
+	local presetFrameHeight = 125 * mainFrameScale
+    local presetFrameOffsetY = 340 * mainFrameScale
     local presetFrame = Instance.new("Frame")
-    presetFrame.Size = UDim2.new(0.95, 0, 0, 125) -- Increased frame size
-    presetFrame.Position = UDim2.new(0.025, 0, 0, 340)
+    presetFrame.Size = UDim2.new(0.95, 0, 0, presetFrameHeight)
+    presetFrame.Position = UDim2.new(0.025, 0, 0, presetFrameOffsetY)
     presetFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     presetFrame.BorderSizePixel = 0
     presetFrame.Parent = mainFrame
 
     local presetFrameCorner = Instance.new("UICorner")
-    presetFrameCorner.CornerRadius = UDim.new(0, 6)
+    presetFrameCorner.CornerRadius = UDim.new(0, 6 * mainFrameScale)
     presetFrameCorner.Parent = presetFrame
 
     -- Preset input
+	local presetInputHeight = 30 * mainFrameScale
+	local presetInputOffsetY = 10 * mainFrameScale
+	
     local presetInput = Instance.new("TextBox")
-    presetInput.Size = UDim2.new(0.7, 0, 0, 30)
-    presetInput.Position = UDim2.new(0.025, 0, 0, 10)
+    presetInput.Size = UDim2.new(0.7, 0, 0, presetInputHeight)
+    presetInput.Position = UDim2.new(0.025, 0, 0, presetInputOffsetY)
     presetInput.PlaceholderText = "Enter preset name..."
     presetInput.Text = ""
     presetInput.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     presetInput.BorderSizePixel = 0
     presetInput.TextColor3 = Color3.fromRGB(255, 255, 255)
     presetInput.Font = Enum.Font.Gotham
-    presetInput.TextSize = 14
+    presetInput.TextSize = 14 * mainFrameScale
     presetInput.Parent = presetFrame
 
     local inputCorner = Instance.new("UICorner")
-    inputCorner.CornerRadius = UDim.new(0, 4)
+    inputCorner.CornerRadius = UDim.new(0, 4 * mainFrameScale)
     inputCorner.Parent = presetInput
 
-    local savePresetButton = createButton("Save", presetFrame, UDim2.new(0.225, 0, 0, 30), UDim2.new(0.75, 0, 0, 10), Color3.fromRGB(70, 170, 70))
-
-    -- Preset list
+    local savePresetButtonSize = 30 * mainFrameScale
+    local savePresetButtonOffsetY = 10 * mainFrameScale
+    local savePresetButton = createButton("Save", presetFrame, UDim2.new(0.225, 0, 0, savePresetButtonSize), UDim2.new(0.75, 0, 0, savePresetButtonOffsetY), Color3.fromRGB(70, 170, 70))
+	
+	-- Preset list
+	local presetListHeight = 80 * mainFrameScale
+	local presetListOffsetY = 45 * mainFrameScale
     local presetList = Instance.new("ScrollingFrame")
-    presetList.Size = UDim2.new(0.95, 0, 0, 80) -- Increased height
-    presetList.Position = UDim2.new(0.025, 0, 0, 45) -- Adjusted position to fit inside presetFrame
+    presetList.Size = UDim2.new(0.95, 0, 0, presetListHeight)
+    presetList.Position = UDim2.new(0.025, 0, 0, presetListOffsetY)
     presetList.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
     presetList.BorderSizePixel = 0
-    presetList.ScrollBarThickness = 4
+    presetList.ScrollBarThickness = 4 * mainFrameScale
     presetList.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
     presetList.ScrollBarImageTransparency = 0.5
     presetList.Parent = presetFrame
 
     local listCorner = Instance.new("UICorner")
-    listCorner.CornerRadius = UDim.new(0, 4)
+    listCorner.CornerRadius = UDim.new(0, 4 * mainFrameScale)
     listCorner.Parent = presetList
 
     local function updatePresetList()
@@ -322,11 +362,12 @@ local function createDrawingInterface()
             end
         end
 
-        local yOffset = 5
+        local yOffset = 5 * mainFrameScale
         for i, presetData in ipairs(presets) do
             local name = presetData.name
             local preset = presetData.grid
-            local presetButton = createButton(name, presetList, UDim2.new(0.9, 0, 0, 25), UDim2.new(0.05, 0, 0, yOffset))
+            local presetButtonHeight = 25 * mainFrameScale
+            local presetButton = createButton(name, presetList, UDim2.new(0.9, 0, 0, presetButtonHeight), UDim2.new(0.05, 0, 0, yOffset))
 
             -- Load preset
             presetButton.MouseButton1Click:Connect(function()
@@ -337,18 +378,20 @@ local function createDrawingInterface()
                     end
                 end
             end)
-
+			
             -- Delete button
-            local deleteButton = createButton("X", presetButton, UDim2.new(0, 20, 0, 20), UDim2.new(1, -25, 0, 2), Color3.fromRGB(200, 50, 50))
-            deleteButton.TextSize = 12
-
+            local deleteButtonSize = 20 * mainFrameScale
+            local deleteButtonOffsetX = -25 * mainFrameScale
+            local deleteButtonOffsetY = 2 * mainFrameScale
+            local deleteButton = createButton("X", presetButton, UDim2.new(0, deleteButtonSize, 0, deleteButtonSize), UDim2.new(1, deleteButtonOffsetX, 0, deleteButtonOffsetY), Color3.fromRGB(200, 50, 50))
+            deleteButton.TextSize = 12 * mainFrameScale
             deleteButton.MouseButton1Click:Connect(function()
                 table.remove(presets, i)
                 updatePresetList()
-				savePresetsToFile()
+                savePresetsToFile()
             end)
 
-            yOffset = yOffset + 30
+            yOffset = yOffset + 30 * mainFrameScale
         end
 
         presetList.CanvasSize = UDim2.new(0, 0, 0, yOffset)
@@ -366,30 +409,33 @@ local function createDrawingInterface()
             end
 
             table.insert(presets, {name = name, grid = currentGrid})
-			savePresetsToFile()
+            savePresetsToFile()
             presetInput.Text = ""
             updatePresetList()
         end
     end)
 
     -- Action buttons at bottom
+	local actionButtonsHeight = 35 * mainFrameScale
+	local actionButtonsOffsetY = 455 * mainFrameScale
+	
     local actionButtons = Instance.new("Frame")
-    actionButtons.Size = UDim2.new(0.95, 0, 0, 35)
-    actionButtons.Position = UDim2.new(0.025, 0, 0, 455) -- Lowered action buttons
+    actionButtons.Size = UDim2.new(0.95, 0, 0, actionButtonsHeight)
+    actionButtons.Position = UDim2.new(0.025, 0, 0, actionButtonsOffsetY) -- Lowered action buttons
     actionButtons.BackgroundTransparency = 1
     actionButtons.Parent = mainFrame
 
     local sendButton = createButton("Send", actionButtons, UDim2.new(0.48, 0, 1, 0), UDim2.new(0, 0, 0, 0), Color3.fromRGB(70, 170, 70))
     sendButton.MouseButton1Click:Connect(function()
         local art = ""
-		for x = 1, GRID_SIZE do
-			for y = 1, GRID_SIZE do
-				art = art .. (grid[x][y] ~= "" and grid[x][y] or "⬜")
-			end
-			if x < GRID_SIZE then
-				art = art .. NEWLINE
-			end
-		end
+        for x = 1, GRID_SIZE do
+            for y = 1, GRID_SIZE do
+                art = art .. (grid[x][y] ~= "" and grid[x][y] or "⬜")
+            end
+            if x < GRID_SIZE then
+                art = art .. NEWLINE
+            end
+        end
         chatMessage(INVISIBLE_CHAR .. string.rep(NEWLINE, 1) .. art)
     end)
 
@@ -442,7 +488,7 @@ local function createDrawingInterface()
             update(input)
         end
     end)
-
+	
 	-- Save grid before the interface is disabled or reset
 	gui.DescendantRemoving:Connect(function(descendant)
 		if descendant == gui then
@@ -455,10 +501,11 @@ local function createDrawingInterface()
 			end
 		end
 	end)
-    
+
+
     -- Call updatePresetList here after the presetList has been created so it will render the list
     updatePresetList()
-    
+
     return gui
 end
 
