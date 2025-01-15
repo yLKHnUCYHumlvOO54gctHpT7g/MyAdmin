@@ -112,6 +112,7 @@ deleteAllButton.MouseLeave:Connect(function()
     updateDeleteButtonColor(false)
 end)
 
+
 -- Scroll Container
 local scrollFrame = Instance.new("ScrollingFrame")
 scrollFrame.Size = UDim2.new(1, -20, 1, -135)
@@ -135,70 +136,70 @@ padding.Parent = scrollFrame
 
 -- Functions
 local function createTouchButton(partName, part)
-	local buttonFrame = Instance.new("Frame")
-	buttonFrame.Size = UDim2.new(1, 0, 0, 50)
-	buttonFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
-	buttonFrame.BorderSizePixel = 0
+    local buttonFrame = Instance.new("Frame")
+    buttonFrame.Size = UDim2.new(1, 0, 0, 50)
+    buttonFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 45)
+    buttonFrame.BorderSizePixel = 0
 
-	local buttonUICorner = Instance.new("UICorner")
-	buttonUICorner.CornerRadius = UDim.new(0, 8)
-	buttonUICorner.Parent = buttonFrame
+    local buttonUICorner = Instance.new("UICorner")
+    buttonUICorner.CornerRadius = UDim.new(0, 8)
+    buttonUICorner.Parent = buttonFrame
 
-	-- Part Name
-	local nameLabel = Instance.new("TextLabel")
-	nameLabel.Size = UDim2.new(1, -100, 1, 0)
-	nameLabel.Position = UDim2.new(0, 10, 0, 0)
-	nameLabel.BackgroundTransparency = 1
-	nameLabel.Text = partName
-	nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-	nameLabel.TextSize = 14
-	nameLabel.Font = Enum.Font.GothamBold
-	nameLabel.TextXAlignment = Enum.TextXAlignment.Left
-	nameLabel.Parent = buttonFrame
+    -- Part Name
+    local nameLabel = Instance.new("TextLabel")
+    nameLabel.Size = UDim2.new(1, -100, 1, 0)
+    nameLabel.Position = UDim2.new(0, 10, 0, 0)
+    nameLabel.BackgroundTransparency = 1
+    nameLabel.Text = partName
+    nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    nameLabel.TextSize = 14
+    nameLabel.Font = Enum.Font.GothamBold
+    nameLabel.TextXAlignment = Enum.TextXAlignment.Left
+    nameLabel.Parent = buttonFrame
 
-	-- Touch Button
-	local touchButton = Instance.new("TextButton")
-	touchButton.Size = UDim2.new(0, 80, 0, 30)
-	touchButton.Position = UDim2.new(1, -90, 0.5, -15)
-	touchButton.BackgroundColor3 = Color3.fromRGB(59, 130, 246)
-	touchButton.BorderSizePixel = 0
-	touchButton.Text = "Touch"
-	touchButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-	touchButton.TextSize = 14
-	touchButton.Font = Enum.Font.GothamBold
-	touchButton.Parent = buttonFrame
+    -- Touch Button
+    local touchButton = Instance.new("TextButton")
+    touchButton.Size = UDim2.new(0, 80, 0, 30)
+    touchButton.Position = UDim2.new(1, -90, 0.5, -15)
+    touchButton.BackgroundColor3 = Color3.fromRGB(59, 130, 246)
+    touchButton.BorderSizePixel = 0
+    touchButton.Text = "Touch"
+    touchButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    touchButton.TextSize = 14
+    touchButton.Font = Enum.Font.GothamBold
+    touchButton.Parent = buttonFrame
 
-	local touchUICorner = Instance.new("UICorner")
-	touchUICorner.CornerRadius = UDim.new(0, 6)
-	touchUICorner.Parent = touchButton
+    local touchUICorner = Instance.new("UICorner")
+    touchUICorner.CornerRadius = UDim.new(0, 6)
+    touchUICorner.Parent = touchButton
 
-	-- Hover Effect
-	local function updateButtonColor(isHovered)
-		local targetColor = isHovered and Color3.fromRGB(96, 165, 250) or Color3.fromRGB(59, 130, 246)
-		local tweenInfo = TweenInfo.new(0.2)
-		local tween = TweenService:Create(touchButton, tweenInfo, { BackgroundColor3 = targetColor })
-		tween:Play()
-	end
+    -- Hover Effect
+    local function updateButtonColor(isHovered)
+        local targetColor = isHovered and Color3.fromRGB(96, 165, 250) or Color3.fromRGB(59, 130, 246)
+        local tweenInfo = TweenInfo.new(0.2)
+        local tween = TweenService:Create(touchButton, tweenInfo, {BackgroundColor3 = targetColor})
+        tween:Play()
+    end
 
-	touchButton.MouseEnter:Connect(function()
-		updateButtonColor(true)
-	end)
+    touchButton.MouseEnter:Connect(function()
+        updateButtonColor(true)
+    end)
 
-	touchButton.MouseLeave:Connect(function()
-		updateButtonColor(false)
-	end)
+    touchButton.MouseLeave:Connect(function()
+        updateButtonColor(false)
+    end)
 
-	-- Simulate Touch
-	touchButton.MouseButton1Click:Connect(function()
-		local touchInterest = part:FindFirstChild("TouchInterest")
-		if touchInterest then
-			firetouchinterest(part, player.Character.HumanoidRootPart, 0)
-			wait()
-			firetouchinterest(part, player.Character.HumanoidRootPart, 1)
-		end
-	end)
+    -- Simulate Touch
+    touchButton.MouseButton1Click:Connect(function()
+        local touchInterest = part:FindFirstChild("TouchInterest")
+        if touchInterest then
+            firetouchinterest(part, player.Character.HumanoidRootPart, 0)
+            wait()
+            firetouchinterest(part, player.Character.HumanoidRootPart, 1)
+        end
+    end)
 
-	return buttonFrame
+    return buttonFrame
 end
 
 -- Make GUI draggable
@@ -271,48 +272,53 @@ scrollFrame:GetPropertyChangedSignal("AbsoluteSize"):Connect(updateCanvasSize)
 listLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateCanvasSize)
 
 
--- Monitor for new TouchInterests and DELETE THEM INSTANTLY ALWAYS
+-- Variables for loop control
+local deletionLoopActive = false
 local function onDescendantAdded(object)
-    if object:IsA("BasePart") then
-        local touchInterest = object:FindFirstChild("TouchInterest")
-        if touchInterest then
-            touchInterest:Destroy()
-            local objectNameLower = string.lower(object.Name)
-            if string.match(objectNameLower, "touch") or string.match(objectNameLower, "trigger") or string.match(objectNameLower, "area")
-                or string.match(objectNameLower, "damage") or string.match(objectNameLower, "kill") or string.match(objectNameLower, "lava") or string.match(objectNameLower, "acid") then
-               object:Destroy()
-            end
+    if deletionLoopActive then
+	    if object:IsA("BasePart") then
+		    local touchInterest = object:FindFirstChild("TouchInterest")
+		    if touchInterest then
+			    touchInterest:Destroy()
+                local objectNameLower = string.lower(object.Name)
+                if string.match(objectNameLower, "touch") or string.match(objectNameLower, "trigger") or string.match(objectNameLower, "area")
+                    or string.match(objectNameLower, "damage") or string.match(objectNameLower, "kill") or string.match(objectNameLower, "lava") or string.match(objectNameLower, "acid") then
+                   object:Destroy()
+                end
+		    end
+	    end
+         if object:IsA("Script") or object:IsA("LocalScript") then
+            object:Destroy()
+        elseif object:IsA("Fire") or object:IsA("Explosion") or object:IsA("Part") and object.Material == Enum.Material.ForceField then
+            object:Destroy()
         end
+
     end
-    if object:FindFirstChild("TouchInterest") then
+     if object:FindFirstChild("TouchInterest") then
 		wait() -- Wait for TouchInterest to be added
 		local button = createTouchButton(object.Name, object)
 		button.Parent = scrollFrame
 		updateCanvasSize()
     end
-
-    if object:IsA("Script") or object:IsA("LocalScript") then
-        --delete any scripts to prevent any new firetouchinterest to occur
-        object:Destroy()
-    elseif object:IsA("Fire") or object:IsA("Explosion") or object:IsA("Part") and object.Material == Enum.Material.ForceField then
-        --remove any instances that could directly damage you
-        object:Destroy()
-    end
 end
 
 local function onChildAdded(child)
-    if child:IsA("BasePart") then
-        local touchInterest = child:FindFirstChild("TouchInterest")
-        if touchInterest then
-            touchInterest:Destroy()
-            local objectNameLower = string.lower(child.Name)
-            if string.match(objectNameLower, "touch") or string.match(objectNameLower, "trigger") or string.match(objectNameLower, "area")
-                or string.match(objectNameLower, "damage") or string.match(objectNameLower, "kill") or string.match(objectNameLower, "lava") or string.match(objectNameLower, "acid") then
-                child:Destroy()
-            end
-        end
+    if deletionLoopActive then
+	    if child:IsA("BasePart") then
+		    local touchInterest = child:FindFirstChild("TouchInterest")
+		    if touchInterest then
+			    touchInterest:Destroy()
+                local objectNameLower = string.lower(child.Name)
+                if string.match(objectNameLower, "touch") or string.match(objectNameLower, "trigger") or string.match(objectNameLower, "area")
+                    or string.match(objectNameLower, "damage") or string.match(objectNameLower, "kill") or string.match(objectNameLower, "lava") or string.match(objectNameLower, "acid") then
+                    child:Destroy()
+                end
+		    end
+	    end
     end
 end
+
+
 
 -- Connect both events
 workspace.DescendantAdded:Connect(onDescendantAdded)
@@ -323,9 +329,13 @@ for _, obj in pairs(workspace:GetDescendants()) do
 	end
 end
 
+
 -- Delete All Button Logic
 deleteAllButton.MouseButton1Click:Connect(function()
-	local allDescendants = workspace:GetDescendants()
+    -- Set the loop to active and perform the initial removal:
+    deletionLoopActive = true
+
+    local allDescendants = workspace:GetDescendants()
 	for i = 1, #allDescendants do
         local object = allDescendants[i]
         if object then
@@ -355,6 +365,7 @@ deleteAllButton.MouseButton1Click:Connect(function()
         end
     end
 end)
+
 
 -- Initialize
 loadTouchInterests()
