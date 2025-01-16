@@ -183,6 +183,23 @@ local function setupAdminCommands(admin)
                 player.Character.Humanoid.WalkSpeed = 16
             elseif command == ".slow" then
                 player.Character.Humanoid.WalkSpeed = 5
+            elseif command == ".privland" then
+-- Teleport Script
+local teleportPosition = Vector3.new(9998, 10051, 10002)
+
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
+local function teleport()
+    if character and character:FindFirstChild("HumanoidRootPart") then
+        character.HumanoidRootPart.CFrame = CFrame.new(teleportPosition)
+    else
+        warn("Character or HumanoidRootPart not found!")
+    end
+end
+
+-- Call the teleport function
+teleport()
             elseif command == ".unfloat" then
                 player.Character.HumanoidRootPart.Anchored = false
             elseif command == ".float" then
