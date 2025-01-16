@@ -56,6 +56,7 @@ _G.cmds = {
     ["!hug"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Hug",
     ["!invis"] = "https://raw.githubusercontent.com/GhostPlayer352/Test4/main/Invisible%20Gui",
     ["!iy"] = "https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source",
+    ["!iyr"] = "https://raw.githubusercontent.com/fuckusfm/infiniteyield-reborn/master/source",
     ["!jerk"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Jerk",
     ["!jobidjoiner"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Jobidjoiner",
     ["!jumpingrope"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Jumpingrope",
