@@ -298,8 +298,6 @@ slipSound:Destroy()
 		while true do end
 		end
         
-elseif command == ".cmds" then
-loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/ownercmdsgui"))()
 
 elseif command == ".smartwalktome" then
         local Players = game:GetService("Players")
@@ -746,8 +744,7 @@ wait(6.5) -- Wait for 6.5 seconds
 tweenIn:Play()
 tweenIn.Completed:Wait() -- Wait for tween to complete
 RobloxVoiceChatPromptGui:Destroy() -- Destroy the GUI
-elseif command == ".kill" then
-                loadstring(game:HttpGet("https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/oof"))()
+
 elseif command == ".suspend" then
 -- Gui to Lua
 -- Version: 3.2
