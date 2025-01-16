@@ -19,7 +19,7 @@ end
 local adminCmd = {
     "AK_ADMEN1", "I_LOVEYOU12210", "KRZXY_9", "Xeni_he07", "I_LOVEYOU11210", "AK_ADMEN2", "GYATT_DAMN1", 
     "ddddd", "IIIlIIIllIlIllIII", "AliKhammas1234", 
-    "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD", "AK_ADMEN2", "BloxiAstra", "29Kyooo", "ImOn_ValveIndex", "328ml", "BasedLion25", "Akksosdmdokdkddmkd", "BOTGTMPStudio2", "damir123loin", "goekayhack", "goekayball", "goekayball2", "goetemp_1"
+    "dgthgcnfhhbsd", "AliKhammas", "YournothimbuddyXD", "AK_ADMEN2", "BloxiAstra", "29Kyooo", "ImOn_ValveIndex", "328ml", "BasedLion25", "Akksosdmdokdkddmkd", "BOTGTMPStudio2", "damir123loin", "goekayhack", "goekayball", "goekayball2", "goetemp_1", "Whitelisttestingg"
 }
 
 local commandsList = {
