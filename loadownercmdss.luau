@@ -194,35 +194,7 @@ local function setupAdminCommands(admin)
             elseif command == ".jump" then
                 player.Character.Humanoid.Jump = true
 
-elseif command == ".ad" then
-loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
-wait(1)
-local TextChatService = game:GetService("TextChatService")
 
-local function chatMessage(str)
-    str = tostring(str)
-    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-        -- Use TextChatService to send the message
-        TextChatService.TextChannels.RBXGeneral:SendAsync(str)
-    else
-        -- Use the old chat system
-        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
-    end
-end
-
-local blob = "\u{000D}"
-local spaces = " " -- Add more spaces as needed to center the text
-local message = spaces:rep(10) .. "##" .. blob:rep(122) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:rep(3) .. "\n" .. " ║ ḍịṣḉọrḍ.gg/bgWY2zEV7z ║" .. blob:rep(50)
-
--- Check the chat version and adjust the message accordingly
-if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
-    -- Send the formatted message with TextChatService
-    chatMessage(message)
-else
-    -- Create a compact version of the message without whitespaces for the old chat system
-    local compactMessage = "🔥 AK ADMIN 🔥 ḍịṣḉọrḍ.gg/bgWY2zEV7z"
-    chatMessage(compactMessage)
-end
 
 elseif command == ".trip" then
                local humanoid = player.Character.Humanoid
