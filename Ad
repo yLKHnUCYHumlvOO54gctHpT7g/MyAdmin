@@ -59,7 +59,7 @@ end
 
 local blob = "\u{000D}"
 local spaces = " " -- Add more spaces as needed to center the text
-local message = spaces:rep(2) .. "" .. blob:rep(3) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:rep(4) .. "\n" .. " ║ ḍịṣcọrḍ.gg/gJgRuwC3MP ║" .. blob:rep(3)
+local message = spaces:rep(2) .. "" .. blob:rep(2) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:rep(2) .. "\n" .. " ║ ḍịṣcọrḍ.gg/gJgRuwC3MP ║" .. blob:rep(3)
 
 -- Check the chat version and adjust the message accordingly
 if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
