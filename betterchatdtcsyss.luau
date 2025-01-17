@@ -112,8 +112,17 @@ for cmdname,link in pairs(_G.cmds) do
             end
 
 elseif command == "!ad" then
--- Load external script
--- Load external script
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Create notification
+StarterGui:SetCore("SendNotification", {
+    Title = "AK ADMIN",
+    Text = "You need to change your Roblox Language to Қазақ тілі so it won't get tagged",
+    Duration = 5
+})
+
 local TextChatService = game:GetService("TextChatService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
