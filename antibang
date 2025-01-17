@@ -56,7 +56,20 @@ local function IsUsingBangAnimation()
 end
 
 -- Bypass the void limit
-workspace.FallenPartsDestroyHeight = 0 / 0
+workspace.FallenPartsDestroyHeight = 0/0;
+
+-- Camera stuff
+local function VoidTeleport()
+    workspace.Camera.CameraType = Enum.CameraType.Fixed;
+
+    local HRoot = game:GetService("Players").LocalPlayer.Character.Humanoid.RootPart;
+    local Pos = HRoot.CFrame;
+    HRoot.CFrame = Pos + Vector3.new(0, -1e3, 0);
+    task.wait(.1) -- try messing with this value
+    HRoot.CFrame = Pos;
+
+    workspace.Camera.CameraType = Enum.CameraType.Custom;
+end
 
 while true do
     -- Refresh character components
@@ -80,19 +93,7 @@ while true do
         end
 
         -- Teleport yourself to the void
-        local CurrentPosition = RootPart.CFrame  -- Store your current position
-        local Timer = tick()
-
-        repeat
-            -- Teleport to the void
-            RootPart.CFrame = CFrame.new(0, -499, 0) * CFrame.Angles(math.rad(90), 0, 0)
-            RootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-            task.wait()
-        until tick() > Timer + 1  -- Wait for 1 second
-
-        -- Return to the original position
-        RootPart.CFrame = CurrentPosition
-        Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)  -- Reset humanoid state
+		VoidTeleport()
 
         IsVoiding = false  -- Reset voiding flag
     end
