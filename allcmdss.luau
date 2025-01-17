@@ -37,6 +37,7 @@ _G.cmds = {
     ["!demonmic"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/DemonMic",
     ["!dex"] = "https://cdn.wearedevs.net/scripts/Dex%20Explorer.txt",
     ["!droptools"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/main/getoutmyinv",
+    ["!dc"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/main/dc",
     ["!dropkick"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/Dropkick",
     ["!emotes"] = "https://raw.githubusercontent.com/Gi7331/scripts/main/Emote.lua",
     ["!emoji"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/emoji/main/emo",
