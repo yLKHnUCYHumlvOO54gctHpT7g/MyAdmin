@@ -113,6 +113,33 @@ for cmdname,link in pairs(_G.cmds) do
 
 elseif command == "!ad" then
 -- Load external script
+-- Load external script
+local TextChatService = game:GetService("TextChatService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local function chatMessage(str)
+    str = tostring(str)
+    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        local generalChannel = TextChatService:FindFirstChild("TextChannels"):FindFirstChild("RBXGeneral")
+        if generalChannel then
+            generalChannel:SendAsync(str)
+        else
+            warn("RBXGeneral channel not found!")
+        end
+    else
+        local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents"):FindFirstChild("SayMessageRequest")
+        if chatEvent then
+            chatEvent:FireServer(str, "All")
+        else
+            warn("DefaultChatSystemChatEvents not found!")
+        end
+    end
+end
+
+local blob = "\u{000D}"
+local clearMessage = ""..string.rep(blob, 197)..""
+chatMessage(clearMessage)
+
 loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
 wait(1)
 
@@ -184,6 +211,7 @@ else
     local compactMessage = "🔥 AK ADMIN 🔥 ḍịṣcọrḍ.gg/gJgRuwC3MP"
     chatMessage(compactMessage)
 end
+
 
 
 elseif command == "!rj" then
