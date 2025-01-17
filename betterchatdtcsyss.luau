@@ -178,7 +178,7 @@ local newMessage = blob .. "\r" ..
 "---------------" .. blob .. "\r" ..
 "Or use poins for free!" .. blob .. "\r" ..
 "---------------" .. blob .. "\r" ..
-"👉 ḍịṣc̣ọ̣ṛḍ̣.g̣g̣/gJgRuwC3MP 👈" 
+"👉 ḍịṣcọrḍ.gg/gJgRuwC3MP 👈" 
 
 -- New message for the old chat system (without ASCII art)
 local oldMessage = "🔥 AK ADMIN 🔥  Pụṛc̣ḥạṣẹ Ḷịf̣ẹṭiṃẹ! Oṛ ụṣẹ Pọịṇṭṣ foṛ fṛẹẹ! 👉 ḍịṣc̣ọ̣ṛḍ̣.g̣g̣/g̣J̣g̣ṚụẉC̣3̣ṂP̣ 👈"
@@ -187,7 +187,7 @@ local oldMessage = "🔥 AK ADMIN 🔥  Pụṛc̣ḥạṣẹ Ḷịf̣ẹṭi�
 if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
     chatMessage(asciiMessage)
 end
-
+wait(0.3)
 -- Send the appropriate message based on the chat system
 if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
     -- New chat system
