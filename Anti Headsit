@@ -1,37 +1,35 @@
 -- Made by AnthonyIsntHere
--- This script will teleport you to the void and kill anyone who sits directly within the radius above your head or uses the bang animation near you.
+-- This will teleport you to the void and kill anyone who either sits exactly on your head or uses the bang animation on you
 
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
 local Character, Humanoid, RootPart, Head
+local Camera = workspace.CurrentCamera
 local IsVoiding = false
 
--- Set detection radius
-local HEAD_DETECTION_RADIUS = 1.5
-
--- Function to check if a player is seated and within the detection radius above your head
-local function IsPlayerInHeadRadius()
+-- Function to check if a player is sitting exactly on your head
+local function IsPlayerSittingOnHead()
     if RootPart and Head then
         for _, otherPlayer in ipairs(Players:GetPlayers()) do
             if otherPlayer ~= Player then
                 local otherCharacter = otherPlayer.Character
                 local otherHumanoid = otherCharacter and otherCharacter:FindFirstChildWhichIsA("Humanoid")
                 local otherRootPart = otherHumanoid and otherHumanoid.RootPart
+                local otherHead = otherCharacter and otherCharacter:FindFirstChild("Head")
 
                 -- Ensure the other player's humanoid and root part exist
-                if otherHumanoid and otherRootPart then
-                    -- Calculate the distance between your head and the other player's root part
-                    local distanceToHead = (Head.Position - otherRootPart.Position).Magnitude
+                if otherHumanoid and otherRootPart and otherHead then
+                    local distance = (Head.Position - otherHead.Position).Magnitude
 
-                    -- Check if the other player is within the detection radius and seated
-                    if distanceToHead <= HEAD_DETECTION_RADIUS and otherHumanoid:GetState() == Enum.HumanoidStateType.Seated then
-                        return otherPlayer  -- Return the player within the radius sitting near your head
+                    -- Strictly check if the player is sitting exactly on your head
+                    if distance <= 1 and otherHumanoid:GetState() == Enum.HumanoidStateType.Seated then
+                        return otherPlayer  -- Return the player sitting on your head
                     end
                 end
             end
         end
     end
-    return nil  -- No player is within the radius above your head
+    return nil  -- No player is sitting on your head
 end
 
 -- Function to check if a player is using the bang animation on you
@@ -58,7 +56,20 @@ local function IsUsingBangAnimation()
 end
 
 -- Bypass the void limit
-workspace.FallenPartsDestroyHeight = 0 / 0
+workspace.FallenPartsDestroyHeight = 0/0;
+
+-- Camera stuff
+local function VoidTeleport()
+    workspace.Camera.CameraType = Enum.CameraType.Fixed;
+
+    local HRoot = game:GetService("Players").LocalPlayer.Character.Humanoid.RootPart;
+    local Pos = HRoot.CFrame;
+    HRoot.CFrame = Pos + Vector3.new(0, -1e3, 0);
+    task.wait(.1) -- try messing with this value
+    HRoot.CFrame = Pos;
+
+    workspace.Camera.CameraType = Enum.CameraType.Custom;
+end
 
 while true do
     -- Refresh character components
@@ -67,39 +78,25 @@ while true do
     RootPart = Humanoid and Humanoid.RootPart
     Head = Character and Character:FindFirstChild("Head")  -- Get your head part
 
-    if Humanoid and RootPart then
-        -- Check if a player is within the head radius or using the bang animation on you
-        local sittingPlayer = IsPlayerInHeadRadius()
-        local bangPlayer = IsUsingBangAnimation()
+    -- Check if a player is sitting on your head or using the bang animation on you
+    local sittingPlayer = IsPlayerSittingOnHead()
+    local bangPlayer = IsUsingBangAnimation()
 
-        if (sittingPlayer or bangPlayer) and not IsVoiding then
-            IsVoiding = true  -- Set voiding flag to prevent multiple activations
-            local offender = sittingPlayer or bangPlayer  -- The player to kill
+    if (sittingPlayer or bangPlayer) and Humanoid and RootPart and not IsVoiding then
+        IsVoiding = true  -- Set voiding flag to prevent multiple activations
+        local offender = sittingPlayer or bangPlayer  -- The player to kill
 
-            -- Kill the offending player
-            local offenderHumanoid = offender.Character:FindFirstChildWhichIsA("Humanoid")
-            if offenderHumanoid then
-                offenderHumanoid.Health = 0  -- Kill the player
-            end
-
-            -- Teleport yourself to the void
-            local CurrentPosition = RootPart.CFrame  -- Store your current position
-            local Timer = tick()
-
-            repeat
-                -- Teleport to the void
-                RootPart.CFrame = CFrame.new(0, -499, 0) * CFrame.Angles(math.rad(90), 0, 0)
-                RootPart.AssemblyLinearVelocity = Vector3.new(0, 0, 0)
-                task.wait()
-            until tick() > Timer + 1  -- Wait for 1 second
-
-            -- Return to the original position
-            RootPart.CFrame = CurrentPosition
-            Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)  -- Reset humanoid state
-
-            IsVoiding = false  -- Reset voiding flag
+        -- Kill the offending player
+        local offenderHumanoid = offender.Character:FindFirstChildWhichIsA("Humanoid")
+        if offenderHumanoid then
+            offenderHumanoid.Health = 0  -- Kill the player
         end
+
+        -- Teleport yourself to the void
+		VoidTeleport()
+
+        IsVoiding = false  -- Reset voiding flag
     end
 
-    task.wait(0.05)  -- Small wait to improve responsiveness
+    task.wait(0.1)  -- Small wait to prevent overload
 end
