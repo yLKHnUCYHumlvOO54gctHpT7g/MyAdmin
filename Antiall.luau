@@ -1,4 +1,4 @@
--- Made by AnthonyIsntHere
+-- M-- Made by AnthonyIsntHere
 -- Acts like the original script with a GUI button to teleport to the void and back.
 
 local Players = game:GetService("Players")
@@ -79,6 +79,20 @@ game:GetService("UserInputService").InputChanged:Connect(function(input)
 end)
 
 -- Voiding Function
+
+-- Camera stuff
+local function VoidTeleport()
+    workspace.Camera.CameraType = Enum.CameraType.Fixed;
+
+    local HRoot = game:GetService("Players").LocalPlayer.Character.Humanoid.RootPart;
+    local Pos = HRoot.CFrame;
+    HRoot.CFrame = Pos + Vector3.new(0, -1e3, 0);
+    task.wait(.1) -- try messing with this value
+    HRoot.CFrame = Pos;
+
+    workspace.Camera.CameraType = Enum.CameraType.Custom;
+end
+
 local function VoidAndReturn()
     Character = Player.Character
     Humanoid = Character and Character:FindFirstChildWhichIsA("Humanoid")
@@ -87,27 +101,13 @@ local function VoidAndReturn()
     if RootPart and Humanoid and not IsVoiding then
         IsVoiding = true
 
-        -- Save current position
-        local CurrentPosition = RootPart.Velocity.Magnitude < 50 and RootPart.CFrame or Camera.Focus
-        local Timer = tick()
-
-        -- Teleport to a slightly lower void (Y = -5000)
-        repeat
-            RootPart.CFrame = CFrame.new(0, -5000, 0) * CFrame.Angles(math.rad(90), 0, 0)
-            RootPart.AssemblyLinearVelocity = Vector3.new()
-            task.wait()
-        until tick() > Timer + 1
-
-        -- Return to original position
-        RootPart.AssemblyLinearVelocity = Vector3.new()
-        RootPart.CFrame = CurrentPosition
-
-        -- Reset humanoid state
-        Humanoid:ChangeState(Enum.HumanoidStateType.GettingUp)
+        -- Teleport yourself to the void
+        VoidTeleport()
 
         IsVoiding = false
     end
 end
+
 
 -- Connect Button Click to Void Function
 Button.MouseButton1Click:Connect(VoidAndReturn)
