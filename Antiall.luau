@@ -1,5 +1,4 @@
--- M-- Made by AnthonyIsntHere
--- Acts like the original script with a GUI button to teleport to the void and back.
+
 
 local Players = game:GetService("Players")
 local Player = Players.LocalPlayer
