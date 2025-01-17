@@ -112,6 +112,8 @@ for cmdname,link in pairs(_G.cmds) do
             end
 
 elseif command == "!ad" then
+loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
+wait(1)
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
