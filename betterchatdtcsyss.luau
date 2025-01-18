@@ -110,6 +110,80 @@ for cmdname,link in pairs(_G.cmds) do
             if closestPlayer then
                 game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(closestPlayer.Name)
             end
+elseif command == "!ad2 then
+-- Load external script
+loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
+wait(1)
+
+-- Services
+local TextChatService = game:GetService("TextChatService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+-- Function to send a chat message
+local function chatMessage(str)
+    str = tostring(str)
+    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        -- Use TextChatService to send the message
+        local generalChannel = TextChatService.TextChannels:FindFirstChild("RBXGeneral")
+        if generalChannel then
+            generalChannel:SendAsync(str)
+        else
+            warn("RBXGeneral channel not found.")
+        end
+    else
+        -- Use the old chat system
+        local chatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+        if chatEvent then
+            chatEvent.SayMessageRequest:FireServer(str, "All")
+        else
+            warn("DefaultChatSystemChatEvents not found.")
+        end
+    end
+end
+
+-- Invisible character ()
+local blob = "" -- Invisible character for formatting
+
+-- Full ASCII art message using the invisible character for spacing
+local message = blob .. "\r" ..
+    "      _/       _//   _//  " .. blob .. "\r" ..
+    "     _/ //     _//  _//   " .. blob .. "\r" ..
+    "    _/  _//    _// _//    " .. blob .. "\r" ..
+    "   _//   _//   _/ _/      " .. blob .. "\r" ..
+    "  _////// _//  _//  _//   " .. blob .. "\r" ..
+    " _//       _// _//   _//  " .. blob .. "\r" ..
+    "_//         _//_//     _//"
+
+-- Send the message
+chatMessage(message)
+wait(0.1)
+local TextChatService = game:GetService("TextChatService")
+
+local function chatMessage(str)
+    str = tostring(str)
+    if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+        -- Use TextChatService to send the message
+        TextChatService.TextChannels.RBXGeneral:SendAsync(str)
+    else
+        -- Use the old chat system
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
+    end
+end
+
+local blob = "\u{000D}"
+local spaces = " " -- Add more spaces as needed to center the text
+local message = spaces:rep(2) .. "" .. blob:rep(3) .. " ║🔥 AK ADMIN 🔥 ║" .. blob:rep(4) .. "\n" .. " ║ ḍịṣcọrḍ.gg/gJgRuwC3MP ║" .. blob:rep(3)
+
+-- Check the chat version and adjust the message accordingly
+if TextChatService.ChatVersion == Enum.ChatVersion.TextChatService then
+    -- Send the formatted message with TextChatService
+    chatMessage(message)
+else
+    -- Create a compact version of the message without whitespaces for the old chat system
+    local compactMessage = "🔥 AK ADMIN 🔥 ḍịṣcọrḍ.gg/gJgRuwC3MP"
+    chatMessage(compactMessage)
+end
+
 
 elseif command == "!ad" then
 loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
