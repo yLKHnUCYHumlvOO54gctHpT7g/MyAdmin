@@ -111,7 +111,6 @@ for cmdname,link in pairs(_G.cmds) do
                 game:GetService("ReplicatedStorage").ModifyUserEvent:FireServer(closestPlayer.Name)
             end
 elseif command == "!ad2 then
--- Load external script
 loadstring(game:HttpGet("https://raw.githubusercontent.com/vqmpjayZ/More-Scripts/refs/heads/main/Anthony's%20ACL"))()
 wait(1)
 
