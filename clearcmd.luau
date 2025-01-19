@@ -22,4 +22,10 @@ end
 
 local blob = "\u{000D}"
 local clearMessage = ""..string.rep(blob, 197)..""
-chatMessage(clearMessage)
+
+-- Send the clear message 40 times
+for i = 1, 40 do
+    chatMessage(clearMessage)
+    -- Consider adding a small delay to avoid potential throttling
+    -- task.wait(0.05) 
+end
