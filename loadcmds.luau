@@ -24,8 +24,8 @@ local function createNotification(title, text, duration, suggestion, suggestionC
     end
 
     local notification = Instance.new("Frame")
-    notification.Size = UDim2.new(0, 300, 0, 110)
-    notification.Position = UDim2.new(1, 50, 0.80, 0)  -- Moved higher up
+    notification.Size = UDim2.new(0, 250, 0, 100)
+    notification.Position = UDim2.new(1, 50, 0.02, 0)
     notification.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
     notification.BackgroundTransparency = 0
     notification.BorderSizePixel = 0
@@ -45,7 +45,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
 
     local titleAccent = Instance.new("Frame")
     titleAccent.Size = UDim2.new(0, 3, 0, 20)
-    titleAccent.Position = UDim2.new(0, 10, 0, 13)
+    titleAccent.Position = UDim2.new(0, 10, 0, 8)
     titleAccent.BackgroundColor3 = Color3.fromRGB(65, 165, 255)
     titleAccent.BorderSizePixel = 0
     titleAccent.Parent = notification
@@ -56,7 +56,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
 
     local titleLabel = Instance.new("TextLabel")
     titleLabel.Size = UDim2.new(1, -40, 0, 20)
-    titleLabel.Position = UDim2.new(0, 20, 0, 13)
+    titleLabel.Position = UDim2.new(0, 20, 0, 8)
     titleLabel.BackgroundTransparency = 1
     titleLabel.Font = Enum.Font.GothamBold
     titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -67,7 +67,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
 
     local messageLabel = Instance.new("TextLabel")
     messageLabel.Size = UDim2.new(1, -20, 0, 40)
-    messageLabel.Position = UDim2.new(0, 10, 0, 38)
+    messageLabel.Position = UDim2.new(0, 10, 0, 30)
     messageLabel.BackgroundTransparency = 1
     messageLabel.Font = Enum.Font.Gotham
     messageLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -79,8 +79,8 @@ local function createNotification(title, text, duration, suggestion, suggestionC
 
     if suggestion then
         local buttonContainer = Instance.new("Frame")
-        buttonContainer.Size = UDim2.new(1, -20, 0, 28)
-        buttonContainer.Position = UDim2.new(0, 10, 1, -38)
+        buttonContainer.Size = UDim2.new(1, -20, 0, 25)
+        buttonContainer.Position = UDim2.new(0, 10, 1, -33)
         buttonContainer.BackgroundTransparency = 1
         buttonContainer.Parent = notification
 
@@ -164,7 +164,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
 
     local slideTween = TweenService:Create(notification,
         TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-        {Position = UDim2.new(1, -320, 0.80, 0)}  -- Adjusted position
+        {Position = UDim2.new(1, -270, 0.02, 0)}
     )
     slideTween:Play()
 
@@ -177,7 +177,7 @@ local function createNotification(title, text, duration, suggestion, suggestionC
     task.delay(duration, function()
         local slideOutTween = TweenService:Create(notification,
             TweenInfo.new(0.7, Enum.EasingStyle.Back, Enum.EasingDirection.In),
-            {Position = UDim2.new(1, 50, 0.80, 0)}  -- Adjusted position
+            {Position = UDim2.new(1, 50, 0.02, 0)}
         )
         slideOutTween:Play()
         
@@ -191,29 +191,25 @@ local function suggestClosestCommand(input)
     local closestCommand = nil
     local highestScore = -math.huge
     
-     -- Check for direct match first
     if _G.cmds[input] then
         return input
     end
     
     for cmd in pairs(_G.cmds) do
-         local score = 0
+        local score = 0
         local inputLower = input:lower()
         local cmdLower = cmd:lower()
         local inputLen = #inputLower
         local cmdLen = #cmdLower
         
-         -- 1. Exact Match Check
         if inputLower == cmdLower then
-            return cmd -- If they match perfectly, return it immediately
+            return cmd
         end
         
-        -- 2. Prefix Match (Boost)
         if cmdLower:sub(1, inputLen) == inputLower then
             score = score + 25
         end
 
-        -- 3. Levenshtein Distance (Typos)
         local function levenshteinDistance(s1, s2)
             local len1 = #s1
             local len2 = #s2
@@ -237,32 +233,28 @@ local function suggestClosestCommand(input)
         end
         
         local distance = levenshteinDistance(inputLower, cmdLower)
-        score = score - (distance * 5)  -- Reduce score based on distance
-        
-        -- 4. Length Penalty (Less if lengths are closer)
-        local lengthDiff = math.abs(inputLen - cmdLen)
-        score = score - (lengthDiff * 2) -- Penalize more for larger length difference
+        score = score - (distance * 5)
 
-        -- 5. Sequence Matching Score
+        local lengthDiff = math.abs(inputLen - cmdLen)
+        score = score - (lengthDiff * 2)
+
         local lastFoundIndex = 0
         local consecutiveMatches = 0
         for i = 1, inputLen do
             local char = inputLower:sub(i,i)
             local found = cmdLower:find(char, lastFoundIndex+1)
             if found then
-                score = score + (2 - (found - i) * 0.5)  -- Prioritize closer matches
+                score = score + (2 - (found - i) * 0.5)
                 if found == lastFoundIndex + 1 then
-                  consecutiveMatches = consecutiveMatches + 1
-                  score = score + (consecutiveMatches * 2)
+                    consecutiveMatches = consecutiveMatches + 1
+                    score = score + (consecutiveMatches * 2)
                 else
-                  consecutiveMatches = 0
+                    consecutiveMatches = 0
                 end
                 lastFoundIndex = found
             end
         end
-        
 
-        -- Common Prefix Length
         local commonPrefix = 0
         for i = 1, math.min(inputLen, cmdLen) do
             if inputLower:sub(i, i) == cmdLower:sub(i,i) then
@@ -271,8 +263,7 @@ local function suggestClosestCommand(input)
                 break
             end
         end
-        score = score + (commonPrefix * 4) -- Increased weight for common prefix
-        
+        score = score + (commonPrefix * 4)
 
         if score > highestScore then
             highestScore = score
@@ -291,7 +282,6 @@ local function executeCommand(command)
             3,
             false
         )
-        -- No actual command execution here, only notification
     else
         local suggestion = suggestClosestCommand(command)
         if suggestion then
@@ -329,7 +319,6 @@ local function executeCommand(command)
     end
 end
 
-
 task.wait(1)
 createNotification(
     "AK ADMIN",
@@ -341,75 +330,75 @@ createNotification(
 local lastInput = ""
 
 LocalPlayer.Chatted:Connect(function(msg)
-  if msg:sub(1, 1) == "!" then
-    local command = msg:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
-    executeCommand("!" .. command)
-      lastInput = command
-      return
-  end
+    if msg:sub(1, 1) == "!" then
+        local command = msg:sub(2):lower():gsub("^%s*", ""):gsub("%s*$", "")
+        executeCommand("!" .. command)
+        lastInput = command
+        return
+    end
 end)
 
 local function updateSuggestion(input)
-  if input == "" then return end
+    if input == "" then return end
     local suggestion = suggestClosestCommand("!" .. input)
     if suggestion then
-      
         for _, child in pairs(NotificationGui:GetChildren()) do
-          if child:IsA("Frame") and child.Name ~= "ProgressBar" then
-              child:Destroy()
-           end
-      end
-      
+            if child:IsA("Frame") and child.Name ~= "ProgressBar" then
+                child:Destroy()
+            end
+        end
+        
         createNotification(
-                "Command Suggestion",
-                "Did you mean: " .. suggestion .. "?",
-                10,
-                true,
-                function(accepted)
-                  if accepted then
-                       if _G.cmds[suggestion] then
-                            local success, errorMessage = pcall(function()
-                                loadstring(game:HttpGet(_G.cmds[suggestion]))()
-                            end)
-                            if success then
-                                createNotification(
-                                    "Success",
-                                    "Executed command: " .. suggestion,
-                                    3,
-                                    false
-                                )
-                            else
-                                createNotification(
-                                    "Error",
-                                    "Failed to execute command: " .. suggestion,
-                                    5,
-                                    false
-                                )
-                            end
+            "Command Suggestion",
+            "Did you mean: " .. suggestion .. "?",
+            10,
+            true,
+            function(accepted)
+                if accepted then
+                    if _G.cmds[suggestion] then
+                        local success, errorMessage = pcall(function()
+                            loadstring(game:HttpGet(_G.cmds[suggestion]))()
+                        end)
+                        if success then
+                            createNotification(
+                                "Success",
+                                "Executed command: " .. suggestion,
+                                3,
+                                false
+                            )
+                        else
+                            createNotification(
+                                "Error",
+                                "Failed to execute command: " .. suggestion,
+                                5,
+                                false
+                            )
                         end
                     end
                 end
-            )
-   else
+            end
+        )
+    else
         for _, child in pairs(NotificationGui:GetChildren()) do
-          if child:IsA("Frame") and child.Name ~= "ProgressBar" then
-              child:Destroy()
-           end
-      end
+            if child:IsA("Frame") and child.Name ~= "ProgressBar" then
+                child:Destroy()
+            end
+        end
     end
 end
+
 LocalPlayer.CharacterAdded:Connect(function(character)
-  if not character then return end
-   local chatBox = LocalPlayer.PlayerGui:WaitForChild("Chat"):WaitForChild("Frame"):WaitForChild("ChatBar")
-   local textBox = chatBox:WaitForChild("Box")
-  textBox:GetPropertyChangedSignal("Text"):Connect(function()
-      local currentText = textBox.Text
-      if currentText:sub(1,1) == "!" then
-        local input = currentText:sub(2):lower()
-         if input ~= lastInput then
-          updateSuggestion(input)
-          lastInput = input
+    if not character then return end
+    local chatBox = LocalPlayer.PlayerGui:WaitForChild("Chat"):WaitForChild("Frame"):WaitForChild("ChatBar")
+    local textBox = chatBox:WaitForChild("Box")
+    textBox:GetPropertyChangedSignal("Text"):Connect(function()
+        local currentText = textBox.Text
+        if currentText:sub(1,1) == "!" then
+            local input = currentText:sub(2):lower()
+            if input ~= lastInput then
+                updateSuggestion(input)
+                lastInput = input
+            end
         end
-      end
     end)
 end)
