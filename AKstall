@@ -118,7 +118,7 @@ local function executeTeleportationSequence()
 
     for i, position in ipairs(targetPositions) do
         teleportToTarget(character, position)
-        wait(1.1)
+        wait(0.99)
         fireProximityPrompts()
         previousColor, previousFont = updateBoothText(messages[i], previousColor, previousFont)
         deleteBoothOwnership()
