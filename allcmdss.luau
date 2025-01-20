@@ -24,7 +24,6 @@ _G.cmds = {
     ["!bring"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/main/Bring",
     ["!bye"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/byebye",
     ["!byebye all"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/main/quickfling",
-    ["!bypasser"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/bypasser",
     ["!catchme"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/unmutable.luau",
     ["!chatbot"] = "https://raw.githubusercontent.com/Guerric9018/chatbothub/main/ChatbotHub.lua",
     ["!chatdraw"] = "https://raw.githubusercontent.com/fjkdvbjkfvjkfbvjkfbvjkdfhdfjkhvuldfhv/deinemudda/refs/heads/main/chatdraw",
